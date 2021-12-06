@@ -1,0 +1,184 @@
+<template>
+	<view class="user">
+		<view class="header" :style="[{height:CustomBar + 'px'}]">
+			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+				<view class="action" @tap="back">
+					<text class="cuIcon-back"></text>
+				</view>
+				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
+					全站用户
+				</view>
+				<view class="action">
+					
+				</view>
+			</view>
+		</view>
+		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
+		
+		<view class="cu-list menu-avatar userList" style="margin-top: 20upx;">
+			
+			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
+				<view class="cu-avatar round lg" :style="item.style"></view>
+				<view class="content">
+					<view class="text-grey" v-if="item.screenName">{{item.screenName}}
+						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+					</view>
+					<view class="text-grey" v-else>{{item.name}}
+						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+					</view>
+					<view class="text-gray text-sm flex">
+						<view class="text-cut">
+							{{item.mail}}
+						</view> </view>
+				</view>
+				<view class="action">
+					<view class="text-blue text-xs">详情</view>
+					
+				</view>
+			</view>
+			<view class="load-more" @tap="loadMore">
+				<text>{{moreText}}</text>
+			</view>
+
+		</view>
+	</view>
+</template>
+
+<script>
+	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	var API = require('../../utils/api')
+	var Net = require('../../utils/net')
+	export default {
+		data() {
+			return {
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar,
+				NavBar:this.StatusBar +  this.CustomBar,
+				
+				userList:[],
+				
+				page:1,
+				moreText:"加载更多",
+				isLoad:0,
+				
+			}
+		},
+		onPullDownRefresh(){
+			var that = this;
+			
+		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			if(that.isLoad==0){
+				that.loadMore();
+			}
+		},
+		onShow(){
+			var that = this;
+			// #ifdef APP-PLUS
+			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
+			plus.navigator.setStatusBarStyle("dark")
+			// #endif
+			
+		},
+		onLoad() {
+			var that = this;
+			// #ifdef APP-PLUS
+			that.NavBar = this.CustomBar;
+			// #endif
+			that.getUserList(false);
+		},
+		methods:{
+			back(){
+				uni.navigateBack({
+					delta: 1
+				});
+			},
+			formatDate(datetime) {
+				var datetime = new Date(parseInt(datetime * 1000));
+				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+				var year = datetime.getFullYear(),
+					month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+					date = ("0" + datetime.getDate()).slice(-2),
+					hour = ("0" + datetime.getHours()).slice(-2),
+					minute = ("0" + datetime.getMinutes()).slice(-2);
+				//second = ("0" + date.getSeconds()).slice(-2);
+				// 拼接
+				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+				// 返回
+				return result;
+			},
+			loadMore(){
+				var that = this;
+				that.moreText="正在加载中...";
+				that.isLoad=1;
+				that.getUserList(true);
+				
+			},
+			getUserList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				Net.request({
+					url: API.getUserList(),
+					data:{
+						"searchParams":"",
+						"limit":10,
+						"page":page,
+						"order":"created"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								
+								var userList = [];
+								for(var i in list){
+									var arr = list[i];
+									arr.style = "background-image:url("+list[i].avatar+");"
+									userList.push(arr);
+								}
+								if(isPage){
+									that.page++;
+									that.userList = that.userList.concat(userList);
+								}else{
+									that.userList = userList;
+								}
+								localStorage.setItem('userList',JSON.stringify(that.userList));
+							}
+						}
+					},
+					fail: function(res) {
+						that.isLoad=0;
+					}
+				})
+			},
+			toUserContents(data){
+				var that = this;
+				var title = data.name+"的文章";
+				if(data.screenName){
+					title = data.screenName+" 的文章";
+				}
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
+		}
+	}
+	
+</script>
+
+<style>
+@import "../../static/base.css";
+</style>
