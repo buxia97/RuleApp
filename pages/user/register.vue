@@ -2,7 +2,7 @@
 	<view class="user">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action">
+				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
@@ -17,23 +17,24 @@
 		<view class="user-form">
 			<form>
 				<view class="cu-form-group">
-					<input name="input" placeholder="请输入用户名(必填)"></input>
+					<input name="input" v-model="name" placeholder="请输入用户名(必填)"></input>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" placeholder="请输入邮箱(必填)"></input>
+					<input name="input" v-model="mail" placeholder="请输入邮箱(必填)"></input>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" placeholder="请输入验证码"></input>
-					<view class="sendcode text-blue">发送</view>
+					<input name="input" v-model="code" placeholder="请输入验证码"></input>
+					<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
+					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" placeholder="请输入密码"></input>
+					<input name="input" v-model="password" type="password" placeholder="请输入密码"></input>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" placeholder="再次输入密码"></input>
+					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg">立即注册</button>
+					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userRegister">立即注册</button>
 				</view>
 			</form>
 		</view>
@@ -42,6 +43,8 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	var API = require('../../utils/api')
+	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -49,8 +52,14 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
-				index: -1,
-				picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
+				times: 60,
+				show:true,
+				
+				name:"",
+				mail:"",
+				code:"",
+				password:"",
+				repassword:"",
 				
 			}
 		},
@@ -73,9 +82,137 @@
 			// #endif
 		},
 		methods: {
+			back(){
+				uni.navigateBack({
+					delta: 1
+				});
+			},
 			PickerChange(e) {
 				this.index = e.detail.value
 			},
+			userRegister() {
+				var that = this;
+				if (that.name == ""||that.code == ""||that.mail == ""||that.password == ""||that.repassword == "") {
+					uni.showToast({
+						title:"请输入正确的参数",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				if(that.password!=that.repassword){
+					uni.showToast({
+						title:"两次密码不一致",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var data = {
+					'name':that.name,
+					'code':that.code,
+					'password':that.password,
+					'mail':that.mail
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.userRegister(),
+					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.back();
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			RegSendCode() {
+				var that = this;
+				if (that.mail == "") {
+					uni.showToast({
+						title:"请输入邮箱",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var data = {
+					'mail':that.mail
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.RegSendCode(),
+					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.getCode();
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			getCode() {
+			  this.show = false
+			  this.timer = setInterval(()=>{
+				this.times--
+				if(this.times===0){
+				  this.show = true
+				  clearInterval(this.timer)
+				}
+			  },1000)
+			}
 		}
 	}
 </script>

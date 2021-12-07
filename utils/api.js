@@ -17,14 +17,26 @@ module.exports = {
 	userLogin:function(){
 		return API_URL + 'typechoUsers/userLogin';
 	},
+	RegSendCode:function(){
+		return API_URL + 'typechoUsers/RegSendCode';
+	},
+	SendCode:function(){
+		return API_URL + 'typechoUsers/SendCode';
+	},
 	userRegister:function(){
 		return API_URL + 'typechoUsers/userRegister';
+	},
+	userFoget:function(){
+		return API_URL + 'typechoUsers/userFoget';
 	},
 	getUserInfo:function(){
 		return API_URL + 'typechoUsers/userInfo';
 	},
 	getUserList:function(){
 		return API_URL + 'typechoUsers/userList';
+	},
+	userEdit:function(){
+		return API_URL + 'typechoUsers/userEdit';
 	},
 	getCommentsList:function(){
 		return API_URL + 'typechoComments/commentsList';
@@ -44,6 +56,9 @@ module.exports = {
 	},
 	getContentsInfo:function(){
 		return API_URL + 'typechoContents/contentsInfo';
+	},
+	cosUpload:function(){
+		return API_URL + 'upload/cosUpload';
 	},
 	
 	IsNull(obj) {

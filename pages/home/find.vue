@@ -33,7 +33,7 @@
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> 网站分类
+					<text class="cuIcon-titles text-rule"></text> 内容分类
 				</view>
 				<view class="action more" @tap="toAllcategory">
 					<text>全部分类</text><text class="cuIcon-right"></text>
@@ -95,6 +95,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			that.allCache();
 			
 		},
 		onLoad() {
@@ -110,6 +111,18 @@
 				that.getTopList();
 				that.getMetaList();
 				that.getTagList();
+			},
+			allCache(){
+				var that = this;
+				if(localStorage.getItem('topList')){
+					that.topList = JSON.parse(localStorage.getItem('topList'));
+				}
+				if(localStorage.getItem('find_metaList')){
+					that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
+				}
+				if(localStorage.getItem('find_tagList')){
+					that.tagList = JSON.parse(localStorage.getItem('find_tagList'));
+				}
 			},
 			getTopList(){
 				var that = this;

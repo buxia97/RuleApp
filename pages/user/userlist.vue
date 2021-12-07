@@ -90,6 +90,12 @@
 			that.getUserList(false);
 		},
 		methods:{
+			allCache(){
+				var that = this;
+				if(localStorage.getItem('userList')){
+					that.userList = JSON.parse(localStorage.getItem('userList'));
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1

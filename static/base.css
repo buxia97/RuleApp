@@ -1,5 +1,5 @@
 page{
-	background-color: #f9f9f9;
+	background-color: #f6f6f6;
 	color: #333333;
 }
 .header{
@@ -93,6 +93,18 @@ page{
 }
 .index-sort .index-sort-box:nth-child(4) .index-sort-i{
 	background-color: #e54d42;
+}
+.index-sort .index-sort-box:nth-child(5) .index-sort-i{
+	background-color: #e03997;
+}
+.index-sort .index-sort-box:nth-child(6) .index-sort-i{
+	background-color: #2eabbf;
+}
+.index-sort .index-sort-box:nth-child(7) .index-sort-i{
+	background-color: #607d8b;
+}
+.index-sort .index-sort-box:nth-child(8) .index-sort-i{
+	background-color: #ff9f10;
 }
 .data-box{
 	margin-top: 20upx;
@@ -267,7 +279,7 @@ page{
 .info-content{
 	background: #fff;
 	font-size: 28upx;
-	line-height: 46upx;
+	line-height: 50upx;
 	padding: 40upx 30upx;
 }
 .user-form{
@@ -384,4 +396,42 @@ page{
 	border-radius: 8upx;
 	float: left;
 	opacity: 0.9;
+}
+.info-content .tags{
+	padding: 0upx;
+	border-top: solid 1px #f9f9f9;
+	padding-top: 30upx;
+}
+.info-content .tags-box{
+	color: #0081ff !important;
+	border: solid 1px rgba(0, 129, 255, 0.4);
+	background-color: #cce6ff;
+}
+.data-box .menu .cu-item{
+	padding-top: 0upx;
+}
+.edit-tool{
+	height: 80upx;
+	line-height: 80upx;
+	padding: 0upx 10upx;
+}
+.edit-tool text{
+	display: inline-block;
+	margin: 0upx 10upx;
+	width: 40upx;
+	font-size: 40upx;
+}
+.edit-tool text.cuIcon-read{
+	float: right;
+}
+.cu-form-group .text{
+	height: calc(100vh - 490upx);
+	/* #ifdef APP-PLUS */
+	height: calc(100vh - 540upx);
+	/* #endif */
+	line-height: 45upx;
+	width: 100%;
+}
+.cu-form-group scroll-view.text{
+	padding-top: 30upx;
 }

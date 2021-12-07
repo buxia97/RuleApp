@@ -6,10 +6,10 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					用户登录
+					找回密码
 				</view>
-				<view class="action" @tap="toRegister">
-					<text>注册</text>
+				<view class="action">
+					
 				</view>
 			</view>
 		</view>
@@ -17,18 +17,23 @@
 		<view class="user-form">
 			<form>
 				<view class="cu-form-group">
-					<input name="input" placeholder="用户名" v-model="userName"></input>
+					<input name="input" v-model="name" placeholder="请输入用户名(必填)"></input>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" placeholder="用户密码" type="password" v-model="password"></input>
+					<input name="input" v-model="code" placeholder="请输入验证码"></input>
+					<view class="sendcode text-blue" v-if="show" @tap="SendCode">发送</view>
+					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
+				</view>
+				<view class="cu-form-group">
+					<input name="input" v-model="password" type="password" placeholder="输入新密码"></input>
+				</view>
+				<view class="cu-form-group">
+					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="login">立即登录</button>
+					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userFoget">确认修改</button>
 				</view>
 			</form>
-		</view>
-		<view class="user-foget">
-			<text @tap="toFoget">忘记密码？</text>
 		</view>
 	</view>
 </template>
@@ -43,8 +48,14 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-				userName:"",
+				
+				times: 60,
+				show:true,
+				
+				name:"",
+				code:"",
 				password:"",
+				repassword:"",
 				
 			}
 		},
@@ -72,28 +83,40 @@
 					delta: 1
 				});
 			},
-			login() {
+			PickerChange(e) {
+				this.index = e.detail.value
+			},
+			userFoget() {
 				var that = this;
-				if (this.password == ""||this.userName == "") {
+				if (that.name == ""||that.code == ""||that.password == ""||that.repassword == "") {
 					uni.showToast({
-					    title:"请输入正确的参数",
+						title:"请输入正确的参数",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',
 					});
 					return false
 				}
-			
+				if(that.password!=that.repassword){
+					uni.showToast({
+						title:"两次密码不一致",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				var data = {
-					name: this.userName,
-					password: this.password,
+					'name':that.name,
+					'code':that.code,
+					'password':that.password,
 				}
 				uni.showLoading({
 					title: "加载中"
 				});
 				Net.request({
 					
-					url: API.userLogin(),
+					url: API.userFoget(),
 					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -109,15 +132,7 @@
 							icon: 'none'
 						})
 						if(res.data.code==1){
-							//保存用户信息
-							localStorage.setItem('userinfo',JSON.stringify(res.data.data));
-							localStorage.setItem('token',res.data.data.token);
-							var timer = setTimeout(function() {
-								uni.reLaunch({
-									url: '/pages/home/home'
-								})
-								clearTimeout('timer')
-							}, 1000)
+							that.back();
 						}
 					},
 					fail: function(res) {
@@ -132,19 +147,67 @@
 					}
 				})
 			},
-			toRegister(){
+			SendCode() {
 				var that = this;
-				
-				uni.navigateTo({
-					url: '../user/register'
+				if (that.name == "") {
+					uni.showToast({
+						title:"请输入邮箱",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var data = {
+					'name':that.name
+				}
+				uni.showLoading({
+					title: "加载中"
 				});
+				Net.request({
+					
+					url: API.SendCode(),
+					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.getCode();
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh()
+					}
+				})
 			},
-			toFoget(){
-				var that = this;
-				uni.navigateTo({
-					url: '../user/foget'
-				});
-			},
+			getCode() {
+			  this.show = false
+			  this.timer = setInterval(()=>{
+				this.times--
+				if(this.times===0){
+				  this.show = true
+				  clearInterval(this.timer)
+				}
+			  },1000)
+			}
 		}
 	}
 </script>

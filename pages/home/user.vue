@@ -45,7 +45,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('../user/useredit')">
 							<view class="index-sort-i">
 								<text class="cuIcon-picfill"></text>
 							</view>
@@ -59,7 +59,7 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-commentfill"></text>
+								<text class="cuIcon-message"></text>
 							</view>
 							<view class="index-sort-text">
 								我的消息
@@ -71,7 +71,19 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-rechargefill"></text>
+								<text class="cuIcon-commentfill"></text>
+							</view>
+							<view class="index-sort-text">
+								评论区
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i">
+								<text class="cuIcon-favorfill"></text>
 							</view>
 							<view class="index-sort-text">
 								收藏
@@ -81,9 +93,9 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('../user/userpost')">
 							<view class="index-sort-i">
-								<text class="cuIcon-rechargefill"></text>
+								<text class="cuIcon-writefill"></text>
 							</view>
 							<view class="index-sort-text">
 								我的投稿
@@ -95,7 +107,7 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-rechargefill"></text>
+								<text class="cuIcon-post"></text>
 							</view>
 							<view class="index-sort-text">
 								意见反馈
@@ -107,7 +119,7 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-rechargefill"></text>
+								<text class="cuIcon-settingsfill"></text>
 							</view>
 							<view class="index-sort-text">
 								设置
@@ -121,20 +133,20 @@
 			<view class="cu-list menu" >
 				<view class="cu-item">
 					<view class="content">
-						<text class="cuIcon-circlefill text-grey"></text>
-						<text class="text-grey">QQ交流群</text>
+						<text class="cuIcon-friendfill  text-blue"></text>
+						<text>QQ交流群</text>
 					</view>
 				</view>
 				<view class="cu-item">
 					<view class="content">
-						<text class="cuIcon-circlefill text-grey"></text>
-						<text class="text-grey">官网网站</text>
+						<text class="cuIcon-circlefill text-brown"></text>
+						<text>官网网站</text>
 					</view>
 				</view>
 				<view class="cu-item">
 					<view class="content">
-						<text class="cuIcon-circlefill text-grey"></text>
-						<text class="text-grey">Github</text>
+						<text class="cuIcon-github text-black"></text>
+						<text>Github</text>
 					</view>
 				</view>
 			</view>
@@ -145,6 +157,8 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	var API = require('../../utils/api')
+	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -166,6 +180,7 @@
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
+				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 			}
@@ -176,10 +191,7 @@
 			// #ifdef APP-PLUS
 			that.NavBar = this.CustomBar;
 			// #endif
-			if(localStorage.getItem('userinfo')){
-				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
-			}
+			
 		},
 		methods:{
 			toLogin(){
@@ -189,6 +201,20 @@
 					url: '../user/login'
 				});
 			},
+			toLink(text){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: text
+				});
+			}
 			
 		},
 		components: {

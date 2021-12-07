@@ -44,7 +44,18 @@
 				</view>
 			</view>
 			<view class="info-content">
-				<joMarkdown :nodes="markdownData"></joMarkdown>
+				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
+				
+				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
+				
+				
+				<view class="tags" v-if="tagList.length>0">
+					
+					<text class="tags-box" v-for="(item,index) in tagList"  @tap='toTagsContents("#"+item.name+"#",item.mid)'>
+						{{item.name}}
+					</text>
+					
+				</view>
 			</view>
 			<view class="data-box">
 				<view class="cu-bar bg-white">
@@ -98,9 +109,8 @@
 </template>
 
 <script>
+	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	import joMarkdown from '@/components/jo-markdown/decode.vue';
-	import markdownFunc from '@/components/jo-markdown/index.js';
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -119,6 +129,7 @@
 				markdownData: {},
 				userInfo:{},
 				
+				tagList:[],
 				commentsList:[],
 				
 				moreText:"加载更多",
@@ -129,7 +140,7 @@
 			}
 		},
 		components: {
-			joMarkdown
+		  mpHtml,
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -146,6 +157,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			that.allCache();
 			
 		},
 		onLoad(res) {
@@ -159,12 +171,30 @@
 			that.getInfo(that.cid);
 			that.getCommentsList(false,that.cid);
 			
+			var ctx = this.$refs.article;
 		},
 		methods:{
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			allCache(){
+				var that = this;
+				var cid = that.cid;
+				// if(localStorage.getItem('postInfo_'+cid)){
+				// 	var postInfo = JSON.parse(localStorage.getItem('postInfo_'+cid));
+				// 	that.category = postInfo.category;
+				// 	that.created = postInfo.created;
+				// 	that.commentsNum = postInfo.commentsNum;
+				// 	that.html=postInfo.text;
+				// 	that.tagList=postInfo.tag;
+				// 	that.getUserInfo(postInfo.authorId);
+				// }
+				if(localStorage.getItem('commentsList_'+cid)){
+					that.commentsList = JSON.parse(localStorage.getItem('commentsList_'+cid));
+				}
+				
 			},
 			toUserContents(data){
 				var that = this;
@@ -174,6 +204,13 @@
 				}
 				var id= data.uid;
 				var type="user";
+				uni.navigateTo({
+				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
+			toTagsContents(title,id){
+				var that = this;
+				var type="meta";
 				uni.navigateTo({
 				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
@@ -199,7 +236,7 @@
 				var that = this;
 				var data = {
 					"key":that.cid,
-					"isMd":0,
+					"isMd":1,
 				}
 				
 				Net.request({
@@ -216,9 +253,15 @@
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;
 							that.html=res.data.text;
-							that.markdownData = markdownFunc(that.html, 'markdown');
-							that.getUserInfo(res.data.authorId);
+							that.tagList=res.data.tag;
 							
+							//这里可以继续处理text字段，将网站内部链接缓存程序链接，从而实现内部页面跳转
+							
+							//下面是uniapp的markdown解析插件
+							//that.markdownData = markdownFunc(that.html, 'markdown');
+							that.getUserInfo(res.data.authorId);
+							localStorage.removeItem('postInfo_'+that.cid);
+							localStorage.setItem('postInfo_'+that.cid,JSON.stringify(res.data));
 						}
 					},
 					fail: function(res) {
@@ -287,6 +330,7 @@
 								}else{
 									that.commentsList = commentsList;
 								}
+								localStorage.setItem('commentsList_'+that.cid,JSON.stringify(that.commentsList));
 							}else{
 								that.moreText="没有更多评论了";
 							}

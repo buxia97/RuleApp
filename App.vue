@@ -118,7 +118,6 @@
 <style>
 	@import "colorui/main.css";
 	@import "colorui/icon.css";
-	@import './components/jo-markdown/main.css';
 	.nav-list {
 		display: flex;
 		flex-wrap: wrap;

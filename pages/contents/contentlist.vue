@@ -119,11 +119,17 @@
 				}
 			}
 			if(res.type=="all"){
+				
 				that.getMetaList();
 			}
 			
 		},
 		methods:{
+			allCache(){
+				var that = this;
+				var meta = that.TabCur;
+				
+			},
 			tabSelect(e) {
 				var that = this;
 				that.TabCur = e.currentTarget.dataset.id;
@@ -145,9 +151,15 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				that.isLoad=1;
-				if(that.type=="meta"||that.type=="all"){
+				if(that.type=="meta"){
 					
 					that.getMetaContents(true,that.id);
+				}else if(that.type=="all"){
+					if(that.id==0){
+						that.getContentsList(true,that.type,that.id);
+					}else{
+						that.getMetaContents(true,that.id);
+					}
 				}else{
 					that.getContentsList(true,that.type,that.id);
 				}
@@ -182,7 +194,7 @@
 							if(list.length>0){
 							
 								that.metaList = that.metaList.concat(list);
-								localStorage.setItem('metaList',JSON.stringify(that.metaList));
+							
 							}
 						}
 					},
@@ -235,7 +247,7 @@
 								}
 								
 								
-								localStorage.setItem('contentsList_0',JSON.stringify(that.contentsList));
+							
 							}else{
 								that.moreText="没有更多文章了";
 							}

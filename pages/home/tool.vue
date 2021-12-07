@@ -26,7 +26,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toPage('使用攻略',1518)">
 							<view class="index-sort-i">
 								<text class="cuIcon-appreciate"></text>
 							</view>
@@ -62,7 +62,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toCategoryContents('#精选#',397)">
 							<view class="index-sort-i">
 								<text class="cuIcon-choicenessfill"></text>
 							</view>
@@ -164,6 +164,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			that.allCache();
 			
 		},
 		onLoad() {
@@ -174,6 +175,12 @@
 			that.getMetaContents(58);
 		},
 		methods:{
+			allCache(){
+				var that = this;
+				if(localStorage.getItem('toolList')){
+					that.toolList = JSON.parse(localStorage.getItem('toolList'));
+				}
+			},
 			getMetaContents(meta){
 				var that = this;
 				var data = {
@@ -225,6 +232,20 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
+			},
+			toInfo(data){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				});
+			},
+			toPage(title,cid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/info?cid='+cid+"&title="+title
+				});
 			},
 		},
 		components: {

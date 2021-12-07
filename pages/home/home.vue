@@ -194,13 +194,7 @@
 				swiperList: [],
 				recommendList:[],
 				contentsList:[],
-				metaList:[
-					{
-						mid:0,
-						name:"全部",
-						parent:0
-					}
-				],
+				metaList:[],
 				
 				dotStyle: false,
 				towerStart: 0,
@@ -225,6 +219,8 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			//获取缓存
+			that.allCache();
 			
 		},
 		onLoad() {
@@ -278,7 +274,20 @@
 			},
 			//公共缓存
 			allCache(){
-				
+				var that = this;
+				var meta = that.TabCur;
+				if(localStorage.getItem('swiperList')){
+					that.swiperList = JSON.parse(localStorage.getItem('swiperList'));
+				}
+				if(localStorage.getItem('recommendList')){
+					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
+				}
+				if(localStorage.getItem('metaList')){
+					that.metaList = JSON.parse(localStorage.getItem('metaList'));
+				}
+				if(localStorage.getItem('contentsList_'+meta)){
+					that.contentsList = JSON.parse(localStorage.getItem('contentsList_'+meta));
+				}
 			},
 			getSwiper(){
 				var that = this;
@@ -378,8 +387,12 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
-							
-								that.metaList = that.metaList.concat(list);
+								var meta = [{
+									mid:0,
+									name:"全部",
+									parent:0
+								}];
+								that.metaList = meta.concat(list);
 								localStorage.setItem('metaList',JSON.stringify(that.metaList));
 							}
 						}
