@@ -2,13 +2,13 @@
 	<view>
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action">
+				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					工具库
 				</view>
-				<view class="action">
+				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('../user/post?type=add')">
 							<view class="index-sort-i">
 								<text class="cuIcon-edit"></text>
 							</view>
@@ -50,7 +50,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toRand">
 							<view class="index-sort-i">
 								<text class="cuIcon-refresh"></text>
 							</view>
@@ -151,12 +151,17 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
-				toolList:[]
+				toolList:[],
+				userInfo:null,
+				token:"",
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.getMetaContents(58);
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onShow(){
 			var that = this;
@@ -164,6 +169,16 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			if(localStorage.getItem('userinfo')){
+				
+				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+			}
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
+			that.userStatus();
 			that.allCache();
 			
 		},
@@ -246,6 +261,70 @@
 				uni.navigateTo({
 				    url: '../contents/info?cid='+cid+"&title="+title
 				});
+			},
+			toSearch(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/search'
+				});
+			},
+			toRand(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/randlist'
+				});
+			},
+			userStatus() {
+				var that = this;
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==0){
+							localStorage.removeItem('userinfo');
+							localStorage.removeItem('token');
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toLink(text){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: text
+				});
+			},
+			toGroup(){
+				var url = API.GetGroupUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 		},
 		components: {

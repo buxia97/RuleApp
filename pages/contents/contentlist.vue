@@ -114,6 +114,8 @@
 				if(that.type=="meta"){
 					
 					that.getMetaContents(false,that.id);
+				}else if(that.type=="top"){
+					that.getContentsList(false,that.type,that.id);
 				}else{
 					that.getContentsList(false,that.type,that.id);
 				}
@@ -160,6 +162,9 @@
 					}else{
 						that.getMetaContents(true,that.id);
 					}
+				}else if(that.type=="top"){
+					that.getContentsList(true,that.type,that.id);
+					
 				}else{
 					that.getContentsList(true,that.type,that.id);
 				}
@@ -207,13 +212,16 @@
 				var info = {
 					"type":"post"
 				}
+				var order = "created";
 				if(type=="user"){
 					info = {
 						"type":"post",
 						"authorId":that.id
 					}
 				}
-				
+				if(that.type=="top"){
+					order = that.id
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -222,7 +230,7 @@
 					"searchParams":JSON.stringify(API.removeObjectEmptyKey(info)),
 					"limit":5,
 					"page":page,
-					"order":"created"
+					"order":order
 				};
 				Net.request({
 					url: API.getContentsList(),

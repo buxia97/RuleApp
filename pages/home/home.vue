@@ -2,13 +2,13 @@
 	<view>
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action">
+				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					首页
 				</view>
-				<view class="action">
+				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
 			</view>
@@ -207,11 +207,16 @@
 				moreText:"加载更多",
 				
 				isLoad:0,
+				
+				token:"",
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.loading();
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onShow(){
 			var that = this;
@@ -221,6 +226,11 @@
 			// #endif
 			//获取缓存
 			that.allCache();
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
+			that.userStatus();
 			
 		},
 		onLoad() {
@@ -229,11 +239,6 @@
 			// #ifdef APP-PLUS
 			that.NavBar = this.CustomBar;
 			// #endif
-		},
-		
-		onPullDownRefresh(){
-		    var that = this;
-		    //用户下拉操作时执行的方法
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -332,6 +337,7 @@
 						}
 					},
 					fail: function(res) {
+						
 					}
 				})
 			},
@@ -353,6 +359,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -363,6 +370,7 @@
 						}
 					},
 					fail: function(res) {
+						
 					}
 				})
 			},
@@ -384,6 +392,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -398,6 +407,7 @@
 						}
 					},
 					fail: function(res) {
+						
 					}
 				})
 			},
@@ -424,6 +434,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						that.isLoad=0;
 						//console.log(JSON.stringify(res))
 						that.moreText="加载更多";
@@ -445,6 +456,7 @@
 						}
 					},
 					fail: function(res) {
+						
 						that.moreText="加载更多";
 						that.isLoad=0;
 					}
@@ -473,6 +485,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						that.isLoad=0;
 						//console.log(JSON.stringify(res))
 						that.moreText="加载更多";
@@ -494,18 +507,52 @@
 						}
 					},
 					fail: function(res) {
+						
 						that.moreText="加载更多";
 						that.isLoad=0;
 					}
 				})
 			},
-			
+			userStatus() {
+				var that = this;
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==0){
+							localStorage.removeItem('userinfo');
+							localStorage.removeItem('token');
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 			
 			toComments(){
 				var that = this;
 				
 				uni.navigateTo({
 				    url: '../contents/comments'
+				});
+			},
+			toSearch(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/search'
 				});
 			},
 			toUsers(){
@@ -559,7 +606,16 @@
 				// 返回
 				return result;
 			},
-			//
+			toGroup(){
+				var url = API.GetGroupUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			
 		},
 		components: {
 			waves

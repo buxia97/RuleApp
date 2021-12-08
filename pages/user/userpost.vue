@@ -1,5 +1,5 @@
 <template>
-	<view class="user">
+	<view class="userpost">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -16,7 +16,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="cu-card article no-card">
-				<view class="cu-item shadow"  v-for="(item,index) in contentsList">
+				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)">
 					<view class="content">
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>
@@ -56,13 +56,23 @@
 				
 				isLoad:0,
 				token:"",
-				
 				contentsList:[],
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.getContentsList(false);
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 			
+		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			if(that.isLoad==0){
+				that.loadMore();
+			}
 		},
 		onShow(){
 			var that = this;
@@ -159,6 +169,13 @@
 				
 				uni.navigateTo({
 					url: '../user/post'
+				});
+			},
+			toEdit(cid){
+				var that = this;
+				
+				uni.navigateTo({
+					url: '../user/post?type=edit'+'&cid='+cid
 				});
 			},
 			subText(text,num){

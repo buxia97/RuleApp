@@ -249,6 +249,8 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.title){
+							
+							that.title = res.data.title;
 							that.category = res.data.category;
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;

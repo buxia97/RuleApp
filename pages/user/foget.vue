@@ -151,7 +151,7 @@
 				var that = this;
 				if (that.name == "") {
 					uni.showToast({
-						title:"请输入邮箱",
+						title:"请输入用户名",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',

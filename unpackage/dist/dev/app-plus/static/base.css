@@ -89,7 +89,7 @@ page{
 	background-color: #39b54a;
 }
 .index-sort .index-sort-box:nth-child(3) .index-sort-i{
-	/* background-color: #e03997; */
+	background-color: #2eabbf; 
 }
 .index-sort .index-sort-box:nth-child(4) .index-sort-i{
 	background-color: #e54d42;
@@ -98,10 +98,10 @@ page{
 	background-color: #e03997;
 }
 .index-sort .index-sort-box:nth-child(6) .index-sort-i{
-	background-color: #2eabbf;
+	background-color: #607d8b;
 }
 .index-sort .index-sort-box:nth-child(7) .index-sort-i{
-	background-color: #607d8b;
+	/* background-color: #607d8b; */
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
 	background-color: #ff9f10;
@@ -425,10 +425,34 @@ page{
 	float: right;
 }
 .cu-form-group .text{
-	height: calc(100vh - 490upx);
+	/* height: calc(100vh - 490upx); */
 	/* #ifdef APP-PLUS */
-	height: calc(100vh - 540upx);
+	/* height: calc(100vh - 540upx); */
 	/* #endif */
 	line-height: 45upx;
 	width: 100%;
+}
+.cu-form-group scroll-view.text{
+	padding: 30upx 0upx;
+}
+.LinksModal input{
+	height: 70upx;
+	text-align: left;
+	padding: 10upx 20upx;
+	font-size: 24upx;
+	border: solid #999 1px;
+	border-radius: 8upx;
+	background-color: #fff;
+}
+.LinksModal input:nth-child(1){
+	margin-bottom: 30upx;
+}
+.post{
+	max-height: 100%;
+}
+.update-tips{
+	padding: 6upx;
+	border-radius: 4upx;
+	font-size: 22upx;
+	margin-right: 10upx;
 }

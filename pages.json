@@ -3,15 +3,45 @@
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/home/home",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
 		},
 		{
 			"path": "pages/home/find",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
 		},
 		{
 			"path": "pages/home/tool",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
 		},
 		{
 			"path": "pages/home/user",
@@ -26,12 +56,33 @@
 			"style": {}
 		},
 		{
-			"path": "pages/user/userpost",
+			"path": "pages/user/mailedit",
 			"style": {}
 		},
 		{
-			"path": "pages/user/post",
+			"path": "pages/user/inbox",
 			"style": {}
+		},
+		{
+			"path": "pages/user/userpost",
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
+		},
+		{
+			"path": "pages/user/post",
+			"style": {},
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/login",
@@ -43,6 +94,10 @@
 		},
 		{
 			"path": "pages/user/register",
+			"style": {}
+		},
+		{
+			"path": "pages/user/setup",
 			"style": {}
 		},
 		{
@@ -66,7 +121,15 @@
 			"style": {}
 		},
 		{
+			"path": "pages/contents/randlist",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/allcategory",
+			"style": {}
+		},
+		{
+			"path": "pages/contents/search",
 			"style": {}
 		}
 		

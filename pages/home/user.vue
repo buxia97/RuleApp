@@ -2,13 +2,13 @@
 	<view class="user">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action">
+				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					账户
 				</view>
-				<view class="action">
+				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
 			</view>
@@ -27,7 +27,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="cu-item userinfo" v-else>
+				<view class="cu-item userinfo" v-else  @tap="toLink('../user/useredit')">
 					<view class="cu-avatar round lg" :style="userInfo.style"></view>
 					<view class="content">
 						<view class="text-grey" v-if="userInfo.screenName">{{userInfo.screenName}}</view>
@@ -57,7 +57,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('../user/inbox')">
 							<view class="index-sort-i">
 								<text class="cuIcon-message"></text>
 							</view>
@@ -67,7 +67,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<!-- <view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
@@ -78,7 +78,7 @@
 							</view>
 						</view>
 					</waves>
-				</view>
+				</view> -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -117,7 +117,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toSetUp">
 							<view class="index-sort-i">
 								<text class="cuIcon-settingsfill"></text>
 							</view>
@@ -130,20 +130,20 @@
 			</view>
 		</view>
 		<view class="data-box">
-			<view class="cu-list menu" >
+			<view class="cu-list menu" @tap="toGroup">
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-friendfill  text-blue"></text>
 						<text>QQ交流群</text>
 					</view>
 				</view>
-				<view class="cu-item">
+				<view class="cu-item" @tap="toWeb">
 					<view class="content">
 						<text class="cuIcon-circlefill text-brown"></text>
 						<text>官网网站</text>
 					</view>
 				</view>
-				<view class="cu-item">
+				<view class="cu-item" @tap="toGithub">
 					<view class="content">
 						<text class="cuIcon-github text-black"></text>
 						<text>Github</text>
@@ -166,6 +166,7 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				userInfo:null,
+				token:"",
 				
 			}
 		},
@@ -184,6 +185,11 @@
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 			}
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
+			that.userStatus();
 			
 		},
 		onLoad() {
@@ -214,8 +220,75 @@
 				uni.navigateTo({
 					url: text
 				});
+			},
+			userStatus() {
+				var that = this;
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==0){
+							localStorage.removeItem('userinfo');
+							localStorage.removeItem('token');
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toSearch(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/search'
+				});
+			},
+			toGroup(){
+				var url = API.GetGroupUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			toWeb(){
+				var url = API.GetWebUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			toGithub(){
+				var url = API.GetGithubUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			toSetUp(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/setup'
+				});
 			}
-			
 		},
 		components: {
 			waves

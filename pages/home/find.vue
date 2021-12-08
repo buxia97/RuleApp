@@ -2,13 +2,13 @@
 	<view>
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action">
+				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					发现
 				</view>
-				<view class="action">
+				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
 			</view>
@@ -19,7 +19,7 @@
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 排行榜
 				</view>
-				<view class="action more">
+				<view class="action more" @tap='toTopContents("排行榜","commentsNum")'>
 					<text>更多热门</text><text class="cuIcon-right"></text>
 				</view>
 				
@@ -87,7 +87,10 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.loading();
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onShow(){
 			var that = this;
@@ -221,11 +224,25 @@
 					}
 				})
 			},
+			toSearch(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/search'
+				});
+			},
 			toCategoryContents(title,id){
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
 				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
+			toTopContents(title,id){
+				var that = this;
+				var type="meta";
+				uni.navigateTo({
+				    url: '../contents/contentlist?title='+title+"&type=top&id="+id
 				});
 			},
 			toInfo(data){
@@ -248,6 +265,15 @@
 				uni.navigateTo({
 				    url: '../contents/allcategory'
 				});
+			},
+			toGroup(){
+				var url = API.GetGroupUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 		},
 		components: {

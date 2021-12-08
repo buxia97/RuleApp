@@ -1,18 +1,28 @@
-var API_URL = 'http://192.168.10.192:8081/';
-//var API_URL = 'http://192.168.0.26:8080/';
+var API_URL = 'https://api.ruletree.club/';
+
 var WEB_URL = 'https://www.ruletree.club/';
-//var API_URL = 'http://web.prawnkj.com:8080/';
+
+var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
+
+var GithubUrl = 'https://github.com/buxia97/RuleApp';
+
+
 // #ifdef H5
 //var API_URL = '/';
 // #endif
 
 module.exports = {
-	
 	GetWebUrl:function(){
 		return WEB_URL;
 	},
 	GetUpdateUrl:function(){
-		return API_URL + 'mp/versionControl';
+		return WEB_URL + 'apiResult.php?update=1';
+	},
+	GetGithubUrl:function(){
+		return GithubUrl;
+	},
+	GetGroupUrl:function(){
+		return GroupUrl;
 	},
 	userLogin:function(){
 		return API_URL + 'typechoUsers/userLogin';
@@ -38,6 +48,9 @@ module.exports = {
 	userEdit:function(){
 		return API_URL + 'typechoUsers/userEdit';
 	},
+	userStatus:function(){
+		return API_URL + 'typechoUsers/userStatus';
+	},
 	getCommentsList:function(){
 		return API_URL + 'typechoComments/commentsList';
 	},
@@ -56,6 +69,13 @@ module.exports = {
 	},
 	getContentsInfo:function(){
 		return API_URL + 'typechoContents/contentsInfo';
+	},
+	contensAdd:function(){
+		return API_URL + 'typechoContents/contensAdd';
+	},
+	
+	contensUpdate:function(){
+		return API_URL + 'typechoContents/contensUpdate';
 	},
 	cosUpload:function(){
 		return API_URL + 'upload/cosUpload';

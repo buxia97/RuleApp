@@ -27,13 +27,12 @@
 			<view class="cu-form-group">
 				<view class="title">邮箱</view>
 				<input placeholder="未设置" disabled="disabled" name="input" :value="mail"></input>
-				<view class="text-blue">修改</view>
+				<view class="text-blue" @tap="toEmail">修改</view>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">网址</view>
 				<input placeholder="请输入网址" name="input" v-model="url"></input>
 			</view>
-			
 			<view class="cu-form-group margin-top">
 				<view class="title">密码</view>
 				<input placeholder="请输入密码,不填则不修改" v-model="password" name="input"></input>
@@ -183,6 +182,13 @@
 						uni.stopPullDownRefresh()
 					}
 				})
+			},
+			toEmail(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/mailedit'
+				});
 			},
 		}
 	}
