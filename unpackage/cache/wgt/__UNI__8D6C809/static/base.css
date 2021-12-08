@@ -280,7 +280,7 @@ page{
 	background: #fff;
 	font-size: 28upx;
 	line-height: 50upx;
-	padding: 40upx 30upx;
+	padding: 10upx 30upx 40upx 30upx;
 }
 .user-form{
 	margin-top: 100upx;
