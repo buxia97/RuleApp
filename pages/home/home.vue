@@ -32,7 +32,7 @@
 		<view class="index-sort grid col-4">
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
-					<view class="index-sort-main">
+					<view class="index-sort-main" @tap="toImagetoday">
 						<view class="index-sort-i">
 							<text class="cuIcon-picfill"></text>
 						</view>
@@ -540,7 +540,13 @@
 					}
 				})
 			},
-			
+			toImagetoday(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/imagetoday'
+				});
+			},
 			toComments(){
 				var that = this;
 				

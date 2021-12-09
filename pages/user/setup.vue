@@ -34,14 +34,20 @@
 			</view>
 		</view>
 		<view class="cu-list menu margin-top" >
-			<view class="cu-item">
+			<view class="cu-item" @tap="toPage('关于平台',2)">
 				<view class="content">
-					<text>关于</text>
+					<text>关于平台</text>
 				</view>
 				<view class="action">
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+		</view>
+		<view class="logout" v-if="token!=''" @tap="logout">
+			<view class="logout-main">
+				<text class="text-red">退出登录</text>
+			</view>
+			
 		</view>
 		
 	</view>
@@ -66,6 +72,8 @@
 				Update:0,
 				versionUrl:"",
 				
+				userInfo:null,
+				token:"",
 				
 			}
 		},
@@ -81,6 +89,15 @@
 			
 			that.isUpdate(false);
 			// #endif
+			if(localStorage.getItem('userinfo')){
+				
+				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+			}
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
 			
 		},
 		onLoad() {
@@ -97,12 +114,13 @@
 				});
 			},
 			rmlocal(){
+				var that = this;
 				uni.showModal({
 				    title: '提示',
 				    content: '是否清除缓存？',
 				    success: function (res) {
 				        if (res.confirm) {
-				            console.log('用户点击确定');
+				            that.closeLocal();
 				        } else if (res.cancel) {
 				            console.log('用户点击取消');
 				        }
@@ -111,19 +129,7 @@
 			},
 			closeLocal() {
 				var that = this
-				if (localStorage.getItem('token')) {
-					var username = localStorage.getItem('username')
-					var token = localStorage.getItem('token')
-					var userqq = localStorage.getItem('userqq')
-					var uid = localStorage.getItem('uid')
-					localStorage.clear()
-					localStorage.setItem('username', username)
-					localStorage.setItem('token', token)
-					localStorage.setItem('userqq', userqq)
-					localStorage.setItem('uid', uid)
-				} else {
-					localStorage.clear()
-				}
+				localStorage.clear();
 				uni.showToast({
 					title: '操作成功！',
 					icon: 'none',
@@ -136,7 +142,7 @@
 				var that = this
 				var obj = uni.getStorageInfoSync()
 				if (obj) {
-					that.localdata = obj.currentSize + 'KB'
+					that.localdata = obj.currentSize + ' KB'
 				} else {
 					console.log('浏览器不支持localStorage')
 				}
@@ -181,6 +187,40 @@
 					
 				})
 			},
+			toPage(title,cid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/info?cid='+cid+"&title="+title
+				});
+			},
+			logout(){
+				var that = this;
+				uni.showModal({
+				    title: '提示',
+				    content: '确认退出账户？',
+				    success: function (res) {
+				        if (res.confirm) {
+				            localStorage.removeItem('userinfo');
+				            localStorage.removeItem('token');
+							uni.showToast({
+								title:"退出成功",
+								icon:'none',
+								duration: 1000,
+								position:'bottom',
+							});
+							var timer = setTimeout(function() {
+								uni.reLaunch({
+									url: '/pages/home/home'
+								})
+								clearTimeout('timer')
+							}, 1000)
+				        } else if (res.cancel) {
+				            
+				        }
+				    }
+				});
+			}
 		}
 	}
 </script>

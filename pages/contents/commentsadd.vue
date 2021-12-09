@@ -22,7 +22,7 @@
 				<input name="input" :value="title" disabled=""></input>
 			</view>
 			<view class="cu-form-group">
-				<textarea maxlength="-1" v-model="text" placeholder="评论内容，评论审核通过后才会显示"></textarea>
+				<textarea maxlength="-1" v-model="text" placeholder="如首次发布评论,将审核后再给予显示"></textarea>
 			</view>
 		</form>
 	</view>
@@ -125,7 +125,7 @@
 				
 				var data = {
 					"cid":that.cid,
-					"ownerId":that.userinfo.uid,
+					//"ownerId":that.userinfo.uid,
 					"parent":coid,
 					"text":that.text,
 				}

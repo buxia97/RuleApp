@@ -113,8 +113,32 @@
 			"style": {}
 		},
 		{
+			"path": "pages/contents/imagetoday",
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
+		},
+		{
 			"path": "pages/contents/info",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
 		},
 		{
 			"path": "pages/contents/alltag",

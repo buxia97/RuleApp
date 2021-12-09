@@ -8,7 +8,7 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					文章详情
 				</view>
-				<view class="action">
+				<view class="action" @tap="ToShare">
 					<text class="cuIcon-share"></text>
 				</view>
 			</view>
@@ -20,8 +20,8 @@
 			</view>
 			<view class="info-tyle">
 				<text class="text-blue" v-if="category.length>0" @tap="toCategoryContents(category)">{{category[0].name}}</text>
+				<text class="text-gray" v-if="category.length==0">暂无分类</text>
 				<text class="info-date" v-if="created!=''">{{formatDate(created)}}
-				<!-- <text class="cuIcon-attention"></text>221323 -->
 				</text>
 			</view>
 			<view class="info-author">
@@ -128,7 +128,7 @@
 				created:'',
 				markdownData: {},
 				userInfo:{},
-				
+				slug:"",
 				tagList:[],
 				commentsList:[],
 				
@@ -147,10 +147,7 @@
 			var that = this;
 			that.loadMore();
 		},
-		onPullDownRefresh(){
-			var that = this;
-			
-		},
+		
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
@@ -159,6 +156,14 @@
 			// #endif
 			that.allCache();
 			
+		},
+		onPullDownRefresh(){
+			var that = this;
+			
+			var timer = setTimeout(function() {
+				that.getInfo(that.cid);
+				that.getCommentsList(false,that.cid);
+			}, 1000)
 		},
 		onLoad(res) {
 			var that = this;
@@ -182,15 +187,16 @@
 			allCache(){
 				var that = this;
 				var cid = that.cid;
-				// if(localStorage.getItem('postInfo_'+cid)){
-				// 	var postInfo = JSON.parse(localStorage.getItem('postInfo_'+cid));
-				// 	that.category = postInfo.category;
-				// 	that.created = postInfo.created;
-				// 	that.commentsNum = postInfo.commentsNum;
-				// 	that.html=postInfo.text;
-				// 	that.tagList=postInfo.tag;
-				// 	that.getUserInfo(postInfo.authorId);
-				// }
+				if(localStorage.getItem('postInfo_'+cid)){
+					var postInfo = JSON.parse(localStorage.getItem('postInfo_'+cid));
+					that.category = postInfo.category;
+					that.created = postInfo.created;
+					that.commentsNum = postInfo.commentsNum;
+					that.html=postInfo.text;
+					that.tagList=postInfo.tag;
+					that.slug = postInfo.slug;
+					that.getUserInfo(postInfo.authorId);
+				}
 				if(localStorage.getItem('commentsList_'+cid)){
 					that.commentsList = JSON.parse(localStorage.getItem('commentsList_'+cid));
 				}
@@ -248,6 +254,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						uni.stopPullDownRefresh();
 						if(res.data.title){
 							
 							that.title = res.data.title;
@@ -256,7 +263,7 @@
 							that.commentsNum = res.data.commentsNum;
 							that.html=res.data.text;
 							that.tagList=res.data.tag;
-							
+							that.slug = res.data.slug;
 							//这里可以继续处理text字段，将网站内部链接缓存程序链接，从而实现内部页面跳转
 							
 							//下面是uniapp的markdown解析插件
@@ -267,6 +274,7 @@
 						}
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh();
 					}
 				})
 			},
@@ -316,6 +324,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						uni.stopPullDownRefresh();
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -340,6 +349,7 @@
 						}
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh();
 						that.isLoad=0;
 						that.moreText="加载更多";
 					}
@@ -367,6 +377,57 @@
 				// 返回
 				return result;
 			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+			// #endif
+			},
+			ToShare(){
+				
+				var that = this;
+				var url = API.GetWebUrl()+"archives/"+that.cid+"/"
+				if(that.slug!=""){
+					url = API.GetWebUrl()+that.slug+".html"
+				}
+				// #ifdef APP-PLUS
+				uni.shareWithSystem({
+				  href: url,
+				  summary:that.title,
+				  success(){
+				    // 分享完成，请注意此时不一定是成功分享
+					
+				  },
+				  fail(){
+				    // 分享失败
+				  }
+				});
+				// #endif
+				// #ifdef h5
+				that.ToCopy(url);
+				// #endif
+			}
 		}
 	}
 </script>

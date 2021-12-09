@@ -224,7 +224,7 @@
 			  this.show = false
 			  this.timer = setInterval(()=>{
 				this.times--
-				if(this.times===0){
+				if(this.times<=0){
 				  this.show = true
 				  clearInterval(this.timer)
 				}

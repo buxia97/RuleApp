@@ -2,12 +2,14 @@
     "name" : "规则之树",
     "appid" : "__UNI__8D6C809",
     "description" : "规则之树手机客户端",
-    "versionName" : "RuleTree App 1.0.0 beta",
-    "versionCode" : 10,
+    "versionName" : "RuleTree App 1.0.1 beta",
+    "versionCode" : 11,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
-        "modules" : {},
+        "modules" : {
+            "FaceID" : {}
+        },
         /* 模块配置 */
         "distribute" : {
             /* 应用发布信息 */
@@ -42,7 +44,8 @@
             /* ios打包配置 */
             "sdkConfigs" : {
                 "push" : {},
-                "ad" : {}
+                "ad" : {},
+                "share" : {}
             },
             "icons" : {
                 "android" : {

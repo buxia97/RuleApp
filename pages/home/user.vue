@@ -103,7 +103,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box"  @tap="toPage('帮助与反馈',2689)">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
@@ -219,6 +219,13 @@
 				}
 				uni.navigateTo({
 					url: text
+				});
+			},
+			toPage(title,cid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/info?cid='+cid+"&title="+title
 				});
 			},
 			userStatus() {

@@ -77,6 +77,9 @@ module.exports = {
 	contensUpdate:function(){
 		return API_URL + 'typechoContents/contensUpdate';
 	},
+	contensImage:function(){
+		return API_URL + 'typechoContents/ImagePexels';
+	},
 	cosUpload:function(){
 		return API_URL + 'upload/cosUpload';
 	},

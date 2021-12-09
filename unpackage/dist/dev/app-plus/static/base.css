@@ -280,7 +280,7 @@ page{
 	background: #fff;
 	font-size: 28upx;
 	line-height: 50upx;
-	padding: 40upx 30upx;
+	padding: 10upx 30upx 40upx 30upx;
 }
 .user-form{
 	margin-top: 100upx;
@@ -455,4 +455,45 @@ page{
 	border-radius: 4upx;
 	font-size: 22upx;
 	margin-right: 10upx;
+}
+.logout{
+	width: 100%;
+	margin-top: 30upx;
+	padding: 0upx 30upx;
+}
+.logout-main{
+	width: 100%;
+	text-align: center;
+	border-radius: 10upx;
+	height: 80upx;
+	line-height: 80upx;
+	background-color: #fff;
+}
+.ImageList{
+	width: 100%;
+	padding: 0upx 20upx;
+}
+.ImageList-box{
+	height: 500upx;
+	overflow: hidden;
+	margin-bottom: 20upx;
+	border-radius: 20upx;
+	position: relative;
+}
+.image-info{
+	position: absolute;
+	bottom: 30upx;
+	left: 0upx;
+	padding: 0upx 30upx;
+}
+.image-info text{
+	padding: 10upx;
+	background-color: #008080;
+	color: #fff;
+	font-size: 24upx;
+	opacity: 0.8;
+	border-radius: 8upx;
+}
+.ImageList image{
+	width: 100% !important;
 }
