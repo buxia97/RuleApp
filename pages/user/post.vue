@@ -348,6 +348,7 @@
 							  	uni.hideLoading();
 							  }, 1000);
 							var data = JSON.parse(uploadFileRes.data);
+							//var data = uploadFileRes.data;
 							uni.showToast({
 								title: data.msg,
 								icon: 'none'

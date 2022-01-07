@@ -175,6 +175,13 @@
 				<text>{{moreText}}</text>
 			</view>
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -209,6 +216,8 @@
 				isLoad:0,
 				
 				token:"",
+				
+				isLoading:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -251,6 +260,7 @@
 			//全部请求
 			loading(){
 				var that = this;
+				that.page = 1;
 				that.getSwiper();
 				that.getRecommend();
 				that.getMetaList();
@@ -283,6 +293,10 @@
 				var meta = that.TabCur;
 				if(localStorage.getItem('swiperList')){
 					that.swiperList = JSON.parse(localStorage.getItem('swiperList'));
+					var timer = setTimeout(function() {
+						that.isLoading=1;
+						clearTimeout('timer')
+					}, 300)
 				}
 				if(localStorage.getItem('recommendList')){
 					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
@@ -392,7 +406,6 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -405,9 +418,16 @@
 								localStorage.setItem('metaList',JSON.stringify(that.metaList));
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
-						
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

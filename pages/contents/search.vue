@@ -17,10 +17,21 @@
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
-					<input type="text" placeholder="搜索文章" v-model="searchText"  @input="searchTag"></input>
+					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
 				</view>
 			</view>
-			<view class="cu-card article no-card">
+			<view class="search-type grid col-3">
+				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
+					<text>文章</text>
+				</view>
+				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
+					<text>评论</text>
+				</view>
+				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
+					<text>用户</text>
+				</view>
+			</view>
+			<view class="cu-card article no-card" v-if="type==0">
 				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 					<view class="cu-item shadow">
 						<view class="title">
@@ -47,6 +58,78 @@
 				</view>
 
 			</view>
+			
+			<!--评论-->
+			<view class="cu-list menu-avatar" v-if="type==1">
+				<view class="no-data" v-if="commentsList.length==0">
+					暂时没有评论
+				</view>
+				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
+					<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+						<view class="cu-list menu-avatar comment">
+							<text class="copy-comment" @tap="ToCopy(item.text)">
+								复制
+							</text>
+							<view class="cu-item">
+								<view class="cu-avatar round" :style="item.style"></view>
+								<view class="content">
+									<view class="text-grey">{{item.author}}</view>
+									<view class="text-content text-df">
+										{{item.text}}
+									</view>
+									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
+										<view class="flex" @tap="toInfoComment(item.cid,item.contenTitle)">
+											<view>{{item.contenTitle}}</view>
+											
+										</view>
+									</view>
+									<view class="margin-top-sm flex justify-between">
+										<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+										<view>
+											<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
+										</view>
+									</view>
+								</view>
+							</view>
+				
+							
+						</view>
+					</view>
+				</view>
+				
+				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
+					<text>{{moreText}}</text>
+				</view>
+			</view>
+			<!--评论结束-->
+			
+			<view class="cu-list menu-avatar userList" style="margin-top: 4upx;" v-if="type==2">
+				
+				<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
+					<view class="cu-avatar round lg" :style="item.style"></view>
+					<view class="content">
+						<view class="text-grey" v-if="item.screenName">{{item.screenName}}
+							<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						</view>
+						<view class="text-grey" v-else>{{item.name}}
+							<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						</view>
+						<view class="text-gray text-sm flex">
+							<view class="text-cut">
+								{{item.mail}}
+							</view> </view>
+					</view>
+					<view class="action">
+						<view class="text-blue text-xs">详情</view>
+						
+					</view>
+				</view>
+				<view class="load-more" @tap="loadMore">
+					<text>{{moreText}}</text>
+				</view>
+			
+			</view>
+			<!--用户结束-->
 		</view>
 		
 	</view>
@@ -64,7 +147,14 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				contentsList:[],
+				
+				commentsList:[],
+				
+				userList:[],
+				
 				searchText:"",
+				
+				type:0,
 				
 				page:1,
 				moreText:"加载更多",
@@ -98,6 +188,20 @@
 			
 		},
 		methods: {
+			toType(i){
+				var that = this;
+				that.type=i;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				if(i==0){
+					that.getContentsList(false);
+				}else if(i==1){
+					that.getCommentsList(false)
+				}else{
+					that.getUserList(false)
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -107,16 +211,37 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				that.isLoad=1;
-				that.getContentsList(true);
+				if(that.type==0){
+					that.getContentsList(true);
+				}else if(that.type==1){
+					that.getCommentsList(true)
+				}else{
+					that.getUserList(true)
+				}
+				
 			},
 			reload(){
 				var that = this;
-				that.getContentsList();
+				if(that.type==0){
+					that.getContentsList();
+				}else if(that.type==1){
+					that.getCommentsList()
+				}else{
+					that.getUserList()
+				}
+				
 			},
 			searchTag(){
 				var that = this;
 				var searchText = that.searchText;
-				that.getContentsList();
+				if(that.type==0){
+					that.getContentsList();
+				}else if(that.type==1){
+					that.getCommentsList()
+				}else{
+					that.getUserList()
+				}
+
 			},
 			getContentsList(isPage){
 				var that = this;
@@ -157,7 +282,7 @@
 								
 								
 							}else{
-								that.moreText="没有更多文章了";
+								that.moreText="没有更多数据了";
 							}
 						}
 					},
@@ -166,6 +291,127 @@
 						that.isLoad=0;
 					}
 				})
+			},
+			getCommentsList(isPage){
+				var that = this;
+				var data = {
+					"type":"comment",
+				}
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				Net.request({
+					url: API.getCommentsList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":5,
+						"page":page,
+						"searchKey":that.searchText,
+						"order":"created"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								var commentsList = [];
+								for(var i in list){
+									var arr = list[i];
+									arr.style = "background-image:url("+list[i].avatar+");"
+									commentsList.push(arr);
+								}
+								if(isPage){
+									that.page++;
+									that.commentsList = that.commentsList.concat(commentsList);
+								}else{
+									that.commentsList = commentsList;
+								}
+							}else{
+								that.moreText="没有更多数据了";
+							}
+							
+						}
+					},
+					fail: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+					}
+				})
+			},
+			getUserList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				Net.request({
+					url: API.getUserList(),
+					data:{
+						"searchParams":"",
+						"limit":10,
+						"page":page,
+						"searchKey":that.searchText,
+						"order":"created"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								
+								var userList = [];
+								for(var i in list){
+									var arr = list[i];
+									arr.style = "background-image:url("+list[i].avatar+");"
+									userList.push(arr);
+								}
+								if(isPage){
+									that.page++;
+									that.userList = that.userList.concat(userList);
+								}else{
+									that.userList = userList;
+								}
+							}else{
+								that.moreText="没有更多数据了";
+							}
+						}
+					},
+					fail: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+					}
+				})
+			},
+			toUserContents(data){
+				var that = this;
+				var title = data.name+"的文章";
+				if(data.screenName){
+					title = data.screenName+" 的文章";
+				}
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
+			commentsAdd(title,coid,reply){
+				var that = this;
+				var cid = that.cid;
+				uni.navigateTo({
+				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+				});
 			},
 			toPost(){
 				var that = this;
@@ -209,6 +455,40 @@
 				uni.navigateTo({
 				    url: '../contents/info?cid='+data.cid+"&title="+data.title
 				});
+			},
+			toInfoComment(cid,title){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/info?cid='+cid+"&title="+title
+				});
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+			// #endif
 			},
 		}
 	}

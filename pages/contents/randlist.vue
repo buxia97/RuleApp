@@ -37,7 +37,13 @@
 
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -53,6 +59,8 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				contentsList:[],
+				
+				isLoading:0,
 			}
 		},
 		onShow(){
@@ -108,13 +116,22 @@
 									that.contentsList = list;
 								
 								
-							}else{
-								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
-						
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

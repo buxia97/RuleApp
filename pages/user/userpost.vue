@@ -84,6 +84,7 @@
 				that.token=localStorage.getItem('token');
 				that.getContentsList(false);
 			}
+			that.page = 1;
 			
 		},
 		onLoad() {

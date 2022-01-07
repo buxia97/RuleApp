@@ -497,3 +497,41 @@ page{
 .ImageList image{
 	width: 100% !important;
 }
+.comment{
+	position: relative;
+}
+.copy-comment{
+	opacity: 0;
+	position: absolute;
+	right: 30upx;
+	top: 0upx;
+	z-index: 888;
+	color: #0081FF;;
+	font-size: 22upx;
+	padding: 5upx 20upx;
+	border-radius: 8upx;
+	border: solid 1px #0081FF;;
+	background-color: #e0eaff;;
+	transition:0.3s all;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;
+}
+.cu-list.comment:hover .copy-comment{
+	opacity: 1;
+}
+.search-type{
+	line-height: 80upx;
+	padding: 0upx 30upx;
+	text-align: center;
+	height: 80upx;
+	border-bottom: solid 1px #f3f3f3;
+}
+.search-type-box{
+	color: #999;
+}
+.search-type-box.active{
+	border-bottom: solid 2px #0081FF;
+	color: #333;
+}

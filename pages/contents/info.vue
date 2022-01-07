@@ -69,9 +69,12 @@
 				<view class="no-data" v-if="commentsList.length==0">
 					暂时没有评论
 				</view>
-				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
+				<view class="cu-card dynamic no-card info-comment" style="margin-top: 20upx;">
 					<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
 						<view class="cu-list menu-avatar comment">
+							<text class="copy-comment" @tap="ToCopy(item.text)">
+								复制
+							</text>
 							<view class="cu-item">
 								<view class="cu-avatar round" :style="item.style"></view>
 								<view class="content">
@@ -104,7 +107,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -137,6 +146,8 @@
 				
 				isLoad:0,
 				
+				isLoading:0,
+				
 			}
 		},
 		components: {
@@ -154,7 +165,13 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.allCache();
+			that.isLoad=0;
+			that.page=1;
+			if(that.cid!=0){
+				that.getInfo(that.cid);
+				that.getCommentsList(false,that.cid);
+			}
+			//that.allCache();
 			
 		},
 		onPullDownRefresh(){
@@ -173,6 +190,7 @@
 			// #endif
 			that.cid = res.cid;
 			that.title = res.title;
+			
 			that.getInfo(that.cid);
 			that.getCommentsList(false,that.cid);
 			
@@ -244,7 +262,7 @@
 					"key":that.cid,
 					"isMd":1,
 				}
-				
+				that.allCache();
 				Net.request({
 					url: API.getContentsInfo(),
 					data:data,
@@ -256,7 +274,6 @@
 					success: function(res) {
 						uni.stopPullDownRefresh();
 						if(res.data.title){
-							
 							that.title = res.data.title;
 							that.category = res.data.category;
 							that.created = res.data.created;
@@ -271,6 +288,10 @@
 							that.getUserInfo(res.data.authorId);
 							localStorage.removeItem('postInfo_'+that.cid);
 							localStorage.setItem('postInfo_'+that.cid,JSON.stringify(res.data));
+							var timer = setTimeout(function() {
+								that.allCache();
+							}, 200)
+							
 						}
 					},
 					fail: function(res) {
@@ -342,15 +363,29 @@
 									that.commentsList = commentsList;
 								}
 								localStorage.setItem('commentsList_'+that.cid,JSON.stringify(that.commentsList));
+								
 							}else{
 								that.moreText="没有更多评论了";
 							}
 							
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						uni.stopPullDownRefresh();
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
 						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+						
 						that.moreText="加载更多";
 					}
 				})

@@ -1,5 +1,5 @@
 var API_URL = 'https://api.ruletree.club/';
-
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
@@ -83,6 +83,10 @@ module.exports = {
 	cosUpload:function(){
 		return API_URL + 'upload/cosUpload';
 	},
+	localUpload:function(){
+		return API_URL + 'upload/localUpload';
+	},
+	
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

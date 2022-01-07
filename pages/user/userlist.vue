@@ -160,11 +160,14 @@
 									that.userList = userList;
 								}
 								localStorage.setItem('userList',JSON.stringify(that.userList));
+							}else{
+								that.moreText="没有更多数据了";
 							}
 						}
 					},
 					fail: function(res) {
 						that.isLoad=0;
+						that.moreText="加载更多";
 					}
 				})
 			},

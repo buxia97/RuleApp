@@ -45,6 +45,13 @@
 				暂时没有数据
 			</view>
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -78,6 +85,7 @@
 				],
 				TabCur: 0,
 				scrollLeft: 0,
+				isLoading:0,
 				
 			}
 		},
@@ -202,8 +210,20 @@
 							
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},
@@ -260,10 +280,22 @@
 								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.moreText="加载更多";
 						that.isLoad=0;
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},
@@ -309,8 +341,20 @@
 								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 						that.moreText="加载更多";
 						that.isLoad=0;
 					}
