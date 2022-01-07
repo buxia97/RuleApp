@@ -48,6 +48,22 @@ module.exports = {
 	userEdit:function(){
 		return API_URL + 'typechoUsers/userEdit';
 	},
+	getUserData:function(){
+		return API_URL + 'typechoUsers/userData';
+	},
+	getMarkList:function(){
+		return API_URL + 'typechoUserlog/markList';
+	},
+	getIsMark:function(){
+		return API_URL + 'typechoUserlog/isMark';
+	},
+	
+	addLog:function(){
+		return API_URL + 'typechoUserlog/addLog';
+	},
+	removeLog:function(){
+		return API_URL + 'typechoUserlog/removeLog';
+	},
 	userStatus:function(){
 		return API_URL + 'typechoUsers/userStatus';
 	},

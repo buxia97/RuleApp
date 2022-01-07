@@ -101,6 +101,15 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/usercomments",
+			"style": {}
+		},
+		{
+			"path": "pages/user/usermark",
+			"style": {}
+		},
+		
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},

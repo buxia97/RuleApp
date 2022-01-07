@@ -37,9 +37,31 @@
 								{{userInfo.mail}}
 							</view>
 						</view>
+						
 					</view>
+					
 				</view>
+				<block v-if="userInfo!=null">
+					<text class="clock-btn" @tap="toClock" v-if="isClock==0">签到</text>
+					<text class="clock-btn istap" v-else>已签到</text>
+					<view class="user-data grid col-3" v-if="userInfo!=null">
+						<view class="user-data-box" @tap="toLink('../user/userpost')">
+							<view class="user-data-value">{{userData.contentsNum}}</view>
+							<view class="user-data-title">文章</view>
+						</view>
+						<view class="user-data-box" @tap="toLink('../user/usercomments')">
+							<view class="user-data-value">{{userData.commentsNum}}</view>
+							<view class="user-data-title">评论</view>
+						</view>
+						<view class="user-data-box">
+							<view class="user-data-value">{{userData.assets}}</view>
+							<view class="user-data-title">积分</view>
+						</view>
+					</view>
+				</block>
+				
 			</view>
+			
 		</view>
 		<view class="data-box">
 			<view class="index-sort grid col-4">
@@ -81,7 +103,7 @@
 				</view> -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('../user/usermark')">
 							<view class="index-sort-i">
 								<text class="cuIcon-favorfill"></text>
 							</view>
@@ -167,6 +189,8 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				userInfo:null,
 				token:"",
+				userData:{},
+				isClock:0,
 				
 			}
 		},
@@ -189,6 +213,7 @@
 				
 				that.token = localStorage.getItem('token');
 			}
+			that.getUserData();
 			that.userStatus();
 			
 		},
@@ -255,6 +280,81 @@
 					}
 				})
 			},
+			getUserData() {
+				var that = this;
+				Net.request({
+					
+					url: API.getUserData(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.userData = res.data.data;
+							that.isClock = res.data.data.isClock;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toClock(){
+				
+				var that = this;
+				var data = {
+					"type":"clock",
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.addLog(),
+					data:{
+						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.isClock=1;
+							that.getUserData();
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 			toSearch(){
 				var that = this;
 				

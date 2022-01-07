@@ -8,8 +8,12 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					文章详情
 				</view>
-				<view class="action" @tap="ToShare">
-					<text class="cuIcon-share"></text>
+				<view class="action info-btn">
+					
+					
+					<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
+					<text class="cuIcon-favorfill" @tap="rmMark" v-else></text>
+					<text class="cuIcon-share" @tap="ToShare"></text>
 				</view>
 			</view>
 		</view>
@@ -48,7 +52,20 @@
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
 				
-				
+				<view class="content-btn grid col-2">
+					<view class="content-btn-box">
+						<view class="content-btn-i" @tap="toLikes">
+							<text class="cuIcon-appreciatefill btn-i"></text>
+							<text>点赞( {{formatNumber(likes)}} )</text>
+						</view>
+					</view>
+					<view class="content-btn-box" @tap="toReward">
+						<view class="content-btn-i">
+							<text class="cuIcon-rechargefill btn-i"></text>
+							<text>投币</text>
+						</view>
+					</view>
+				</view>
 				<view class="tags" v-if="tagList.length>0">
 					
 					<text class="tags-box" v-for="(item,index) in tagList"  @tap='toTagsContents("#"+item.name+"#",item.mid)'>
@@ -148,6 +165,13 @@
 				
 				isLoading:0,
 				
+				isMark:0,
+				logid:-1,
+				
+				token:"",
+				
+				likes:0,
+				
 			}
 		},
 		components: {
@@ -170,6 +194,11 @@
 			if(that.cid!=0){
 				that.getInfo(that.cid);
 				that.getCommentsList(false,that.cid);
+			}
+			
+			if(localStorage.getItem('token')){
+				that.token=localStorage.getItem('token');
+				that.toIsMark();
 			}
 			//that.allCache();
 			
@@ -281,6 +310,8 @@
 							that.html=res.data.text;
 							that.tagList=res.data.tag;
 							that.slug = res.data.slug;
+							
+							that.likes =  res.data.likes;
 							//这里可以继续处理text字段，将网站内部链接缓存程序链接，从而实现内部页面跳转
 							
 							//下面是uniapp的markdown解析插件
@@ -397,7 +428,222 @@
 				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
 			},
-			
+			toReward(){
+				var that = this;
+				var data = {
+					"type":"reward",
+					"cid":that.cid,
+					"num":5,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.addLog(),
+					data:{
+						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							uni.showToast({
+								title: "成功打赏 5 积分",
+								icon: 'none'
+							})
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toLikes(){
+				var that = this;
+				var data = {
+					"type":"likes",
+					"cid":that.cid,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.addLog(),
+					data:{
+						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.likes++;
+							//that.getInfo(that.cid);
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toIsMark(){
+				var that = this;
+				Net.request({
+					
+					url: API.getIsMark(),
+					data:{
+						"token":that.token,
+						"cid":that.cid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.isMark = res.data.data.isMark;
+							that.logid = res.data.data.logid;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toMark(){
+				
+				var that = this;
+				var data = {
+					"type":"mark",
+					"cid":that.cid,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.addLog(),
+					data:{
+						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.isMark=1;
+							that.toIsMark();
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			rmMark(){
+				var that = this;
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.removeLog(),
+					data:{
+						"key":that.logid,
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.isMark=1;
+							that.toIsMark();
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
 				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -462,6 +708,9 @@
 				// #ifdef h5
 				that.ToCopy(url);
 				// #endif
+			},
+			formatNumber(num) {
+			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			}
 		}
 	}

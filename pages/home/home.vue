@@ -164,7 +164,10 @@
 						<view class="desc">
 							<view class="text-content"> {{subText(item.text,80)}}</view>
 							<view>
-								<view class="cu-tag data-author"><text class="cuIcon-message"></text>{{item.commentsNum}}</view>
+								<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+								<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+								<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+
 								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 							</view>
 						</view>
@@ -632,6 +635,7 @@
 				// 返回
 				return result;
 			},
+			
 			toGroup(){
 				var url = API.GetGroupUrl();
 				// #ifdef APP-PLUS
@@ -641,6 +645,9 @@
 				window.open(url)
 				// #endif
 			},
+			formatNumber(num) {
+			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			}
 			
 		},
 		components: {
