@@ -100,7 +100,7 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-rechargefill"></text>
+								<text class="cuIcon-ticket"></text>
 							</view>
 							<view class="index-sort-text">
 								优惠券
@@ -108,7 +108,18 @@
 						</view>
 					</waves>
 				</view>
-				
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i">
+								<text class="cuIcon-taoxiaopu"></text>
+							</view>
+							<view class="index-sort-text">
+								积分兑换
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<view class="data-box">

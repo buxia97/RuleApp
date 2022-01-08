@@ -69,7 +69,7 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('../user/useredit')">
 							<view class="index-sort-i">
-								<text class="cuIcon-picfill"></text>
+								<text class="cuIcon-edit"></text>
 							</view>
 							<view class="index-sort-text">
 								个人信息
