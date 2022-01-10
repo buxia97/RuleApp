@@ -22,6 +22,7 @@
 					<text class="text-gray">{{ localdata }}</text>
 				</view>
 			</view>
+			<!--  #ifdef APP-PLUS -->
 			<view class="cu-item" @tap="isUpdate(true)">
 				<view class="content">
 					<text>检查更新</text>
@@ -32,6 +33,7 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+			<!--  #endif -->
 		</view>
 		<view class="cu-list menu margin-top" >
 			<view class="cu-item" @tap="toPage('关于平台',2)">
@@ -102,7 +104,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.get_cache_size();

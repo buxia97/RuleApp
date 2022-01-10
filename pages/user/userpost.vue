@@ -8,14 +8,24 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					投稿列表
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toPost">
 					<text class="cuIcon-add"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="cu-card article no-card">
+				<!--  #ifdef MP-WEIXIN -->
+				<view class="all-btn">
+					<view class="user-btn flex flex-direction">
+						<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toPost">发布文章</button>
+						
+					</view>
+				</view>
+				<!--  #endif -->
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)">
 					<view class="content">
 						<image v-if="item.images.length>0" :src="item.images[0]"
@@ -89,7 +99,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			

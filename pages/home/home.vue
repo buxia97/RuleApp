@@ -2,15 +2,24 @@
 	<view>
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
-				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					首页
-				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP-WEIXIN -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
+				<!--  #endif -->
+				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
+					首页
+				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="action" @tap="toSearch">
+					<text class="cuIcon-search"></text>
+				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -248,7 +257,7 @@
 		onLoad() {
 			var that = this;
 			that.loading();
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

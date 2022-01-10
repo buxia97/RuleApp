@@ -8,9 +8,11 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					发布评论
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="commentsadd">
 					<text class="cuIcon-upload"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -24,6 +26,15 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-model="text" placeholder="如首次发布评论,将审核后再给予显示"></textarea>
 			</view>
+			<!--  #ifdef MP-WEIXIN -->
+			<view class="all-btn">
+				<view class="user-btn flex flex-direction">
+					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="commentsadd">提交评论</button>
+					
+				</view>
+			</view>
+			<!--  #endif -->
+			
 		</form>
 	</view>
 </template>
@@ -72,7 +83,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.title=res.title;

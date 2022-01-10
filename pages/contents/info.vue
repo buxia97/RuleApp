@@ -9,11 +9,11 @@
 					文章详情
 				</view>
 				<view class="action info-btn">
-					
-					
+					<!--  #ifdef H5 || APP-PLUS -->
 					<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
 					<text class="cuIcon-favorfill" @tap="rmMark" v-else></text>
 					<text class="cuIcon-share" @tap="ToShare"></text>
+					<!--  #endif -->
 				</view>
 			</view>
 		</view>
@@ -172,6 +172,8 @@
 				
 				likes:0,
 				
+				type:"post",
+				
 			}
 		},
 		components: {
@@ -214,7 +216,7 @@
 		onLoad(res) {
 			var that = this;
 			
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.cid = res.cid;
@@ -310,7 +312,7 @@
 							that.html=res.data.text;
 							that.tagList=res.data.tag;
 							that.slug = res.data.slug;
-							
+							that.type = res.data.type;
 							that.likes =  res.data.likes;
 							//这里可以继续处理text字段，将网站内部链接缓存程序链接，从而实现内部页面跳转
 							
@@ -689,7 +691,7 @@
 				
 				var that = this;
 				var url = API.GetWebUrl()+"archives/"+that.cid+"/"
-				if(that.slug!=""){
+				if(that.type!="post"){
 					url = API.GetWebUrl()+that.slug+".html"
 				}
 				// #ifdef APP-PLUS

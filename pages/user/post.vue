@@ -13,9 +13,12 @@
 						发布文章
 					</block>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="submit">
 					<text class="cuIcon-upload"></text>
 				</view>
+				<!--  #endif -->
+				
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -51,6 +54,11 @@
 					<mp-html :content="text" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
 				</scroll-view>
 			</view>
+			<!--  #ifdef MP-WEIXIN -->
+			<view class="post-update bg-blue" @tap="submit">
+				<text class="cuIcon-upload"></text>
+			</view>
+			<!--  #endif -->
 		</form>
 		<!--分类选择控件-->
 		<view class="cu-modal" :class="modalName=='metaModal'?'show':''" @tap="hideModal">
@@ -168,7 +176,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			

@@ -24,12 +24,28 @@
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="login">立即登录</button>
+					
 				</view>
 			</form>
 		</view>
+		<!-- #ifdef APP-PLUS || MP-WEIXIN -->
+		<view class="api-login grid col-3">
+			<view class="api-login-box" @tap="toQQlogin">
+				<image src="../../static/icon_qq.png"></image>
+			</view>
+			<view class="api-login-box" @tap="toWexinlogin">
+				<image src="../../static/icon_weixin.png"></image>
+			</view>
+			<view class="api-login-box" @tap="toWeibologin">
+				<image src="../../static/icon_weibo.png"></image>
+			</view>
+		</view>
+		<!-- #endif -->
+		<!-- #ifdef APP-PLUS || H5 -->
 		<view class="user-foget">
 			<text @tap="toFoget">忘记密码？</text>
 		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -62,7 +78,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 		},
@@ -145,8 +161,138 @@
 					url: '../user/foget'
 				});
 			},
+			toQQlogin(){
+				//QQ登陆
+				//后端直接根据access_token来判断用户的唯一性。
+				uni.login({
+					provider: 'qq',
+					success: resp => {
+						var access_token = resp.authResult.access_token;
+						uni.getUserInfo({
+							provider: 'qq',
+							success: function(infoRes) {
+								console.log(JSON.stringify(infoRes));
+								var formdata = {
+									nickName: infoRes.userInfo.nickname,
+									gender: infoRes.userInfo.gender == '男' ? 1 : 2,
+				                    headImgUrl: infoRes.userInfo.figureurl_qq_2,
+									openId: infoRes.userInfo.openId,
+									access_token: access_token
+								};
+								
+								// uni.request({
+								// 	url: 'http://192.168.43.205:8080/thirdPartLogin/app/login',
+								// 	method: 'POST',
+								// 	data: formdata,
+								// 	header: {
+								// 		'content-type': 'application/x-www-form-urlencoded'
+								// 	},
+								// 	success: res => {
+								// 		if (res.data.code != 200) {
+								// 			uni.showToast({
+								// 				title: res.data.err,
+								// 				duration: 3000,
+								// 				icon: 'none'
+								// 			});
+								// 			return false;
+								// 		} else {
+								// 			//登录成功处理
+								// 			uni.showToast({
+								// 				title: res.data.message,
+								// 				duration: 3000,
+								// 				icon: 'none'
+								// 			});
+								// 			let ticket = res.data.ticket;
+								// 			uni.setStorageSync('ticket', ticket);
+								// 			uni.reLaunch({
+								// 				url: '../my/my'
+								// 			});
+								// 			return true;
+								// 		}
+								// 	}
+								// });
+							}
+						});
+					},
+					fail: err => {
+						uni.showToast({
+							title: '请求出错啦！',
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				});
+			},
+			toWexinlogin(){
+				//微信登陆
+				//后端直接根据unionId来判断用户的唯一性。
+				uni.login({
+					provider: 'weixin',
+					success: res => {
+						uni.getUserInfo({
+							provider: 'weixin',
+							success: function(infoRes) {
+								console.log(JSON.stringify(infoRes));
+								let formdata = {
+									nickName: infoRes.userInfo.nickName,
+									gender: infoRes.userInfo.gender,
+				                    headImgUrl: infoRes.userInfo.avatarUrl,
+									openId: infoRes.userInfo.openId,
+									unionId: infoRes.userInfo.unionId
+								};
+								
+							}
+						});
+					},
+					fail: err => {
+						uni.showToast({
+							title: '请求出错啦！',
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				});
+			},
+			toWeibologin(){
+				//微博登陆
+				//后端直接根据access_token来判断用户的唯一性。
+				uni.login({
+					provider: 'sinaweibo',
+					success: res => {
+						var access_token = '';
+						access_token = res.authResult.access_token;
+						uni.getUserInfo({
+							provider: 'sinaweibo',
+							success: function(infoRes) {
+								
+								var formdata = {
+									nickName: infoRes.userInfo.nickname,
+									gender: infoRes.userInfo.gender == 'm' ? 1 : 2,
+									headImgUrl: infoRes.userInfo.avatar_large,
+									openId: infoRes.userInfo.id,
+									unionId: '',
+									access_token: access_token,
+									appLoginType: 'SINAWEIBO'
+
+								};
+								console.log(JSON.stringify(formdata));
+								
+
+							}
+						});
+					},
+					fail: err => {
+						uni.showToast({
+							title: '请求出错啦！',
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				});
+			}
 		}
 	}
+	
 </script>
 
 <style>

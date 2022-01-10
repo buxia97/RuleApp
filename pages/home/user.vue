@@ -2,15 +2,24 @@
 	<view class="user">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
 				</view>
-				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					账户
-				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP-WEIXIN -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
+				<!--  #endif -->
+				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
+					账户
+				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="action" @tap="toSearch">
+					<text class="cuIcon-search"></text>
+				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -152,8 +161,8 @@
 			</view>
 		</view>
 		<view class="data-box">
-			<view class="cu-list menu" @tap="toGroup">
-				<view class="cu-item">
+			<view class="cu-list menu">
+				<view class="cu-item" @tap="toGroup">
 					<view class="content">
 						<text class="cuIcon-friendfill  text-blue"></text>
 						<text>QQ交流群</text>
@@ -219,7 +228,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			

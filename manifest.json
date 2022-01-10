@@ -8,7 +8,8 @@
     "app-plus" : {
         /* 5+App特有相关 */
         "modules" : {
-            "Share" : {}
+            "Share" : {},
+            "OAuth" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -45,7 +46,19 @@
             "sdkConfigs" : {
                 "push" : {},
                 "ad" : {},
-                "share" : {}
+                "share" : {},
+                "oauth" : {
+                    "qq" : {
+                        "appid" : "101374917",
+                        "UniversalLinks" : ""
+                    },
+                    "sina" : {
+                        "appkey" : "1408627749",
+                        "redirect_uri" : "https://www.ruletree.club/tepass/wb_login",
+                        "UniversalLinks" : ""
+                    }
+                },
+                "payment" : {}
             },
             "icons" : {
                 "android" : {

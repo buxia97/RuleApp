@@ -8,9 +8,11 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					{{title}}
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -113,7 +115,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.title = res.title;

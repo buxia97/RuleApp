@@ -1,0 +1,71 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/home/find",
+    "pages/home/tool",
+    "pages/home/user",
+    "pages/user/userlist",
+    "pages/user/useredit",
+    "pages/user/mailedit",
+    "pages/user/inbox",
+    "pages/user/userpost",
+    "pages/user/post",
+    "pages/user/login",
+    "pages/user/foget",
+    "pages/user/register",
+    "pages/user/setup",
+    "pages/user/usercomments",
+    "pages/user/usermark",
+    "pages/contents/comments",
+    "pages/contents/commentsadd",
+    "pages/contents/contentlist",
+    "pages/contents/imagetoday",
+    "pages/contents/info",
+    "pages/contents/alltag",
+    "pages/contents/randlist",
+    "pages/contents/allcategory",
+    "pages/contents/search"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#0081ff",
+    "navigationBarTitleText": "规则之树",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#54b5db",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/home/home",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home_cur.png"
+      },
+      {
+        "text": "发现",
+        "pagePath": "pages/home/find",
+        "iconPath": "static/tabbar/find.png",
+        "selectedIconPath": "static/tabbar/find_cur.png"
+      },
+      {
+        "text": "工具",
+        "pagePath": "pages/home/tool",
+        "iconPath": "static/tabbar/tool.png",
+        "selectedIconPath": "static/tabbar/tool_cur.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/home/user",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user_cur.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  }
+}

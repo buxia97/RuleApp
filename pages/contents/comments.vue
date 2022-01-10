@@ -98,7 +98,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getCommentsList(false);

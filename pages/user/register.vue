@@ -35,6 +35,7 @@
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userRegister">立即注册</button>
+					<text class="text-blue text-right margin-top">注册即为同意 《用户协议》</text>
 				</view>
 			</form>
 		</view>
@@ -77,7 +78,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS
+			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
 		},
