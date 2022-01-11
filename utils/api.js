@@ -1,5 +1,5 @@
 var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://127.0.0.1:8081/';
+//var API_URL = 'http://192.168.10.192:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
@@ -32,6 +32,9 @@ module.exports = {
 	},
 	SendCode:function(){
 		return API_URL + 'typechoUsers/SendCode';
+	},
+	userApi:function(){
+		return API_URL + 'typechoUsers/apiLogin';
 	},
 	userRegister:function(){
 		return API_URL + 'typechoUsers/userRegister';

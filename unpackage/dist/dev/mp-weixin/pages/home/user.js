@@ -369,8 +369,88 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     toLogin: function toLogin() {
       var that = this;
 
-      uni.navigateTo({
-        url: '../user/login' });
+
+
+
+
+
+      that.toWexinlogin();
+
+    },
+    toWexinlogin: function toWexinlogin() {
+      //微信登陆
+      //后端直接根据unionId来判断用户的唯一性。
+      uni.showLoading({
+        title: "加载中" });
+
+      uni.login({
+        provider: 'weixin',
+        success: function success(res) {
+          uni.getUserInfo({
+            provider: 'weixin',
+            success: function success(infoRes) {
+              var formdata = {
+                nickName: infoRes.userInfo.nickName,
+                //gender: infoRes.userInfo.gender,
+                appLoginType: "weixin",
+                headImgUrl: infoRes.userInfo.avatarUrl,
+                openId: infoRes.userInfo.openId,
+                accessToken: infoRes.userInfo.unionId };
+
+              Net.request({
+
+                url: API.userApi(),
+                data: { "params": JSON.stringify(API.removeObjectEmptyKey(formdata)) },
+                header: {
+                  'Content-Type': 'application/x-www-form-urlencoded' },
+
+                method: "get",
+                dataType: 'json',
+                success: function success(res) {
+                  setTimeout(function () {
+                    uni.hideLoading();
+                  }, 1000);
+                  uni.showToast({
+                    title: res.data.msg,
+                    icon: 'none' });
+
+                  if (res.data.code == 1) {
+                    //保存用户信息
+                    _index.localStorage.setItem('userinfo', JSON.stringify(res.data.data));
+                    _index.localStorage.setItem('token', res.data.data.token);
+                    var timer = setTimeout(function () {
+                      uni.reLaunch({
+                        url: '/pages/home/home' });
+
+                      clearTimeout('timer');
+                    }, 1000);
+                  }
+                },
+                fail: function fail(res) {
+                  setTimeout(function () {
+                    uni.hideLoading();
+                  }, 1000);
+                  uni.showToast({
+                    title: "网络开小差了哦",
+                    icon: 'none' });
+
+                  uni.stopPullDownRefresh();
+                } });
+
+
+            } });
+
+        },
+        fail: function fail(err) {
+          uni.showToast({
+            title: '请求出错啦！',
+            icon: 'none',
+            duration: 3000 });
+
+          uni.showLoading({
+            title: "加载中" });
+
+        } });
 
     },
     toLink: function toLink(text) {

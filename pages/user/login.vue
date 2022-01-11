@@ -164,6 +164,9 @@
 			toQQlogin(){
 				//QQ登陆
 				//后端直接根据access_token来判断用户的唯一性。
+				uni.showLoading({
+					title: "加载中"
+				});
 				uni.login({
 					provider: 'qq',
 					success: resp => {
@@ -171,46 +174,57 @@
 						uni.getUserInfo({
 							provider: 'qq',
 							success: function(infoRes) {
-								console.log(JSON.stringify(infoRes));
+								
 								var formdata = {
 									nickName: infoRes.userInfo.nickname,
-									gender: infoRes.userInfo.gender == '男' ? 1 : 2,
+									//gender: infoRes.userInfo.gender == '男' ? 1 : 2,
+									appLoginType:"qq",
 				                    headImgUrl: infoRes.userInfo.figureurl_qq_2,
 									openId: infoRes.userInfo.openId,
-									access_token: access_token
+									accessToken: access_token
 								};
 								
-								// uni.request({
-								// 	url: 'http://192.168.43.205:8080/thirdPartLogin/app/login',
-								// 	method: 'POST',
-								// 	data: formdata,
-								// 	header: {
-								// 		'content-type': 'application/x-www-form-urlencoded'
-								// 	},
-								// 	success: res => {
-								// 		if (res.data.code != 200) {
-								// 			uni.showToast({
-								// 				title: res.data.err,
-								// 				duration: 3000,
-								// 				icon: 'none'
-								// 			});
-								// 			return false;
-								// 		} else {
-								// 			//登录成功处理
-								// 			uni.showToast({
-								// 				title: res.data.message,
-								// 				duration: 3000,
-								// 				icon: 'none'
-								// 			});
-								// 			let ticket = res.data.ticket;
-								// 			uni.setStorageSync('ticket', ticket);
-								// 			uni.reLaunch({
-								// 				url: '../my/my'
-								// 			});
-								// 			return true;
-								// 		}
-								// 	}
-								// });
+								Net.request({
+									
+									url: API.userApi(),
+									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									header:{
+										'Content-Type':'application/x-www-form-urlencoded'
+									},
+									method: "get",
+									dataType: 'json',
+									success: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+										if(res.data.code==1){
+											//保存用户信息
+											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
+											localStorage.setItem('token',res.data.data.token);
+											var timer = setTimeout(function() {
+												uni.reLaunch({
+													url: '/pages/home/home'
+												})
+												clearTimeout('timer')
+											}, 1000)
+										}
+									},
+									fail: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: "网络开小差了哦",
+											icon: 'none'
+										})
+										uni.stopPullDownRefresh()
+									}
+								})
+								
 							}
 						});
 					},
@@ -219,6 +233,9 @@
 							title: '请求出错啦！',
 							icon: 'none',
 							duration: 3000
+						});
+						uni.showLoading({
+							title: "加载中"
 						});
 					}
 				});
@@ -226,20 +243,63 @@
 			toWexinlogin(){
 				//微信登陆
 				//后端直接根据unionId来判断用户的唯一性。
+				uni.showLoading({
+					title: "加载中"
+				});
 				uni.login({
 					provider: 'weixin',
 					success: res => {
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
-								console.log(JSON.stringify(infoRes));
 								let formdata = {
 									nickName: infoRes.userInfo.nickName,
-									gender: infoRes.userInfo.gender,
+									//gender: infoRes.userInfo.gender,
+									appLoginType:"weixin",
 				                    headImgUrl: infoRes.userInfo.avatarUrl,
 									openId: infoRes.userInfo.openId,
-									unionId: infoRes.userInfo.unionId
+									accessToken: infoRes.userInfo.unionId
 								};
+								Net.request({
+									
+									url: API.userApi(),
+									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									header:{
+										'Content-Type':'application/x-www-form-urlencoded'
+									},
+									method: "get",
+									dataType: 'json',
+									success: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+										if(res.data.code==1){
+											//保存用户信息
+											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
+											localStorage.setItem('token',res.data.data.token);
+											var timer = setTimeout(function() {
+												uni.reLaunch({
+													url: '/pages/home/home'
+												})
+												clearTimeout('timer')
+											}, 1000)
+										}
+									},
+									fail: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: "网络开小差了哦",
+											icon: 'none'
+										})
+										uni.stopPullDownRefresh()
+									}
+								})
 								
 							}
 						});
@@ -250,12 +310,18 @@
 							icon: 'none',
 							duration: 3000
 						});
+						uni.showLoading({
+							title: "加载中"
+						});
 					}
 				});
 			},
 			toWeibologin(){
 				//微博登陆
 				//后端直接根据access_token来判断用户的唯一性。
+				uni.showLoading({
+					title: "加载中"
+				});
 				uni.login({
 					provider: 'sinaweibo',
 					success: res => {
@@ -264,20 +330,55 @@
 						uni.getUserInfo({
 							provider: 'sinaweibo',
 							success: function(infoRes) {
-								
 								var formdata = {
 									nickName: infoRes.userInfo.nickname,
-									gender: infoRes.userInfo.gender == 'm' ? 1 : 2,
+									//gender: infoRes.userInfo.gender == 'm' ? 1 : 2,
 									headImgUrl: infoRes.userInfo.avatar_large,
 									openId: infoRes.userInfo.id,
-									unionId: '',
-									access_token: access_token,
+									accessToken: access_token,
 									appLoginType: 'SINAWEIBO'
 
 								};
-								console.log(JSON.stringify(formdata));
-								
-
+								Net.request({
+									
+									url: API.userApi(),
+									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									header:{
+										'Content-Type':'application/x-www-form-urlencoded'
+									},
+									method: "get",
+									dataType: 'json',
+									success: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+										if(res.data.code==1){
+											//保存用户信息
+											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
+											localStorage.setItem('token',res.data.data.token);
+											var timer = setTimeout(function() {
+												uni.reLaunch({
+													url: '/pages/home/home'
+												})
+												clearTimeout('timer')
+											}, 1000)
+										}
+									},
+									fail: function(res) {
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+										uni.showToast({
+											title: "网络开小差了哦",
+											icon: 'none'
+										})
+										uni.stopPullDownRefresh()
+									}
+								})
 							}
 						});
 					},
@@ -286,6 +387,9 @@
 							title: '请求出错啦！',
 							icon: 'none',
 							duration: 3000
+						});
+						uni.showLoading({
+							title: "加载中"
 						});
 					}
 				});
