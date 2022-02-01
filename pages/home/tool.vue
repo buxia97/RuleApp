@@ -124,7 +124,7 @@
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
 							<view class="index-sort-text">
-								积分兑换
+								积分商城
 							</view>
 						</view>
 					</waves>

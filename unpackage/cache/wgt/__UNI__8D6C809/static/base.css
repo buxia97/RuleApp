@@ -10,7 +10,10 @@ page{
 	
 }
 .header .cu-bar{
+	/*  #ifdef APP-PLUS || H5  */
 	box-shadow: 0px 0px 8upx rgba(0, 0, 0, 0.1);
+	/*  #endif  */
+	
 }
 .header .content{
 	color: #333;
@@ -651,4 +654,31 @@ page{
 }
 .content-btn-i .cuIcon-rechargefill{
 	color: #DD514C;
+}
+.api-login{
+	text-align: center;
+	width: 450upx;
+	margin: 50upx auto 0upx auto;
+}
+.api-login-box{
+	text-align: center;
+}
+.api-login-box image{
+	width: 90upx;
+	height: 90upx;
+}
+.all-btn{
+	padding: 0upx 50upx;
+}
+.post-update{
+	position: fixed;
+	bottom: 50upx;
+	right: 30upx;
+	width: 90upx;
+	height: 90upx;
+	color: #fff;
+	text-align: center;
+	line-height: 90upx;
+	border-radius: 50%;
+	box-shadow: 0px 0px 8upx rgba(0, 0, 0, 0.1);
 }

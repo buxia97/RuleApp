@@ -64,6 +64,10 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/manage",
+			"style": {}
+		},
+		{
 			"path": "pages/user/userpost",
 			"style": {
 				"enablePullDownRefresh":true
@@ -108,7 +112,14 @@
 			"path": "pages/user/usermark",
 			"style": {}
 		},
-		
+		{
+			"path": "pages/user/address",
+			"style": {}
+		},
+		{
+			"path": "pages/user/pay",
+			"style": {}
+		},
 		{
 			"path": "pages/contents/comments",
 			"style": {}
@@ -123,6 +134,20 @@
 		},
 		{
 			"path": "pages/contents/imagetoday",
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
+		},
+		{
+			"path": "pages/contents/shop",
 			"style": {
 				"enablePullDownRefresh":true
 			},

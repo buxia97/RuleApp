@@ -2,7 +2,7 @@
     "name" : "规则之树",
     "appid" : "__UNI__8D6C809",
     "description" : "规则之树手机客户端",
-    "versionName" : "RuleTree App 1.0.3 beta",
+    "versionName" : "RuleTree App 1.0.4 beta",
     "versionCode" : 13,
     "transformPx" : false,
     "app-plus" : {
@@ -49,11 +49,11 @@
                 "share" : {},
                 "oauth" : {
                     "qq" : {
-                        "appid" : "101374917",
+                        "appid" : "101988549",
                         "UniversalLinks" : ""
                     },
                     "sina" : {
-                        "appkey" : "1408627749",
+                        "appkey" : "1656619711",
                         "redirect_uri" : "https://www.ruletree.club/tepass/wb_login",
                         "UniversalLinks" : ""
                     }

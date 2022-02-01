@@ -42,6 +42,29 @@
 				<input placeholder="请再次输入密码" v-model="repassword" name="input"></input>
 			</view>
 		</form>
+		<view class="cu-list menu">
+			<view class="cu-item margin-top" @tap="toAddress">
+				<view class="content">
+					<text>收货地址设置</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
+			<view class="cu-item" @tap="toPay">
+				<view class="content">
+					<text>账户设置</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
+		</view>
+		<!--  #ifdef MP-WEIXIN -->
+		<view class="post-update bg-blue" @tap="userEdit">
+			<text class="cuIcon-upload"></text>
+		</view>
+		<!--  #endif -->
 	</view>
 </template>
 
@@ -190,6 +213,20 @@
 				    url: '../user/mailedit'
 				});
 			},
+			toAddress(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/address'
+				});
+			},
+			toPay(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/pay'
+				});
+			}
 		}
 	}
 </script>

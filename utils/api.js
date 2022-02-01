@@ -1,7 +1,6 @@
-var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://192.168.10.192:8081/';
+//var API_URL = 'https://api.zr.lc/';
+var API_URL = 'http://192.168.10.192:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
-
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';

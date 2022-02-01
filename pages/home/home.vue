@@ -168,8 +168,11 @@
 						<view class="text-cut">{{item.title}}</view>
 					</view>
 					<view class="content">
-						<image v-if="item.images.length>0" :src="item.images[0]"
-						 mode="aspectFill"></image>
+						<!-- <image v-if="item.images.length > 0" :src="item.images[0]"
+						 mode="aspectFill"></image> -->
+						 <image v-if="item.images.length > 0" :src="item.images[0]"
+						  mode="aspectFill"></image>
+						 
 						<view class="desc">
 							<view class="text-content"> {{subText(item.text,80)}}</view>
 							<view>
@@ -194,6 +197,32 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<!--update-->
+		<view class="update" v-if="Update==1">
+			<view class="update-bg">
+				
+			</view>
+			<view class="update-box">
+				<view class="update-main">
+					<image src="../../static/ic_ar.png"></image>
+					<view class="update-title">发现新版本：{{versionTitle}}</view>
+					<view class="update-intro">{{versionIntro}}</view>
+					<view class="update-btn grid col-2">
+						<view class="update-btn-box">
+							<view class="update-btn-main bg-blue"  @tap="isUpdate(true)">
+								确定
+							</view>
+						</view>
+						<view class="update-btn-box">
+							<view class="update-btn-main bg-gray" @tap="closeUpdate()">
+								取消
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!--update结束-->
 	</view>
 </template>
 
@@ -230,6 +259,15 @@
 				token:"",
 				
 				isLoading:0,
+				
+				
+				versionCode:0,
+				wgtVer:'',
+				
+				Update:0,
+				versionUrl:"",
+				versionTitle:"",
+				versionIntro:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -239,6 +277,7 @@
 				uni.stopPullDownRefresh();
 			}, 1000)
 		},
+		
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
@@ -259,6 +298,9 @@
 			that.loading();
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
+			// #endif
+			// #ifdef APP-PLUS
+			that.isUpdate(false);
 			// #endif
 		},
 		onReachBottom() {
@@ -466,9 +508,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
 						that.isLoad=0;
-						//console.log(JSON.stringify(res))
 						that.moreText="加载更多";
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -519,7 +559,7 @@
 					success: function(res) {
 						
 						that.isLoad=0;
-						//console.log(JSON.stringify(res))
+						
 						that.moreText="加载更多";
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -656,9 +696,62 @@
 			},
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			},
+			isUpdate(Status) {
+				var that = this;
+				
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					that.wgtVer = inf.version //获取当前版本号
+					that.versionCode = inf.versionCode;
+					var version = inf.versionCode;
+					Net.request({
+						url: API.GetUpdateUrl(),
+						method: 'get',
+						success: function(res) {
+							console.log(JSON.stringify())
+							var versionCode = res.data.versionCode;
+							that.versionUrl =  res.data.versionUrl;
+							that.versionTitle = res.data.version;
+							that.versionIntro = res.data.versionIntro;
+							if(Status){
+								uni.showToast({
+									title:"检测完成",
+									icon:'none',
+									duration: 1000,
+									position:'bottom',
+								});
+								
+							}
+							if(versionCode > version){
+								console.log("有更新");
+								uni.hideTabBar({
+								animation: true
+								})
+								that.Update=1;
+								if(Status){
+									if(res.data.versionUrl!=""){
+										plus.runtime.openURL(res.data.versionUrl);  
+									}
+								}
+							}
+							
+						},
+						fail:function(res){
+							
+						}
+					})
+					
+				})
+			},
+			closeUpdate(){
+				var that = this;
+				that.Update = 0;
+				uni.showTabBar({
+					animation: true
+				});
 			}
-			
 		},
+		
 		components: {
 			waves
 		}
@@ -667,4 +760,5 @@
 
 <style>
 @import "../../static/base.css";
+
 </style>

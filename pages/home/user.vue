@@ -98,18 +98,6 @@
 						</view>
 					</waves>
 				</view>
-				<!-- <view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i">
-								<text class="cuIcon-commentfill"></text>
-							</view>
-							<view class="index-sort-text">
-								评论区
-							</view>
-						</view>
-					</waves>
-				</view> -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('../user/usermark')">
@@ -130,6 +118,18 @@
 							</view>
 							<view class="index-sort-text">
 								我的投稿
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+							<view class="index-sort-i">
+								<text class="cuIcon-present"></text>
+							</view>
+							<view class="index-sort-text">
+								我的商品
 							</view>
 						</view>
 					</waves>
@@ -157,6 +157,20 @@
 							</view>
 						</view>
 					</waves>
+				</view>
+			</view>
+		</view>
+		<view class="data-box" v-if="group=='administrator'">
+			<view class="cu-list menu" @tap="toManage">
+				<view class="cu-item">
+					<view class="content">
+						<text class="cuIcon-colorlens text-red"></text>
+						<text>管理员中心 </text>
+					</view>
+					<view class="action">
+						<text class="text-sm text-gray">仅管理员显示</text>
+						<text class="cuIcon-right"></text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -200,6 +214,7 @@
 				token:"",
 				userData:{},
 				isClock:0,
+				group:"",
 				
 			}
 		},
@@ -217,6 +232,7 @@
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.group = that.userInfo.group;
 			}
 			if(localStorage.getItem('token')){
 				
@@ -483,6 +499,11 @@
 				
 				uni.navigateTo({
 				    url: '../user/setup'
+				});
+			},
+			toManage(){
+				uni.navigateTo({
+				    url: '../user/manage'
 				});
 			}
 		},
