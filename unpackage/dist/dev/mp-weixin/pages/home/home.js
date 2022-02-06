@@ -370,7 +370,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 242));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 290));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -400,7 +429,16 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
       token: "",
 
-      isLoading: 0 };
+      isLoading: 0,
+
+
+      versionCode: 0,
+      wgtVer: '',
+
+      Update: 0,
+      versionUrl: "",
+      versionTitle: "",
+      versionIntro: "" };
 
   },
   onPullDownRefresh: function onPullDownRefresh() {
@@ -410,6 +448,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       uni.stopPullDownRefresh();
     }, 1000);
   },
+
   onShow: function onShow() {
     var that = this;
 
@@ -430,6 +469,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     that.loading();
 
     that.NavBar = this.CustomBar;
+
+
+
 
   },
   onReachBottom: function onReachBottom() {
@@ -637,9 +679,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
-
           that.isLoad = 0;
-          //console.log(JSON.stringify(res))
           that.moreText = "加载更多";
           if (res.data.code == 1) {
             var list = res.data.data;
@@ -690,7 +730,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         success: function success(res) {
 
           that.isLoad = 0;
-          //console.log(JSON.stringify(res))
+
           that.moreText = "加载更多";
           if (res.data.code == 1) {
             var list = res.data.data;
@@ -827,6 +867,59 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     },
     formatNumber: function formatNumber(num) {
       return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num;
+    },
+    isUpdate: function isUpdate(Status) {
+      var that = this;
+
+      plus.runtime.getProperty(plus.runtime.appid, function (inf) {
+        that.wgtVer = inf.version; //获取当前版本号
+        that.versionCode = inf.versionCode;
+        var version = inf.versionCode;
+        Net.request({
+          url: API.GetUpdateUrl(),
+          method: 'get',
+          success: function success(res) {
+            console.log(JSON.stringify());
+            var versionCode = res.data.versionCode;
+            that.versionUrl = res.data.versionUrl;
+            that.versionTitle = res.data.version;
+            that.versionIntro = res.data.versionIntro;
+            if (Status) {
+              uni.showToast({
+                title: "检测完成",
+                icon: 'none',
+                duration: 1000,
+                position: 'bottom' });
+
+
+            }
+            if (versionCode > version) {
+              console.log("有更新");
+              uni.hideTabBar({
+                animation: true });
+
+              that.Update = 1;
+              if (Status) {
+                if (res.data.versionUrl != "") {
+                  plus.runtime.openURL(res.data.versionUrl);
+                }
+              }
+            }
+
+          },
+          fail: function fail(res) {
+
+          } });
+
+
+      });
+    },
+    closeUpdate: function closeUpdate() {
+      var that = this;
+      that.Update = 0;
+      uni.showTabBar({
+        animation: true });
+
     } },
 
 

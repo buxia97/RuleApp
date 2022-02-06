@@ -252,6 +252,7 @@
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
+								
 								let formdata = {
 									nickName: infoRes.userInfo.nickName,
 									//gender: infoRes.userInfo.gender,

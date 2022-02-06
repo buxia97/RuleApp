@@ -345,7 +345,7 @@
 						});
 						const tempFilePaths = res.tempFilePaths;
 						const uploadTask = uni.uploadFile({
-						  url : API.cosUpload(),
+						  url : API.upload(),
 						  filePath: tempFilePaths[0],
 						  name: 'file',
 						  formData: {
@@ -380,10 +380,7 @@
 						});
 					 
 						uploadTask.onProgressUpdate(function (res) {
-						  // that.percent = res.progress;
-						  // console.log('上传进度' + res.progress);
-						  // console.log('已经上传的数据长度' + res.totalBytesSent);
-						  // console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+						  
 						 });
 					}
 				})

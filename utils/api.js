@@ -1,5 +1,8 @@
-//var API_URL = 'https://api.zr.lc/';
+//var API_URL = 'https://api.ruletree.club/';
 var API_URL = 'http://192.168.10.192:8081/';
+//var API_URL = 'http://api.bijilu.com/';
+
+
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -98,13 +101,42 @@ module.exports = {
 	contensImage:function(){
 		return API_URL + 'typechoContents/ImagePexels';
 	},
-	cosUpload:function(){
-		return API_URL + 'upload/cosUpload';
-	},
-	localUpload:function(){
-		return API_URL + 'upload/localUpload';
+	
+	//下面这个方法涉及图片上传，自己修改定义接口路径
+	upload:function(){
+		//return API_URL + 'upload/cosUpload';//COS对象存储接口
+		return API_URL + 'upload/localUpload'; //本地上传接口
 	},
 	
+	shopList:function(){
+		return API_URL + 'typechoShop/shopList';
+	},
+	shopInfo:function(){
+		return API_URL + 'typechoShop/shopInfo';
+	},
+	addShop:function(){
+		return API_URL + 'typechoShop/addShop';
+	},
+	editShop:function(){
+		return API_URL + 'typechoShop/editShop';
+	},
+	deleteShop:function(){
+		return API_URL + 'typechoShop/deleteShop';
+	},
+	buyShop:function(){
+		return API_URL + 'typechoShop/buyShop';
+	},
+	buyList:function(){
+		return API_URL + 'typechoUserlog/buyList';
+	},
+	orderList:function(){
+		return API_URL + 'typechoUserlog/orderList';
+	},
+	
+	//文章挂载商品
+	mountShop:function(){
+		return API_URL + 'typechoShop/mountShop';
+	},
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

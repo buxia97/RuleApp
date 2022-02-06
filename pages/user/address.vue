@@ -53,6 +53,7 @@
 				telephone:"",
 				address:"",
 				
+				userInfo:"",
 				token:'',
 			}
 		},
@@ -66,7 +67,11 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
+			that.userStatus();
 			that.getCacheInfo();
 		},
 		onLoad() {
@@ -86,6 +91,7 @@
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					that.uid=userInfo.uid;
+					that.userInfo = userInfo;
 				}
 			},
 			userEdit() {
@@ -100,6 +106,7 @@
 				var address = that.name+"|"+that.telephone+"|"+that.address;
 				var data = {
 					uid:that.uid,
+					name:that.userInfo.name,
 					address:address
 				}
 				uni.showLoading({
@@ -118,7 +125,6 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						//console.log(JSON.stringify(res))
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -147,6 +153,40 @@
 							icon: 'none'
 						})
 						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			userStatus() {
+				var that = this;
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						if(res.data.code==1){
+							var address = res.data.data.address;
+							if(address){
+								var arr = address.split("|");
+								that.name=arr[0];
+								that.telephone=arr[1];
+								that.address=arr[2];
+							}
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
 					}
 				})
 			},

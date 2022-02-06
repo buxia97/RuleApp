@@ -104,10 +104,10 @@ page{
 	background-color: #e03997;
 }
 .index-sort .index-sort-box:nth-child(7) .index-sort-i{
-	background-color: #607d8b;
+	background-color: #eb550f;
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
-	/* background-color: #607d8b; */
+	background-color: #607d8b;
 }
 .index-sort .index-sort-box:nth-child(9) .index-sort-i{
 	background-color: #ff9f10;
@@ -779,4 +779,132 @@ page{
 .update-btn-main{
 	padding: 15upx 0upx;
 	border-radius: 10upx;
+}
+.pay-codeImg{
+	background-color: #fff;
+	text-align: center;
+	padding: 30upx 0upx;
+}
+.shop-list{
+	padding: 30upx 15upx;
+}
+.shop-box{
+	padding: 10upx;
+	
+}
+.shop-main{
+	padding: 15upx;
+	border: solid 1px #f3f3f3;
+	border-radius: 10upx;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;
+}
+.shop-box:hover .shop-main{
+	box-shadow: 0upx 0upx 15upx rgba(0,0,0,0.3);
+}
+.shop-img{
+	height: 250upx;
+	overflow: hidden;
+}
+.shop-img image{
+	height: 250upx;
+	border-radius: 15upx;
+}
+.shop-title{
+	font-size: 22upx;
+	margin-top: 10upx;
+	margin-bottom: 15upx;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2;
+}
+.shop-info{
+	padding: 10upx 10upx;
+	line-height: 40upx;
+}
+.shop-price{
+	font-size: 38upx;
+}
+.shop-info .cuIcon-cart{
+	float:right;
+}
+.shopinfo-img{
+	width: 100%;
+	height: 400upx;
+	overflow: hidden;
+}
+.shopinfo-img image{
+	width: 100%;
+	height: 400upx;
+}
+.shopinfo-title{
+	font-size: 35upx;
+	line-height: 50upx;
+	font-weight: bold;
+	background-color: #fff;
+	padding: 20upx 30upx;
+	border-bottom: solid 1px #f3f3f3;
+}
+.shopinfo-bar{
+	position: fixed;
+	width: 100%;
+	z-index: 999;
+	bottom: 0;
+	left: 0;
+	background-color: #fff;
+	border-top: solid 1px #f3f3f3;
+	height: 100upx;
+	line-height: 100upx;
+	padding: 0upx 30upx;
+}
+.shopinfo-price{
+	font-size: 38upx;
+	color: #CE292C;
+	font-weight: bold;
+}
+.shopinfo-btn{
+	text-align: right;
+}
+.shopinfo-info{
+	text-align: right;
+	padding: 10upx 30upx;
+	background-color: #fff;
+}
+.shop-btn{
+	padding: 8upx 15upx;
+	margin: 0upx 20upx;
+	border-radius: 6upx;
+}
+.text-tips{
+	line-height: 40upx;
+}
+.order-box{
+	background-color: #fff;
+	border-top: solid 1px #f3f3f3;
+	padding: 30upx;
+}
+.order-info{
+	margin-bottom: 20upx;
+	line-height: 50upx;
+}
+.order-id{
+	font-weight: bold;
+}
+.order-type{
+	float: right;
+	padding: 5upx 15upx;
+	border-radius: 8upx;
+	font-size: 24upx;
+}
+.order-shop{
+	background-color: #f3f3f3;
+	padding: 30upx;
+	margin-bottom: 20upx;
+}
+.order-btn .text-blue{
+	float: right;
 }

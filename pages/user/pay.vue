@@ -18,22 +18,55 @@
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">账户类型</view>
-				<input placeholder="请输入账户信息" name="input" type="number" v-model="type"></input>
+				<view class="picker" @tap="showModal" data-target="payModal">
+					<block v-if="type==''">
+						选择账户类型
+					</block>
+					<block v-else>
+						{{type}}
+					</block>
+					<text class="cuIcon-right"></text>
+				</view>
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">真实姓名</view>
-				<input placeholder="请输入真实姓名" name="input" v-model="realname"></input>
+				<input placeholder="请输入真实姓名" name="input" type="text" v-model="realname"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">账户信息</view>
-				<input placeholder="请输入账户信息" name="input" type="number" v-model="info"></input>
+				<input placeholder="请输入账户信息" name="input" type="text" v-model="info"></input>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">收款二维码</view>
+				<view class="action">
+					<text class="cu-btn bg-blue radius" @tap="upload">上传图片</text>
+				</view>
+			</view>
+			<view class="pay-codeImg" v-if="imgurl!=''">
+				<image :src="imgurl"></image>
+			</view>
+			
 		</form>
 		<!--  #ifdef MP-WEIXIN -->
 		<view class="post-update bg-blue" @tap="userEdit">
 			<text class="cuIcon-upload"></text>
 		</view>
 		<!--  #endif -->
+		<!--分类选择控件-->
+		<view class="cu-modal" :class="modalName=='payModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block">
+					<view class="cu-list menu text-left">
+						<view class="cu-item" v-for="(item,index) in payList" :key="index" @tap="toPay(item.name)" >
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">{{item.name}}</view>
+								<radio class="round"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -49,12 +82,25 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				uid:0,
-				
+				payList:[
+					{
+					"name":"支付宝",
+					},
+					{
+					"name":"微信",
+					}
+				],
 				type:"",
 				realname:"",
 				info:"",
 				
 				token:'',
+				userInfo:"",
+				
+				
+				modalName:"",
+				
+				imgurl:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -67,7 +113,11 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
+			that.userStatus();
 			that.getCacheInfo();
 		},
 		onLoad() {
@@ -82,25 +132,41 @@
 					delta: 1
 				});
 			},
+			PickerChange(e) {
+				this.index = e.detail.value
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal() {
+				this.modalName = null
+			},
+			toPay(name){
+				var that = this;
+				that.type = name;
+				that.hideModal();
+			},
 			getCacheInfo(){
 				var that = this;
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					that.uid=userInfo.uid;
+					that.userInfo = userInfo;
 				}
 			},
 			userEdit() {
 				var that = this;
-				if(that.type==""||that.realname==""||that.info==""){
+				if(that.type==""||that.realname==""||that.info==""||that.imgurl==""){
 					uni.showToast({
 						title: "请完成表单输入",
 						icon: 'none'
 					})
 					return false;
 				}
-				var pay = that.type+"|"+that.realname+"|"+that.info;
+				var pay = that.type+"|"+that.realname+"|"+that.info+"|"+that.imgurl;
 				var data = {
 					uid:that.uid,
+					name:that.userInfo.name,
 					pay:pay
 				}
 				uni.showLoading({
@@ -148,6 +214,85 @@
 							icon: 'none'
 						})
 						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			upload(){
+				let that = this				
+				uni.chooseImage({
+					count: 1,  // 最多可以选择的图片张数，默认9
+					sourceType: ['album', 'camera'], 
+				    success: function (res) {						
+						uni.showLoading({
+							title: "加载中"
+						});
+						const tempFilePaths = res.tempFilePaths;
+						const uploadTask = uni.uploadFile({
+						  url : API.upload(),
+						  filePath: tempFilePaths[0],
+						  name: 'file',
+						  formData: {
+						   'token': that.token
+						  },
+						  success: function (uploadFileRes) {
+							  setTimeout(function () {
+							  	uni.hideLoading();
+							  }, 1000);
+							var data = JSON.parse(uploadFileRes.data);
+							//var data = uploadFileRes.data;
+							uni.showToast({
+								title: data.msg,
+								icon: 'none'
+							})
+							if(data.code==1){
+								that.imgurl = data.data.url;
+							}
+							},fail:function(){
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+							}
+							
+						   
+						});
+					 
+						uploadTask.onProgressUpdate(function (res) {
+						  
+						 });
+					}
+				})
+			},
+			userStatus() {
+				var that = this;
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var pay = res.data.data.pay;
+							if(pay){
+								var arr = pay.split("|");
+								that.type=arr[0];
+								that.realname=arr[1];
+								that.info=arr[2];
+								that.imgurl=arr[3];
+							}
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
 					}
 				})
 			},

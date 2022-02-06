@@ -319,7 +319,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 242));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 290));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -331,7 +357,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       userInfo: null,
       token: "",
       userData: {},
-      isClock: 0 };
+      isClock: 0,
+      group: "" };
 
 
   },
@@ -349,6 +376,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
       that.userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
       that.userInfo.style = "background-image:url(" + that.userInfo.avatar + ");";
+      that.group = that.userInfo.group;
     }
     if (_index.localStorage.getItem('token')) {
 
@@ -397,6 +425,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
                 openId: infoRes.userInfo.openId,
                 accessToken: infoRes.userInfo.unionId };
 
+              console.log(JSON.stringify(infoRes));
               Net.request({
 
                 url: API.userApi(),
@@ -615,6 +644,11 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
       uni.navigateTo({
         url: '../user/setup' });
+
+    },
+    toManage: function toManage() {
+      uni.navigateTo({
+        url: '../user/manage' });
 
     } },
 

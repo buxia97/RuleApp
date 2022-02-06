@@ -148,6 +148,18 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+							<view class="index-sort-i">
+								<text class="cuIcon-baby"></text>
+							</view>
+							<view class="index-sort-text">
+								订单记录
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toSetUp">
 							<view class="index-sort-i">
 								<text class="cuIcon-settingsfill"></text>
@@ -281,6 +293,7 @@
 									openId: infoRes.userInfo.openId,
 									accessToken: infoRes.userInfo.unionId
 								};
+								console.log(JSON.stringify(infoRes));
 								Net.request({
 									
 									url: API.userApi(),

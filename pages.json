@@ -121,6 +121,22 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/addshop",
+			"style": {}
+		},
+		{
+			"path": "pages/user/addshopinfo",
+			"style": {}
+		},
+		{
+			"path": "pages/user/myshop",
+			"style": {}
+		},
+		{
+			"path": "pages/user/order",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},
@@ -150,14 +166,12 @@
 			"path": "pages/contents/shop",
 			"style": {
 				"enablePullDownRefresh":true
-			},
-			
-			"app-plus":{
-				"pullToRefresh":{
-					"color":"#54b5db",
-					"style":"circle"
-				}
-				
+			}
+		},
+		{
+			"path": "pages/contents/shopinfo",
+			"style": {
+				"enablePullDownRefresh":true
 			}
 		},
 		{

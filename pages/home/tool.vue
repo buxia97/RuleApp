@@ -119,7 +119,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toShop">
 							<view class="index-sort-i">
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
@@ -294,6 +294,13 @@
 				
 				uni.navigateTo({
 				    url: '../contents/randlist'
+				});
+			},
+			toShop(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/shop'
 				});
 			},
 			userStatus() {

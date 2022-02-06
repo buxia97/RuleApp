@@ -8,6 +8,7 @@
     "pages/user/useredit",
     "pages/user/mailedit",
     "pages/user/inbox",
+    "pages/user/manage",
     "pages/user/userpost",
     "pages/user/post",
     "pages/user/login",
@@ -16,10 +17,16 @@
     "pages/user/setup",
     "pages/user/usercomments",
     "pages/user/usermark",
+    "pages/user/address",
+    "pages/user/pay",
+    "pages/user/addshop",
+    "pages/user/addshopinfo",
     "pages/contents/comments",
     "pages/contents/commentsadd",
     "pages/contents/contentlist",
     "pages/contents/imagetoday",
+    "pages/contents/shop",
+    "pages/contents/shopinfo",
     "pages/contents/info",
     "pages/contents/alltag",
     "pages/contents/randlist",
@@ -67,6 +74,5 @@
   },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
-  },
-  "sitemapLocation": "sitemap94.json"
+  }
 }
