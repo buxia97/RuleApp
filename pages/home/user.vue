@@ -62,7 +62,7 @@
 							<view class="user-data-value">{{userData.commentsNum}}</view>
 							<view class="user-data-title">评论</view>
 						</view>
-						<view class="user-data-box">
+						<view class="user-data-box" @tap="toLink('../user/assets')">
 							<view class="user-data-value">{{userData.assets}}</view>
 							<view class="user-data-title">积分</view>
 						</view>

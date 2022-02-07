@@ -90,7 +90,7 @@
 								<text class="cuIcon-pay"></text>
 							</view>
 							<view class="index-sort-text">
-								快捷充值
+								快捷充扣
 							</view>
 						</view>
 					</waves>
@@ -110,18 +110,18 @@
 			</view>
 		</view>
 		<view class="data-box">
-			<view class="ruleApi-Info grid col-2">
+			<view class="ruleApi-Info grid col-2" v-if="ruleApiInfo">
 				<view class="ruleApi-Info-box">
 					<view class="ruleApi-title">客户端最新版本</view>
 					<view class="ruleApi-name">RuleApp</view>
-					<view class="ruleApi-version text-gray">v1.0.3 (2022.01.28)</view>
-					<text class="cu-btn bg-blue">获取</text>
+					<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleappVersion}}</view>
+					<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleappDt)">获取</text>
 				</view>
 				<view class="ruleApi-Info-box">
 					<view class="ruleApi-title">服务端最新版本</view>
 					<view class="ruleApi-name">RuleApi</view>
-					<view class="ruleApi-version text-gray">V1.0.0 (2022.01.28)</view>
-					<text class="cu-btn bg-blue">获取</text>
+					<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleapiVersion}}</view>
+					<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleapiDt)">获取</text>
 				</view>
 			</view>
 		</view>
@@ -146,7 +146,9 @@
 				allComments:"",
 				allUsers:"",
 				allShop:"",
-				allContents:""
+				allContents:"",
+				
+				ruleApiInfo:null,
 				
 			}
 		},
@@ -171,6 +173,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.allData();
+			that.getInfo();
 		},
 		onLoad() {
 			var that = this;
@@ -227,19 +230,40 @@
 					}
 				})
 			},
-			toLink(text){
+			getInfo() {
 				var that = this;
-				
-				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
-					uni.showToast({
-						title: "请先登录哦",
-						icon: 'none'
-					})
-					return false;
-				}
-				uni.navigateTo({
-					url: text
-				});
+				Net.request({
+					
+					url: "https://www.ruletree.club/ruleApiInfo.php",
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.ruleappVersion){
+							that.ruleApiInfo = res.data;
+						}
+						
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toUrl(url){
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 		},
 		components: {

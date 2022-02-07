@@ -141,6 +141,22 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/assets",
+			"style": {}
+		},
+		{
+			"path": "pages/user/userwithdraw",
+			"style": {}
+		},
+		{
+			"path": "pages/user/userrecharge",
+			"style": {}
+		},
+		{
+			"path": "pages/user/userwithdrawlist",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},

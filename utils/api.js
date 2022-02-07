@@ -1,6 +1,5 @@
 //var API_URL = 'https://api.ruletree.club/';
 var API_URL = 'http://192.168.10.192:8081/';
-//var API_URL = 'http://api.bijilu.com/';
 
 
 var WEB_URL = 'https://www.ruletree.club/';
@@ -62,6 +61,17 @@ module.exports = {
 	userRecharge:function(){
 		return API_URL + 'typechoUsers/userRecharge';
 	},
+	
+	userWithdraw:function(){
+		return API_URL + 'typechoUsers/userWithdraw';
+	},
+	withdrawList:function(){
+		return API_URL + 'typechoUsers/withdrawList';
+	},
+	withdrawStatus:function(){
+		return API_URL + 'typechoUsers/withdrawStatus';
+	},
+	
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
 	},
@@ -77,7 +87,9 @@ module.exports = {
 	removeLog:function(){
 		return API_URL + 'typechoUserlog/removeLog';
 	},
-	
+	removeLog:function(){
+		return API_URL + 'typechoUserlog/removeLog';
+	},
 	
 	
 	getCommentsList:function(){
@@ -166,6 +178,18 @@ module.exports = {
 	mountShop:function(){
 		return API_URL + 'typechoShop/mountShop';
 	},
+	//充值
+	scancodePay:function(){
+		return API_URL + 'pay/scancodePay';
+	},
+	//充值二维码
+	qrCode:function(){
+		return API_URL + 'pay/qrCode';
+	},
+	payLogList:function(){
+		return API_URL + 'pay/payLogList';
+	},
+	
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

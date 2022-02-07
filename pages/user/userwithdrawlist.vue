@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					提现审核
+					提现记录
 				</view>
 				<view class="action">
 					
@@ -16,17 +16,6 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-			<view class="search-type grid col-3 bg-white">
-				<view class="search-type-box" @tap="toType('-1')" :class="type=='-1'?'active':''">
-					<text>待审核</text>
-				</view>
-				<view class="search-type-box" @tap="toType('-2')" :class="type=='-2'?'active':''">
-					<text>已拒绝</text>
-				</view>
-				<view class="search-type-box" @tap="toType('0')" :class="type=='0'?'active':''">
-					<text>已通过</text>
-				</view>
-			</view>
 			<view class="cu-item">
 				<view class="cu-list menu-avatar comment">
 					<view class="no-data" v-if="withdrawList.length==0">
@@ -36,17 +25,14 @@
 						<view class="order-main">
 							<view class="order-info">
 								<text class="order-id">时间：{{formatDate(item.created)}}</text>
-								<text class="order-type">UID：{{item.uid}}</text>
+								
 							</view>
 							<view class="order-btn">
-								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/100}}</text>
-								<text class="text-blue order-status" @tap="toPay(item.pay)">用户收款码</text>
+								<text class="text-red">{{item.num}} 积分</text>
+								<text class="text-blue order-status" v-if="item.cid==-1">审核中</text>
+								<text class="text-green order-status" v-if="item.cid==0">已成功</text>
+								<text class="text-red order-status" v-if="item.cid==-2">被拒绝</text>
 							</view>
-							<view class="order-kill" v-if="item.cid==-1">
-								<text class="cu-btn bg-green radius" @tap="toStatus(item.id,1)">已打款</text>
-								<text class="cu-btn bg-red radius"  @tap="toStatus(item.id,0)">拒绝</text>
-							</view>
-							
 						</view>
 					</view>
 					
@@ -76,8 +62,6 @@
 				moreText:"加载更多",
 				page:1,
 				
-				type:"-1"
-				
 			}
 		},
 		onPullDownRefresh(){
@@ -95,7 +79,6 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.page=1;
 			
 		},
 		onLoad() {
@@ -144,7 +127,7 @@
 				}
 				var data = {
 					"type":"withdraw",
-					"cid":that.type,
+					"uid":uid
 				}
 				var page = that.page;
 				if(isPage){
@@ -176,9 +159,6 @@
 									that.withdrawList = withdrawList;
 								}
 							}else{
-								if(that.page==1){
-									that.withdrawList = withdrawList;
-								}
 								that.moreText="没有更多数据了";
 							}
 							
@@ -205,89 +185,6 @@
 				// 返回
 				return result;
 			},
-			toPay(text){
-				if(!text){
-					uni.showToast({
-						title: "该用户未设置收款",
-						icon: 'none'
-					})
-					return false;
-				}
-				var arr = text.split("|");
-				var image=arr[3];
-				var imgArr = [];
-				imgArr.push(image);
-				//预览图片
-				uni.previewImage({
-					urls: imgArr,
-					current: imgArr[0]
-				});
-			},
-			toStatus(id,type){
-				var that = this;
-				var token = "";
-				
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}
-				var data = {
-					"key":id,
-					"type":type,
-					"token":token
-				}
-				uni.showModal({
-				    title: '确定要进行操作吗？',
-				    success: function (res) {
-				        if (res.confirm) {
-				            uni.showLoading({
-				            	title: "加载中"
-				            });
-				            
-				            Net.request({
-				            	url: API.withdrawStatus(),
-				            	data:data,
-				            	header:{
-				            		'Content-Type':'application/x-www-form-urlencoded'
-				            	},
-				            	method: "get",
-				            	dataType: 'json',
-				            	success: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: res.data.msg,
-				            			icon: 'none'
-				            		})
-				            		if(res.data.code==1){
-										that.page=1;
-				            			that.getWithdrawList();
-				            		}
-				            		
-				            	},
-				            	fail: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: "网络开小差了哦",
-				            			icon: 'none'
-				            		})
-				            	}
-				            })
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
-				});
-			},
-			toType(i){
-				var that= this;
-				that.type = i;
-				that.page=1;
-				that.getWithdrawList();
-			}
 		}
 	}
 </script>

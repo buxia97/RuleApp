@@ -908,6 +908,12 @@ page{
 .order-btn .text-blue{
 	float: right;
 }
+.order-btn .text-green{
+	float: right;
+}
+.order-btn .order-status{
+	float: right;
+}
 .shop-status{
 	font-size: 22upx;
 	padding: 8upx 15upx;
@@ -1010,4 +1016,91 @@ page{
 	position: absolute;
 	right: 30upx;
 	top: 40upx;
+}
+.myAssets{
+	width: 100%;
+	text-align: center;
+	padding: 50upx 30upx;
+	
+}
+.myAssets-num{
+	font-size: 60upx;
+	margin-right: 10upx;
+}
+.myAssets-btn{
+	text-align: center;
+	padding-bottom: 30upx;
+}
+.myAssets-btn text{
+	margin: 0upx 20upx;
+}
+.userrecharge{
+	padding: 30upx;
+}
+.userrecharge-type{
+	margin-bottom: 40upx;
+}
+.userrecharge-type text{
+	margin-right: 10upx;
+}
+.userrecharge-code{
+	text-align: center;
+	margin-bottom: 40upx;
+}
+.userrecharge-code image{
+	border: 30upx solid #aecfff;
+	border-radius: 20upx;
+	width: 400upx;
+	height: 400upx;
+}
+.userrecharge-btn{
+	text-align: center;
+	margin-bottom: 20upx;
+}
+.userrecharge-btn text{
+	margin:0upx 20upx;
+}
+.userrecharge-intro-title{
+	font-size: 35upx;
+	font-weight: bold;
+	margin-top: 50upx;
+}
+.userrecharge-intro{
+	line-height: 45upx;
+	margin-top: 30upx;
+}
+.userrecharge-intro-text{
+	margin-top: 20upx;
+	font-size: 26upx;
+}
+.userrecharge-form{
+	padding: 30upx 30upx;
+	text-align: center;
+}
+.userrecharge-form input{
+	border: solid #ccc 1px;
+	height: 70upx;
+	line-height: 70upx;
+	margin-bottom: 40upx;
+	padding: 20upx;
+}
+.pay-status{
+	float: right;
+}
+.cur-assets{
+	padding: 0upx 30upx;
+}
+.cur-assets text{
+	font-weight: bold;
+	font-size: 35upx;
+}
+.userwithdraw-box{
+	background-color: #fff;
+	padding:10upx 30upx 30upx 30upx;
+}
+.order-kill{
+	margin-top: 30upx;
+}
+.order-kill text{
+	margin-left: 15upx;
 }
