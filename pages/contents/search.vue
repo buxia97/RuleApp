@@ -236,6 +236,7 @@
 			searchTag(){
 				var that = this;
 				var searchText = that.searchText;
+				that.page=1;
 				if(that.type==0){
 					that.getContentsList();
 				}else if(that.type==1){

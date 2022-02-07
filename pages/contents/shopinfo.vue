@@ -30,12 +30,20 @@
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
 			</view>
 		</view>
-		<view class="shopinfo-bar grid col-2">
+		<view class="shopinfo-bar grid col-2" v-if="isBuy==0">
 			<view class="shopinfo-price">
 				{{price}} 积分
 			</view>
 			<view class="shopinfo-btn">
 				<text class="cu-btn bg-blue radius" @tap="shopBuy">立即购买</text>
+			</view>
+		</view>
+		<view class="shopinfo-bar grid col-2" v-if="isBuy==1">
+			<view class="shopinfo-price">
+				已购买
+			</view>
+			<view class="shopinfo-btn">
+				<text class="cu-btn bg-blue radius" @tap="toInfo">查看详情</text>
 			</view>
 		</view>
 		<!--加载遮罩-->
@@ -70,6 +78,9 @@
 				
 				isLoading:0,
 				
+				isBuy:0,
+				shopinfo:{},
+				
 				
 			}
 		},
@@ -102,6 +113,7 @@
 			if(res.sid){
 				that.sid = res.sid;
 				that.getInfo(that.sid);
+				that.isBuyShop(that.sid);
 			}
 			
 		},
@@ -127,6 +139,7 @@
 					success: function(res) {
 						
 						uni.stopPullDownRefresh();
+						that.shopinfo = res.data;
 						that.title = res.data.title;
 						that.type = res.data.type;
 						that.html = res.data.text;
@@ -225,7 +238,55 @@
 						})
 					}
 				})
-			}
+			},
+			toInfo(){
+				var that = this;
+				var data = that.shopinfo;
+				if(data.type==1){
+					uni.showToast({
+						title: "实体商品请留意快递信息",
+						icon: 'none'
+					})
+				}else{
+					uni.navigateTo({
+					    url: '../contents/shoptext?sid='+data.id
+					});
+				}
+			},
+			isBuyShop(sid){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"sid":that.sid,
+					"token":token
+				}
+				Net.request({
+					url: API.isBuyShop(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.isBuy=1;
+						}
+						
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		}
 	}
 </script>

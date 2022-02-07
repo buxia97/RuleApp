@@ -124,7 +124,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+						<view class="index-sort-main" @tap="toLink('../user/myshop')">
 							<view class="index-sort-i">
 								<text class="cuIcon-present"></text>
 							</view>
@@ -146,9 +146,9 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" @tap="toLink('../user/order')">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+						<view class="index-sort-main">
 							<view class="index-sort-i">
 								<text class="cuIcon-baby"></text>
 							</view>

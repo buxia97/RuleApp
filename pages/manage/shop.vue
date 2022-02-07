@@ -6,27 +6,12 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					我的商品
+					商品管理
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toShop">
-					<text class="cuIcon-add"></text>
-				</view>
-				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			
-			<view class="all-btn">
-				<view class="user-btn flex flex-direction">
-					<!--  #ifdef MP-WEIXIN -->
-					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toShop">发布商品</button>
-					
-					<!--  #endif -->
-					<button class="cu-btn bg-yellow margin-tb-sm lg">已售出订单</button>
-				</view>
-			</view>
 			
 			<view class="shop-list grid col-2">
 				<view class="shop-box" v-for="(item,index) in shopList">
@@ -34,14 +19,14 @@
 						<text class="bg-orange shop-status" v-if="item.status==0">待审核</text>
 						<text class="bg-green shop-status" v-if="item.status==1">已上架</text>
 						<text class="bg-red shop-status" v-if="item.status==2">已禁用</text>
-						<view class="shop-img">
+						<view class="shop-img" @tap="editShop(item.id)">
 							<image :src="item.imgurl"></image>
 						</view>
 						<view class="shop-title">
 							{{item.title}}
 						</view>
 						<view class="shop-info text-center">
-							<text class="shop-btn bg-blue" @tap="editShop(item.id)">编辑</text>
+							<text class="shop-btn bg-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
 							<text class="shop-btn bg-red" @tap="deleteShop(item.id)">删除</text>
 						</view>
 					</view>
@@ -310,6 +295,76 @@
 				    url: '../user/addshop?type=edit'+'&sid='+sid
 				});
 			},
+			auditShop(sid){
+				var that = this;
+				var token= "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+				uni.showToast({
+				    title:"请先登录",
+					icon:'none',
+					duration: 1000,
+					position:'bottom',
+				});
+				var timer = setTimeout(function() {
+					uni.navigateTo({
+						url: '../user/login'
+					});
+					clearTimeout('timer')
+				}, 1000)
+				return false
+				}
+				var data = {
+					key: sid,
+					token: token,
+				}
+				uni.showModal({
+					title: '确定审核通过该商品吗?',
+					content: ' ',
+					success: function(res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							Net.request({
+								
+								url: API.auditShop(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: res.data.msg,
+										icon: 'none'
+									})
+									if(res.data.code==1){
+										that.page=1;
+										that.getShopList();
+									}
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+									uni.stopPullDownRefresh()
+								}
+							})
+						}
+					}
+				});
+			}
 			
 		},
 		components: {

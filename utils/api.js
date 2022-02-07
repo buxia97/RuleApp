@@ -56,27 +56,38 @@ module.exports = {
 	getUserData:function(){
 		return API_URL + 'typechoUsers/userData';
 	},
+	userDelete:function(){
+		return API_URL + 'typechoUsers/userDelete';
+	},
+	userRecharge:function(){
+		return API_URL + 'typechoUsers/userRecharge';
+	},
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
 	},
 	getIsMark:function(){
 		return API_URL + 'typechoUserlog/isMark';
 	},
-	
+	userStatus:function(){
+		return API_URL + 'typechoUsers/userStatus';
+	},
 	addLog:function(){
 		return API_URL + 'typechoUserlog/addLog';
 	},
 	removeLog:function(){
 		return API_URL + 'typechoUserlog/removeLog';
 	},
-	userStatus:function(){
-		return API_URL + 'typechoUsers/userStatus';
-	},
+	
+	
+	
 	getCommentsList:function(){
 		return API_URL + 'typechoComments/commentsList';
 	},
 	setComments:function(){
 		return API_URL + 'typechoComments/commentsAdd';
+	},
+	commentsDelete:function(){
+		return API_URL + 'typechoComments/commentsDelete';
 	},
 	//根据标签或者分类获取文章
 	getMetaContents:function(){
@@ -100,6 +111,15 @@ module.exports = {
 	},
 	contensImage:function(){
 		return API_URL + 'typechoContents/ImagePexels';
+	},
+	allData:function(){
+		return API_URL + 'typechoContents/allData';
+	},
+	contentsDelete:function(){
+		return API_URL + 'typechoContents/contentsDelete';
+	},
+	contentsAudit:function(){
+		return API_URL + 'typechoContents/contentsAudit';
 	},
 	
 	//下面这个方法涉及图片上传，自己修改定义接口路径
@@ -126,11 +146,20 @@ module.exports = {
 	buyShop:function(){
 		return API_URL + 'typechoShop/buyShop';
 	},
+	isBuyShop:function(){
+		return API_URL + 'typechoShop/isBuyShop';
+	},
+	auditShop:function(){
+		return API_URL + 'typechoShop/auditShop';
+	},
 	buyList:function(){
 		return API_URL + 'typechoUserlog/buyList';
 	},
 	orderList:function(){
 		return API_URL + 'typechoUserlog/orderList';
+	},
+	orderSellList:function(){
+		return API_URL + 'typechoUserlog/orderSellList';
 	},
 	
 	//文章挂载商品

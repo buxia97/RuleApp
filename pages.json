@@ -137,6 +137,10 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/sellorder",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},
@@ -175,6 +179,13 @@
 			}
 		},
 		{
+			"path": "pages/contents/shoptext",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+
+		{
 			"path": "pages/contents/info",
 			"style": {
 				"enablePullDownRefresh":true
@@ -202,6 +213,30 @@
 		},
 		{
 			"path": "pages/contents/search",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/comments",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/contents",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/recharge",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/shop",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/users",
+			"style": {}
+		},
+		{
+			"path": "pages/manage/withdraw",
 			"style": {}
 		}
 		

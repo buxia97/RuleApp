@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					我的订单
+					售出的订单
 				</view>
 				<view class="action">
 					<!-- <text class="cuIcon-search"></text> -->
@@ -15,7 +15,7 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="text-tips margin-top text-center text-gray text-sm">
-			只显示最近30条记录，请及时保存信息
+			只显示最近30条记录，请及时处理
 		</view>
 		<view class="order-box"  v-for="(item,index) in orderList">
 			<view class="order-main">
@@ -33,7 +33,21 @@
 				</view>
 				<view class="order-btn" v-if="item.shopInfo">
 					<text class="text-red">{{item.shopInfo.price}} 积分</text>
-					<text class="text-blue" @tap="toInfo(item.shopInfo)">查看收费内容</text>
+					<text class="text-blue" v-if="item.shopInfo.type==1" @tap="addressInfo(item.address)">查看用户地址</text>
+				</view>
+			</view>
+		</view>
+		
+		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">用户地址信息</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					{{address}}
 				</view>
 			</view>
 		</view>
@@ -55,6 +69,10 @@
 				isLoad:0,
 				token:"",
 				orderList:[],
+				
+				address:"",
+				
+				modalName: null,
 			}
 		},
 		onPullDownRefresh(){
@@ -88,6 +106,12 @@
 					delta: 1
 				});
 			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
 			getType(i){
 				var arr = ["实体商品","源码","软件工具","付费阅读"];
 				return arr[i-1];
@@ -98,7 +122,7 @@
 					"token":that.token
 				}
 				Net.request({
-					url: API.orderList(),
+					url: API.orderSellList(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -129,18 +153,6 @@
 				    url: '../contents/shopinfo?sid='+sid
 				});
 			},
-			toInfo(data){
-				if(data.type==1){
-					uni.showToast({
-						title: "实体商品请留意快递信息",
-						icon: 'none'
-					})
-				}else{
-					uni.navigateTo({
-					    url: '../contents/shoptext?sid='+data.id
-					});
-				}
-			},
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
 				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -154,6 +166,11 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
+			},
+			addressInfo(text){
+				var that = this;
+				that.address = text;
+				this.modalName ="Modal";
 			}
 
 		}

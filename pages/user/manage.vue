@@ -16,19 +16,19 @@
 		<view class="data-box manage-data" >
 			<view class="user-data grid col-4">
 				<view class="user-data-box">
-					<view class="user-data-value">5453</view>
+					<view class="user-data-value">{{allContents}}</view>
 					<view class="user-data-title">全站文章</view>
 				</view>
 				<view class="user-data-box">
-					<view class="user-data-value">235</view>
+					<view class="user-data-value">{{allComments}}</view>
 					<view class="user-data-title">全站评论</view>
 				</view>
 				<view class="user-data-box">
-					<view class="user-data-value">554</view>
+					<view class="user-data-value">{{allShop}}</view>
 					<view class="user-data-title">全站商品</view>
 				</view>
 				<view class="user-data-box">
-					<view class="user-data-value">554</view>
+					<view class="user-data-value">{{allUsers}}</view>
 					<view class="user-data-title">用户注册</view>
 				</view>
 			</view>
@@ -37,7 +37,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/useredit')">
+						<view class="index-sort-main" @tap="toLink('../manage/users')">
 							<view class="index-sort-i">
 								<text class="cuIcon-friend"></text>
 							</view>
@@ -49,7 +49,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/inbox')">
+						<view class="index-sort-main" @tap="toLink('../manage/contents')">
 							<view class="index-sort-i">
 								<text class="cuIcon-text"></text>
 							</view>
@@ -61,7 +61,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usermark')">
+						<view class="index-sort-main" @tap="toLink('../manage/usermark')">
 							<view class="index-sort-i">
 								<text class="cuIcon-favorfill"></text>
 							</view>
@@ -73,7 +73,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/userpost')">
+						<view class="index-sort-main" @tap="toLink('../manage/shop')">
 							<view class="index-sort-i">
 								<text class="cuIcon-shop"></text>
 							</view>
@@ -85,7 +85,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+						<view class="index-sort-main" @tap="toLink('../manage/recharge')">
 							<view class="index-sort-i">
 								<text class="cuIcon-pay"></text>
 							</view>
@@ -97,12 +97,12 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usershop')">
+						<view class="index-sort-main" @tap="toLink('../manage/withdraw')">
 							<view class="index-sort-i">
 								<text class="cuIcon-vipcard"></text>
 							</view>
 							<view class="index-sort-text">
-								提现申请
+								提现审核
 							</view>
 						</view>
 					</waves>
@@ -143,6 +143,10 @@
 				
 				userInfo:null,
 				token:"",
+				allComments:"",
+				allUsers:"",
+				allShop:"",
+				allContents:""
 				
 			}
 		},
@@ -166,7 +170,7 @@
 				
 				that.token = localStorage.getItem('token');
 			}
-			
+			that.allData();
 		},
 		onLoad() {
 			var that = this;
@@ -179,6 +183,49 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			toLink(text){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: text
+				});
+			},
+			allData() {
+				var that = this;
+				Net.request({
+					
+					url: API.allData(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.allComments = res.data.data.allComments;
+							that.allUsers = res.data.data.allUsers;
+							that.allShop = res.data.data.allShop;
+							that.allContents = res.data.data.allContents;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			toLink(text){
 				var that = this;

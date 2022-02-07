@@ -6,28 +6,33 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					全部标签
+					已购内容
 				</view>
 				<view class="action">
+					
 				</view>
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		
-		<view class="data-box">
-			<view class="category grid col-3">
-				<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid)">
-					<view class="category-main">
-						{{item.name}}
-					</view>
-				</view>
+		<view class="info" style="margin-top:10upx;">
+			<view class="info-content">
+				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
+				
+				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
 <script>
+	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
@@ -38,15 +43,27 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
-				metaList:[],
-				searchText:"",
+				sid:0,
+				title:"",
+				html:"",
+				markdownData: {},
+				price:"",
+				num:"",
+				imgurl:"",
+				
+				isLoading:0,
+				
 				
 			}
 		},
-		onPullDownRefresh(){
-			var that = this;
-			
+		components: {
+		  mpHtml,
 		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+		},
+		
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
@@ -54,67 +71,79 @@
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
+			
 		},
-		onLoad() {
+		onPullDownRefresh(){
 			var that = this;
+		},
+		onLoad(res) {
+			var that = this;
+			
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.getMetaList();
+			
+			if(res.sid){
+				that.sid = res.sid;
+				that.getInfo(that.sid);
+			}
+			
 		},
-		methods: {
+		methods:{
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
 			},
-			getMetaList(){
+			getInfo(sid){
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('token')){
+					token=localStorage.getItem('token');
+				}
 				var data = {
-					"type":"category"
+					"key":that.sid,
+					"token":token
 				}
 				Net.request({
-					url: API.getMetasList(),
-					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":15,
-						"page":1,
-					},
+					url: API.shopInfo(),
+					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-							
-								that.metaList = list;
-								localStorage.setItem('find_metaList',JSON.stringify(that.metaList));
-							}
+						
+						uni.stopPullDownRefresh();
+						if(res.data.value){
+							that.html = res.data.value;
 						}
+						
+
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh();
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'
 						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},
-			toCategoryContents(title,id){
-				var that = this;
-				var type="meta";
-				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
-				});
-			},
-
 		}
 	}
 </script>
 
 <style>
+	
 @import "../../static/base.css";
 </style>

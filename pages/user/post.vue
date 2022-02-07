@@ -46,7 +46,10 @@
 				<text class="cuIcon-picfill" @tap="upload"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
+				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
+				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
 				<text class="cuIcon-read" @tap="toIsShow"></text>
+				
 			</view>
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="文章内容" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)"></textarea>
@@ -80,7 +83,7 @@
 			<view class="cu-dialog" @tap.stop="">
 				<radio-group class="block">
 					<view class="cu-list menu text-left">
-						<view class="cu-item" v-for="(item,index) in 5" :key="index" @tap="toTitle(index +1)">
+						<view class="cu-item" v-for="(item,index) in 5" :key="index" @tap="toTitle(index +1)" >
 							<label class="flex justify-between align-center flex-sub">
 								<view class="flex-sub">标题 {{index +1}}</view>
 								<radio class="round"></radio>
@@ -109,6 +112,24 @@
 						<button class="cu-btn bg-blue margin-left" @tap="tolinks">确定</button>
 		
 					</view>
+				</view>
+			</view>
+		</view>
+		<!--插入商品控件-->
+		<view class="setShop" v-if="isShop">
+			<view class="setShop-bg" @tap="isShop=0"></view>
+			<view class="setShop-box">
+				<view class="setShop-main">
+					<view class="setShop-title">
+						选择付费内容插入文章
+					</view>
+
+					<scroll-view class="setShop-list" scroll-y>
+						<view class="setShop-list-box" v-for="(item,index) in shopList" @tap="toShop(item.id)" :class="item.id==shopID?'cur':''">
+							<text class="cuIcon-moneybagfill text-red"></text>{{item.title}}
+						</view>
+
+					</scroll-view>
 				</view>
 			</view>
 		</view>
@@ -153,6 +174,9 @@
 					url:"",
 				},
 				
+				shopList:[],
+				isShop:0,
+				shopID:-1,
 				//页面状态
 				type:"add",
 				cid:0,
@@ -186,8 +210,10 @@
 				if(res.cid){
 					that.cid = res.cid;
 					that.getInfo(that.cid);
+					
 				}
 			}
+			that.getShopList();
 			
 			//键盘弹出相关
 			let screenHeight = uni.getSystemInfoSync().screenHeight;
@@ -428,6 +454,9 @@
 				}else{
 					that.contensUpdate();
 				}
+				if(that.shopID!=-1){
+					that.mountShop();
+				}
 				
 			},
 			contensAdd() {
@@ -445,6 +474,7 @@
 					'title':that.title,
 					'category':that.category,
 					'text':that.text,
+					'sid':that.shopID
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -504,6 +534,7 @@
 					'title':that.title,
 					'category':that.category,
 					'text':that.text,
+					'sid':that.shopID
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -580,6 +611,81 @@
 				that.categoryText = data.name;
 				that.category = data.mid,
 				that.hideModal();
+			},
+			setShop(){
+				var that=this;
+				that.isShop = 1;
+			},
+			toShop(id){
+				var that=this;
+				that.shopID = id;
+				that.isShop = 0;
+			},
+			getShopList(){
+				var that = this;
+				var uid= 0;
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					uid = userInfo.uid;
+					
+				}else{
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+							url: '../user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				var data = {
+					"uid":uid,
+					"status":1,
+				}
+				Net.request({
+					url: API.shopList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":1000,
+						"page":1,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+
+						if(res.data.code==1){
+							var list = res.data.data;
+							that.shopList = list;
+	
+							
+							if(that.cid!=0){
+								for(var i in list){
+									if(list[i].cid == that.cid){
+										
+										that.shopID = list[i].id;
+									}
+								}
+							}
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
 			},
 			
 		}

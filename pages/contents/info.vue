@@ -51,7 +51,25 @@
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
-				
+				<view class="content-shop">
+						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item.id)">
+							
+							<view class="cu-item shadow" >
+								<view class="content">
+									<image :src="item.imgurl"
+									 mode="aspectFill"></image>
+									<view class="desc">
+										<view class="text-content">{{item.title}}</view>
+										<view class="text-i">
+											<text class="text-red">{{item.price}} 积分</text>
+											<text class="cuIcon-cart"></text>
+										</view>
+									</view>
+								</view>
+							</view>
+							
+					</view>
+				</view>
 				<view class="content-btn grid col-2">
 					<view class="content-btn-box">
 						<view class="content-btn-i" @tap="toLikes">
@@ -174,6 +192,9 @@
 				
 				type:"post",
 				
+				shopList:[],
+				shopID:-1,
+				
 			}
 		},
 		components: {
@@ -223,7 +244,9 @@
 			that.title = res.title;
 			
 			that.getInfo(that.cid);
+			that.getShopList();
 			that.getCommentsList(false,that.cid);
+			
 			
 			var ctx = this.$refs.article;
 		},
@@ -713,6 +736,70 @@
 			},
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			},
+			getShopList(){
+				var that = this;
+				var uid= 0;
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					uid = userInfo.uid;
+					
+				}else{
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+							url: '../user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				var data = {
+					"cid":that.cid,
+					"status":1,
+				}
+				Net.request({
+					url: API.shopList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":2,
+						"page":1,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var list = res.data.data;
+							that.shopList = list;
+							if(list.length>0){
+								that.shopID = list[0].id;
+							}
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			shopInfo(sid){
+				var that = this;
+				uni.navigateTo({
+				    url: '../contents/shopinfo?sid='+sid
+				});
 			}
 		}
 	}
