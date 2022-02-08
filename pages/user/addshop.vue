@@ -579,34 +579,6 @@
 					}
 				})
 			},
-			getInfo(cid){
-				var that = this;
-				var data = {
-					"key":that.cid,
-					"isMd":0,
-				}
-				
-				Net.request({
-					url: API.getContentsInfo(),
-					data:data,
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						if(res.data.title){
-							
-							that.title = res.data.title;
-							that.category = res.data.category[0].mid;
-							that.categoryText =  res.data.category[0].name;
-							that.text=res.data.text;
-						}
-					},
-					fail: function(res) {
-					}
-				})
-			},
 			toMate(data){
 				var that = this;
 				that.categoryText = data.name;
@@ -622,8 +594,14 @@
 			},
 			getInfo(sid){
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var data = {
 					"key":that.sid,
+					"token":token
 				}
 				Net.request({
 					url: API.shopInfo(),

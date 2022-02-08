@@ -1,5 +1,5 @@
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://192.168.10.192:8081/';
+var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://192.168.10.192:8081/';
 
 
 var WEB_URL = 'https://www.ruletree.club/';

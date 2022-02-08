@@ -156,6 +156,13 @@
 				</view>
 			</view>
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -174,6 +181,7 @@
 				toolList:[],
 				userInfo:null,
 				token:"",
+				isLoading:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -242,8 +250,16 @@
 								localStorage.setItem('toolList',JSON.stringify(list));
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

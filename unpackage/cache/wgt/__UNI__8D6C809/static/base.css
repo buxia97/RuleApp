@@ -1015,7 +1015,12 @@ page{
 .comment-delete{
 	position: absolute;
 	right: 30upx;
-	top: 40upx;
+	top: 15upx;
+}
+.comment-audit{
+	position: absolute;
+	right: 180upx;
+	top: 15upx;
 }
 .myAssets{
 	width: 100%;
@@ -1103,4 +1108,20 @@ page{
 }
 .order-kill text{
 	margin-left: 15upx;
+}
+.index-sort-main.active{
+	background-color: #f3f3f3;
+}
+.content-shop .cu-card{
+	position: relative !important;
+}
+.info-shop-status{
+	position: absolute;
+	top: 20upx;
+	left: 30upx;
+	z-index: 100;
+	opacity: 0.7;
+}
+.shop-content{
+	padding-bottom: 100upx !important;
 }

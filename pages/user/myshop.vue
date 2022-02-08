@@ -126,6 +126,7 @@
 			}
 			that.isLoad=0;
 			that.page=1;
+			that.getShopList();
 			
 		},
 		onLoad() {
@@ -133,7 +134,7 @@
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.getShopList();
+			
 		},
 		methods: {
 			back(){

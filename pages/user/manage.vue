@@ -125,6 +125,16 @@
 				</view>
 			</view>
 		</view>
+		<view class="data-box">
+			<view class="cu-list menu">
+				<view class="cu-item" @tap="toReward">
+					<view class="content">
+						<text class="cuIcon-presentfill text-red"></text>
+						<text>打赏开发者</text>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -265,6 +275,15 @@
 				window.open(url)
 				// #endif
 			},
+			toReward(){
+				var url = "https://www.ruletree.club/sponsor.html";
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			}
 		},
 		components: {
 			waves

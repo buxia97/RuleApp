@@ -24,7 +24,7 @@
 			<view class="shopinfo-info">
 				<text class="text-sm text-right text-gray">剩余数量：{{num}}</text>
 			</view>
-			<view class="info-content">
+			<view class="info-content shop-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>

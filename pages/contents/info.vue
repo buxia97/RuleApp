@@ -52,10 +52,11 @@
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
 				<view class="content-shop">
-						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item.id)">
+						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item)">
 							
 							<view class="cu-item shadow" >
 								<view class="content">
+									<text class="info-shop-status cu-btn bg-orange" v-if="item.status!=1">未上架</text>
 									<image :src="item.imgurl"
 									 mode="aspectFill"></image>
 									<view class="desc">
@@ -762,13 +763,12 @@
 				}
 				var data = {
 					"cid":that.cid,
-					"status":1,
 				}
 				Net.request({
 					url: API.shopList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":2,
+						"limit":1,
 						"page":1,
 					},
 					header:{
@@ -795,8 +795,16 @@
 					}
 				})
 			},
-			shopInfo(sid){
+			shopInfo(data){
 				var that = this;
+				var sid = data.id;
+				if(data.status!=1){
+					uni.showToast({
+						title: "该商品未上架",
+						icon: 'none'
+					})
+					return false;
+				}
 				uni.navigateTo({
 				    url: '../contents/shopinfo?sid='+sid
 				});

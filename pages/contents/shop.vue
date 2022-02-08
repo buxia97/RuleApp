@@ -17,7 +17,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(1)">
+						<view class="index-sort-main" @tap="setType(1)" :class="type=='1'?'active':''">
 							<view class="index-sort-i">
 								<text class="cuIcon-goods"></text>
 							</view>
@@ -29,7 +29,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(2)">
+						<view class="index-sort-main" @tap="setType(2)" :class="type=='2'?'active':''">
 							<view class="index-sort-i">
 								<text class="cuIcon-choicenessfill"></text>
 							</view>
@@ -41,7 +41,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(3)">
+						<view class="index-sort-main" @tap="setType(3)" :class="type=='3'?'active':''">
 							<view class="index-sort-i">
 								<text class="cuIcon-repairfill"></text>
 							</view>
@@ -53,7 +53,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(4)">
+						<view class="index-sort-main" @tap="setType(4)" :class="type=='4'?'active':''">
 							<view class="index-sort-i">
 								<text class="cuIcon-creativefill"></text>
 							</view>
@@ -201,7 +201,8 @@
 			getShopList(isPage){
 				var that = this;
 				var data = {
-					"type":that.type
+					"type":that.type,
+					"status":"1"
 				}
 				var page = that.page;
 				if(isPage){

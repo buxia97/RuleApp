@@ -290,14 +290,14 @@
 				var that = this;
 				var h = "";
 				var text = h+"**加粗文字**";
-				that.text+=text;
+				that.value+=text;
 				
 			},
 			toItalic(){
 				var that = this;
 				var h = "";
 				var text = h+"*斜体文字* ";
-				that.text+=text;
+				that.value+=text;
 				
 			},
 			toTitle(num){
@@ -308,21 +308,21 @@
 				    text=text+"#";
 				}
 				var h = "";
-				if(that.text!=""){
+				if(that.value!=""){
 					h="\n";
 				}
 				var title = h+text+" 标题文字";
-				that.text+=title;
+				that.value+=title;
 				that.hideModal();
 			},
 			toCode(){
 				var that = this;
 				var h = "";
-				if(that.text!=""){
+				if(that.value!=""){
 					h="\n";
 				}
 				var text = h+"```javascript\n代码片段\n```";
-				that.text+=text;
+				that.value+=text;
 				
 			},
 			tolinks(){
@@ -338,7 +338,7 @@
 					return false
 				}
 				var text = "["+link.title+"]("+link.url+")";
-				that.text+=text;
+				that.value+=text;
 				that.link = {
 					title:"",
 					url:"",
@@ -375,11 +375,11 @@
 							if(data.code==1){
 								   //插入文章
 									var h = "";
-									if(that.text!=""){
+									if(that.value!=""){
 										h="\n";
 									}
 									var text = h+"![图片名称]("+data.data.url+")";
-									that.text+=text;
+									that.value+=text;
 								   }
 							},fail:function(){
 								setTimeout(function () {
