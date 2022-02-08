@@ -15,6 +15,9 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="no-data" v-if="ImageList.length==0">
+				暂时没有数据
+			</view>
 			<view class="ImageList">
 				<view class="ImageList-box"  v-for="(item,index) in ImageList" :key="index">
 					<image :src="item.src.large2x"  mode="widthFix" @tap="previewImage(item.src.large2x)"></image>
@@ -24,7 +27,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -40,6 +49,8 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				ImageList:[],
+				
+				isLoading:0,
 			}
 		},
 		onShow(){
@@ -95,9 +106,17 @@
 							that.ImageList = res.data.photos;
 							localStorage.setItem('ImageList',JSON.stringify(that.ImageList));
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						uni.stopPullDownRefresh();
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

@@ -104,10 +104,10 @@ page{
 	background-color: #e03997;
 }
 .index-sort .index-sort-box:nth-child(7) .index-sort-i{
-	background-color: #607d8b;
+	background-color: #eb550f;
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
-	/* background-color: #607d8b; */
+	background-color: #607d8b;
 }
 .index-sort .index-sort-box:nth-child(9) .index-sort-i{
 	background-color: #ff9f10;
@@ -580,7 +580,7 @@ page{
 	background-color: #1AAD16;
 }
 .clock-btn.istap{
-	background-color: #999;
+	background-color: #008080;
 }
 .user-data{
 	padding: 30upx 30upx 10upx 30upx;
@@ -779,4 +779,328 @@ page{
 .update-btn-main{
 	padding: 15upx 0upx;
 	border-radius: 10upx;
+}
+.pay-codeImg{
+	background-color: #fff;
+	text-align: center;
+	padding: 30upx 0upx;
+}
+.shop-list{
+	padding: 30upx 15upx;
+}
+.shop-box{
+	padding: 10upx;
+	
+}
+.shop-main{
+	padding: 15upx;
+	border: solid 1px #f3f3f3;
+	border-radius: 10upx;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;
+}
+.shop-box:hover .shop-main{
+	box-shadow: 0upx 0upx 15upx rgba(0,0,0,0.3);
+}
+.shop-img{
+	height: 250upx;
+	overflow: hidden;
+}
+.shop-img image{
+	height: 250upx;
+	border-radius: 15upx;
+}
+.shop-title{
+	font-size: 22upx;
+	margin-top: 10upx;
+	margin-bottom: 15upx;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2;
+}
+.shop-info{
+	padding: 10upx 10upx;
+	line-height: 40upx;
+}
+.shop-price{
+	font-size: 38upx;
+}
+.shop-info .cuIcon-cart{
+	float:right;
+}
+.shopinfo-img{
+	width: 100%;
+	height: 400upx;
+	overflow: hidden;
+}
+.shopinfo-img image{
+	width: 100%;
+	height: 400upx;
+}
+.shopinfo-title{
+	font-size: 35upx;
+	line-height: 50upx;
+	font-weight: bold;
+	background-color: #fff;
+	padding: 20upx 30upx;
+	border-bottom: solid 1px #f3f3f3;
+}
+.shopinfo-bar{
+	position: fixed;
+	width: 100%;
+	z-index: 999;
+	bottom: 0;
+	left: 0;
+	background-color: #fff;
+	border-top: solid 1px #f3f3f3;
+	height: 100upx;
+	line-height: 100upx;
+	padding: 0upx 30upx;
+}
+.shopinfo-price{
+	font-size: 38upx;
+	color: #CE292C;
+	font-weight: bold;
+}
+.shopinfo-btn{
+	text-align: right;
+}
+.shopinfo-info{
+	text-align: right;
+	padding: 10upx 30upx;
+	background-color: #fff;
+}
+.shop-btn{
+	padding: 8upx 15upx;
+	margin: 0upx 20upx;
+	border-radius: 6upx;
+}
+.text-tips{
+	line-height: 40upx;
+}
+.order-box{
+	background-color: #fff;
+	border-top: solid 1px #f3f3f3;
+	padding: 30upx;
+}
+.order-info{
+	margin-bottom: 20upx;
+	line-height: 50upx;
+}
+.order-id{
+	font-weight: bold;
+}
+.order-type{
+	float: right;
+	padding: 5upx 15upx;
+	border-radius: 8upx;
+	font-size: 24upx;
+}
+.order-shop{
+	background-color: #f3f3f3;
+	padding: 30upx;
+	margin-bottom: 20upx;
+}
+.order-btn .text-blue{
+	float: right;
+}
+.order-btn .text-green{
+	float: right;
+}
+.order-btn .order-status{
+	float: right;
+}
+.shop-status{
+	font-size: 22upx;
+	padding: 8upx 15upx;
+	position: absolute;
+	top: 10upx;
+	left: 20upx;
+	z-index: 100;
+	opacity: 0.8;
+	border-radius: 8upx;
+}
+.shop-main{
+	position: relative;
+}
+.setShop{
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	z-index: 9999;
+}
+.setShop-bg{
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	z-index: 10000;
+	opacity: 0.5;
+	background-color: #000000;
+}
+.setShop-box{
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	z-index: 10001;
+	top: 10%;
+}
+.setShop-main{
+	margin: 0 auto;
+	background-color: #fff;
+	width: 550upx;
+	height: 800upx;
+	border-radius: 10upx;
+	padding: 30upx;
+}
+.setShop-title{
+	text-align: center;
+	margin-bottom: 30upx;
+}
+.setShop-list{
+	background-color: #f3f3f3;
+	height: 670upx;
+	padding: 0upx 10upx;
+}
+.setShop-list-box{
+	width: 100%;
+	padding: 20upx 15upx;
+	background-color: #fff;
+	border-bottom: #ccc;
+	font-size: 24upx;
+	margin: 10upx auto;
+	
+	opacity: 0.8;
+	line-height: 40upx;
+}
+.setShop-list-box text{
+	margin-right: 10upx;
+}
+.setShop-list-box:hover,.setShop-list-box.cur{
+	background-color: #ccc;
+}
+.content-shop .cu-card{
+	box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2);
+	border-radius: 10upx;
+	overflow: auto;
+	padding-top: 30upx;
+}
+.content-shop .cu-card.article>.cu-item .content .text-content{
+	color: #000;
+	font-weight: bold;
+}
+.content-shop .cu-card.article>.cu-item .content .text-red{
+	font-size: 32upx;
+	font-weight: bold;
+}
+.content-shop .cu-card.article>.cu-item .content .cuIcon-cart{
+	float: right;
+}
+.order-time{
+	font-size: 24upx;
+	text-align: right;
+	margin-top: 10upx;
+	color: #ccc;
+}
+.manage-btn{
+	margin-top: 15upx;
+	padding: 0upx 30upx;
+}
+.manage-btn text{
+	margin-right: 20upx;
+}
+.comment-delete{
+	position: absolute;
+	right: 30upx;
+	top: 40upx;
+}
+.myAssets{
+	width: 100%;
+	text-align: center;
+	padding: 50upx 30upx;
+	
+}
+.myAssets-num{
+	font-size: 60upx;
+	margin-right: 10upx;
+}
+.myAssets-btn{
+	text-align: center;
+	padding-bottom: 30upx;
+}
+.myAssets-btn text{
+	margin: 0upx 20upx;
+}
+.userrecharge{
+	padding: 30upx;
+}
+.userrecharge-type{
+	margin-bottom: 40upx;
+}
+.userrecharge-type text{
+	margin-right: 10upx;
+}
+.userrecharge-code{
+	text-align: center;
+	margin-bottom: 40upx;
+}
+.userrecharge-code image{
+	border: 30upx solid #aecfff;
+	border-radius: 20upx;
+	width: 400upx;
+	height: 400upx;
+}
+.userrecharge-btn{
+	text-align: center;
+	margin-bottom: 20upx;
+}
+.userrecharge-btn text{
+	margin:0upx 20upx;
+}
+.userrecharge-intro-title{
+	font-size: 35upx;
+	font-weight: bold;
+	margin-top: 50upx;
+}
+.userrecharge-intro{
+	line-height: 45upx;
+	margin-top: 30upx;
+}
+.userrecharge-intro-text{
+	margin-top: 20upx;
+	font-size: 26upx;
+}
+.userrecharge-form{
+	padding: 30upx 30upx;
+	text-align: center;
+}
+.userrecharge-form input{
+	border: solid #ccc 1px;
+	height: 70upx;
+	line-height: 70upx;
+	margin-bottom: 40upx;
+	padding: 20upx;
+}
+.pay-status{
+	float: right;
+}
+.cur-assets{
+	padding: 0upx 30upx;
+}
+.cur-assets text{
+	font-weight: bold;
+	font-size: 35upx;
+}
+.userwithdraw-box{
+	background-color: #fff;
+	padding:10upx 30upx 30upx 30upx;
+}
+.order-kill{
+	margin-top: 30upx;
+}
+.order-kill text{
+	margin-left: 15upx;
 }

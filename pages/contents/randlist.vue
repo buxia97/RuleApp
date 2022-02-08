@@ -15,6 +15,9 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="no-data" v-if="contentsList.length==0">
+				暂时没有数据
+			</view>
 			<view class="cu-card article no-card">
 				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 					<view class="cu-item shadow">

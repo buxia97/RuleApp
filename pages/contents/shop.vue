@@ -68,10 +68,11 @@
 			</view>
 		</view>
 		<view class="data-box">
+			<view class="no-data" v-if="shopList.length==0">
+				暂时没有商品
+			</view>
 			<view class="shop-list grid col-2">
-				<view class="no-data" v-if="shopList.length==0">
-					暂时没有商品
-				</view>
+				
 				<view class="shop-box" v-for="(item,index) in shopList">
 					<view class="shop-main" @tap="shopInfo(item.id)">
 						<view class="shop-img">
@@ -90,7 +91,7 @@
 				
 			</view>
 		</view>
-		<view class="load-more" @tap="loadMore">
+		<view class="load-more" @tap="loadMore" v-if="shopList.length>0">
 			<text>{{moreText}}</text>
 		</view>
 		<!--加载遮罩-->

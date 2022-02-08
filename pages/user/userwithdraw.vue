@@ -15,7 +15,7 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="all-btn margin-top">
-			<view class="user-btn flex flex-direction">
+			<view class="user-btn flex flex-direction" @tap="userwithdrawlist">
 				
 				<button class="cu-btn bg-blue margin-tb-sm lg">提现记录</button>
 			</view>
@@ -99,7 +99,13 @@
 					delta: 1
 				});
 			},
-
+			userwithdrawlist(){
+				var that = this;
+				
+				uni.navigateTo({
+					url: '../user/userwithdrawlist'
+				});
+			},
 			userStatus() {
 				var that = this;
 				var token = "";

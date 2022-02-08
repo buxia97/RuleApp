@@ -42,7 +42,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -61,6 +67,8 @@
 				
 				moreText:"加载更多",
 				page:1,
+				
+				isLoading:0,
 				
 			}
 		},
@@ -163,10 +171,18 @@
 							}
 							
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

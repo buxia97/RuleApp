@@ -24,11 +24,14 @@
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toShop">发布商品</button>
 					
 					<!--  #endif -->
-					<button class="cu-btn bg-yellow margin-tb-sm lg">已售出订单</button>
+					<button class="cu-btn bg-yellow margin-tb-sm lg" @tap="sellOrder">已售出订单</button>
 				</view>
 			</view>
-			
+			<view class="no-data" v-if="shopList.length==0">
+				暂时没有数据
+			</view>
 			<view class="shop-list grid col-2">
+				
 				<view class="shop-box" v-for="(item,index) in shopList">
 					<view class="shop-main">
 						<text class="bg-orange shop-status" v-if="item.status==0">待审核</text>
@@ -41,8 +44,8 @@
 							{{item.title}}
 						</view>
 						<view class="shop-info text-center">
-							<text class="shop-btn bg-blue" @tap="editShop(item.id)">编辑</text>
-							<text class="shop-btn bg-red" @tap="deleteShop(item.id)">删除</text>
+							<text class="shop-btn text-blue" @tap="editShop(item.id)">编辑</text>
+							<text class="shop-btn text-red" @tap="deleteShop(item.id)">删除</text>
 						</view>
 					</view>
 				</view>
@@ -50,7 +53,7 @@
 				
 			</view>
 		</view>
-		<view class="load-more" @tap="loadMore">
+		<view class="load-more" @tap="loadMore" v-if="shopList.length>0">
 			<text>{{moreText}}</text>
 		</view>
 		<!--加载遮罩-->
@@ -302,6 +305,12 @@
 				var that = this;
 				uni.navigateTo({
 				    url: '../user/addshop'
+				});
+			},
+			sellOrder(){
+				var that = this;
+				uni.navigateTo({
+				    url: '../user/sellorder'
 				});
 			},
 			editShop(sid){

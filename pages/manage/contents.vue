@@ -12,6 +12,7 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
@@ -25,6 +26,9 @@
 				<view class="search-type-box" @tap="toType('publish')" :class="type=='publish'?'active':''">
 					<text>已发布</text>
 				</view>
+			</view>
+			<view class="no-data" v-if="contentsList.length==0">
+				暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList">
@@ -40,9 +44,9 @@
 						
 					</view>
 					<view class="manage-btn">
-						<text class="cu-btn bg-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid)">快捷审核</text>
-						<text class="cu-btn bg-blue radius" @tap="toEdit(item.cid)">编辑</text>
-						<text class="cu-btn bg-red radius"  @tap="toDelete(item.cid)">删除</text>
+						<text class="cu-btn text-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid)">快捷审核</text>
+						<text class="cu-btn text-blue radius" @tap="toEdit(item.cid)">编辑</text>
+						<text class="cu-btn text-red radius"  @tap="toDelete(item.cid)">删除</text>
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
@@ -51,7 +55,13 @@
 
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -75,7 +85,9 @@
 				
 				searchText:"",
 				
-				type:"waiting"
+				type:"waiting",
+				
+				isLoading:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -192,10 +204,18 @@
 								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.moreText="加载更多";
 						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

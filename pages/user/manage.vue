@@ -61,7 +61,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/usermark')">
+						<view class="index-sort-main" @tap="toLink('../manage/comments')">
 							<view class="index-sort-i">
 								<text class="cuIcon-favorfill"></text>
 							</view>

@@ -15,6 +15,9 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<view class="data-box">
+			<view class="no-data" v-if="metaList.length==0">
+				暂时没有数据
+			</view>
 			<view class="category grid col-3">
 				<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid)">
 					<view class="category-main">
@@ -23,7 +26,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -40,6 +49,8 @@
 				
 				metaList:[],
 				searchText:"",
+				
+				isLoading:0,
 				
 			}
 		},
@@ -94,12 +105,20 @@
 								localStorage.setItem('find_metaList',JSON.stringify(that.metaList));
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'
 						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

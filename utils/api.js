@@ -101,6 +101,11 @@ module.exports = {
 	commentsDelete:function(){
 		return API_URL + 'typechoComments/commentsDelete';
 	},
+	commentsAudit:function(){
+		return API_URL + 'typechoComments/commentsAudit';
+	},
+	
+	
 	//根据标签或者分类获取文章
 	getMetaContents:function(){
 		return API_URL + 'typechoMetas/selectContents';

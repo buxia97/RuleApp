@@ -26,6 +26,9 @@
 					</view>
 				</view>
 				<!--  #endif -->
+				<view class="no-data" v-if="contentsList.length==0">
+					暂时没有数据
+				</view>
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)">
 					<view class="content">
 						<image v-if="item.images.length>0" :src="item.images[0]"
@@ -46,7 +49,13 @@
 
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -67,6 +76,8 @@
 				isLoad:0,
 				token:"",
 				contentsList:[],
+				
+				isLoading:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -168,8 +179,16 @@
 								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 						that.moreText="加载更多";
 						that.isLoad=0;
 					}

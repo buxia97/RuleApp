@@ -1015,7 +1015,12 @@ page{
 .comment-delete{
 	position: absolute;
 	right: 30upx;
-	top: 40upx;
+	top: 15upx;
+}
+.comment-audit{
+	position: absolute;
+	right: 180upx;
+	top: 15upx;
 }
 .myAssets{
 	width: 100%;

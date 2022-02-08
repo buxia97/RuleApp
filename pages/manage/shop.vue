@@ -12,7 +12,9 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			
+			<view class="no-data" v-if="shopList.length==0">
+				暂时没有商品
+			</view>
 			<view class="shop-list grid col-2">
 				<view class="shop-box" v-for="(item,index) in shopList">
 					<view class="shop-main">
@@ -26,8 +28,8 @@
 							{{item.title}}
 						</view>
 						<view class="shop-info text-center">
-							<text class="shop-btn bg-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
-							<text class="shop-btn bg-red" @tap="deleteShop(item.id)">删除</text>
+							<text class="shop-btn text-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
+							<text class="shop-btn text-red" @tap="deleteShop(item.id)">删除</text>
 						</view>
 					</view>
 				</view>
@@ -35,7 +37,7 @@
 				
 			</view>
 		</view>
-		<view class="load-more" @tap="loadMore">
+		<view class="load-more" @tap="loadMore" v-if="shopList.length>0">
 			<text>{{moreText}}</text>
 		</view>
 		<!--加载遮罩-->

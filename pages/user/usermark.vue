@@ -15,6 +15,9 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="all-box">
+			<view class="no-data" v-if="contentsList.length==0">
+				暂时没有数据
+			</view>
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
 					<view class="title">
@@ -38,14 +41,17 @@
 			<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
 				<text>{{moreText}}</text>
 			</view>
-			<view class="no-data" v-if="contentsList.length==0">
-				暂时没有数据
-			</view>
 			
 			
 
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -66,6 +72,7 @@
 				isLoad:0,
 				token:"",
 				contentsList:[],
+				isLoading:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -162,10 +169,18 @@
 								that.moreText="没有更多文章了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.moreText="加载更多";
 						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

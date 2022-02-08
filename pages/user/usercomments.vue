@@ -16,6 +16,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
+			
 			<view class="cu-item">
 				<view class="cu-list menu-avatar comment">
 					<view class="no-data" v-if="commentsList.length==0">
@@ -57,7 +58,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -76,6 +83,8 @@
 				
 				moreText:"加载更多",
 				page:1,
+				
+				isLoading:0,
 				
 			}
 		},
@@ -178,10 +187,18 @@
 							}
 							
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

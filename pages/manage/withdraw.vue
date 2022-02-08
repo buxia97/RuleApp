@@ -43,8 +43,8 @@
 								<text class="text-blue order-status" @tap="toPay(item.pay)">用户收款码</text>
 							</view>
 							<view class="order-kill" v-if="item.cid==-1">
-								<text class="cu-btn bg-green radius" @tap="toStatus(item.id,1)">已打款</text>
-								<text class="cu-btn bg-red radius"  @tap="toStatus(item.id,0)">拒绝</text>
+								<text class="cu-btn text-green radius" @tap="toStatus(item.id,1)">已打款</text>
+								<text class="cu-btn text-red radius"  @tap="toStatus(item.id,0)">拒绝</text>
 							</view>
 							
 						</view>
@@ -56,7 +56,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -76,7 +82,9 @@
 				moreText:"加载更多",
 				page:1,
 				
-				type:"-1"
+				type:"-1",
+				
+				isLoading:0,
 				
 			}
 		},
@@ -176,17 +184,25 @@
 									that.withdrawList = withdrawList;
 								}
 							}else{
-								if(that.page==1){
+								if(!isPage){
 									that.withdrawList = withdrawList;
 								}
 								that.moreText="没有更多数据了";
 							}
 							
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

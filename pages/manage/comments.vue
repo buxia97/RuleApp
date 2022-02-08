@@ -22,6 +22,14 @@
 					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
 				</view>
 			</view>
+			<view class="search-type grid col-2">
+				<view class="search-type-box" @tap="toStatus('waiting')" :class="status=='waiting'?'active':''">
+					<text>待审核</text>
+				</view>
+				<view class="search-type-box" @tap="toStatus('approved')" :class="status=='approved'?'active':''">
+					<text>已发布</text>
+				</view>
+			</view>
 			<view class="cu-item">
 				<view class="cu-list menu-avatar comment">
 					<view class="no-data" v-if="commentsList.length==0">
@@ -50,7 +58,8 @@
 											</view>
 										</view>
 									</view>
-									<text class="cu-btn text-red comment-delete cuIcon-deletefill"  @tap="toDelete(item.coid)"></text>
+									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="status=='waiting'">审核</text>
+									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)">删除</text>
 								</view>
 					
 								
@@ -65,6 +74,13 @@
 			</view>
 		</view>
 		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -85,6 +101,10 @@
 				page:1,
 				
 				searchText:"",
+				
+				status:"waiting",
+				
+				isLoading:0,
 				
 			}
 		},
@@ -150,6 +170,7 @@
 				var that = this;
 				var data = {
 					"type":"comment",
+					"status":that.status
 				}
 				var page = that.page;
 				if(isPage){
@@ -190,12 +211,28 @@
 							}
 							
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
+			},
+			toStatus(i){
+				var that = this;
+				that.status=i;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				that.getCommentsList(false);
 			},
 			commentsAdd(title,coid,reply){
 				var that = this;
@@ -241,6 +278,63 @@
 				            
 				            Net.request({
 				            	url: API.commentsDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.getCommentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			toAudit(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要通过审核吗？',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.commentsAudit(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

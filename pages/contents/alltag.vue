@@ -21,6 +21,9 @@
 					<input type="text" placeholder="搜索标签" v-model="searchText"  @input="searchTag"></input>
 				</view>
 			</view>
+			<view class="no-data" v-if="tagList.length==0">
+				暂时没有数据
+			</view>
 			<view class="tags">
 				
 				<text class="tags-box" v-for="(item,index) in tagList" :style="item.style" @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
@@ -29,7 +32,13 @@
 				
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -46,6 +55,8 @@
 				
 				tagList:[],
 				searchText:"",
+				
+				isLoading:0,
 				
 			}
 		},
@@ -107,8 +118,16 @@
 								localStorage.setItem('tagList',JSON.stringify(that.tagList));
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

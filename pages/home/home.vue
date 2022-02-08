@@ -708,7 +708,7 @@
 						url: API.GetUpdateUrl(),
 						method: 'get',
 						success: function(res) {
-							console.log(JSON.stringify())
+
 							var versionCode = res.data.versionCode;
 							that.versionUrl =  res.data.versionUrl;
 							that.versionTitle = res.data.version;

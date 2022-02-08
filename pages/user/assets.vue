@@ -25,6 +25,9 @@
 		<view class="text-tips margin-top text-center text-gray text-sm">
 			只显示最近30条充值记录
 		</view>
+		<view class="no-data" v-if="orderList.length==0">
+			暂时没有数据
+		</view>
 		<view class="order-box"  v-for="(item,index) in orderList">
 			<view class="order-main">
 				<view class="order-info">
@@ -42,6 +45,13 @@
 				</view>
 			</view>
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -63,6 +73,8 @@
 				assets:"",
 				
 				orderList:[],
+				
+				isLoading:0,
 				
 			}
 		},
@@ -179,12 +191,20 @@
 								
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'
 						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},

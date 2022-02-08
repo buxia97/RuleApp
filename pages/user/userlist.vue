@@ -16,7 +16,9 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<view class="cu-list menu-avatar userList" style="margin-top: 20upx;">
-			
+			<view class="no-data" v-if="userList.length==0">
+				暂时没有数据
+			</view>
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
@@ -36,11 +38,18 @@
 					
 				</view>
 			</view>
-			<view class="load-more" @tap="loadMore">
+			<view class="load-more" @tap="loadMore" v-if="userList.length>0">
 				<text>{{moreText}}</text>
 			</view>
 
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -60,6 +69,7 @@
 				page:1,
 				moreText:"加载更多",
 				isLoad:0,
+				isLoading:0,
 				
 			}
 		},
@@ -164,10 +174,18 @@
 								that.moreText="没有更多数据了";
 							}
 						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					},
 					fail: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
 					}
 				})
 			},
