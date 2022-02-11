@@ -40,10 +40,15 @@
 						</view>
 					</view>
 				</view>
-				<view class="action">
+				<view class="action user-list-btn">
+					<view class="cu-btn text-blue radius" @tap="toEdit(item.uid)">
+						<text class="cuIcon-post"></text>
+					</view>
+					
 					<view class="cu-btn text-red radius" @tap="deleteUser(item.uid)">
 						<text class="cuIcon-deletefill"></text>
 					</view>
+					
 				</view>
 			</view>
 			<view class="load-more" @tap="loadMore" v-if="userList.length>0">
@@ -85,6 +90,11 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.page=1;
+			that.getUserList(false);
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 			
 		},
 		onReachBottom() {
@@ -119,6 +129,13 @@
 			back(){
 				uni.navigateBack({
 					delta: 1
+				});
+			},
+			toEdit(id){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../manage/usersedit?uid='+id
 				});
 			},
 			formatDate(datetime) {

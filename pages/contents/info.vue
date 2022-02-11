@@ -10,9 +10,8 @@
 				</view>
 				<view class="action info-btn">
 					<!--  #ifdef H5 || APP-PLUS -->
-					<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
-					<text class="cuIcon-favorfill" @tap="rmMark" v-else></text>
-					<text class="cuIcon-share" @tap="ToShare"></text>
+					
+					<text class="cuIcon-search"  @tap="toSearch"></text>
 					<!--  #endif -->
 				</view>
 			</view>
@@ -116,7 +115,7 @@
 								<view class="content">
 									<view class="text-grey">{{item.author}}</view>
 									<view class="text-content text-df">
-										{{item.text}}
+										<rich-text :nodes="markHtml(item.text)"></rich-text>
 									</view>
 									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.parent>0">
 										<view class="flex">
@@ -141,6 +140,7 @@
 				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
 					<text>{{moreText}}</text>
 				</view>
+				<view style="height: 100upx"></view>
 			</view>
 		</view>
 		<!--加载遮罩-->
@@ -150,6 +150,22 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<view class="info-footer grid col-2">
+			<view class="info-footer-input">
+				<view class="info-input-box"  @tap="commentsAdd(title,0,0)">
+					<text class="cuIcon-writefill"></text>留下评论&吐槽
+				</view>
+			</view>
+			<view class="info-footer-btn">
+				<text class="cuIcon-appreciate" @tap="toLikes"></text>
+				<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
+				<text class="cuIcon-favorfill text-orange" @tap="rmMark" v-else></text>
+				<text class="cuIcon-recharge"  @tap="toReward"></text>
+				<text class="cuIcon-share text-blue" @tap="ToShare"></text>
+				
+				
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -158,6 +174,7 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	import owo from '../../static/owo/OwO.js'
 	export default {
 		data() {
 			return {
@@ -195,6 +212,9 @@
 				
 				shopList:[],
 				shopID:-1,
+				
+				owo:owo,
+				owoList:[],
 				
 			}
 		},
@@ -244,6 +264,15 @@
 			that.cid = res.cid;
 			that.title = res.title;
 			
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoList = owoList;
+			
+			
+			that.allCache();
 			that.getInfo(that.cid);
 			that.getShopList();
 			that.getCommentsList(false,that.cid);
@@ -265,7 +294,7 @@
 					that.category = postInfo.category;
 					that.created = postInfo.created;
 					that.commentsNum = postInfo.commentsNum;
-					that.html=postInfo.text;
+					that.html=that.markHtml(postInfo.text);
 					that.tagList=postInfo.tag;
 					that.slug = postInfo.slug;
 					that.getUserInfo(postInfo.authorId);
@@ -274,6 +303,17 @@
 					that.commentsList = JSON.parse(localStorage.getItem('commentsList_'+cid));
 				}
 				
+			},
+			markHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+					if(text.indexOf(owoList[i].data) != -1){
+						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
 			},
 			toUserContents(data){
 				var that = this;
@@ -317,7 +357,7 @@
 					"key":that.cid,
 					"isMd":1,
 				}
-				that.allCache();
+				
 				Net.request({
 					url: API.getContentsInfo(),
 					data:data,
@@ -333,7 +373,9 @@
 							that.category = res.data.category;
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;
-							that.html=res.data.text;
+							var html =that.markHtml(res.data.text);
+							//
+							that.html=html;
 							that.tagList=res.data.tag;
 							that.slug = res.data.slug;
 							that.type = res.data.type;
@@ -449,10 +491,23 @@
 			},
 			commentsAdd(title,coid,reply){
 				var that = this;
-				var cid = that.cid;
-				uni.navigateTo({
-				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
-				});
+				
+				if(!localStorage.getItem('userinfo')){
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+					    url: '../user/login'
+					});
+					return false;
+				}else{
+					var cid = that.cid;
+					uni.navigateTo({
+					    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+					});
+				}
+				
 			},
 			toReward(){
 				var that = this;
@@ -746,20 +801,6 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					uid = userInfo.uid;
 					
-				}else{
-					uni.showToast({
-					    title:"请先登录",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					var timer = setTimeout(function() {
-						uni.navigateTo({
-							url: '../user/login'
-						});
-						clearTimeout('timer')
-					}, 1000)
-					return false
 				}
 				var data = {
 					"cid":that.cid,
@@ -808,7 +849,14 @@
 				uni.navigateTo({
 				    url: '../contents/shopinfo?sid='+sid
 				});
-			}
+			},
+			toSearch(){
+				var that = this;
+				
+				uni.redirectTo({
+				    url: '../contents/search'
+				});
+			},
 		}
 	}
 </script>

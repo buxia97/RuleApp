@@ -430,6 +430,10 @@ myAudio,
   margin-top: 10px;
 }
 
+.tImg{
+	width: 25px;
+	height: 25px;
+}
 p{
 	margin: 10px 0px;
 }

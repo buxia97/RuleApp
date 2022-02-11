@@ -65,7 +65,7 @@
 			</view>
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toCategoryContents('软件中心',58)">
+					<view class="index-sort-main" @tap="toCategoryContents('软件中心',softwareid)">
 						<view class="index-sort-i">
 							<text class="cuIcon-repairfill"></text>
 						</view>
@@ -99,28 +99,10 @@
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="topic grid col-4">
-					<view class="topic-box" @tap="toCategoryContents('#区块链#',744)">
+					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)">
 						<view class="topic-main">
-							<image src="../../static/img/topic1.jpg"></image>
-							<view class="topic-text">#区块链#</view>
-						</view>
-					</view>
-					<view class="topic-box">
-						<view class="topic-main" @tap="toCategoryContents('#编程#',2)">
-							<image src="../../static/img/topic2.jpg"></image>
-							<view class="topic-text">#编程#</view>
-						</view>
-					</view>
-					<view class="topic-box">
-						<view class="topic-main" @tap="toCategoryContents('#APP开发#',24)">
-							<image src="../../static/img/topic3.jpg"></image>
-							<view class="topic-text">#APP开发#</view>
-						</view>
-					</view>
-					<view class="topic-box">
-						<view class="topic-main" @tap="toCategoryContents('#短篇文学#',3)">
-							<image src="../../static/img/topic4.jpg"></image>
-							<view class="topic-text">#短篇文学#</view>
+							<image :src="item.imgUrl"></image>
+							<view class="topic-text">{{item.name}}</view>
 						</view>
 					</view>
 				</view>
@@ -239,11 +221,12 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				cardCur: 0,
+				softwareid:API.GetSoftware(),
 				swiperList: [],
 				recommendList:[],
 				contentsList:[],
 				metaList:[],
-				
+				Topic:API.GetTopic(),
 				dotStyle: false,
 				towerStart: 0,
 				direction: '100000',
@@ -315,8 +298,8 @@
 			loading(){
 				var that = this;
 				that.page = 1;
-				that.getSwiper();
-				that.getRecommend();
+				that.getSwiper(API.GetSwiperid());
+				that.getRecommend(API.GetRecommend());
 				that.getMetaList();
 				that.getContentsList(false);
 			},
@@ -362,10 +345,10 @@
 					that.contentsList = JSON.parse(localStorage.getItem('contentsList_'+meta));
 				}
 			},
-			getSwiper(){
+			getSwiper(id){
 				var that = this;
 				var data = {
-					"mid":"394"
+					"mid":id
 				}
 				
 				Net.request({
@@ -409,10 +392,10 @@
 					}
 				})
 			},
-			getRecommend(){
+			getRecommend(id){
 				var that = this;
 				var data = {
-					"mid":"397"
+					"mid":id
 				}
 				Net.request({
 					url: API.getMetaContents(),

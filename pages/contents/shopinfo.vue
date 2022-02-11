@@ -222,7 +222,9 @@
 							
 							//跳转订单页面
 							var timer = setTimeout(function() {
-								
+								uni.redirectTo({
+								    url: '../user/order'
+								});
 								clearTimeout('timer')
 							}, 1000)
 						}

@@ -35,7 +35,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toPage('使用攻略',1518)">
+						<view class="index-sort-main" @tap="toPage('使用攻略',raiders)">
 							<view class="index-sort-i">
 								<text class="cuIcon-appreciate"></text>
 							</view>
@@ -71,7 +71,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toCategoryContents('#精选#',397)">
+						<view class="index-sort-main" @tap="toCategoryContents('#精选#',featured)">
 							<view class="index-sort-i">
 								<text class="cuIcon-choicenessfill"></text>
 							</view>
@@ -182,11 +182,14 @@
 				userInfo:null,
 				token:"",
 				isLoading:0,
+				raiders:API.GetRaiders(),
+				
+				featured:API.GetFeatured()
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
-			that.getMetaContents(58);
+			that.getMetaContents(API.GetTool());
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)

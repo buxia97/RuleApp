@@ -157,6 +157,10 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/agreement",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},
@@ -233,11 +237,15 @@
 		},
 		{
 			"path": "pages/manage/comments",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/manage/contents",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/manage/recharge",
@@ -245,15 +253,24 @@
 		},
 		{
 			"path": "pages/manage/shop",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/manage/users",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/manage/usersedit"
 		},
 		{
 			"path": "pages/manage/withdraw",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		}
 		
 	],

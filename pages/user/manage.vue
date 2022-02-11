@@ -181,8 +181,9 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
+				that.allData();
 			}
-			that.allData();
+			
 			that.getInfo();
 		},
 		onLoad() {
@@ -245,9 +246,6 @@
 				Net.request({
 					
 					url: "https://www.ruletree.club/ruleApiInfo.php",
-					data:{
-						"token":that.token
-					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},

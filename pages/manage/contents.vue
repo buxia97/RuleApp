@@ -92,6 +92,7 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.page=1;
 			that.getContentsList(false);
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
@@ -202,6 +203,9 @@
 								
 							}else{
 								that.moreText="没有更多文章了";
+								if(!isPage){
+									that.contentsList = list;
+								}
 							}
 						}
 						var timer = setTimeout(function() {

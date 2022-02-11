@@ -36,7 +36,7 @@
 			<!--  #endif -->
 		</view>
 		<view class="cu-list menu margin-top" >
-			<view class="cu-item" @tap="toPage('关于平台',2)">
+			<view class="cu-item" @tap="toPage('关于平台',aboutme)">
 				<view class="content">
 					<text>关于平台</text>
 				</view>
@@ -76,6 +76,8 @@
 				
 				userInfo:null,
 				token:"",
+				
+				aboutme:API.GetAboutme()
 				
 			}
 		},

@@ -30,7 +30,7 @@
 									<view class="content">
 										<view class="text-grey">{{item.author}}</view>
 										<view class="text-content text-df">
-											{{item.text}}
+											<rich-text :nodes="markHtml(item.text)"></rich-text>
 										</view>
 										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
 											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
@@ -72,6 +72,7 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	import owo from '../../static/owo/OwO.js'
 	export default {
 		data() {
 			return {
@@ -85,6 +86,9 @@
 				page:1,
 				
 				isLoading:0,
+				
+				owo:owo,
+				owoList:[],
 				
 			}
 		},
@@ -110,6 +114,12 @@
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoList = owoList;
 			that.getCommentsList(false);
 		},
 		methods:{
@@ -124,6 +134,17 @@
 				if(that.isLoad==0){
 					that.getCommentsList(true);
 				}
+			},
+			markHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+					if(text.indexOf(owoList[i].data) != -1){
+						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
 			},
 			toInfo(cid,title){
 				var that = this;

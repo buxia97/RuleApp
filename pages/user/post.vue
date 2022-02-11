@@ -40,6 +40,34 @@
 				</view>
 			</view>
 			<view class="edit-tool">
+				<view class="OwO-box">
+					<text class="cuIcon-emoji" @tap="OwO"></text>
+					<!--表情-->
+					<view class="owo" v-if="isOwO">
+						<scroll-view class="owo-list" scroll-y>
+							<view class="owo-main">
+								<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
+									<image :src="item.icon" mode="aspectFill"></image>
+								</view>
+							</view>
+							
+						</scroll-view>
+						<view class="owo-type">
+							<view class="owo-box" @tap="toOwO('paopao')" :class="OwOtype=='paopao'?'cur':''">
+								泡泡
+							</view>
+							<view class="owo-box" @tap="toOwO('adai')" :class="OwOtype=='adai'?'cur':''">
+								阿呆
+							</view>
+							<view class="owo-box" @tap="toOwO('alu')" :class="OwOtype=='alu'?'cur':''">
+								阿鲁
+							</view>
+							<view class="owo-box" @tap="toOwO('quyinniang')" :class="OwOtype=='quyinniang'?'cur':''">
+								蛆音娘
+							</view>
+						</view>
+					</view>
+				</view>
 				<text @tap="showModal" data-target="RadioModal">H</text>
 				<text @tap="toBold">B</text>
 				<text @tap="toItalic">I</text>
@@ -139,6 +167,7 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	import owo from '../../static/owo/OwO.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -181,6 +210,11 @@
 				type:"add",
 				cid:0,
 				
+				isOwO:false,
+				owo:owo,
+				owoList:[],
+				OwOtype:"paopao",
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -197,6 +231,8 @@
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.token=userInfo.token;
 			}
+			
+			that.owoList = that.owo.data.paopao.container;
 		},
 		onLoad(res) {
 			var that = this;
@@ -687,6 +723,32 @@
 					}
 				})
 			},
+			toOwO(text){
+				var that = this;
+				that.OwOtype = text;
+				if(text=="paopao"){
+					that.owoList = that.owo.data.paopao.container;
+				}
+				if(text=="adai"){
+					that.owoList = that.owo.data.adai.container;
+				}
+				if(text=="alu"){
+					that.owoList = that.owo.data.alu.container;
+				}
+				if(text=="quyinniang"){
+					that.owoList = that.owo.data.quyinniang.container;
+				}
+			},
+			setOwO(data){
+				var that = this;
+				var text = data.data;
+				that.text+=text;
+				that.isOwO = false;
+			},
+			OwO(){
+				var that = this;
+				that.isOwO = !that.isOwO;
+			}
 			
 		}
 	}

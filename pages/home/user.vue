@@ -134,7 +134,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box"  @tap="toPage('帮助与反馈',2689)">
+				<view class="index-sort-box"  @tap="toPage('帮助与反馈',feedback)">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
@@ -228,6 +228,8 @@
 				isClock:0,
 				group:"",
 				
+				feedback:API.GetFeedback(),
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -245,10 +247,14 @@
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 				that.group = that.userInfo.group;
+			}else{
+				that.userInfo =null;
 			}
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
+			}else{
+				that.token = "";
 			}
 			that.getUserData();
 			that.userStatus();

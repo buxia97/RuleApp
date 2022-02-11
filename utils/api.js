@@ -7,20 +7,99 @@ var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
+//下面主要用于用户协议
+var appName="规则之树";
+var appEmail = "buxia97@126.com";
+//全局数据调用部分【重要】
+
+//首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
+var swiperid = 394; 
+//首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
+var Topic=[
+	{
+		"mid":744,
+		"name":"#区块链#",
+		"imgUrl":"../../static/img/topic1.jpg"
+	},
+	{
+		"mid":2,
+		"name":"#编程#",
+		"imgUrl":"../../static/img/topic2.jpg"
+	},
+	{
+		"mid":24,
+		"name":"#APP开发#",
+		"imgUrl":"../../static/img/topic3.jpg"
+	},
+	{
+		"mid":3,
+		"name":"#短篇文学#",
+		"imgUrl":"../../static/img/topic4.jpg"
+	},
+];
+//推荐文章,后面的数字为mid，为typecho数据库的标签和分类id
+var recommend = 397;
+//软件中心链接,后面的数字为mid，为typecho数据库的标签和分类id
+var software = 58;
+//工具页数据调用id,后面的数字为mid，为typecho数据库的标签和分类id
+var tool = 58;
+//精选作品mid,后面的数字为mid，为typecho数据库的标签和分类id
+var featured = 397;
+
+
+//使用攻略文章id，typecho文章表cid
+var raiders = 1518
+//意见反馈文章id，typecho文章表cid
+var feedback = 2689
+//关于我们文章id，typecho文章表cid
+var aboutme = 2
 
 // #ifdef H5
 //var API_URL = '/';
 // #endif
 
 module.exports = {
-	GetWebUrl:function(){
-		return WEB_URL;
+	GetAppName:function(){
+		return appName;
+	},
+	GetAppEmail:function(){
+		return appEmail;
+	},
+	GetSwiperid:function(){
+		return swiperid;
+	},
+	GetTopic:function(){
+		return Topic;
+	},
+	GetRecommend:function(){
+		return recommend;
+	},
+	GetSoftware:function(){
+		return software;
+	},
+	GetTool:function(){
+		return tool;
+	},
+	GetFeatured:function(){
+		return featured;
+	},
+	GetRaiders:function(){
+		return raiders;
+	},
+	GetFeedback:function(){
+		return feedback;
+	},
+	GetAboutme:function(){
+		return aboutme;
 	},
 	GetUpdateUrl:function(){
 		return WEB_URL + 'apiResult.php?update=1';
 	},
 	GetGithubUrl:function(){
 		return GithubUrl;
+	},
+	GetWebUrl:function(){
+		return WEB_URL;
 	},
 	GetGroupUrl:function(){
 		return GroupUrl;
@@ -71,7 +150,9 @@ module.exports = {
 	withdrawStatus:function(){
 		return API_URL + 'typechoUsers/withdrawStatus';
 	},
-	
+	manageUserEdit:function(){
+		return API_URL + 'typechoUsers/manageUserEdit';
+	},
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
 	},
@@ -141,8 +222,9 @@ module.exports = {
 	
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){
+		return API_URL + 'upload/ossUpload';//OSS对象存储接口
 		//return API_URL + 'upload/cosUpload';//COS对象存储接口
-		return API_URL + 'upload/localUpload'; //本地上传接口
+		//return API_URL + 'upload/localUpload'; //本地上传接口
 	},
 	
 	shopList:function(){
@@ -168,9 +250,6 @@ module.exports = {
 	},
 	auditShop:function(){
 		return API_URL + 'typechoShop/auditShop';
-	},
-	buyList:function(){
-		return API_URL + 'typechoUserlog/buyList';
 	},
 	orderList:function(){
 		return API_URL + 'typechoUserlog/orderList';

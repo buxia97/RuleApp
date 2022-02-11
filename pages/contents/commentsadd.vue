@@ -26,6 +26,34 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-model="text" placeholder="如首次发布评论,将审核后再给予显示"></textarea>
 			</view>
+			<view class="comments-owo">
+				<text class="cuIcon-emoji" @tap="OwO"></text>
+				<!--表情-->
+				<view class="owo" v-if="isOwO">
+					<scroll-view class="owo-list" scroll-y>
+						<view class="owo-main">
+							<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
+								<image :src="item.icon" mode="aspectFill"></image>
+							</view>
+						</view>
+						
+					</scroll-view>
+					<view class="owo-type">
+						<view class="owo-box" @tap="toOwO('paopao')" :class="OwOtype=='paopao'?'cur':''">
+							泡泡
+						</view>
+						<view class="owo-box" @tap="toOwO('adai')" :class="OwOtype=='adai'?'cur':''">
+							阿呆
+						</view>
+						<view class="owo-box" @tap="toOwO('alu')" :class="OwOtype=='alu'?'cur':''">
+							阿鲁
+						</view>
+						<view class="owo-box" @tap="toOwO('quyinniang')" :class="OwOtype=='quyinniang'?'cur':''">
+							蛆音娘
+						</view>
+					</view>
+				</view>
+			</view>
 			<!--  #ifdef MP-WEIXIN -->
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
@@ -41,6 +69,8 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	
+	import owo from '../../static/owo/OwO.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -59,6 +89,11 @@
 				
 				userinfo:{},
 				token:"",
+				
+				isOwO:false,
+				owo:owo,
+				owoList:[],
+				OwOtype:"paopao",
 				
 			}
 		},
@@ -90,6 +125,7 @@
 			that.coid=res.coid;
 			that.isreply=res.isreply;
 			that.cid=res.cid;
+			that.owoList = that.owo.data.paopao.container;
 		},
 		methods: {
 			PickerChange(e) {
@@ -181,6 +217,33 @@
 						uni.stopPullDownRefresh()
 					}
 				})
+			},
+			
+			toOwO(text){
+				var that = this;
+				that.OwOtype = text;
+				if(text=="paopao"){
+					that.owoList = that.owo.data.paopao.container;
+				}
+				if(text=="adai"){
+					that.owoList = that.owo.data.adai.container;
+				}
+				if(text=="alu"){
+					that.owoList = that.owo.data.alu.container;
+				}
+				if(text=="quyinniang"){
+					that.owoList = that.owo.data.quyinniang.container;
+				}
+			},
+			setOwO(data){
+				var that = this;
+				var text = data.data;
+				that.text+=text;
+				that.isOwO = false;
+			},
+			OwO(){
+				var that = this;
+				that.isOwO = !that.isOwO;
 			}
 		}
 	}

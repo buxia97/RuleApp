@@ -45,7 +45,15 @@
 			</view>
 		</form>
 		<view class="cu-list menu">
-			<view class="cu-item margin-top" @tap="toAddress">
+			<view class="cu-item margin-top" @tap="toBind">
+				<view class="content">
+					<text>社会化登陆绑定</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
+			<view class="cu-item" @tap="toAddress">
 				<view class="content">
 					<text>收货地址设置</text>
 				</view>

@@ -79,6 +79,7 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.page=1;
 			that.getShopList();
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();

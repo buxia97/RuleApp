@@ -82,6 +82,7 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.page=1;
 			that.getContentsList(false);
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();

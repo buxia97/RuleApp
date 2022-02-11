@@ -90,6 +90,11 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
+			that.page=1;
+			that.getWithdrawList(false);
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 			
 		},
 		onReachBottom() {

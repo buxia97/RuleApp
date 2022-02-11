@@ -35,7 +35,7 @@
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userRegister">立即注册</button>
-					<text class="text-blue text-right margin-top">注册即为同意 《用户协议》</text>
+					<text class="text-blue text-right margin-top" @tap="toAgreement">注册即为同意 《用户协议》</text>
 				</view>
 			</form>
 		</view>
@@ -213,7 +213,14 @@
 				  clearInterval(this.timer)
 				}
 			  },1000)
-			}
+			},
+			toAgreement(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/agreement'
+				});
+			},
 		}
 	}
 </script>

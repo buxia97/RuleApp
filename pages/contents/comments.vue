@@ -29,7 +29,8 @@
 									<view class="content">
 										<view class="text-grey">{{item.author}}</view>
 										<view class="text-content text-df">
-											{{item.text}}
+											<rich-text :nodes="markHtml(item.text)"></rich-text>
+											
 										</view>
 										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
 											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
@@ -40,7 +41,7 @@
 										<view class="margin-top-sm flex justify-between">
 											<view class="text-gray text-df">{{formatDate(item.created)}}</view>
 											<view>
-												<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
+												<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
 											</view>
 										</view>
 									</view>
@@ -65,6 +66,7 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	import owo from '../../static/owo/OwO.js'
 	export default {
 		data() {
 			return {
@@ -73,6 +75,8 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				commentsList:[],
+				owo:owo,
+				owoList:[],
 				
 				moreText:"加载更多",
 				page:1,
@@ -101,13 +105,33 @@
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
+			
+			
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoList = owoList;
 			that.getCommentsList(false);
+			
 		},
 		methods:{
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			markHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+					if(text.indexOf(owoList[i].data) != -1){
+						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
 			},
 			loadMore(){
 				var that = this;
@@ -127,6 +151,7 @@
 				var that = this;
 				var data = {
 					"type":"comment",
+					"status":"approved"
 				}
 				var page = that.page;
 				if(isPage){
@@ -173,9 +198,8 @@
 					}
 				})
 			},
-			commentsAdd(title,coid,reply){
+			commentsAdd(title,coid,reply,cid){
 				var that = this;
-				var cid = that.cid;
 				uni.navigateTo({
 				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
