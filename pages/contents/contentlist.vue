@@ -21,6 +21,11 @@
 				{{item.name}}
 			</view>
 		</scroll-view>
+		<scroll-view scroll-x class="bg-white nav metaList" scroll-with-animation :scroll-left="scrollLeft" style="margin-top: 20upx;" v-if="type=='top'">
+			<view class="cu-item" :class="item.order==orderCur?'text-blue cur':''" v-for="(item,index) in topList" :key="index" @tap="topSelect" :data-order="item.order">
+				{{item.name}}
+			</view>
+		</scroll-view>
 		<view class="cu-card article no-card" style="margin-top: 20upx;">
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
@@ -87,6 +92,24 @@
 						parent:0
 					}
 				],
+				topList:[
+					{
+						order:"commentsNum",
+						name:"评论榜",
+						parent:0
+					},
+					{
+						order:"views",
+						name:"点击榜",
+						parent:0
+					},
+					{
+						order:"likes",
+						name:"喜欢榜",
+						parent:0
+					},
+				],
+				orderCur:"commentsNum",
 				TabCur: 0,
 				scrollLeft: 0,
 				isLoading:0,
@@ -155,6 +178,12 @@
 				}else{
 					that.getMetaContents(false,that.TabCur);
 				}
+			},
+			topSelect(e){
+				var that = this;
+				that.orderCur = e.currentTarget.dataset.order;
+				that.page = 1;
+				that.getContentsList(false,"all",0);
 			},
 			back(){
 				uni.navigateBack({
@@ -244,7 +273,7 @@
 					}
 				}
 				if(that.type=="top"){
-					order = that.id
+					order = that.orderCur
 				}
 				var page = that.page;
 				if(isPage){

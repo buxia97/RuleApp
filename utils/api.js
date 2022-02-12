@@ -153,6 +153,12 @@ module.exports = {
 	manageUserEdit:function(){
 		return API_URL + 'typechoUsers/manageUserEdit';
 	},
+	apiBind:function(){
+		return API_URL + 'typechoUsers/apiBind';
+	},
+	userBindStatus:function(){
+		return API_URL + 'typechoUsers/userBindStatus';
+	},
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
 	},

@@ -186,6 +186,8 @@
 				type:"add",
 				sid:0,
 				
+				start:-1,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -255,8 +257,24 @@
 				if (that.curHeight != 0&&that.isText==1) {
 					that.focus(that.curHeight);
 				}
+				uni.getSelectedTextRange({
+				  success: res => {
+				    //console.log('getSelectedTextRange res', res.start, res.end);
+					that.start = res.start;
+				  }
+				})
 				
-				
+			},
+			insetText(newStr){
+				var that= this;
+				var start = that.start;
+				var text = that.text;
+				if(start==-1){
+					text+=newStr;
+				}else{
+					text = text.slice(0, start) + newStr + text.slice(start);
+				}
+				that.text = text;
 			},
 			focus(h){
 				var that = this;
@@ -303,21 +321,29 @@
 				this.modalName = null
 			},
 			textareaAInput(){
-				
+				var that = this;
+				uni.getSelectedTextRange({
+				  success: res => {
+				    //console.log('getSelectedTextRange res', res.start, res.end);
+					that.start = res.start;
+				  }
+				})
 			},
 			//编辑器工具开始
 			toBold(){
 				var that = this;
 				var h = "";
 				var text = h+"**加粗文字**";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			toItalic(){
 				var that = this;
 				var h = "";
 				var text = h+"*斜体文字* ";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			toTitle(num){
@@ -332,7 +358,8 @@
 					h="\n";
 				}
 				var title = h+text+" 标题文字";
-				that.text+=title;
+				//that.text+=title;
+				that.insetText(text);
 				that.hideModal();
 			},
 			toCode(){
@@ -342,7 +369,8 @@
 					h="\n";
 				}
 				var text = h+"```javascript\n代码片段\n```";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			tolinks(){
@@ -358,7 +386,8 @@
 					return false
 				}
 				var text = "["+link.title+"]("+link.url+")";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				that.link = {
 					title:"",
 					url:"",
@@ -399,7 +428,8 @@
 										h="\n";
 									}
 									var text = h+"![图片名称]("+data.data.url+")";
-									that.text+=text;
+									//that.text+=text;
+									that.insetText(text);
 								   }
 							},fail:function(){
 								setTimeout(function () {

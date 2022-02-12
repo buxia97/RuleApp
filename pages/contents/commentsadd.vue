@@ -33,7 +33,7 @@
 					<scroll-view class="owo-list" scroll-y>
 						<view class="owo-main">
 							<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
-								<image :src="item.icon" mode="aspectFill"></image>
+								<image :src="'/'+item.icon" mode="aspectFill"></image>
 							</view>
 						</view>
 						

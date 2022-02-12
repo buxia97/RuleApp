@@ -58,7 +58,7 @@
 											</view>
 										</view>
 									</view>
-									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="status=='waiting'">审核</text>
+									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'">审核</text>
 									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)">删除</text>
 								</view>
 					
@@ -159,7 +159,7 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}

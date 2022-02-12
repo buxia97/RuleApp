@@ -213,6 +213,7 @@ myAudio,
       // #endif
       this.root.$emit('imgtap', node.attrs)
       // 自动预览图片
+	  console.log(JSON.stringify(this.root.imgList))
       if (this.root.previewImg) {
         uni.previewImage({
           current: parseInt(node.attrs.i),

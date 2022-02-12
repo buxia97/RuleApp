@@ -161,6 +161,10 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/userbind",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},

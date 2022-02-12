@@ -236,6 +236,13 @@
 				uni.navigateTo({
 				    url: '../user/pay'
 				});
+			},
+			toBind(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../user/userbind'
+				});
 			}
 		}
 	}

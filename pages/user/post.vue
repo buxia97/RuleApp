@@ -47,7 +47,7 @@
 						<scroll-view class="owo-list" scroll-y>
 							<view class="owo-main">
 								<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
-									<image :src="item.icon" mode="aspectFill"></image>
+									<image :src="'/'+item.icon" mode="aspectFill"></image>
 								</view>
 							</view>
 							
@@ -82,7 +82,7 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="文章内容" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)"></textarea>
 				<scroll-view scroll-y class="text" v-if="isShow"  :style="readstyle">
-					<mp-html :content="text" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
+					<mp-html :content="textRead" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
 				</scroll-view>
 			</view>
 			<!--  #ifdef MP-WEIXIN -->
@@ -197,6 +197,7 @@
 				category:-1,
 				categoryText:"",
 				text:'',
+				textRead:"",
 				
 				link:{
 					title:"",
@@ -214,6 +215,8 @@
 				owo:owo,
 				owoList:[],
 				OwOtype:"paopao",
+				
+				start:-1,
 				
 			}
 		},
@@ -280,14 +283,41 @@
 			})
 		},
 		methods: {
+			markHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+					if(text.indexOf(owoList[i].data) != -1){
+						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
+			},
 			ToisText(i){
 				var that= this;
 				that.isText = i;
 				if (that.curHeight != 0&&that.isText==1) {
 					that.focus(that.curHeight);
 				}
-				
-				
+				uni.getSelectedTextRange({
+				  success: res => {
+				    //console.log('getSelectedTextRange res', res.start, res.end);
+					that.start = res.start;
+				  }
+				})
+			},
+			insetText(newStr){
+				var that= this;
+				var start = that.start;
+				var text = that.text;
+				if(start==-1){
+					text+=newStr;
+				}else{
+					text = text.slice(0, start) + newStr + text.slice(start);
+				}
+				that.text = text;
+				that.textRead = that.markHtml(that.text);
 			},
 			focus(h){
 				var that = this;
@@ -334,6 +364,14 @@
 				this.modalName = null
 			},
 			textareaAInput(){
+				var that = this;
+				uni.getSelectedTextRange({
+				  success: res => {
+				    //console.log('getSelectedTextRange res', res.start, res.end);
+					that.start = res.start;
+				  }
+				})
+				that.textRead = that.markHtml(that.text);
 				
 			},
 			//编辑器工具开始
@@ -341,14 +379,16 @@
 				var that = this;
 				var h = "";
 				var text = h+"**加粗文字**";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			toItalic(){
 				var that = this;
 				var h = "";
 				var text = h+"*斜体文字* ";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			toTitle(num){
@@ -363,7 +403,9 @@
 					h="\n";
 				}
 				var title = h+text+" 标题文字";
-				that.text+=title;
+				//that.text+=title;
+				that.insetText(title);
+				
 				that.hideModal();
 			},
 			toCode(){
@@ -373,7 +415,8 @@
 					h="\n";
 				}
 				var text = h+"```javascript\n代码片段\n```";
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				
 			},
 			tolinks(){
@@ -389,7 +432,9 @@
 					return false
 				}
 				var text = "["+link.title+"]("+link.url+")";
-				that.text+=text;
+				//that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				that.link = {
 					title:"",
 					url:"",
@@ -430,7 +475,8 @@
 										h="\n";
 									}
 									var text = h+"![图片名称]("+data.data.url+")";
-									that.text+=text;
+									//that.text+=text;
+									that.insetText(text);
 								   }
 							},fail:function(){
 								setTimeout(function () {
@@ -450,6 +496,7 @@
 			toIsShow(){
 				var that= this;
 				that.isShow = !that.isShow;
+				that.textRead = that.markHtml(that.text);
 			},
 			getMetaList(){
 				var that = this;
@@ -738,12 +785,15 @@
 				if(text=="quyinniang"){
 					that.owoList = that.owo.data.quyinniang.container;
 				}
+				
 			},
 			setOwO(data){
 				var that = this;
 				var text = data.data;
-				that.text+=text;
+				//that.text+=text;
+				that.insetText(text);
 				that.isOwO = false;
+				that.textRead = that.markHtml(that.text);
 			},
 			OwO(){
 				var that = this;

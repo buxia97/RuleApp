@@ -146,7 +146,7 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}

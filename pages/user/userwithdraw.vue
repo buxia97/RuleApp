@@ -33,7 +33,7 @@
 				提现注意：
 			</view>
 			<view class="userrecharge-intro-text">
-				1.提现申请发起后，将会在<text class="text-red text-bold">24小时</text>内审核并打款到您设置的账户，所以在提现前，请设置自己的收款信息。
+				1.提现申请发起后，将会在<text class="text-red text-bold">24小时</text>内审核并打款到您设置的账户，所以在提现前，请<text class="text-blue" @tap="topay">设置</text>自己的收款信息。
 			</view>
 			<view class="userrecharge-intro-text">
 				2.提现金额与网站积分的比例为<text class="text-red text-bold"> 1:100 </text>，最低提现<text class="text-red text-bold"> 5000 </text>积分，网站将收取<text class="text-red text-bold">5%</text>手续费。
@@ -210,6 +210,11 @@
 					}
 				})
 			},
+			topay(){
+				uni.navigateTo({
+				    url: '../user/pay'
+				});
+			}
 		}
 	}
 </script>

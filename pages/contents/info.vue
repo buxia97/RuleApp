@@ -49,7 +49,7 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
+				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
 				<view class="content-shop">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item)">
 							
@@ -115,7 +115,7 @@
 								<view class="content">
 									<view class="text-grey">{{item.author}}</view>
 									<view class="text-content text-df">
-										<rich-text :nodes="markHtml(item.text)"></rich-text>
+										<rich-text :nodes="markCommentHtml(item.text)"></rich-text>
 									</view>
 									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.parent>0">
 										<view class="flex">
@@ -168,7 +168,6 @@
 		</view>
 	</view>
 </template>
-
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
@@ -310,6 +309,17 @@
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
 						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
+			},
+			markCommentHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+					if(text.indexOf(owoList[i].data) != -1){
+						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}

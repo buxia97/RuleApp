@@ -19,7 +19,7 @@
 			</view>
 			<view class="myAssets-btn">
 				<text class="cu-btn bg-blue radius" @tap="userrecharge">在线充值</text>
-				<text class="cu-btn bg-red radius">快捷提现</text>
+				<text class="cu-btn bg-red radius" @tap="userwithdraw">快捷提现</text>
 			</view>
 		</view>
 		<view class="text-tips margin-top text-center text-gray text-sm">
@@ -141,6 +141,11 @@
 				    url: '../user/userrecharge'
 				});
 				
+			},
+			userwithdraw(){
+				uni.navigateTo({
+				    url: '../user/userwithdraw'
+				});
 			},
 			userStatus() {
 				var that = this;
