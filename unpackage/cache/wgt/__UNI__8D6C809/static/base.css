@@ -1246,3 +1246,6 @@ page{
 .agreement-text{
 	margin-top: 15upx;
 }
+.bind image{
+	border-radius: 50%;
+}

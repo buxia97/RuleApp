@@ -39,9 +39,9 @@
 					<view class="order-time">{{formatDate(item.created)}}</view>
 				</view>
 				<view class="order-btn">
-					<text class="text-red">￥ {{item.totalAmount}}</text>
+					<text class="text-red">￥ {{item.totalAmount}} = {{item.totalAmount*100}} 积分</text>
 					<text class="text-yellow pay-status" v-if="item.status==0">未支付</text>
-					<text class="text-green pay-status" v-if="item.status==1">未支付</text>
+					<text class="text-green pay-status" v-if="item.status==1">已支付</text>
 				</view>
 			</view>
 		</view>
