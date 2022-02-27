@@ -8,9 +8,12 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					个人设置
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="userEdit">
 					<text class="cuIcon-upload"></text>
 				</view>
+				<!--  #endif -->
+				
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -30,7 +33,11 @@
 				<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
 				<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
 			</view>
-			
+			<!--  #ifdef MP-WEIXIN -->
+			<view class="post-update bg-blue" @tap="userEdit">
+				<text class="cuIcon-upload"></text>
+			</view>
+			<!--  #endif -->
 			
 		</form>
 	</view>

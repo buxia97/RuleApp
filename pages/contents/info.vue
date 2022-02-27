@@ -327,9 +327,9 @@
 			},
 			toUserContents(data){
 				var that = this;
-				var title = data.name+"的文章";
+				var title = data.name+"的信息";
 				if(data.screenName){
-					title = data.screenName+" 的文章";
+					title = data.screenName+" 的信息";
 				}
 				var id= data.uid;
 				var type="user";
@@ -719,7 +719,7 @@
 							icon: 'none'
 						})
 						if(res.data.code==1){
-							that.isMark=1;
+							that.isMark=0;
 							that.toIsMark();
 						}
 						

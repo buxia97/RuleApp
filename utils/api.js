@@ -271,6 +271,10 @@ module.exports = {
 	scancodePay:function(){
 		return API_URL + 'pay/scancodePay';
 	},
+	wxPay:function(){
+		return API_URL + 'pay/WxPay';
+	},
+	
 	//充值二维码
 	qrCode:function(){
 		return API_URL + 'pay/qrCode';

@@ -14,57 +14,28 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			<view class="index-sort grid col-4">
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(1)" :class="type=='1'?'active':''">
-							<view class="index-sort-i">
-								<text class="cuIcon-goods"></text>
-							</view>
-							<view class="index-sort-text">
-								实体商品
-							</view>
-						</view>
-					</waves>
+			<view class="cu-bar bg-white search">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input type="text" placeholder="搜索商品" v-model="searchText"  @input="searchShop"></input>
 				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(2)" :class="type=='2'?'active':''">
-							<view class="index-sort-i">
-								<text class="cuIcon-choicenessfill"></text>
-							</view>
-							<view class="index-sort-text">
-								源码
-							</view>
-						</view>
-					</waves>
+			</view>
+			<view class="shop-sort">
+				<view class="shop-sort-box" @tap="setType(0)":class="type=='0'?'active':''">
+					全部
 				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(3)" :class="type=='3'?'active':''">
-							<view class="index-sort-i">
-								<text class="cuIcon-repairfill"></text>
-							</view>
-							<view class="index-sort-text">
-								软件工具
-							</view>
-						</view>
-					</waves>
+				<view class="shop-sort-box" @tap="setType(1)":class="type=='1'?'active':''">
+					实体商品
 				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="setType(4)" :class="type=='4'?'active':''">
-							<view class="index-sort-i">
-								<text class="cuIcon-creativefill"></text>
-							</view>
-							<view class="index-sort-text">
-								付费阅读
-							</view>
-						</view>
-					</waves>
+				<view class="shop-sort-box" @tap="setType(2)":class="type=='2'?'active':''">
+					源码
 				</view>
-
-
+				<view class="shop-sort-box" @tap="setType(3)":class="type=='3'?'active':''">
+					软件工具
+				</view>
+				<view class="shop-sort-box" @tap="setType(4)":class="type=='4'?'active':''">
+					付费阅读
+				</view>
 			</view>
 		</view>
 		<view class="data-box">
@@ -82,7 +53,7 @@
 							{{item.title}}
 						</view>
 						<view class="shop-info">
-							<text class="shop-price text-red text-bold">{{item.price}}</text>
+							<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">积分</text>
 							<text class="cuIcon-cart"></text>
 						</view>
 					</view>
@@ -124,9 +95,10 @@
 				isLoad:0,
 				page:1,
 				moreText:"加载更多",
-				type:1,
+				type:0,
 				
 				isLoading:0,
+				searchText:"",
 				
 			}
 		},
@@ -179,6 +151,11 @@
 					delta: 1
 				});
 			},
+			searchShop(){
+				var that = this;
+				that.page=1;
+				that.getShopList();
+			},
 			loadMore(){
 				var that = this;
 				that.moreText="正在加载中...";
@@ -205,6 +182,12 @@
 					"type":that.type,
 					"status":"1"
 				}
+				if(that.type==0){
+					data = {
+						"status":"1"
+					}
+				}
+				
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -213,6 +196,7 @@
 					url: API.shopList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchKey":that.searchText,
 						"limit":6,
 						"page":page,
 					},

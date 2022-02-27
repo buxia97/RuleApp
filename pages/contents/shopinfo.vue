@@ -22,6 +22,9 @@
 				{{title}}
 			</view>
 			<view class="shopinfo-info">
+				<text class="text-sm shop-user text-blue"  @tap="toUserContents(userInfo)"><block v-if="userInfo.screenName!=''">{{userInfo.screenName}}</block>
+							<block v-else>{{userInfo.name}}</block>
+			</text>
 				<text class="text-sm text-right text-gray">剩余数量：{{num}}</text>
 			</view>
 			<view class="info-content shop-content">
@@ -67,6 +70,8 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
+				
+				userInfo:"",
 				
 				sid:0,
 				title:"",
@@ -146,6 +151,7 @@
 						that.imgurl = res.data.imgurl;
 						that.price = res.data.price;
 						that.num = res.data.num;
+						that.getUserInfo(res.data.uid);
 						var timer = setTimeout(function() {
 							that.isLoading=1;
 							clearTimeout('timer')
@@ -241,6 +247,30 @@
 					}
 				})
 			},
+			getUserInfo(id){
+				var that = this;
+				var data = {
+					"key":id,
+				}
+				
+				Net.request({
+					url: API.getUserInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.userInfo = res.data.data;
+							that.userInfo.style = "background-image:url("+res.data.data.avatar+");"
+						}
+					},
+					fail: function(res) {
+					}
+				});
+			},
 			toInfo(){
 				var that = this;
 				var data = that.shopinfo;
@@ -289,7 +319,20 @@
 					}
 				})
 			},
-		}
+			toUserContents(data){
+				var that = this;
+				var title = data.name+"的信息";
+				if(data.screenName){
+					title = data.screenName+" 的信息";
+				}
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
+		},
+		
 	}
 </script>
 

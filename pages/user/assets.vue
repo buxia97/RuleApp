@@ -130,13 +130,6 @@
 			},
 			userrecharge(){
 				var that = this;
-				//  #ifdef MP-WEIXIN
-				uni.showToast({
-					title: "暂不支持微信充值",
-					icon: 'none'
-				})
-				return false;
-				//  #endif
 				uni.navigateTo({
 				    url: '../user/userrecharge'
 				});

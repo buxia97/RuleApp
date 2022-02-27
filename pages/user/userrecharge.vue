@@ -15,7 +15,12 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box userrecharge">
 			<view class="userrecharge-type">
-				<text class="cu-btn text-blue radius">支付宝当面付</text>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<text class="cu-btn text-blue radius" @tap="toPayType(0)" :class="payType=='0'?'active':''">支付宝</text>
+				<!--  #endif -->
+				<!--  #ifdef MP-WEIXIN || APP-PLUS -->
+				<text class="cu-btn text-blue radius" @tap="toPayType(1)" :class="payType=='1'?'active':''">微信支付</text>
+				<!--  #endif -->
 			</view>
 			<block v-if="isToPay==0">
 				<view class="userrecharge-form">
@@ -67,6 +72,7 @@
 				userInfo:null,
 				token:"",
 				
+				payType:0,
 				isToPay:0,
 				num:"",
 				
@@ -110,13 +116,19 @@
 					delta: 1
 				});
 			},
+			toPayType(i){
+				var that = this;
+				that.payType = i;
+				that.num="";
+				that.isToPay=0;
+			},
 			isPositiveInteger(s){
 			     var re = /^[0-9]+$/ ;
 			     return re.test(s)
 			},
 			pay(){
 				var that = this;
-				var token = "";
+				
 				if(!that.isPositiveInteger(that.num)||that.num==''){
 					uni.showToast({
 						title: "充值金额只能为正整数",
@@ -131,6 +143,29 @@
 					});
 					return false;
 				}
+				
+				
+				uni.showModal({
+				    title: '确定要充值该金额吗？',
+				    success: function (res) {
+				        if (res.confirm) {
+							if(that.payType==0){
+								that.aliPay();
+							}
+				            if(that.payType==1){
+				            	that.wxPay();
+				            }
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			aliPay(){
+				uni.showLoading({
+					title: "加载中"
+				});
+				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
@@ -139,55 +174,100 @@
 					"num":that.num,
 					"token":token
 				}
-				uni.showModal({
-				    title: '确定要充值该金额吗？',
-				    success: function (res) {
-				        if (res.confirm) {
-				            uni.showLoading({
-				            	title: "加载中"
-				            });
-				            
-				            Net.request({
-				            	url: API.scancodePay(),
-				            	data:data,
-				            	header:{
-				            		'Content-Type':'application/x-www-form-urlencoded'
-				            	},
-				            	method: "get",
-				            	dataType: 'json',
-				            	success: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		if(res.data.code==1){
-										var url = res.data.data;
-										that.alipayUrl = "alipays://platformapi/startapp?appId=20000067&url="+encodeURI(url);
-										that.codeImg = API.qrCode()+"?codeContent="+url;
-										that.isToPay = 1;
-										that.toAlipay();
-									}else{
-										uni.showToast({
-											title: "支付接口异常",
-											icon: 'none'
-										})
-									}
-									
-				            		
-				            	},
-				            	fail: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: "网络开小差了哦",
-				            			icon: 'none'
-				            		})
-				            	}
-				            })
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
+				Net.request({
+					url: API.scancodePay(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						if(res.data.code==1){
+							var url = res.data.data;
+							that.alipayUrl = "alipays://platformapi/startapp?appId=20000067&url="+encodeURI(url);
+							that.codeImg = API.qrCode()+"?codeContent="+url;
+							that.isToPay = 1;
+							that.toAlipay();
+						}else{
+							uni.showToast({
+								title: "支付接口异常",
+								icon: 'none'
+							})
+						}
+						
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			wxPay() {
+				uni.showLoading({
+					title: "加载中"
+				});
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"price":that.num,
+					"token":token
+				}
+				Net.request({
+					url: API.wxPay(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(data) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						console.log(JSON.stringify(data.data))
+						uni.requestPayment({
+							provider: 'wxpay',
+							orderInfo: JSON.stringify(data.data), //微信、支付宝订单数据
+							success: function(res) {
+								uni.showToast({
+									title: "充值成功",
+									icon: 'none'
+								})
+								that.isToPay = 0;
+								that.num = "";
+							},
+							fail: function(err) {
+								uni.showToast({
+									title:JSON.stringify(err),
+									duration:1000,
+									icon:'none'
+								})
+								
+							}
+						});
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
 				});
 			},
 			toAlipay(){

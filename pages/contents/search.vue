@@ -432,9 +432,9 @@
 			},
 			toUserContents(data){
 				var that = this;
-				var title = data.name+"的文章";
+				var title = data.name+"的信息";
 				if(data.screenName){
-					title = data.screenName+" 的文章";
+					title = data.screenName+" 的信息";
 				}
 				var id= data.uid;
 				var type="user";
