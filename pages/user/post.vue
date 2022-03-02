@@ -29,12 +29,12 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">选择分类</view>
-				<view class="picker" @tap="showModal" data-target="metaModal">
+				<view class="picker" @tap="toCategory">
 					<block v-if="categoryText==''">
 						选择发布的分类
 					</block>
 					<block v-else>
-						{{categoryText}}
+						<text class="text-green">已选择</text>
 					</block>
 					<text class="cuIcon-right"></text>
 				</view>
@@ -74,6 +74,7 @@
 				<text class="cuIcon-picfill" @tap="upload"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
+				<text class="cuIcon-attentionforbidfill" @tap="toHideText"></text>
 				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
 				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
 				<text class="cuIcon-read" @tap="toIsShow"></text>
@@ -91,21 +92,6 @@
 			</view>
 			<!--  #endif -->
 		</form>
-		<!--分类选择控件-->
-		<view class="cu-modal" :class="modalName=='metaModal'?'show':''" @tap="hideModal">
-			<view class="cu-dialog" @tap.stop="">
-				<radio-group class="block">
-					<view class="cu-list menu text-left">
-						<view class="cu-item" v-for="(item,index) in metaList" :key="index" @tap="toMate(item)" >
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">{{item.name}}</view>
-								<radio class="round"></radio>
-							</label>
-						</view>
-					</view>
-				</radio-group>
-			</view>
-		</view>
 		<!--标题控件-->
 		<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
 			<view class="cu-dialog" @tap.stop="">
@@ -179,7 +165,6 @@
 				
 				modalName:"",
 				
-				metaList:[],
 				token:"",
 				
 				isShow:false,
@@ -191,14 +176,12 @@
 				poststyle:"",
 				readstyle:"",
 				isText:0,
-				
 				//文章表单部分
 				title:"",
-				category:-1,
+				category:"",
 				categoryText:"",
 				text:'',
 				textRead:"",
-				
 				link:{
 					title:"",
 					url:"",
@@ -234,6 +217,10 @@
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.token=userInfo.token;
 			}
+			if(localStorage.getItem('clist')){
+				that.categoryText = "已选择";
+				that.category = localStorage.getItem('clist');
+			}
 			
 			that.owoList = that.owo.data.paopao.container;
 		},
@@ -243,7 +230,6 @@
 			that.NavBar = this.CustomBar;
 			// #endif
 			
-			that.getMetaList();
 			if(res.type){
 				that.type = res.type;
 				if(res.cid){
@@ -350,6 +336,7 @@
 				// #endif
 			},
 			back(){
+				localStorage.removeItem('clist');
 				uni.navigateBack({
 					delta: 1
 				});
@@ -382,6 +369,13 @@
 				//that.text+=text;
 				that.insetText(text);
 				
+			},
+			toHideText(){
+				var that = this;
+				var h = "";
+				var text = h+"[hide]这是回复可见的内容[/hide]";
+				//that.text+=text;
+				that.insetText(text);
 			},
 			toItalic(){
 				var that = this;
@@ -444,52 +438,53 @@
 			upload(){
 				let that = this				
 				uni.chooseImage({
-					count: 1,  // 最多可以选择的图片张数，默认9
+					count: 9,  // 最多可以选择的图片张数，默认9
 					sourceType: ['album', 'camera'], 
 				    success: function (res) {						
 						uni.showLoading({
 							title: "加载中"
 						});
 						const tempFilePaths = res.tempFilePaths;
-						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
-						  filePath: tempFilePaths[0],
-						  name: 'file',
-						  formData: {
-						   'token': that.token
-						  },
-						  success: function (uploadFileRes) {
-							  setTimeout(function () {
-							  	uni.hideLoading();
-							  }, 1000);
-							var data = JSON.parse(uploadFileRes.data);
-							//var data = uploadFileRes.data;
-							uni.showToast({
-								title: data.msg,
-								icon: 'none'
-							})
-							if(data.code==1){
-								   //插入文章
-									var h = "";
-									if(that.text!=""){
-										h="\n";
-									}
-									var text = h+"![图片名称]("+data.data.url+")";
-									//that.text+=text;
-									that.insetText(text);
-								   }
-							},fail:function(){
-								setTimeout(function () {
-									uni.hideLoading();
-								}, 1000);
-							}
-							
-						   
-						});
-					 
-						uploadTask.onProgressUpdate(function (res) {
-						  
-						 });
+						for(let i = 0;i < tempFilePaths.length; i++) {
+							const uploadTask = uni.uploadFile({
+							  url : API.upload(),
+							  filePath: tempFilePaths[i],
+							  name: 'file',
+							  formData: {
+							   'token': that.token
+							  },
+							  success: function (uploadFileRes) {
+								  if(i==tempFilePaths.length-1){
+									  setTimeout(function () {
+									  	uni.hideLoading();
+									  }, 1000);
+								  }
+								  
+								var data = JSON.parse(uploadFileRes.data);
+								//var data = uploadFileRes.data;
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
+								if(data.code==1){
+									   //插入文章
+										var h = "";
+										if(that.text!=""){
+											h="\n";
+										}
+										var text = h+"![图片名称]("+data.data.url+")";
+										//that.text+=text;
+										that.insetText(text);
+									   }
+								},fail:function(){
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+								}
+								
+							   
+							});
+						}
 					}
 				})
 			},
@@ -498,37 +493,7 @@
 				that.isShow = !that.isShow;
 				that.textRead = that.markHtml(that.text);
 			},
-			getMetaList(){
-				var that = this;
-				var data = {
-					"type":"category"
-				}
-				Net.request({
-					url: API.getMetasList(),
-					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":15,
-						"page":1,
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-								that.metaList =list;
-							}
-						}
-					},
-					fail: function(res) {
-						
-					}
-				})
-			},
+
 			submit(){
 				var that = this;
 				var type = that.type;
@@ -544,7 +509,7 @@
 			},
 			contensAdd() {
 				var that = this;
-				if (that.title == ""||that.category == -1||that.text == "") {
+				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
 						icon:'none',
@@ -583,6 +548,7 @@
 							icon: 'none'
 						})
 						if(res.data.code==1){
+							localStorage.removeItem('clist');
 							var timer = setTimeout(function() {
 								that.back();
 							}, 1000)
@@ -603,7 +569,7 @@
 			},
 			contensUpdate() {
 				var that = this;
-				if (that.title == ""||that.category == -1||that.text == "") {
+				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
 						icon:'none',
@@ -619,6 +585,7 @@
 					'text':that.text,
 					'sid':that.shopID
 				}
+				console.log(JSON.stringify(data));
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -643,6 +610,7 @@
 							icon: 'none'
 						})
 						if(res.data.code==1){
+							localStorage.removeItem('clist');
 							var timer = setTimeout(function() {
 								that.back();
 							}, 1000)
@@ -663,8 +631,16 @@
 			},
 			getInfo(cid){
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token = userInfo.token;
+					
+				}
 				var data = {
 					"key":that.cid,
+					"token":token,
 					"isMd":0,
 				}
 				
@@ -680,8 +656,20 @@
 						if(res.data.title){
 							
 							that.title = res.data.title;
-							that.category = res.data.category[0].mid;
-							that.categoryText =  res.data.category[0].name;
+							console.log(JSON.stringify(res.data.category))
+							if(res.data.category.length>0){
+								that.categoryText = "已选择";
+								var list = res.data.category;
+								var clist ="";
+								for(var i in list){
+
+									clist += ","+list[i].mid;
+									
+								}
+								localStorage.setItem('clist',clist);
+								that.category = clist;
+								
+							}
 							that.text=res.data.text;
 						}
 					},
@@ -798,6 +786,12 @@
 			OwO(){
 				var that = this;
 				that.isOwO = !that.isOwO;
+			},
+			toCategory(){
+				var that = this;
+				uni.navigateTo({
+				    url: '../contents/allcategory?type=edit'
+				});
 			}
 			
 		}

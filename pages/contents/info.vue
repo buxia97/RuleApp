@@ -114,13 +114,13 @@
 								<view class="cu-avatar round" :style="item.style"></view>
 								<view class="content">
 									<view class="text-grey">{{item.author}}</view>
-									<view class="text-content text-df">
+									<view class="text-content text-df break-all">
 										<rich-text :nodes="markCommentHtml(item.text)"></rich-text>
 									</view>
 									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.parent>0">
 										<view class="flex">
 											<view>{{item.parentComments.author}}：</view>
-											<view class="flex-sub">{{item.parentComments.text}}</view>
+											<view class="flex-sub break-all">{{item.parentComments.text}}</view>
 										</view>
 									</view>
 									<view class="margin-top-sm flex justify-between">
@@ -215,6 +215,8 @@
 				owo:owo,
 				owoList:[],
 				
+				isCommnet:0,
+				
 			}
 		},
 		components: {
@@ -234,7 +236,9 @@
 			// #endif
 			that.isLoad=0;
 			that.page=1;
+			
 			if(that.cid!=0){
+				that.getIsCommnet();
 				that.getInfo(that.cid);
 				that.getCommentsList(false,that.cid);
 			}
@@ -305,6 +309,15 @@
 			},
 			markHtml(text){
 				var that = this;
+				if(that.isCommnet==1){
+					text = that.replaceAll(text,"[hide]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;'>");
+					text = that.replaceAll(text,"[/hide]","</div>");
+					text = that.replaceAll(text,"{hide}","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;'>")
+					text = that.replaceAll(text,"{/hide}","</div>")
+				}else{
+					text = text.replace(/\[hide(([\s\S])*?)\[\/hide\]/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
+					text = text.replace(/{hide(([\s\S])*?){\/hide}/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
+				}
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
@@ -324,6 +337,9 @@
 					}
 				}
 				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
 			},
 			toUserContents(data){
 				var that = this;
@@ -384,16 +400,13 @@
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;
 							var html =that.markHtml(res.data.text);
-							//
+							
 							that.html=html;
 							that.tagList=res.data.tag;
 							that.slug = res.data.slug;
 							that.type = res.data.type;
 							that.likes =  res.data.likes;
-							//这里可以继续处理text字段，将网站内部链接缓存程序链接，从而实现内部页面跳转
 							
-							//下面是uniapp的markdown解析插件
-							//that.markdownData = markdownFunc(that.html, 'markdown');
 							that.getUserInfo(res.data.authorId);
 							localStorage.removeItem('postInfo_'+that.cid);
 							localStorage.setItem('postInfo_'+that.cid,JSON.stringify(res.data));
@@ -835,6 +848,45 @@
 								that.shopID = list[0].id;
 							}
 							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			getIsCommnet(){
+				var that = this;
+				var token= "";
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token = userInfo.token;
+					
+				}
+				if(token==""){
+					return false;
+				}
+				var data = {
+					"key":that.cid,
+					"token":token
+				}
+				Net.request({
+					url: API.isCommnet(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.isCommnet=1;
+							that.getInfo(that.cid);
 						}
 					},
 					fail: function(res) {

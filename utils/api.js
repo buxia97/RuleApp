@@ -1,5 +1,5 @@
 var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://192.168.10.192:8081/';
+//var API_URL = 'http://172.16.1.107:8081/';
 
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
@@ -224,14 +224,16 @@ module.exports = {
 	contentsAudit:function(){
 		return API_URL + 'typechoContents/contentsAudit';
 	},
-	
+	//文章是否评论过
+	isCommnet:function(){
+		return API_URL + 'typechoContents/isCommnet';
+	},
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){
-		return API_URL + 'upload/ossUpload';//OSS对象存储接口
-		//return API_URL + 'upload/cosUpload';//COS对象存储接口
+		//return API_URL + 'upload/localUpload';//OSS对象存储接口
+		return API_URL + 'upload/cosUpload';//COS对象存储接口
 		//return API_URL + 'upload/localUpload'; //本地上传接口
 	},
-	
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';
 	},
@@ -267,15 +269,16 @@ module.exports = {
 	mountShop:function(){
 		return API_URL + 'typechoShop/mountShop';
 	},
-	//充值
+	//支付宝当面付
 	scancodePay:function(){
 		return API_URL + 'pay/scancodePay';
 	},
+	//微信支付（官方）
 	wxPay:function(){
 		return API_URL + 'pay/WxPay';
 	},
 	
-	//充值二维码
+	//充值二维码生成
 	qrCode:function(){
 		return API_URL + 'pay/qrCode';
 	},

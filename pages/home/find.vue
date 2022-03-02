@@ -67,7 +67,7 @@
 			</view>
 			<view class="tags">
 				
-				<text class="tags-box" v-for="(item,index) in tagList" :style="item.style" @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
+				<text class="tags-box" v-for="(item,index) in tagList" @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
 					{{item.name}}
 				</text>
 				
@@ -242,13 +242,9 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
-								var tagList = [];
-								for(var i in list){
-									var arr = list[i];
-									arr.style="background-color:"+API.randomHexColor();
-									tagList.push(arr);
-								}
-								that.tagList = tagList;
+
+
+								that.tagList = list;
 								
 								localStorage.setItem('find_tagList',JSON.stringify(that.tagList));
 							}

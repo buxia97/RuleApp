@@ -28,13 +28,13 @@
 									<view class="cu-avatar round" :style="item.style"></view>
 									<view class="content">
 										<view class="text-grey">{{item.author}}</view>
-										<view class="text-content text-df">
+										<view class="text-content text-df break-all">
 											<rich-text :nodes="markHtml(item.text)"></rich-text>
 											
 										</view>
 										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
 											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
-												<view>{{item.contenTitle}}</view>
+												<view class="break-all">{{item.contenTitle}}</view>
 												
 											</view>
 										</view>

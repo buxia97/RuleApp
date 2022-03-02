@@ -400,7 +400,8 @@ myAudio,
   padding: 0.2em 0.4em;
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   font-size: 85%;
-  background-color: rgba(27, 31, 35, 0.05);
+  background-color: #fff5f5;
+  color: #ff502c;
   border-radius: 3px;
 }
 
