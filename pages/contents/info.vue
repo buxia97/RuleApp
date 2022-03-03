@@ -143,6 +143,22 @@
 				<view style="height: 100upx"></view>
 			</view>
 		</view>
+		<!--打赏选择-->
+		<view class="cu-modal bottom-modal" :class="modalName=='ChooseModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<view class="cu-bar bg-white">
+					<view class="action text-blue" @tap="hideModal">取消</view>
+					<view class="action text-green" @tap="toReward">确定</view>
+				</view>
+				<view class="grid col-3 padding-sm">
+					<view v-for="(item,index) in checkbox" class="padding-xs" :key="index">
+						<button class="cu-btn orange lg block" :class="item.checked?'bg-orange':'line-orange'" @tap="ChooseCheckbox(index)"> {{item.name}}
+							<view class="cu-tag sm round" :class="item.checked?'bg-white text-orange':'bg-orange'" v-if="item.hot">HOT</view>
+						</button>
+					</view>
+				</view>
+			</view>
+		</view>
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -160,7 +176,8 @@
 				<text class="cuIcon-appreciate" @tap="toLikes"></text>
 				<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
 				<text class="cuIcon-favorfill text-orange" @tap="rmMark" v-else></text>
-				<text class="cuIcon-recharge"  @tap="toReward"></text>
+				<!-- <text class="cuIcon-recharge"  @tap="toReward"></text> -->
+				<text class="cuIcon-recharge"  @tap="showModal" data-target="ChooseModal"></text>
 				<text class="cuIcon-share text-blue" @tap="ToShare"></text>
 				
 				
@@ -216,6 +233,45 @@
 				owoList:[],
 				
 				isCommnet:0,
+				
+				modalName: null,
+				checkbox: [{
+					value: 0,
+					name: '5积分',
+					num:5,
+					checked: false,
+					hot: false,
+				}, {
+					value: 1,
+					name: '10积分',
+					num:10,
+					checked: false,
+					hot: false,
+				}, {
+					value: 2,
+					name: '30积分',
+					num:30,
+					checked: false,
+					hot: false,
+				}, {
+					value: 3,
+					name: '50积分',
+					num:50,
+					checked: false,
+					hot: false,
+				}, {
+					value: 4,
+					name: '100积分',
+					num:100,
+					checked: false,
+					hot: false,
+				}, {
+					value: 5,
+					name: '200积分',
+					num:200,
+					checked: false,
+					hot: false,
+				}]
 				
 			}
 		},
@@ -343,14 +399,16 @@
 			},
 			toUserContents(data){
 				var that = this;
+				var name = data.name;
 				var title = data.name+"的信息";
 				if(data.screenName){
 					title = data.screenName+" 的信息";
+					name = data.screenName
 				}
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
 				});
 			},
 			toTagsContents(title,id){
@@ -534,10 +592,17 @@
 			},
 			toReward(){
 				var that = this;
+				var rewardList = that.checkbox;
+				var num = 10;
+				for(var i in rewardList){
+					if(rewardList[i].checked){
+						num = rewardList[i].num;
+					}
+				}
 				var data = {
 					"type":"reward",
 					"cid":that.cid,
-					"num":5,
+					"num":num,
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -555,7 +620,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						that.hideModal();
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
@@ -565,13 +630,14 @@
 						})
 						if(res.data.code==1){
 							uni.showToast({
-								title: "成功打赏 5 积分",
+								title: "成功打赏 "+num+" 积分",
 								icon: 'none'
 							})
 						}
 						
 					},
 					fail: function(res) {
+						that.hideModal();
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
@@ -628,6 +694,19 @@
 						})
 					}
 				})
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			ChooseCheckbox(j) {
+				let items = this.checkbox;
+				for (let i = 0, lenI = items.length; i < lenI; ++i) {
+					this.checkbox[i].checked = false;
+				}
+				this.checkbox[j].checked = !this.checkbox[j].checked;
 			},
 			toIsMark(){
 				var that = this;

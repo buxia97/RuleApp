@@ -191,16 +191,18 @@
 			},
 			toUserContents(data){
 				var that = this;
+				var name = data.name;
 				var title = data.name+"的信息";
 				if(data.screenName){
 					title = data.screenName+" 的信息";
+					name = data.screenName
 				}
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
 				});
-			},
+			}
 		}
 	}
 	

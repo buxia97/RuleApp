@@ -18,7 +18,11 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<form>
-			<view class="cu-form-group margin-top">
+			<view class="user-edit-header margin-top">
+				<image :src="avatar"></image>
+				<text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text>
+			</view>
+			<view class="cu-form-group">
 				<view class="title">用户名</view>
 				<input name="input" disabled="disabled" :value="name"></input>
 			</view>
@@ -70,6 +74,26 @@
 				</view>
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">设置头像</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					<view>Gravatar是全球最大的头像库，属于Wordpress旗下。它广泛应用于国内外各类网站和程序，包括知名的Github。在Gravatar通过您的邮箱注册用户，并设置头像后，您在所有支持Gravatar的网站使用邮箱，都会显示您的头像。</view>
+					<view>或者，您可以将将邮箱设置成QQ邮箱，将自动获取您的QQ头像。</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn bg-green margin-left" @tap="toGravatar">前往Gravatar</button>
+		
+					</view>
+				</view>
+			</view>
+		</view>
 		<!--  #ifdef MP-WEIXIN -->
 		<view class="post-update bg-blue" @tap="userEdit">
 			<text class="cuIcon-upload"></text>
@@ -96,6 +120,9 @@
 				repassword:'',
 				mail:'',
 				url:'',
+				avatar:"",
+				
+				modalName: null,
 				
 				token:'',
 			}
@@ -125,6 +152,12 @@
 					delta: 1
 				});
 			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
 			getCacheInfo(){
 				var that = this;
 				if(localStorage.getItem('userinfo')){
@@ -135,6 +168,7 @@
 					that.mail=userInfo.mail;
 					that.url=userInfo.url;
 					that.token=userInfo.token;
+					that.avatar=userInfo.avatar;
 				}
 			},
 			userEdit() {
@@ -243,6 +277,17 @@
 				uni.navigateTo({
 				    url: '../user/userbind'
 				});
+			},
+			toGravatar(){
+				var that = this;
+				that.hideModal();
+				var url = "https://cn.gravatar.com/";
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			}
 		}
 	}

@@ -98,6 +98,7 @@
 		},
 		onShow(){
 			var that = this;
+			that.page = 1;
 			// #ifdef APP-PLUS
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
@@ -106,7 +107,7 @@
 				that.token=localStorage.getItem('token');
 				that.getContentsList(false);
 			}
-			that.page = 1;
+			
 			
 		},
 		onLoad() {

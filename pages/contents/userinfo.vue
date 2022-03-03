@@ -6,29 +6,34 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					全站搜索
+					{{title}}
 				</view>
 				<view class="action">
 				</view>
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="all-box">
-			<view class="cu-bar bg-white search">
-				<view class="search-form round">
-					<text class="cuIcon-search"></text>
-					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
+		<view class="all-box" style="margin-top: -10upx;">
+			
+			<view class="user-info">
+				<view class="user-info-bg">
+					<image :src="avatar" mode="aspectFill"></image>
+				</view>
+				<view class="user-info-main">
+					<view class="user-header">
+						<image :src="avatar"></image>
+					</view>
+					<view class="user-text">
+						{{name}}
+					</view>
 				</view>
 			</view>
-			<view class="search-type grid col-3">
+			<view class="search-type grid col-2">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
 				</view>
 				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 					<text>评论</text>
-				</view>
-				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
-					<text>用户</text>
 				</view>
 			</view>
 			<view class="cu-card article no-card" v-if="type==0">
@@ -104,34 +109,6 @@
 				</view>
 			</view>
 			<!--评论结束-->
-			
-			<view class="cu-list menu-avatar userList" style="margin-top: 4upx;" v-if="type==2">
-				
-				<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
-					<view class="cu-avatar round lg" :style="item.style"></view>
-					<view class="content">
-						<view class="text-grey" v-if="item.screenName">{{item.screenName}}
-							<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
-						</view>
-						<view class="text-grey" v-else>{{item.name}}
-							<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
-						</view>
-						<view class="text-gray text-sm flex">
-							<view class="text-cut">
-								{{item.mail}}
-							</view> </view>
-					</view>
-					<view class="action">
-						<view class="text-blue text-xs">详情</view>
-						
-					</view>
-				</view>
-				<view class="load-more" @tap="loadMore">
-					<text>{{moreText}}</text>
-				</view>
-			
-			</view>
-			<!--用户结束-->
 		</view>
 		
 		<!--加载遮罩-->
@@ -161,7 +138,6 @@
 				
 				userList:[],
 				
-				searchText:"",
 				
 				type:0,
 				
@@ -171,6 +147,13 @@
 				isLoad:0,
 				
 				isLoading:0,
+				
+				title:"",
+				uid:0,
+				avatar:"",
+				name:"",
+				
+				
 			}
 		},
 		onShow(){
@@ -179,7 +162,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.getContentsList(false);
+			
 			
 			
 		},
@@ -191,11 +174,17 @@
 			}
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP-WEIXIN
 			that.NavBar = this.CustomBar;
 			// #endif
+			
+			that.title = res.title;
+			that.uid =  res.uid;
+			that.avatar =  res.avatar;
+			that.name =  res.name;
+			that.getContentsList(false);
 			
 		},
 		methods: {
@@ -207,10 +196,8 @@
 				that.isLoad=0;
 				if(i==0){
 					that.getContentsList(false);
-				}else if(i==1){
-					that.getCommentsList(false)
 				}else{
-					that.getUserList(false)
+					that.getCommentsList(false)
 				}
 			},
 			back(){
@@ -224,10 +211,8 @@
 				that.isLoad=1;
 				if(that.type==0){
 					that.getContentsList(true);
-				}else if(that.type==1){
-					that.getCommentsList(true)
 				}else{
-					that.getUserList(true)
+					that.getCommentsList(true)
 				}
 				
 			},
@@ -235,30 +220,16 @@
 				var that = this;
 				if(that.type==0){
 					that.getContentsList();
-				}else if(that.type==1){
-					that.getCommentsList()
 				}else{
-					that.getUserList()
+					that.getCommentsList()
 				}
 				
-			},
-			searchTag(){
-				var that = this;
-				var searchText = that.searchText;
-				that.page=1;
-				if(that.type==0){
-					that.getContentsList();
-				}else if(that.type==1){
-					that.getCommentsList()
-				}else{
-					that.getUserList()
-				}
-
 			},
 			getContentsList(isPage){
 				var that = this;
 				var data = {
 					"type":"post",
+					"authorId":that.uid,
 				}
 				var page = that.page;
 				if(isPage){
@@ -270,7 +241,6 @@
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
-						"searchKey":that.searchText,
 						"order":"created"
 					},
 					header:{
@@ -316,6 +286,7 @@
 				var that = this;
 				var data = {
 					"type":"comment",
+					"authorId":that.uid,
 				}
 				var page = that.page;
 				if(isPage){
@@ -327,7 +298,6 @@
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"searchKey":that.searchText,
 						"order":"created"
 					},
 					header:{
@@ -372,77 +342,6 @@
 						}, 300)
 					}
 				})
-			},
-			getUserList(isPage){
-				var that = this;
-				var page = that.page;
-				if(isPage){
-					page++;
-				}
-				Net.request({
-					url: API.getUserList(),
-					data:{
-						"searchParams":"",
-						"limit":10,
-						"page":page,
-						"searchKey":that.searchText,
-						"order":"created"
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						that.isLoad=0;
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-								
-								var userList = [];
-								for(var i in list){
-									var arr = list[i];
-									arr.style = "background-image:url("+list[i].avatar+");"
-									userList.push(arr);
-								}
-								if(isPage){
-									that.page++;
-									that.userList = that.userList.concat(userList);
-								}else{
-									that.userList = userList;
-								}
-							}else{
-								that.moreText="没有更多数据了";
-							}
-						}
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					},
-					fail: function(res) {
-						that.isLoad=0;
-						that.moreText="加载更多";
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					}
-				})
-			},
-			toUserContents(data){
-				var that = this;
-				var name = data.name;
-				var title = data.name+"的信息";
-				if(data.screenName){
-					title = data.screenName+" 的信息";
-					name = data.screenName
-				}
-				var id= data.uid;
-				var type="user";
-				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
-				});
 			},
 			commentsAdd(title,coid,reply){
 				var that = this;

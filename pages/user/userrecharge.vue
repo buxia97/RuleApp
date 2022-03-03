@@ -162,6 +162,7 @@
 				});
 			},
 			aliPay(){
+				var that = this;
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -213,6 +214,7 @@
 				})
 			},
 			wxPay() {
+				var that = this;
 				uni.showLoading({
 					title: "加载中"
 				});

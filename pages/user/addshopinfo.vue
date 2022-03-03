@@ -205,9 +205,9 @@
 			//键盘弹出相关
 			let screenHeight = uni.getSystemInfoSync().screenHeight;
 			let statusHeight= uni.getSystemInfoSync().statusBarHeight;
-			let inputHeight = screenHeight - statusHeight - 240;
+			let inputHeight = screenHeight - statusHeight - 292;
 			// #ifdef APP-PLUS
-			inputHeight = screenHeight - statusHeight - 250;
+			inputHeight = screenHeight - statusHeight - 302;
 			// #endif
 			
 			that.screenHeight = screenHeight - that.NavBar;
@@ -265,7 +265,7 @@
 				// #ifdef APP-PLUS
 				let screenHeight = uni.getSystemInfoSync().screenHeight;
 				let statusHeight= uni.getSystemInfoSync().statusBarHeight;
-				let inputHeight = screenHeight - statusHeight - 240;
+				let inputHeight = screenHeight - statusHeight - 292;
 				that.screenHeight = screenHeight - statusHeight - 5;
 				let height = h;
 				let postheight = that.postheight - height;
@@ -281,7 +281,7 @@
 				let screenHeight = uni.getSystemInfoSync().screenHeight;
 				let statusHeight= uni.getSystemInfoSync().statusBarHeight;
 				that.screenHeight = screenHeight - that.NavBar;
-				let inputHeight = screenHeight - statusHeight - 250;
+				let inputHeight = screenHeight - statusHeight - 302;
 				that.jpHeight =0;
 				that.postheight = inputHeight;
 				that.poststyle = "height:"+inputHeight+"px";

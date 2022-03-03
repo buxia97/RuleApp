@@ -110,7 +110,7 @@
 					url: API.getMetasList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":15,
+						"limit":100,
 						"page":1,
 					},
 					header:{

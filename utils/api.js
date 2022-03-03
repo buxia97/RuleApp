@@ -1,5 +1,5 @@
-var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://172.16.1.107:8081/';
+//var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://172.16.1.107:8081/';
 
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
@@ -16,8 +16,8 @@ var swiperid = 394;
 //首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
 var Topic=[
 	{
-		"mid":744,
-		"name":"#区块链#",
+		"mid":165,
+		"name":"#Typecho#",
 		"imgUrl":"../../static/img/topic1.jpg"
 	},
 	{
@@ -231,8 +231,8 @@ module.exports = {
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){
 		//return API_URL + 'upload/localUpload';//OSS对象存储接口
-		return API_URL + 'upload/cosUpload';//COS对象存储接口
-		//return API_URL + 'upload/localUpload'; //本地上传接口
+		//return API_URL + 'upload/cosUpload';//COS对象存储接口
+		return API_URL + 'upload/localUpload'; //本地上传接口
 	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';
