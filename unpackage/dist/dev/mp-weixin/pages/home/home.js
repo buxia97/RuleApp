@@ -386,20 +386,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 290));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -410,11 +397,12 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       NavBar: this.StatusBar + this.CustomBar,
 
       cardCur: 0,
+      softwareid: API.GetSoftware(),
       swiperList: [],
       recommendList: [],
       contentsList: [],
       metaList: [],
-
+      Topic: API.GetTopic(),
       dotStyle: false,
       towerStart: 0,
       direction: '100000',
@@ -438,7 +426,10 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       Update: 0,
       versionUrl: "",
       versionTitle: "",
-      versionIntro: "" };
+      versionIntro: "",
+
+
+      ads: "" };
 
   },
   onPullDownRefresh: function onPullDownRefresh() {
@@ -451,6 +442,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
   onShow: function onShow() {
     var that = this;
+
+
 
 
 
@@ -486,8 +479,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     loading: function loading() {
       var that = this;
       that.page = 1;
-      that.getSwiper();
-      that.getRecommend();
+      that.getSwiper(API.GetSwiperid());
+      that.getRecommend(API.GetRecommend());
       that.getMetaList();
       that.getContentsList(false);
     },
@@ -533,10 +526,34 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         that.contentsList = JSON.parse(_index.localStorage.getItem('contentsList_' + meta));
       }
     },
-    getSwiper: function getSwiper() {
+    getAds: function getAds() {
+      var that = this;
+
+      Net.request({
+        url: API.GetAds(),
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          var isAds = API.isAds();
+          if (isAds == 1) {
+            if (res.data) {
+              that.ads = res.data.ad1.split("|");
+            }
+          }
+
+        },
+        fail: function fail(res) {
+
+        } });
+
+    },
+    getSwiper: function getSwiper(id) {
       var that = this;
       var data = {
-        "mid": "394" };
+        "mid": id };
 
 
       Net.request({
@@ -580,10 +597,10 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         } });
 
     },
-    getRecommend: function getRecommend() {
+    getRecommend: function getRecommend(id) {
       var that = this;
       var data = {
-        "mid": "397" };
+        "mid": id };
 
       Net.request({
         url: API.getMetaContents(),
@@ -783,11 +800,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         } });
 
     },
-    toImagetoday: function toImagetoday() {
+
+    toForeverblog: function toForeverblog() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/imagetoday' });
+        url: '../contents/foreverblog' });
+
 
     },
     toComments: function toComments() {
@@ -879,7 +898,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           url: API.GetUpdateUrl(),
           method: 'get',
           success: function success(res) {
-            console.log(JSON.stringify());
+
             var versionCode = res.data.versionCode;
             that.versionUrl = res.data.versionUrl;
             that.versionTitle = res.data.version;
@@ -919,6 +938,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       that.Update = 0;
       uni.showTabBar({
         animation: true });
+
+    },
+    toAds: function toAds(url) {
+
+
+
+
+
 
     } },
 

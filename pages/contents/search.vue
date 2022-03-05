@@ -193,7 +193,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			
@@ -441,7 +441,7 @@
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
+				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			},
 			commentsAdd(title,coid,reply){

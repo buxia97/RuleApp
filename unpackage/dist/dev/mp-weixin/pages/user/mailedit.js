@@ -169,6 +169,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -207,14 +214,14 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', mail: '', code: '', times: 60, show: true, token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.getCacheInfo();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;},
-  methods: {
-    back: function back() {
-      uni.navigateBack({
-        delta: 1 });
-
-    },
-    getCacheInfo: function getCacheInfo() {
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', mail: '', code: '', times: 60, show: true, token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.getCacheInfo();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getCacheInfo: function getCacheInfo() {
       var that = this;
       if (_index.localStorage.getItem('userinfo')) {
         var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));

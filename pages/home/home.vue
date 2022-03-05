@@ -7,7 +7,7 @@
 					<text class="toGroup">社交</text>
 				</view>
 				<!--  #endif -->
-				<!--  #ifdef MP-WEIXIN -->
+				<!--  #ifdef MP -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
@@ -39,14 +39,15 @@
 			</swiper-item>
 		</swiper>
 		<view class="index-sort grid col-4">
+			
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toImagetoday">
-						<view class="index-sort-i">
-							<text class="cuIcon-picfill"></text>
+					<view class="index-sort-main" @tap="toForeverblog">
+						<view class="index-sort-i toClub">
+							<text class="cuIcon-upstagefill"></text>
 						</view>
 						<view class="index-sort-text">
-							图库
+							十年之约
 						</view>
 					</view>
 				</waves>
@@ -88,6 +89,7 @@
 				</waves>
 			</view>
 		</view>
+		
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
@@ -136,6 +138,9 @@
 				
 				
 			</view>
+		</view>
+		<view class="ads-box" v-if="ads!=''">
+			<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
 		</view>
 		<!--底下改成滑动形式-->
 		<view class="all-box">
@@ -251,6 +256,9 @@
 				versionUrl:"",
 				versionTitle:"",
 				versionIntro:"",
+				
+				
+				ads:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -264,6 +272,8 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
+			that.getAds();
+			
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
@@ -279,7 +289,7 @@
 		onLoad() {
 			var that = this;
 			that.loading();
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			// #ifdef APP-PLUS
@@ -344,6 +354,30 @@
 				if(localStorage.getItem('contentsList_'+meta)){
 					that.contentsList = JSON.parse(localStorage.getItem('contentsList_'+meta));
 				}
+			},
+			getAds(){
+				var that = this;
+				
+				Net.request({
+					url: API.GetAds(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						var isAds = API.isAds();
+						if(isAds==1){
+							if(res.data){
+								that.ads= res.data.ad1.split("|");
+							}
+						}
+						
+					},
+					fail: function(res) {
+						
+					}
+				})
 			},
 			getSwiper(id){
 				var that = this;
@@ -595,12 +629,14 @@
 					}
 				})
 			},
-			toImagetoday(){
+			
+			toForeverblog(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/imagetoday'
+					url: '../contents/foreverblog'
 				});
+				
 			},
 			toComments(){
 				var that = this;
@@ -684,6 +720,7 @@
 				var that = this;
 				
 				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					
 					that.wgtVer = inf.version //获取当前版本号
 					that.versionCode = inf.versionCode;
 					var version = inf.versionCode;
@@ -691,7 +728,6 @@
 						url: API.GetUpdateUrl(),
 						method: 'get',
 						success: function(res) {
-
 							var versionCode = res.data.versionCode;
 							that.versionUrl =  res.data.versionUrl;
 							that.versionTitle = res.data.version;
@@ -720,7 +756,7 @@
 							
 						},
 						fail:function(res){
-							
+							console.log("更新地址请求失败！"+ API.GetUpdateUrl());
 						}
 					})
 					
@@ -732,6 +768,14 @@
 				uni.showTabBar({
 					animation: true
 				});
+			},
+			toAds(url){
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			}
 		},
 		

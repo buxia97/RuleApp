@@ -106,7 +106,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.get_cache_size();

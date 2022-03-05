@@ -22,7 +22,7 @@
 						<text class="bg-green shop-status" v-if="item.status==1">已上架</text>
 						<text class="bg-red shop-status" v-if="item.status==2">已禁用</text>
 						<view class="shop-img" @tap="editShop(item.id)">
-							<image :src="item.imgurl"></image>
+							<image :src="item.imgurl" mode="widthFix"></image>
 						</view>
 						<view class="shop-title">
 							{{item.title}}
@@ -115,7 +115,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getShopList();

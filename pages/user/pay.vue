@@ -47,7 +47,7 @@
 			</view>
 			
 		</form>
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<view class="post-update bg-blue" @tap="userEdit">
 			<text class="cuIcon-upload"></text>
 		</view>
@@ -131,7 +131,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

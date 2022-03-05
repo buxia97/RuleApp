@@ -16,6 +16,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="info" style="margin-top:10upx;">
 			<view class="shopinfo-img">
+				
 				<image :src="imgurl" mode="widthFix" @tap="previewImage(imgurl)"></image>
 			</view>
 			<view class="shopinfo-title">
@@ -112,7 +113,7 @@
 		onLoad(res) {
 			var that = this;
 			
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			if(res.sid){
@@ -330,7 +331,7 @@
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
+				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			}
 		},

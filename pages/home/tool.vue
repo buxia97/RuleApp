@@ -7,7 +7,7 @@
 					<text class="toGroup">社交</text>
 				</view>
 				<!--  #endif -->
-				<!--  #ifdef MP-WEIXIN -->
+				<!--  #ifdef MP -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
@@ -95,12 +95,12 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toImagetoday">
 							<view class="index-sort-i">
-								<text class="cuIcon-shop"></text>
+								<text class="cuIcon-picfill"></text>
 							</view>
 							<view class="index-sort-text">
-								广告位
+								图库
 							</view>
 						</view>
 					</waves>
@@ -109,10 +109,10 @@
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
-								<text class="cuIcon-ticket"></text>
+								<text class="cuIcon-read"></text>
 							</view>
 							<view class="index-sort-text">
-								优惠券
+								广告位
 							</view>
 						</view>
 					</waves>
@@ -215,7 +215,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getMetaContents(58);
@@ -313,6 +313,13 @@
 				
 				uni.navigateTo({
 				    url: '../contents/randlist'
+				});
+			},
+			toImagetoday(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '../contents/imagetoday'
 				});
 			},
 			toShop(){

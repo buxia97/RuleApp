@@ -217,7 +217,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 290));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -231,7 +236,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       metaList: [],
       tagList: [],
 
-      isLoading: 0 };
+      isLoading: 0,
+
+      ads: "" };
 
 
   },
@@ -244,6 +251,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
   },
   onShow: function onShow() {
     var that = this;
+
 
 
 
@@ -280,6 +288,30 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       if (_index.localStorage.getItem('find_tagList')) {
         that.tagList = JSON.parse(_index.localStorage.getItem('find_tagList'));
       }
+    },
+    getAds: function getAds() {
+      var that = this;
+
+      Net.request({
+        url: API.GetAds(),
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          var isAds = API.isAds();
+          if (isAds == 1) {
+            if (res.data) {
+              that.ads = res.data.ad2.split("|");
+            }
+          }
+
+        },
+        fail: function fail(res) {
+
+        } });
+
     },
     getTopList: function getTopList() {
       var that = this;
@@ -374,13 +406,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
-              var tagList = [];
-              for (var i in list) {
-                var arr = list[i];
-                arr.style = "background-color:" + API.randomHexColor();
-                tagList.push(arr);
-              }
-              that.tagList = tagList;
+
+
+              that.tagList = list;
 
               _index.localStorage.setItem('find_tagList', JSON.stringify(that.tagList));
             }
@@ -433,6 +461,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     },
     toGroup: function toGroup() {
       var url = API.GetGroupUrl();
+
+
+
+
+
+
+    },
+    toAds: function toAds(url) {
 
 
 

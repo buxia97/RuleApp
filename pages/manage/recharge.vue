@@ -37,7 +37,7 @@
 				<input placeholder="请输入金额" name="input" type="number" v-model="num"></input>
 			</view>
 		</form>
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<view class="post-update bg-blue" @tap="userRecharge">
 			<text class="cuIcon-upload"></text>
 		</view>
@@ -96,7 +96,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

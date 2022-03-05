@@ -177,6 +177,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -223,16 +232,17 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, userList: [], page: 1, moreText: "加载更多", isLoad: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
-    var that = this;if (that.isLoad == 0) {that.loadMore();}}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;that.getUserList(false);}, methods: { allCache: function allCache() {var that = this;if (_index.localStorage.getItem('userList')) {
-        that.userList = JSON.parse(_index.localStorage.getItem('userList'));
-      }
-    },
-    back: function back() {
-      uni.navigateBack({
-        delta: 1 });
-
-    },
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, userList: [], page: 1, moreText: "加载更多", isLoad: 0, isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
+    var that = this;if (that.isLoad == 0) {that.loadMore();}}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;that.getUserList(false);}, methods: { allCache: function allCache() {var that = this;if (_index.localStorage.getItem('userList')) {that.userList = JSON.parse(_index.localStorage.getItem('userList'));}}, back: function back() {uni.navigateBack({ delta: 1 });},
     formatDate: function formatDate(datetime) {
       var datetime = new Date(parseInt(datetime * 1000));
       // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -296,23 +306,33 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
               that.moreText = "没有更多数据了";
             }
           }
+          var timer = setTimeout(function () {
+            that.isLoading = 1;
+            clearTimeout('timer');
+          }, 300);
         },
         fail: function fail(res) {
           that.isLoad = 0;
           that.moreText = "加载更多";
+          var timer = setTimeout(function () {
+            that.isLoading = 1;
+            clearTimeout('timer');
+          }, 300);
         } });
 
     },
     toUserContents: function toUserContents(data) {
       var that = this;
-      var title = data.name + "的文章";
+      var name = data.name;
+      var title = data.name + "的信息";
       if (data.screenName) {
-        title = data.screenName + " 的文章";
+        title = data.screenName + " 的信息";
+        name = data.screenName;
       }
       var id = data.uid;
       var type = "user";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+        url: '../contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

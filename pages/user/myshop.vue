@@ -20,7 +20,7 @@
 			
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
-					<!--  #ifdef MP-WEIXIN -->
+					<!--  #ifdef MP -->
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toShop">发布商品</button>
 					
 					<!--  #endif -->
@@ -132,7 +132,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			

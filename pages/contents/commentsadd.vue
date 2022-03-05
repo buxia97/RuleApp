@@ -54,7 +54,7 @@
 					</view>
 				</view>
 			</view>
-			<!--  #ifdef MP-WEIXIN -->
+			<!--  #ifdef MP -->
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="commentsadd">提交评论</button>
@@ -118,7 +118,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.title=res.title;

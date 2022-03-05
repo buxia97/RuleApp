@@ -28,7 +28,7 @@
 				</view>
 			</form>
 		</view>
-		<!-- #ifdef APP-PLUS || MP-WEIXIN -->
+		<!-- #ifdef APP-PLUS || MP -->
 		<view class="api-login grid col-3">
 			<view class="api-login-box" @tap="toQQlogin">
 				<image src="../../static/icon_qq.png"></image>
@@ -78,7 +78,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

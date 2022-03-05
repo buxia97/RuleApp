@@ -34,7 +34,7 @@
 			</view>
 		</view>
 
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<block v-if="type=='edit'">
 		<view class="post-update bg-blue" @tap="submit">
 			<text class="cuIcon-upload"></text>
@@ -87,7 +87,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getMetaList();

@@ -7,7 +7,7 @@
 					<text class="toGroup">社交</text>
 				</view>
 				<!--  #endif -->
-				<!--  #ifdef MP-WEIXIN -->
+				<!--  #ifdef MP -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
@@ -262,7 +262,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			

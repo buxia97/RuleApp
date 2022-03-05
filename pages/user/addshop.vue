@@ -64,7 +64,7 @@
 					<mp-html :content="text" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
 				</scroll-view>
 			</view>
-			<!--  #ifdef MP-WEIXIN -->
+			<!--  #ifdef MP -->
 			<view class="post-update bg-blue" @tap="submit">
 				<text class="cuIcon-upload"></text>
 			</view>
@@ -210,7 +210,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			

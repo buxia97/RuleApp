@@ -246,6 +246,12 @@
 			}
 		},
 		{
+			"path": "pages/contents/foreverblog",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/manage/comments",
 			"style": {
 				"enablePullDownRefresh":true

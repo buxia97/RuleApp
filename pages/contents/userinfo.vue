@@ -174,9 +174,21 @@
 			}
 			
 		},
+		onPullDownRefresh(){
+			var that = this;
+			var i = that.type;
+			that.page=1;
+			that.moreText="加载更多";
+			that.isLoad=0;
+			if(i==0){
+				that.getContentsList(false);
+			}else{
+				that.getCommentsList(false)
+			}
+		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			
@@ -249,6 +261,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						uni.stopPullDownRefresh();
 						that.isLoad=0;
 						that.moreText="加载更多";
 						if(res.data.code==1){
@@ -273,6 +286,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh();
 						that.moreText="加载更多";
 						that.isLoad=0;
 						var timer = setTimeout(function() {
@@ -306,7 +320,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						uni.stopPullDownRefresh();
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -334,6 +348,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh();
 						that.isLoad=0;
 						that.moreText="加载更多";
 						var timer = setTimeout(function() {

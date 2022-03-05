@@ -47,7 +47,7 @@
 				<view class="shop-box" v-for="(item,index) in shopList">
 					<view class="shop-main" @tap="shopInfo(item.id)">
 						<view class="shop-img">
-							<image :src="item.imgurl"></image>
+							<image :src="item.imgurl" mode="widthFix"></image>
 						</view>
 						<view class="shop-title">
 							{{item.title}}
@@ -140,7 +140,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getShopList();

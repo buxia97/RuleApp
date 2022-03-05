@@ -28,7 +28,7 @@
 				<textarea class="text"  v-model="address" placeholder="输入收货地址(精确到省市区街道)" ></textarea>
 			</view>
 		</form>
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<view class="post-update bg-blue" @tap="userEdit">
 			<text class="cuIcon-upload"></text>
 		</view>
@@ -84,7 +84,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

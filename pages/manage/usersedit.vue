@@ -43,7 +43,7 @@
 				<input placeholder="请再次输入密码" v-model="repassword" name="input"></input>
 			</view>
 		</form>
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<view class="post-update bg-blue" @tap="userEdit">
 			<text class="cuIcon-upload"></text>
 		</view>
@@ -88,7 +88,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			if(res.uid){

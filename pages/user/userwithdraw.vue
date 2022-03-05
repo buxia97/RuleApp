@@ -45,7 +45,7 @@
 				4.在提现处于审核状态时，不会扣除用户积分。
 			</view>
 		</view>
-		<!--  #ifdef MP-WEIXIN -->
+		<!--  #ifdef MP -->
 		<view class="post-update bg-blue" @tap="userwithdraw">
 			<text class="cuIcon-upload"></text>
 		</view>
@@ -89,7 +89,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 		},

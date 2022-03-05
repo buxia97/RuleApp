@@ -46,6 +46,7 @@
 					</view>
 				</view>
 			</view>
+			
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
@@ -91,6 +92,9 @@
 					</text>
 					
 				</view>
+			</view>
+			<view class="ads-box" v-if="ads!=''">
+				<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
 			</view>
 			<view class="data-box">
 				<view class="cu-bar bg-white">
@@ -271,7 +275,8 @@
 					num:200,
 					checked: false,
 					hot: false,
-				}]
+				}],
+				ads:""
 				
 			}
 		},
@@ -287,6 +292,7 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
+			that.getAds();
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
@@ -317,7 +323,7 @@
 		onLoad(res) {
 			var that = this;
 			
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.cid = res.cid;
@@ -408,7 +414,7 @@
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+data.avatar
+				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			},
 			toTagsContents(title,id){
@@ -434,6 +440,30 @@
 					that.getCommentsList(true,that.cid);
 				}
 				
+			},
+			getAds(){
+				var that = this;
+				
+				Net.request({
+					url: API.GetAds(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						var isAds = API.isAds();
+						if(isAds==1){
+							if(res.data){
+								that.ads= res.data.ad3.split("|");
+							}
+						}
+						
+					},
+					fail: function(res) {
+						
+					}
+				})
 			},
 			getInfo(cid){
 				var that = this;
@@ -998,6 +1028,14 @@
 				    url: '../contents/search'
 				});
 			},
+			toAds(url){
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			}
 		}
 	}
 </script>

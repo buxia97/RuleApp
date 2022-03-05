@@ -1289,3 +1289,62 @@ page{
 .break-all{
 	word-break: break-all;
 }
+.user-info{
+	height: 350upx;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.user-info-bg{
+	position: absolute;
+	height: 350upx;
+	filter: blur(20upx);
+	width: 100%;
+	z-index: 0;
+	transform: scale(1.2);
+	
+}
+.user-info-bg image{
+	width: 100%;
+}
+.user-info-main{
+	position: absolute;
+	height: 350upx;
+	width: 100%;
+	z-index: 5;
+	background-color: rgba(0,0,0,0.2);
+}
+.user-header{
+	width: 100%;
+	text-align: center;
+	padding-top: 80upx;
+}
+.user-header image{
+	width: 120upx;
+	height: 120upx;
+	border-radius: 50%;
+}
+.user-text{
+	text-align: center;
+	font-size: 28upx;
+	color: #fff;
+	margin-top: 20upx;
+	font-weight: bold;
+}
+.user-edit-header{
+	width: 100%;
+	background-color: #fff;
+	text-align: center;
+	padding-top: 40upx;
+	border-bottom:0.5px solid #eee;
+	padding-bottom: 30upx;
+}
+.user-edit-header image{
+	width: 150upx;
+	height: 150upx;
+	display: block;
+	border:solid #ddd 1px;
+	margin: 0upx auto 30upx auto;
+	background-color: #f3f3f3;
+	border-radius: 50%;
+}

@@ -2091,7 +2091,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 106:
+/***/ 107:
 /*!****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/index.js ***!
   \****************************************************************/
@@ -2103,7 +2103,7 @@ uni$1;exports.default = _default;
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */
-var marked = __webpack_require__(/*! ./marked.min */ 107);
+var marked = __webpack_require__(/*! ./marked.min */ 108);
 var index = 0;
 
 function Markdown(vm) {
@@ -2135,7 +2135,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 107:
+/***/ 108:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/marked.min.js ***!
   \*********************************************************************/
@@ -2151,7 +2151,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 108:
+/***/ 109:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/index.js ***!
   \*************************************************************/
@@ -2161,7 +2161,7 @@ module.exports = Markdown;
 /**
  * @fileoverview audio 插件
  */
-var context = __webpack_require__(/*! ./context */ 109);
+var context = __webpack_require__(/*! ./context */ 110);
 var index = 0;
 
 function Audio(vm) {
@@ -2192,22 +2192,6 @@ Audio.prototype.onLoad = function () {var _this = this;
 };
 
 module.exports = Audio;
-
-/***/ }),
-
-/***/ 109:
-/*!***************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var ctx = {};
-
-module.exports = {
-  get: function get(id) {return ctx[id];},
-  set: function set(id, vm) {ctx[id] = vm;},
-  remove: function remove(id) {ctx[id] = undefined;} };
 
 /***/ }),
 
@@ -2341,6 +2325,22 @@ function normalizeComponent (
 /***/ }),
 
 /***/ 110:
+/*!***************************************************************!*\
+  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var ctx = {};
+
+module.exports = {
+  get: function get(id) {return ctx[id];},
+  set: function set(id, vm) {ctx[id] = vm;},
+  remove: function remove(id) {ctx[id] = undefined;} };
+
+/***/ }),
+
+/***/ 111:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/index.js ***!
   \*****************************************************************/
@@ -2351,9 +2351,9 @@ function normalizeComponent (
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
  */
-var prism = __webpack_require__(/*! ./prism.min */ 111);
-var config = __webpack_require__(/*! ./config */ 112);
-var Parser = __webpack_require__(/*! ../parser */ 113);
+var prism = __webpack_require__(/*! ./prism.min */ 112);
+var config = __webpack_require__(/*! ./config */ 113);
+var Parser = __webpack_require__(/*! ../parser */ 114);
 
 function Highlight(vm) {
   this.vm = vm;
@@ -2436,7 +2436,7 @@ module.exports = Highlight;
 
 /***/ }),
 
-/***/ 111:
+/***/ 112:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/prism.min.js ***!
   \*********************************************************************/
@@ -2454,7 +2454,7 @@ Prism.languages.javascript = Prism.languages.extend("clike", { "class-name": [Pr
 
 /***/ }),
 
-/***/ 112:
+/***/ 113:
 /*!******************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/config.js ***!
   \******************************************************************/
@@ -2469,7 +2469,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 113:
+/***/ 114:
 /*!********************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/parser.js ***!
   \********************************************************/
@@ -3703,7 +3703,7 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 114:
+/***/ 115:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/search/index.js ***!
   \**************************************************************/
@@ -3842,7 +3842,7 @@ module.exports = Search;
 
 /***/ }),
 
-/***/ 115:
+/***/ 116:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/index.js ***!
   \*************************************************************/
@@ -3857,7 +3857,7 @@ function Style() {
 }
 
 
-var Parser = __webpack_require__(/*! ./parser */ 116);
+var Parser = __webpack_require__(/*! ./parser */ 117);
 
 Style.prototype.onParse = function (node, vm) {
   // 获取样式
@@ -3979,7 +3979,7 @@ module.exports = Style;
 
 /***/ }),
 
-/***/ 116:
+/***/ 117:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/parser.js ***!
   \**************************************************************/
@@ -4164,14 +4164,14 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 117:
+/***/ 118:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/img-cache/index.js ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 118);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
+/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 119);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
   name: 'imgcache',
   prefix: 'imgcache_' };
 
@@ -4313,18 +4313,18 @@ module.exports = ImgCache;
 
 /***/ }),
 
-/***/ 118:
+/***/ 119:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 119);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 120);
 
 /***/ }),
 
-/***/ 119:
+/***/ 120:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -4355,7 +4355,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 120);
+module.exports = __webpack_require__(/*! ./runtime */ 121);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -4372,7 +4372,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 120:
+/***/ 121:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -5292,30 +5292,117 @@ if (typeof window === 'object' && typeof window.document === 'object') {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://192.168.10.192:8081/';
-//var API_URL = 'http://api.bijilu.com/';
-
+var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://172.16.1.107:8081/';
 
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
+//下面主要用于用户协议
+var appName = "规则之树";
+var appEmail = "buxia97@126.com";
+//全局数据调用部分【重要】
+
+
+//是否开启广告（改为1则显示广告，具体配置在apiResult.php）
+var _isAds = 1;
+
+//首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
+var swiperid = 394;
+//首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
+var Topic = [
+{
+  "mid": 165,
+  "name": "#Typecho#",
+  "imgUrl": "../../static/img/topic1.jpg" },
+
+{
+  "mid": 2,
+  "name": "#编程#",
+  "imgUrl": "../../static/img/topic2.jpg" },
+
+{
+  "mid": 24,
+  "name": "#APP开发#",
+  "imgUrl": "../../static/img/topic3.jpg" },
+
+{
+  "mid": 3,
+  "name": "#短篇文学#",
+  "imgUrl": "../../static/img/topic4.jpg" }];
+
+
+//推荐文章,后面的数字为mid，为typecho数据库的标签和分类id
+var recommend = 397;
+//软件中心链接,后面的数字为mid，为typecho数据库的标签和分类id
+var software = 58;
+//工具页数据调用id,后面的数字为mid，为typecho数据库的标签和分类id
+var tool = 58;
+//精选作品mid,后面的数字为mid，为typecho数据库的标签和分类id
+var featured = 397;
+
+
+//使用攻略文章id，typecho文章表cid
+var raiders = 1518;
+//意见反馈文章id，typecho文章表cid
+var feedback = 2689;
+//关于我们文章id，typecho文章表cid
+var aboutme = 2;
 
 
 
 
 
-module.exports = {
-  GetWebUrl: function GetWebUrl() {
-    return WEB_URL;
+module.exports = (_module$exports = {
+  GetAppName: function GetAppName() {
+    return appName;
+  },
+  GetAppEmail: function GetAppEmail() {
+    return appEmail;
+  },
+  isAds: function isAds() {
+    return _isAds;
+  },
+  GetSwiperid: function GetSwiperid() {
+    return swiperid;
+  },
+  GetTopic: function GetTopic() {
+    return Topic;
+  },
+  GetRecommend: function GetRecommend() {
+    return recommend;
+  },
+  GetSoftware: function GetSoftware() {
+    return software;
+  },
+  GetTool: function GetTool() {
+    return tool;
+  },
+  GetFeatured: function GetFeatured() {
+    return featured;
+  },
+  GetRaiders: function GetRaiders() {
+    return raiders;
+  },
+  GetFeedback: function GetFeedback() {
+    return feedback;
+  },
+  GetAboutme: function GetAboutme() {
+    return aboutme;
   },
   GetUpdateUrl: function GetUpdateUrl() {
     return WEB_URL + 'apiResult.php?update=1';
   },
+  GetAds: function GetAds() {
+    return WEB_URL + 'apiResult.php?getAds=1';
+  },
   GetGithubUrl: function GetGithubUrl() {
     return GithubUrl;
+  },
+  GetWebUrl: function GetWebUrl() {
+    return WEB_URL;
   },
   GetGroupUrl: function GetGroupUrl() {
     return GroupUrl;
@@ -5350,122 +5437,201 @@ module.exports = {
   getUserData: function getUserData() {
     return API_URL + 'typechoUsers/userData';
   },
+  userDelete: function userDelete() {
+    return API_URL + 'typechoUsers/userDelete';
+  },
+  userRecharge: function userRecharge() {
+    return API_URL + 'typechoUsers/userRecharge';
+  },
+
+  userWithdraw: function userWithdraw() {
+    return API_URL + 'typechoUsers/userWithdraw';
+  },
+  withdrawList: function withdrawList() {
+    return API_URL + 'typechoUsers/withdrawList';
+  },
+  withdrawStatus: function withdrawStatus() {
+    return API_URL + 'typechoUsers/withdrawStatus';
+  },
+  manageUserEdit: function manageUserEdit() {
+    return API_URL + 'typechoUsers/manageUserEdit';
+  },
+  apiBind: function apiBind() {
+    return API_URL + 'typechoUsers/apiBind';
+  },
+  userBindStatus: function userBindStatus() {
+    return API_URL + 'typechoUsers/userBindStatus';
+  },
   getMarkList: function getMarkList() {
     return API_URL + 'typechoUserlog/markList';
   },
   getIsMark: function getIsMark() {
     return API_URL + 'typechoUserlog/isMark';
   },
-
+  userStatus: function userStatus() {
+    return API_URL + 'typechoUsers/userStatus';
+  },
   addLog: function addLog() {
     return API_URL + 'typechoUserlog/addLog';
   },
   removeLog: function removeLog() {
     return API_URL + 'typechoUserlog/removeLog';
-  },
-  userStatus: function userStatus() {
-    return API_URL + 'typechoUsers/userStatus';
-  },
-  getCommentsList: function getCommentsList() {
-    return API_URL + 'typechoComments/commentsList';
-  },
-  setComments: function setComments() {
-    return API_URL + 'typechoComments/commentsAdd';
-  },
-  //根据标签或者分类获取文章
-  getMetaContents: function getMetaContents() {
-    return API_URL + 'typechoMetas/selectContents';
-  },
-  getMetasList: function getMetasList() {
-    return API_URL + 'typechoMetas/metasList';
-  },
-  getContentsList: function getContentsList() {
-    return API_URL + 'typechoContents/contensList';
-  },
-  getContentsInfo: function getContentsInfo() {
-    return API_URL + 'typechoContents/contentsInfo';
-  },
-  contensAdd: function contensAdd() {
-    return API_URL + 'typechoContents/contensAdd';
-  },
+  } }, _defineProperty(_module$exports, "removeLog",
+function removeLog() {
+  return API_URL + 'typechoUserlog/removeLog';
+}), _defineProperty(_module$exports, "getCommentsList",
 
-  contensUpdate: function contensUpdate() {
-    return API_URL + 'typechoContents/contensUpdate';
-  },
-  contensImage: function contensImage() {
-    return API_URL + 'typechoContents/ImagePexels';
-  },
 
-  //下面这个方法涉及图片上传，自己修改定义接口路径
-  upload: function upload() {
-    //return API_URL + 'upload/cosUpload';//COS对象存储接口
-    return API_URL + 'upload/localUpload'; //本地上传接口
-  },
+function getCommentsList() {
+  return API_URL + 'typechoComments/commentsList';
+}), _defineProperty(_module$exports, "setComments",
+function setComments() {
+  return API_URL + 'typechoComments/commentsAdd';
+}), _defineProperty(_module$exports, "commentsDelete",
+function commentsDelete() {
+  return API_URL + 'typechoComments/commentsDelete';
+}), _defineProperty(_module$exports, "commentsAudit",
+function commentsAudit() {
+  return API_URL + 'typechoComments/commentsAudit';
+}), _defineProperty(_module$exports, "getMetaContents",
 
-  shopList: function shopList() {
-    return API_URL + 'typechoShop/shopList';
-  },
-  shopInfo: function shopInfo() {
-    return API_URL + 'typechoShop/shopInfo';
-  },
-  addShop: function addShop() {
-    return API_URL + 'typechoShop/addShop';
-  },
-  editShop: function editShop() {
-    return API_URL + 'typechoShop/editShop';
-  },
-  deleteShop: function deleteShop() {
-    return API_URL + 'typechoShop/deleteShop';
-  },
-  buyShop: function buyShop() {
-    return API_URL + 'typechoShop/buyShop';
-  },
-  buyList: function buyList() {
-    return API_URL + 'typechoUserlog/buyList';
-  },
-  //文章挂载商品
-  mountShop: function mountShop() {
-    return API_URL + 'typechoShop/mountShop';
-  },
 
-  IsNull: function IsNull(obj) {
-    return obj != null && obj != undefined;
-  },
-  randomHexColor: function randomHexColor() {//随机生成十六进制颜色
-    var hex = Math.floor(Math.random() * 16777216).toString(16); //生成ffffff以内16进制数
-    while (hex.length < 6) {//while循环判断hex位数，少于6位前面加0凑够6位
-      hex = '0' + hex;
-    }
-    return '#' + hex; //返回‘#'开头16进制颜色
-  },
-  //获取日期
-  formatDate: function formatDate(datetime) {
-    var datetime = new Date(parseInt(datetime * 1000));
-    // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
-    var year = datetime.getFullYear(),
-    month = ("0" + (datetime.getMonth() + 1)).slice(-2),
-    date = ("0" + datetime.getDate()).slice(-2),
-    hour = ("0" + datetime.getHours()).slice(-2),
-    minute = ("0" + datetime.getMinutes()).slice(-2);
-    //second = ("0" + date.getSeconds()).slice(-2);
-    // 拼接
-    var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-    // 返回
-    return result;
-  },
-  //移除数据中的空对象
-  removeObjectEmptyKey: function removeObjectEmptyKey(json) {
-    var value;
-    for (var key in json) {
-      if (json.hasOwnProperty(key)) {
-        value = json[key];
-        if (value === undefined || value === '' || value === null) {
-          delete json[key];
-        }
+
+function getMetaContents() {
+  return API_URL + 'typechoMetas/selectContents';
+}), _defineProperty(_module$exports, "getMetasList",
+function getMetasList() {
+  return API_URL + 'typechoMetas/metasList';
+}), _defineProperty(_module$exports, "getContentsList",
+function getContentsList() {
+  return API_URL + 'typechoContents/contensList';
+}), _defineProperty(_module$exports, "getContentsInfo",
+function getContentsInfo() {
+  return API_URL + 'typechoContents/contentsInfo';
+}), _defineProperty(_module$exports, "contensAdd",
+function contensAdd() {
+  return API_URL + 'typechoContents/contensAdd';
+}), _defineProperty(_module$exports, "contensUpdate",
+
+function contensUpdate() {
+  return API_URL + 'typechoContents/contensUpdate';
+}), _defineProperty(_module$exports, "contensImage",
+function contensImage() {
+  return API_URL + 'typechoContents/ImagePexels';
+}), _defineProperty(_module$exports, "allData",
+function allData() {
+  return API_URL + 'typechoContents/allData';
+}), _defineProperty(_module$exports, "contentsDelete",
+function contentsDelete() {
+  return API_URL + 'typechoContents/contentsDelete';
+}), _defineProperty(_module$exports, "contentsAudit",
+function contentsAudit() {
+  return API_URL + 'typechoContents/contentsAudit';
+}), _defineProperty(_module$exports, "getForeverblog",
+function getForeverblog() {
+  return API_URL + 'typechoContents/foreverblog';
+}), _defineProperty(_module$exports, "isCommnet",
+
+function isCommnet() {
+  return API_URL + 'typechoContents/isCommnet';
+}), _defineProperty(_module$exports, "upload",
+
+function upload() {
+  //return API_URL + 'upload/localUpload';//OSS对象存储接口
+  return API_URL + 'upload/cosUpload'; //COS对象存储接口
+  //return API_URL + 'upload/localUpload'; //本地上传接口
+}), _defineProperty(_module$exports, "shopList",
+function shopList() {
+  return API_URL + 'typechoShop/shopList';
+}), _defineProperty(_module$exports, "shopInfo",
+function shopInfo() {
+  return API_URL + 'typechoShop/shopInfo';
+}), _defineProperty(_module$exports, "addShop",
+function addShop() {
+  return API_URL + 'typechoShop/addShop';
+}), _defineProperty(_module$exports, "editShop",
+function editShop() {
+  return API_URL + 'typechoShop/editShop';
+}), _defineProperty(_module$exports, "deleteShop",
+function deleteShop() {
+  return API_URL + 'typechoShop/deleteShop';
+}), _defineProperty(_module$exports, "buyShop",
+function buyShop() {
+  return API_URL + 'typechoShop/buyShop';
+}), _defineProperty(_module$exports, "isBuyShop",
+function isBuyShop() {
+  return API_URL + 'typechoShop/isBuyShop';
+}), _defineProperty(_module$exports, "auditShop",
+function auditShop() {
+  return API_URL + 'typechoShop/auditShop';
+}), _defineProperty(_module$exports, "orderList",
+function orderList() {
+  return API_URL + 'typechoUserlog/orderList';
+}), _defineProperty(_module$exports, "orderSellList",
+function orderSellList() {
+  return API_URL + 'typechoUserlog/orderSellList';
+}), _defineProperty(_module$exports, "mountShop",
+
+
+function mountShop() {
+  return API_URL + 'typechoShop/mountShop';
+}), _defineProperty(_module$exports, "scancodePay",
+
+function scancodePay() {
+  return API_URL + 'pay/scancodePay';
+}), _defineProperty(_module$exports, "wxPay",
+
+function wxPay() {
+  return API_URL + 'pay/WxPay';
+}), _defineProperty(_module$exports, "qrCode",
+
+
+function qrCode() {
+  return API_URL + 'pay/qrCode';
+}), _defineProperty(_module$exports, "payLogList",
+function payLogList() {
+  return API_URL + 'pay/payLogList';
+}), _defineProperty(_module$exports, "IsNull", function IsNull(
+
+
+obj) {
+  return obj != null && obj != undefined;
+}), _defineProperty(_module$exports, "randomHexColor", function randomHexColor()
+{//随机生成十六进制颜色
+  var hex = Math.floor(Math.random() * 16777216).toString(16); //生成ffffff以内16进制数
+  while (hex.length < 6) {//while循环判断hex位数，少于6位前面加0凑够6位
+    hex = '0' + hex;
+  }
+  return '#' + hex; //返回‘#'开头16进制颜色
+}), _defineProperty(_module$exports, "formatDate", function formatDate(
+
+datetime) {
+  var datetime = new Date(parseInt(datetime * 1000));
+  // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+  var year = datetime.getFullYear(),
+  month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+  date = ("0" + datetime.getDate()).slice(-2),
+  hour = ("0" + datetime.getHours()).slice(-2),
+  minute = ("0" + datetime.getMinutes()).slice(-2);
+  //second = ("0" + date.getSeconds()).slice(-2);
+  // 拼接
+  var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+  // 返回
+  return result;
+}), _defineProperty(_module$exports, "removeObjectEmptyKey", function removeObjectEmptyKey(
+
+json) {
+  var value;
+  for (var key in json) {
+    if (json.hasOwnProperty(key)) {
+      value = json[key];
+      if (value === undefined || value === '' || value === null) {
+        delete json[key];
       }
     }
-    return json;
-  } };
+  }
+  return json;
+}), _module$exports);
 
 /***/ }),
 
@@ -12067,6 +12233,669 @@ function resolveLocaleChain(locale) {
 /***/ (function(module, exports) {
 
 
+
+/***/ }),
+
+/***/ 77:
+/*!*********************************************!*\
+  !*** E:/APPpro/voss/规则之树/static/owo/OwO.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var data = {
+  "paopao": {
+    "type": "image",
+    "container": [
+    {
+      "icon": "static//owo/img/paopao/E591B5E591B5_2x.png",
+      "data": "::(呵呵)",
+      "text": "呵呵" },
+
+    {
+      "icon": "static//owo/img/paopao/E59388E59388_2x.png",
+      "data": "::(哈哈)",
+      "text": "哈哈" },
+
+    {
+      "icon": "static//owo/img/paopao/E59090E8888C_2x.png",
+      "data": "::(吐舌)",
+      "text": "吐舌" },
+
+    {
+      "icon": "static//owo/img/paopao/E6838AE68190_2x.png",
+      "data": "::(惊恐)",
+      "text": "惊恐" },
+
+    {
+      "icon": "static//owo/img/paopao/E985B7_2x.png",
+      "data": "::(酷)",
+      "text": "酷" },
+
+    {
+      "icon": "static//owo/img/paopao/E58F91E9A399_2x.png",
+      "data": "::(发飙)",
+      "text": "发飙" },
+
+    {
+      "icon": "static//owo/img/paopao/E597AFE593BC_2x.png",
+      "data": "::(嗯哼)",
+      "text": "嗯哼" },
+
+    {
+      "icon": "static//owo/img/paopao/E6B581E6B197_2x.png",
+      "data": "::(流汗)",
+      "text": "流汗" },
+
+    {
+      "icon": "static//owo/img/paopao/E5A4A7E593AD_2x.png",
+      "data": "::(大哭)",
+      "text": "大哭" },
+
+    {
+      "icon": "static//owo/img/paopao/E5B0B4E5B0AC_2x.png",
+      "data": "::(尴尬)",
+      "text": "尴尬" },
+
+    {
+      "icon": "static//owo/img/paopao/E9BB91E884B8_2x.png",
+      "data": "::(黑脸)",
+      "text": "黑脸" },
+
+    {
+      "icon": "static//owo/img/paopao/E8B685E8B59E_2x.png",
+      "data": "::(超赞)",
+      "text": "超赞" },
+
+    {
+      "icon": "static//owo/img/paopao/E98791E992B1_2x.png",
+      "data": "::(金钱)",
+      "text": "金钱" },
+
+    {
+      "icon": "static//owo/img/paopao/E9BB91E884B8_2x.png",
+      "data": "::(疑问)",
+      "text": "疑问" },
+
+    {
+      "icon": "static//owo/img/paopao/E5B0ACE884B8_2x.png",
+      "data": "::(尬脸)",
+      "text": "尬脸" },
+
+    {
+      "icon": "static//owo/img/paopao/E59090_2x.png",
+      "data": "::(吐)",
+      "text": "吐" },
+
+    {
+      "icon": "static//owo/img/paopao/E593A6E8B181_2x.png",
+      "data": "::(哦豁)",
+      "text": "哦豁" },
+
+    {
+      "icon": "static//owo/img/paopao/E5A794E5B188_2x.png",
+      "data": "::(委屈)",
+      "text": "委屈" },
+
+    {
+      "icon": "static//owo/img/paopao/E79CAFE79CBCE7AC91_2x.png",
+      "data": "::(眯眼笑)",
+      "text": "眯眼笑" },
+
+    {
+      "icon": "static//owo/img/paopao/E5939FE59AAF_2x.png",
+      "data": "::(哟嚯)",
+      "text": "哟嚯" },
+
+    {
+      "icon": "static//owo/img/paopao/E8B685E5BC80E5BF83_2x.png",
+      "data": "::(超开心)",
+      "text": "超开心" },
+
+    {
+      "icon": "static//owo/img/paopao/E6BB91E7A8BD_2x.png",
+      "data": "::(滑稽)",
+      "text": "滑稽" },
+
+    {
+      "icon": "static//owo/img/paopao/E79CA8E79CBC_2x.png",
+      "data": "::(眨眼)",
+      "text": "眨眼" },
+
+    {
+      "icon": "static//owo/img/paopao/E7BEA1E68595_2x.png",
+      "data": "::(羡慕)",
+      "text": "羡慕" },
+
+    {
+      "icon": "static//owo/img/paopao/E585A5E79CA0_2x.png",
+      "data": "::(入眠)",
+      "text": "入眠" },
+
+    {
+      "icon": "static//owo/img/paopao/E6838AE593AD_2x.png",
+      "data": "::(惊哭)",
+      "text": "惊哭" },
+
+    {
+      "icon": "static//owo/img/paopao/E6B094E591BCE591BC_2x.png",
+      "data": "::(气呼呼)",
+      "text": "气呼呼" },
+
+    {
+      "icon": "static//owo/img/paopao/E99C87E6838A_2x.png",
+      "data": "::(震惊)",
+      "text": "震惊" },
+
+    {
+      "icon": "static//owo/img/paopao/E596B7E6B0B4_2x.png",
+      "data": "::(喷水)",
+      "text": "喷水" },
+
+    {
+      "icon": "static//owo/img/paopao/E788B1E5BF83_2x.png",
+      "data": "::(爱心)",
+      "text": "爱心" },
+
+    {
+      "icon": "static//owo/img/paopao/E5BF83E7A28E_2x.png",
+      "data": "::(心碎)",
+      "text": "心碎" },
+
+    {
+      "icon": "static//owo/img/paopao/E78EABE791B0_2x.png",
+      "data": "::(玫瑰)",
+      "text": "玫瑰" },
+
+    {
+      "icon": "static//owo/img/paopao/E7A4BCE789A9_2x.png",
+      "data": "::(礼物)",
+      "text": "礼物" },
+
+    {
+      "icon": "static//owo/img/paopao/E59296E595A1_2x.png",
+      "data": "::(咖啡)",
+      "text": "咖啡" },
+
+    {
+      "icon": "static//owo/img/paopao/4F4B_2x.png",
+      "data": "::(OK)",
+      "text": "OK" },
+
+    {
+      "icon": "static//owo/img/paopao/E5B08FE697A0E5A588_2x.png",
+      "data": "::(小无奈)",
+      "text": "小无奈" },
+
+    {
+      "icon": "static//owo/img/paopao/E581B7E7AC91_2x.png",
+      "data": "::(偷笑)",
+      "text": "偷笑" },
+
+    {
+      "icon": "static//owo/img/paopao/E59D8FE7AC91_2x.png",
+      "data": "::(坏笑)",
+      "text": "坏笑" },
+
+    {
+      "icon": "static//owo/img/paopao/E58DA7E6A7BD_2x.png",
+      "data": "::(卧槽)",
+      "text": "卧槽" },
+
+    {
+      "icon": "static//owo/img/paopao/E8A681E6ADBB_2x.png",
+      "data": "::(要死)",
+      "text": "要死" },
+
+    {
+      "icon": "static//owo/img/paopao/E4BA9AE9BABBE8B78C_2x.png",
+      "data": "::(亚麻跌)",
+      "text": "亚麻跌" },
+
+    {
+      "icon": "static//owo/img/paopao/E7AC91E593ADE4BA86_2x.png",
+      "data": "::(笑哭了)",
+      "text": "笑哭了" },
+
+    {
+      "icon": "static//owo/img/paopao/E78A80E588A9_2x.png",
+      "data": "::(犀利)",
+      "text": "犀利" },
+
+    {
+      "icon": "static//owo/img/paopao/E79086E4B880E4B88B_2x.png",
+      "data": "::(理一下)",
+      "text": "理一下" },
+
+    {
+      "icon": "static//owo/img/paopao/E59D90E7ABAFE6ADA3_2x.png",
+      "data": "::(坐端正)",
+      "text": "坐端正" },
+
+    {
+      "icon": "static//owo/img/paopao/E5AE8CE7BE8E_2x.png",
+      "data": "::(完美)",
+      "text": "完美" },
+
+    {
+      "icon": "static//owo/img/paopao/E59083E7939C_2x.png",
+      "data": "::(吃瓜)",
+      "text": "吃瓜" },
+
+    {
+      "icon": "static//owo/img/paopao/E6918AE6898B_2x.png",
+      "data": "::(摊手)",
+      "text": "摊手" },
+
+    {
+      "icon": "static//owo/img/paopao/E59BB0E78B97_2x.png",
+      "data": "::(困狗)",
+      "text": "困狗" },
+
+    {
+      "icon": "static//owo/img/paopao/E99DA0E5A299E79C8B_2x.png",
+      "data": "::(靠墙看)",
+      "text": "靠墙看" },
+
+    {
+      "icon": "static//owo/img/paopao/E58F91E78EB0_2x.png",
+      "data": "::(发现)",
+      "text": "发现" },
+
+    {
+      "icon": "static//owo/img/paopao/E9A5AEE98592_2x.png",
+      "data": "::(饮酒)",
+      "text": "饮酒" },
+
+    {
+      "icon": "static//owo/img/paopao/E5BF8DE7AC91_2x.png",
+      "data": "::(忍笑)",
+      "text": "忍笑" },
+
+    {
+      "icon": "static//owo/img/paopao/E8ADA6E5918A_2x.png",
+      "data": "::(警告)",
+      "text": "警告" },
+
+    {
+      "icon": "static//owo/img/paopao/E782B8E9BB91_2x.png",
+      "data": "::(炸黑)",
+      "text": "炸黑" },
+
+    {
+      "icon": "static//owo/img/paopao/E6BB91E7A8BDE6B197_2x.png",
+      "data": "::(滑稽汗)",
+      "text": "滑稽汗" },
+
+    {
+      "icon": "static//owo/img/paopao/E68993E884B8_2x.png",
+      "data": "::(打脸)",
+      "text": "打脸" },
+
+    {
+      "icon": "static//owo/img/paopao/E88396E6ACA1_2x.png",
+      "data": "::(胖次)",
+      "text": "胖次" },
+
+    {
+      "icon": "static//owo/img/paopao/E4BD8EE79C8B_2x.png",
+      "data": "::(低看)",
+      "text": "低看" }] },
+
+
+
+  "adai": {
+    "type": "image",
+    "container": [
+    {
+      "icon": "static//owo/img/adai/E684A4E68092.gif",
+      "data": ":*(愤怒)",
+      "text": "愤怒" },
+
+    {
+      "icon": "static//owo/img/adai/E8A385E985B7.gif",
+      "data": ":*(装酷)",
+      "text": "装酷" },
+
+    {
+      "icon": "static//owo/img/adai/E5A794E5B188.gif",
+      "data": ":*(委屈)",
+      "text": "委屈" },
+
+    {
+      "icon": "static//owo/img/adai/E98499E8A786.gif",
+      "data": ":*(鄙视)",
+      "text": "鄙视" },
+
+    {
+      "icon": "static//owo/img/adai/E5B0B4E5B0AC.gif",
+      "data": ":*(尴尬)",
+      "text": "尴尬" },
+
+    {
+      "icon": "static//owo/img/adai/E9AD94E9ACBC.gif",
+      "data": ":*(魔鬼)",
+      "text": "魔鬼" },
+
+    {
+      "icon": "static//owo/img/adai/E6838AE68190.gif",
+      "data": ":*(惊恐)",
+      "text": "惊恐" },
+
+    {
+      "icon": "static//owo/img/adai/E4BAB2E4BAB2.gif",
+      "data": ":*(亲亲)",
+      "text": "亲亲" },
+
+    {
+      "icon": "static//owo/img/adai/E5969CE6ACA2.gif",
+      "data": ":*(喜欢)",
+      "text": "喜欢" },
+
+    {
+      "icon": "static//owo/img/adai/E78CAAE5A4B4.gif",
+      "data": ":*(猪头)",
+      "text": "猪头" },
+
+    {
+      "icon": "static//owo/img/adai/E68AA0E9BCBB.gif",
+      "data": ":*(抠鼻)",
+      "text": "抠鼻" },
+
+    {
+      "icon": "static//owo/img/adai/E4BCA4E5BF83.gif",
+      "data": ":*(伤心)",
+      "text": "伤心" },
+
+    {
+      "icon": "static//owo/img/adai/E59083E6838A.gif",
+      "data": ":*(吃惊)",
+      "text": "吃惊" },
+
+    {
+      "icon": "static//owo/img/adai/E5BEAEE7AC91.gif",
+      "data": ":*(微笑)",
+      "text": "微笑" },
+
+    {
+      "icon": "static//owo/img/adai/E982AAE7AC91.gif",
+      "data": ":*(邪笑)",
+      "text": "邪笑" },
+
+    {
+      "icon": "static//owo/img/adai/E5A4B1E890BD.gif",
+      "data": ":*(失落)",
+      "text": "失落" },
+
+    {
+      "icon": "static//owo/img/adai/E58692E6B197.gif",
+      "data": ":*(冒汗)",
+      "text": "冒汗" },
+
+    {
+      "icon": "static//owo/img/adai/E997ADE598B4.gif",
+      "data": ":*(闭嘴)",
+      "text": "闭嘴" }] },
+
+
+  "alu": {
+    "type": "image",
+    "container": [
+    {
+      "icon": "static//owo/img/aru/E58F91E781AB_2x.png",
+      "data": ":@(发火)",
+      "text": "发火" },
+
+    {
+      "icon": "static//owo/img/aru/E7BEA1E68595_2x.png",
+      "data": ":@(羡慕)",
+      "text": "羡慕" },
+
+    {
+      "icon": "static//owo/img/aru/E59090E8A180E58092E59CB0_2x.png",
+      "data": ":@(吐血倒地)",
+      "text": "吐血倒地" },
+
+    {
+      "icon": "static//owo/img/aru/E59090E8A180_2x.png",
+      "data": ":@(吐血)",
+      "text": "吐血" },
+
+    {
+      "icon": "static//owo/img/aru/E68AB1E68AB1_2x.png",
+      "data": ":@(抱抱)",
+      "text": "抱抱" },
+
+    {
+      "icon": "static//owo/img/aru/E9BC93E68E8C_2x.png",
+      "data": ":@(鼓掌)",
+      "text": "鼓掌" },
+
+    {
+      "icon": "static//owo/img/aru/E59186E6BB9E_2x.png",
+      "data": ":@(呆滞)",
+      "text": "呆滞" },
+
+    {
+      "icon": "static//owo/img/aru/E6B581E6B3AA_2x.png",
+      "data": ":@(流泪)",
+      "text": "流泪" },
+
+    {
+      "icon": "static//owo/img/aru/E5AB8CE79691_2x.png",
+      "data": ":@(嫌疑)",
+      "text": "嫌疑" },
+
+    {
+      "icon": "static//owo/img/aru/E781B5E9AD82E587BAE7AA8D_2x.png",
+      "data": ":@(灵魂出窍)",
+      "text": "灵魂出窍" },
+
+    {
+      "icon": "static//owo/img/aru/E59BA7_2x.png",
+      "data": ":@(囧)",
+      "text": "囧" },
+
+    {
+      "icon": "static//owo/img/aru/E6838AE6858C_2x.png",
+      "data": ":@(惊慌)",
+      "text": "惊慌" },
+
+    {
+      "icon": "static//owo/img/aru/E6B581E58FA3E6B0B4_2x.png",
+      "data": ":@(流口水)",
+      "text": "流口水" },
+
+    {
+      "icon": "static//owo/img/aru/E98081E88AB1E88AB1_2x.png",
+      "data": ":@(送花花)",
+      "text": "送花花" },
+
+    {
+      "icon": "static//owo/img/aru/E4B88DE9AB98E585B4_2x.png",
+      "data": ":@(不高兴)",
+      "text": "不高兴" },
+
+    {
+      "icon": "static//owo/img/aru/E998B4E999A9_2x.png",
+      "data": ":@(阴险)",
+      "text": "阴险" },
+
+    {
+      "icon": "static//owo/img/aru/E68D85E6ADBBE4BDA0_2x.png",
+      "data": ":@(捅死你)",
+      "text": "捅死你" },
+
+    {
+      "icon": "static//owo/img/aru/E69A97E4B8ADE8A782E5AF9F_2x.png",
+      "data": ":@(暗中观察)",
+      "text": "暗中观察" },
+
+    {
+      "icon": "static//owo/img/aru/E593B2E5ADA6E6809DE88083_2x.png",
+      "data": ":@(哲学思考)",
+      "text": "哲学思考" },
+
+    {
+      "icon": "static//owo/img/aru/E697A0E5A588_2x.png",
+      "data": ":@(无奈)",
+      "text": "无奈" },
+
+    {
+      "icon": "static//owo/img/aru/E5989FE598B4_2x.png",
+      "data": ":@(嘟嘴)",
+      "text": "嘟嘴" },
+
+    {
+      "icon": "static//owo/img/aru/E5A4A7E4BDAC_2x.png",
+      "data": ":@(大佬)",
+      "text": "大佬" },
+
+    {
+      "icon": "static//owo/img/aru/E997ADE598B4_2x.png",
+      "data": ":@(闭嘴)",
+      "text": "闭嘴" },
+
+    {
+      "icon": "static//owo/img/aru/E5AEB3E7BE9E_2x.png",
+      "data": ":@(害羞)",
+      "text": "害羞" },
+
+    {
+      "icon": "static//owo/img/aru/E884B8E7BAA2_2x.png",
+      "data": ":@(脸红)",
+      "text": "脸红" },
+
+    {
+      "icon": "static//owo/img/aru/E9BB91E7BABF_2x.png",
+      "data": ":@(黑线)",
+      "text": "黑线" },
+
+    {
+      "icon": "static//owo/img/aru/E4B8BEE799BDE69797_2x.png",
+      "data": ":@(举白旗)",
+      "text": "举白旗" },
+
+    {
+      "icon": "static//owo/img/aru/E8B59E_2x.png",
+      "data": ":@(赞)",
+      "text": "赞" },
+
+    {
+      "icon": "static//owo/img/aru/E59090E8888CE5A4B4_2x.png",
+      "data": ":@(吐舌头)",
+      "text": "吐舌头" }] },
+
+
+
+  "quyinniang": {
+    "type": "image",
+    "container": [
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E6BB91E7A8BD_2x.png",
+      "data": ":&(蛆音滑稽)",
+      "text": "蛆音滑稽" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E99C87E6838A_2x.png",
+      "data": ":&(蛆音震惊)",
+      "text": "蛆音震惊" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E7949FE6B094_2x.png",
+      "data": ":&(蛆音生气)",
+      "text": "蛆音生气" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E59093E593AD_2x.png",
+      "data": ":&(蛆音吓哭)",
+      "text": "蛆音吓哭" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E8A180E8BABA_2x.png",
+      "data": ":&(蛆音血躺)",
+      "text": "蛆音血躺" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E79691E68391_2x.png",
+      "data": ":&(蛆音疑惑)",
+      "text": "蛆音疑惑" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E68DA1E882A5E79A82_2x.png",
+      "data": ":&(蛆音捡肥皂)",
+      "text": "蛆音捡肥皂" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E68D82E884B8_2x.png",
+      "data": ":&(蛆音捂脸)",
+      "text": "蛆音捂脸" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E59090E8A180E79FB3E58C96_2x.png",
+      "data": ":&(蛆音吐血石化)",
+      "text": "蛆音吐血石化" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E593BCE6B094_2x.png",
+      "data": ":&(蛆音哼气)",
+      "text": "蛆音哼气" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E5A4A7E7AC91_2x.png",
+      "data": ":&(蛆音大笑)",
+      "text": "蛆音大笑" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E581B7E79C8B_2x.png",
+      "data": ":&(蛆音偷看)",
+      "text": "蛆音偷看" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E58D96E8908C_2x.png",
+      "data": ":&(蛆音卖萌)",
+      "text": "蛆音卖萌" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E5A5BDE79A84_2x.png",
+      "data": ":&(蛆音好的)",
+      "text": "蛆音好的" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E6838AE59093_2x.png",
+      "data": ":&(蛆音惊吓)",
+      "text": "蛆音惊吓" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E69187E5A4B4_2x.png",
+      "data": ":&(蛆音摇头)",
+      "text": "蛆音摇头" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E79DA1E8A789_2x.png",
+      "data": ":&(蛆音睡觉)",
+      "text": "蛆音睡觉" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E697A0E8AFAD_2x.png",
+      "data": ":&(蛆音无语)",
+      "text": "蛆音无语" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E59083E7939C_2x.png",
+      "data": ":&(蛆音吃瓜)",
+      "text": "蛆音吃瓜" },
+
+    {
+      "icon": "static//owo/img/quyin/E89B86E99FB3E887AAE6818B_2x.png",
+      "data": ":&(蛆音自恋)",
+      "text": "蛆音自恋" }] } };
+
+
+
+
+module.exports = {
+  data: data };
 
 /***/ })
 

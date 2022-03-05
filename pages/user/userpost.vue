@@ -18,7 +18,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="cu-card article no-card">
-				<!--  #ifdef MP-WEIXIN -->
+				<!--  #ifdef MP -->
 				<view class="all-btn">
 					<view class="user-btn flex flex-direction">
 						<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toPost">发布文章</button>
@@ -112,7 +112,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// #ifdef APP-PLUS || MP-WEIXIN
+			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			

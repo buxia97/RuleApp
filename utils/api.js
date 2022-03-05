@@ -11,6 +11,10 @@ var appName="规则之树";
 var appEmail = "buxia97@126.com";
 //全局数据调用部分【重要】
 
+
+//是否开启广告（改为1则显示广告，具体配置在apiResult.php）
+var isAds = 1;
+
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
 //首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
@@ -64,6 +68,9 @@ module.exports = {
 	GetAppEmail:function(){
 		return appEmail;
 	},
+	isAds:function(){
+		return isAds;
+	},
 	GetSwiperid:function(){
 		return swiperid;
 	},
@@ -93,6 +100,9 @@ module.exports = {
 	},
 	GetUpdateUrl:function(){
 		return WEB_URL + 'apiResult.php?update=1';
+	},
+	GetAds:function(){
+		return WEB_URL + 'apiResult.php?getAds=1';
 	},
 	GetGithubUrl:function(){
 		return GithubUrl;
@@ -224,6 +234,9 @@ module.exports = {
 	contentsAudit:function(){
 		return API_URL + 'typechoContents/contentsAudit';
 	},
+	getForeverblog:function(){
+		return API_URL + 'typechoContents/foreverblog';
+	},
 	//文章是否评论过
 	isCommnet:function(){
 		return API_URL + 'typechoContents/isCommnet';
@@ -231,8 +244,8 @@ module.exports = {
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){
 		//return API_URL + 'upload/localUpload';//OSS对象存储接口
-		//return API_URL + 'upload/cosUpload';//COS对象存储接口
-		return API_URL + 'upload/localUpload'; //本地上传接口
+		return API_URL + 'upload/cosUpload';//COS对象存储接口
+		//return API_URL + 'upload/localUpload'; //本地上传接口
 	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';

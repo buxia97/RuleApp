@@ -201,6 +201,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -271,31 +305,41 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', screenName: '', password: '', repassword: '', mail: '', url: '', token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.getCacheInfo();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getCacheInfo: function getCacheInfo() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.uid = userInfo.uid;that.screenName = userInfo.screenName;that.name = userInfo.name;that.mail = userInfo.mail;that.url = userInfo.url;that.token = userInfo.token;}}, userEdit: function userEdit() {var that = this;if (that.password != "") {if (that.password != that.repassword) {uni.showToast({ title: "两次密码不一致", icon: 'none', duration: 1000, position: 'bottom' });return false;}
-      }
-
-      var data = {
-        uid: that.uid,
-        name: that.name,
-        screenName: that.screenName,
-        password: that.password,
-        url: that.url };
-
-      uni.showLoading({
-        title: "加载中" });
-
-      Net.request({
-
-        url: API.userEdit(),
-        data: {
-          "params": JSON.stringify(API.removeObjectEmptyKey(data)),
-          "token": that.token },
-
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
-        method: "get",
-        dataType: 'json',
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', screenName: '', password: '', repassword: '', mail: '', url: '', avatar: "", modalName: null, token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.getCacheInfo();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, showModal: function showModal(e) {this.modalName = e.currentTarget.dataset.target;}, hideModal: function hideModal(e) {this.modalName = null;}, getCacheInfo: function getCacheInfo() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.uid = userInfo.uid;that.screenName = userInfo.screenName;that.name = userInfo.name;that.mail = userInfo.mail;that.url = userInfo.url;that.token = userInfo.token;that.avatar = userInfo.avatar;}}, userEdit: function userEdit() {var that = this;if (that.password != "") {if (that.password != that.repassword) {uni.showToast({ title: "两次密码不一致", icon: 'none', duration: 1000, position: 'bottom' });return false;}}var data = { uid: that.uid, name: that.name, screenName: that.screenName, password: that.password, url: that.url };uni.showLoading({ title: "加载中" });Net.request({ url: API.userEdit(), data: { "params": JSON.stringify(API.removeObjectEmptyKey(data)), "token": that.token }, header: { 'Content-Type': 'application/x-www-form-urlencoded' }, method: "get", dataType: 'json',
         success: function success(res) {
           //console.log(JSON.stringify(res))
           setTimeout(function () {
@@ -357,6 +401,24 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
 
       uni.navigateTo({
         url: '../user/pay' });
+
+    },
+    toBind: function toBind() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '../user/userbind' });
+
+    },
+    toGravatar: function toGravatar() {
+      var that = this;
+      that.hideModal();
+      var url = "https://cn.gravatar.com/";
+
+
+
+
+
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
