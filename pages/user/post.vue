@@ -317,7 +317,12 @@
 				that.screenHeight = screenHeight - statusHeight - 5;
 				let height = h;
 				let postheight = that.postheight - height;
-				that.jpHeight =height - statusHeight;
+				if(uni.getSystemInfoSync().platform == 'ios'){
+					that.jpHeight =0;
+				}else{
+					that.jpHeight =height - statusHeight;
+				}
+				
 				that.postheight = postheight;
 				that.poststyle = "height:"+postheight+"px";
 				that.readstyle = "height:"+(inputHeight+30)+"px";

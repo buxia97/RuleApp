@@ -168,11 +168,8 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						var isAds = API.isAds();
-						if(isAds==1){
-							if(res.data){
-								that.ads= res.data.ad2.split("|");
-							}
+						if(res.data.isAds==1){
+							that.ads= res.data.ad1.split("|");
 						}
 						
 					},

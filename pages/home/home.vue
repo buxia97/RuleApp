@@ -366,12 +366,10 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						var isAds = API.isAds();
-						if(isAds==1){
-							if(res.data){
-								that.ads= res.data.ad1.split("|");
-							}
+						if(res.data.isAds==1){
+							that.ads= res.data.ad1.split("|");
 						}
+						
 						
 					},
 					fail: function(res) {
@@ -726,6 +724,9 @@
 					var version = inf.versionCode;
 					Net.request({
 						url: API.GetUpdateUrl(),
+						header: {
+								'content-type': 'application/json'
+							},
 						method: 'get',
 						success: function(res) {
 							var versionCode = res.data.versionCode;

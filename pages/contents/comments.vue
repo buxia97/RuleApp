@@ -58,7 +58,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -80,6 +86,8 @@
 				
 				moreText:"加载更多",
 				page:1,
+				
+				isLoading:0,
 				
 			}
 		},
@@ -127,11 +135,14 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
 				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
 			},
 			loadMore(){
 				var that = this;
@@ -170,6 +181,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoading=1;
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -193,6 +205,7 @@
 						}
 					},
 					fail: function(res) {
+						that.isLoading=1;
 						that.isLoad=0;
 						that.moreText="加载更多";
 					}

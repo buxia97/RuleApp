@@ -78,7 +78,7 @@
 							<text>点赞( {{formatNumber(likes)}} )</text>
 						</view>
 					</view>
-					<view class="content-btn-box" @tap="toReward">
+					<view class="content-btn-box"  @tap="showModal" data-target="ChooseModal">
 						<view class="content-btn-i">
 							<text class="cuIcon-rechargefill btn-i"></text>
 							<text>投币</text>
@@ -311,6 +311,7 @@
 			}
 			//that.allCache();
 			
+			
 		},
 		onPullDownRefresh(){
 			var that = this;
@@ -383,7 +384,7 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
@@ -394,7 +395,7 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
@@ -452,11 +453,8 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						var isAds = API.isAds();
-						if(isAds==1){
-							if(res.data){
-								that.ads= res.data.ad3.split("|");
-							}
+						if(res.data.isAds==1){
+							that.ads= res.data.ad1.split("|");
 						}
 						
 					},
@@ -537,6 +535,7 @@
 				var that = this;
 				var data = {
 					"cid":id,
+					"status":"approved"
 				}
 				var page = that.page;
 				if(isPage){
@@ -799,7 +798,7 @@
 						})
 						if(res.data.code==1){
 							that.isMark=1;
-							that.toIsMark();
+							//that.toIsMark();
 						}
 						
 					},
@@ -842,7 +841,7 @@
 						})
 						if(res.data.code==1){
 							that.isMark=0;
-							that.toIsMark();
+							//that.toIsMark();
 						}
 						
 					},

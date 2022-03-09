@@ -1,5 +1,5 @@
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://172.16.1.107:8081/';
+var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://172.16.1.107:8081/';
 
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
@@ -11,9 +11,11 @@ var appName="规则之树";
 var appEmail = "buxia97@126.com";
 //全局数据调用部分【重要】
 
+//用户头衔，自己修改名词
+var rankList = ["小白","萌新","入门","熟手","大佬","巨佬","传说","古神"];
 
-//是否开启广告（改为1则显示广告，具体配置在apiResult.php）
-var isAds = 1;
+//头衔对应的背景颜色
+var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#CC3399","#FF0033","#660033","#000000"];
 
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
@@ -62,6 +64,12 @@ var aboutme = 2
 // #endif
 
 module.exports = {
+	GetRankList(){
+		return rankList;
+	},
+	GetRankStyle(){
+		return rankStyle;
+	},
 	GetAppName:function(){
 		return appName;
 	},

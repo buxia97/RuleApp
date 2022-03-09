@@ -816,7 +816,7 @@ page{
 	overflow: hidden;
 }
 .shop-img image{
-	height: 250upx;
+	width: 100%;
 	border-radius: 15upx;
 }
 .shop-title{
@@ -1347,4 +1347,24 @@ page{
 	margin: 0upx auto 30upx auto;
 	background-color: #f3f3f3;
 	border-radius: 50%;
+}
+.toClub{
+	background-color: #fbbd08 !important;
+	color: #333333 !important;
+}
+.ads-box{
+	width: 100%;
+	overflow: hidden;
+}
+.ads-box image{
+	width: 100%;
+	display: block;
+}
+.foreverblog-text{
+	background-color: #f3f3f3;
+}
+.foreverblog-ico{
+	margin-left: 10upx;
+	font-size: 38upx !important;
+	color: #0081FF;
 }

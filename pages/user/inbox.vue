@@ -146,11 +146,14 @@
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
 				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
 			},
 			toInfo(cid,title){
 				var that = this;
