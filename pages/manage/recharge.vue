@@ -31,6 +31,9 @@
 			<view class="cu-form-group">
 				<view class="title">用户ID</view>
 				<input placeholder="请输入用户ID" name="input" type="number" v-model="toid"></input>
+				<view class="action">
+					<text class="text-blue" @tap="toUser">选择用户</text>
+				</view>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">金额</view>
@@ -86,12 +89,19 @@
 			var that = this;
 			
 		},
+		onHide() {
+			localStorage.removeItem('getuid')
+		},
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			
+			if(localStorage.getItem('getuid')){
+				that.toid = localStorage.getItem('getuid');
+			}
 			
 		},
 		onLoad() {
@@ -184,6 +194,12 @@
 					}
 				})
 			},
+			toUser(){
+				var that = this;
+				uni.navigateTo({
+				    url: '../manage/users?type=get'
+				});
+			}
 		}
 	}
 </script>

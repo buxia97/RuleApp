@@ -824,6 +824,7 @@ page{
 	margin-top: 10upx;
 	margin-bottom: 15upx;
 	overflow: hidden;
+	height: 70upx;
 	text-overflow: ellipsis;
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
@@ -1362,9 +1363,14 @@ page{
 }
 .foreverblog-text{
 	background-color: #f3f3f3;
+	color: #666;
 }
 .foreverblog-ico{
 	margin-left: 10upx;
 	font-size: 38upx !important;
 	color: #0081FF;
+}
+.foreverblog-title{
+	color: #333;
+	font-size: 30upx;
 }

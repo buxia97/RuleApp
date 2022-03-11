@@ -224,6 +224,10 @@
 			
 			that.owoList = that.owo.data.paopao.container;
 		},
+		onHide() {
+			var that = this;
+			localStorage.removeItem('clist')
+		},
 		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
@@ -317,11 +321,9 @@
 				that.screenHeight = screenHeight - statusHeight - 5;
 				let height = h;
 				let postheight = that.postheight - height;
-				if(uni.getSystemInfoSync().platform == 'ios'){
-					that.jpHeight =0;
-				}else{
-					that.jpHeight =height - statusHeight;
-				}
+
+				that.jpHeight =height - statusHeight;
+				
 				
 				that.postheight = postheight;
 				that.poststyle = "height:"+postheight+"px";

@@ -23,7 +23,7 @@
 					<view class="cu-avatar round"  :style="item.style"></view>
 					<view class="content">
 						<view class="text-grey">{{item.author}}</view>
-						<view class="text-gray text-content text-df">
+						<view class="text-gray text-content text-df foreverblog-title">
 							{{item.title}}
 						</view>
 						<view class="padding-sm radius margin-top-sm  text-sm foreverblog-text">

@@ -6,7 +6,12 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					用户管理
+					<block v-if="type=='get'">
+						用户选择
+					</block>
+					<block v-if="type==''">
+						用户管理
+					</block>
 				</view>
 				<view class="action">
 					
@@ -41,14 +46,20 @@
 					</view>
 				</view>
 				<view class="action user-list-btn">
-					<view class="cu-btn text-blue radius" @tap="toEdit(item.uid)">
-						<text class="cuIcon-post"></text>
-					</view>
-					
-					<view class="cu-btn text-red radius" @tap="deleteUser(item.uid)">
-						<text class="cuIcon-deletefill"></text>
-					</view>
-					
+					<block v-if="type==''">
+						<view class="cu-btn text-blue radius" @tap="toEdit(item.uid)">
+							<text class="cuIcon-post"></text>
+						</view>
+						
+						<view class="cu-btn text-red radius" @tap="deleteUser(item.uid)">
+							<text class="cuIcon-deletefill"></text>
+						</view>
+					</block>
+					<block v-if="type=='get'">
+						<view class="cu-btn text-blue radius" @tap="getUser(item)">
+							选择
+						</view>
+					</block>
 				</view>
 			</view>
 			<view class="load-more" @tap="loadMore" v-if="userList.length>0">
@@ -85,6 +96,7 @@
 				searchText:"",
 				
 				isLoading:0,
+				type:"",
 				
 			}
 		},
@@ -112,11 +124,14 @@
 			// #endif
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(res.type){
+				that.type = res.type;
+			}
 			that.getUserList(false);
 		},
 		methods:{
@@ -282,6 +297,11 @@
 				});
 				
 			},
+			getUser(data){
+				var that = this;
+				localStorage.setItem('getuid',data.uid);
+				that.back();
+			}
 		}
 	}
 	

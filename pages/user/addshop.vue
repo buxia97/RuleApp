@@ -194,6 +194,10 @@
 			var that = this;
 			
 		},
+		onHide() {
+			var that = this;
+			localStorage.removeItem('userShopinfo')
+		},
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
