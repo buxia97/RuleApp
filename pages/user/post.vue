@@ -663,7 +663,6 @@
 						if(res.data.title){
 							
 							that.title = res.data.title;
-							console.log(JSON.stringify(res.data.category))
 							if(res.data.category.length>0){
 								that.categoryText = "已选择";
 								var list = res.data.category;

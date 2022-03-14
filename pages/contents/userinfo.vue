@@ -80,7 +80,9 @@
 							<view class="cu-item">
 								<view class="cu-avatar round" :style="item.style"></view>
 								<view class="content">
-									<view class="text-grey">{{item.author}}</view>
+									<view class="text-grey">{{item.author}}
+									<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+									<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text></view>
 									<view class="text-content text-df">
 										{{item.text}}
 									</view>
@@ -386,6 +388,17 @@
 					return text;
 				}
 				
+			},
+			getUserLv(i){
+				var that = this;
+				var rankList = API.GetRankList();
+				return rankList[i];
+			},
+			getUserLvStyle(i){
+				var that = this;
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
 			},
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));

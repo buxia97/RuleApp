@@ -818,12 +818,14 @@ page{
 .shop-img image{
 	width: 100%;
 	border-radius: 15upx;
+	background-color: #f3f3f3;
 }
 .shop-title{
 	font-size: 22upx;
 	margin-top: 10upx;
 	margin-bottom: 15upx;
 	overflow: hidden;
+	height: 70upx;
 	text-overflow: ellipsis;
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
@@ -1362,9 +1364,30 @@ page{
 }
 .foreverblog-text{
 	background-color: #f3f3f3;
+	color: #666;
+}
+.foreverblog-text view{
+	word-break: break-all;
 }
 .foreverblog-ico{
 	margin-left: 10upx;
 	font-size: 38upx !important;
 	color: #0081FF;
+}
+.foreverblog-title{
+	color: #333;
+	font-size: 30upx;
+}
+.userlv{
+	font-size: 24upx;
+	background-color: #cecece;
+	line-height: 25upx;
+	padding: 4upx 15upx;
+	border-radius: 8upx;
+	margin-left: 10upx;
+	margin-top: -4upx;
+}
+.userlv.customize{
+	background-color: #ba21a8;
+	color: #fff;
 }

@@ -77,7 +77,7 @@
 			<view class="agreement-title">十三、联系我们</view>
 			<view class="agreement-text">如果您对本协议有任何疑问，请通过如下方式联系我们：</view>
 			<view class="agreement-text">邮箱：{{email}}</view>
-			<view style="height: 90upx;"></view>
+			<view style="height:150upx;"></view>
 		</scroll-view>
 	</view>
 </template>

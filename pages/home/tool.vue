@@ -136,7 +136,7 @@
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 实用工具
 				</view>
-				<view class="action more"  @tap="toCategoryContents('实用工具',58)">
+				<view class="action more"  @tap="toCategoryContents('实用工具',toolid)">
 					<text>阅读更多</text><text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -183,7 +183,7 @@
 				token:"",
 				isLoading:0,
 				raiders:API.GetRaiders(),
-				
+				toolid:0,
 				featured:API.GetFeatured()
 			}
 		},
@@ -218,7 +218,8 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.getMetaContents(58);
+			that.toolid = API.GetTool();
+			that.getMetaContents(that.toolid);
 		},
 		methods:{
 			allCache(){

@@ -101,6 +101,7 @@ module.exports = {
 import myAudio from '../audio/audio'
 
 import node from './node'
+var API = require('../../../utils/api');
 export default {
   name: 'node',
   options: {
@@ -288,24 +289,42 @@ myAudio,
           // 跳转锚点
           this.root.navigateTo(href.substring(1)).catch(() => { })
         } else if (href.split('?')[0].includes('://')) {
-          // 复制外部链接
-          if (this.root.copyLink) {
-            // #ifdef H5
-            window.open(href)
-            // #endif
-            // #ifdef MP
-            uni.setClipboardData({
-              data: href,
-              success: () =>
-                uni.showToast({
-                  title: '链接已复制'
-                })
-            })
-            // #endif
-            // #ifdef APP-PLUS
-            plus.runtime.openWeb(href)
-            // #endif
-          }
+			//判断链接是否为站内链接
+			var linkRule = API.GetLinkRule();
+			var linkRuleArr = linkRule.split("{cid}");
+			if(href.indexOf(linkRuleArr[0])!=-1){
+				//是本站链接
+				var cid = href;
+				for(var i in linkRuleArr){
+					cid = cid.replace(linkRuleArr[i],"");
+				}
+
+					
+				uni.navigateTo({
+					url: '/pages/contents/info?cid='+cid
+				});
+			}else{
+				// 复制外部链接
+				if (this.root.copyLink) {
+				  // #ifdef H5
+				  window.open(href)
+				  // #endif
+				  // #ifdef MP
+				  uni.setClipboardData({
+				    data: href,
+				    success: () =>
+				      uni.showToast({
+				        title: '链接已复制'
+				      })
+				  })
+				  // #endif
+				  // #ifdef APP-PLUS
+				  plus.runtime.openWeb(href)
+				  // #endif
+				}
+			}
+			
+          
         } else {
           // 跳转页面
           uni.navigateTo({

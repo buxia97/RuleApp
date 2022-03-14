@@ -34,6 +34,10 @@
 				<view class="title">网址</view>
 				<input placeholder="请输入网址" name="input" v-model="url"></input>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">头衔</view>
+				<input placeholder="为用户自定义头衔" name="input" v-model="customize"></input>
+			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">密码</view>
 				<input placeholder="请输入密码,不填则不修改" v-model="password" name="input"></input>
@@ -69,7 +73,7 @@
 				repassword:'',
 				mail:'',
 				url:'',
-				
+				customize:'',
 				token:'',
 				
 			}
@@ -123,6 +127,7 @@
 							that.screenName = res.data.data.screenName;
 							that.mail = res.data.data.mail;
 							that.url = res.data.data.url;
+							that.customize = res.data.data.customize;
 						}
 					},
 					fail: function(res) {
@@ -160,6 +165,7 @@
 					password:that.password,
 					mail:that.mail,
 					url:that.url,
+					customize:that.customize
 				}
 				uni.showLoading({
 					title: "加载中"

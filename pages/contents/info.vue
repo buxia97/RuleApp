@@ -32,8 +32,16 @@
 					<view class="cu-item">
 						<view class="cu-avatar round lg" :style="userInfo.style"  @tap="toUserContents(userInfo)"></view>
 						<view class="content">
-							<view class="text-grey" v-if="userInfo.screenName!=''">{{userInfo.screenName}}</view>
-							<view class="text-grey" v-else>{{userInfo.name}}</view>
+							<view class="text-grey">
+								<block v-if="userInfo.screenName">
+									{{userInfo.screenName}}
+								</block>
+								<block v-else>
+									{{userInfo.name}}
+								</block>
+								<text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text>
+								<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
+							</view>
 							<view class="text-gray text-sm flex">
 								<view class="text-cut">
 									{{userInfo.mail}}
@@ -117,7 +125,11 @@
 							<view class="cu-item">
 								<view class="cu-avatar round" :style="item.style"></view>
 								<view class="content">
-									<view class="text-grey">{{item.author}}</view>
+									<view class="text-grey">
+										{{item.author}}
+										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
+									</view>
 									<view class="text-content text-df break-all">
 										<rich-text :nodes="markCommentHtml(item.text)"></rich-text>
 									</view>
@@ -276,7 +288,8 @@
 					checked: false,
 					hot: false,
 				}],
-				ads:""
+				ads:"",
+				userlvStyle:""
 				
 			}
 		},
@@ -400,6 +413,19 @@
 					}
 				}
 				return text;
+			},
+			getUserLv(i){
+				var that = this;
+				var rankList = API.GetRankList();
+				var rankStyle = API.GetRankStyle();
+				that.userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return rankList[i];
+			},
+			getUserLvStyle(i){
+				var that = this;
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
 			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
@@ -788,7 +814,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						console.log(JSON.stringify(res))
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
@@ -831,7 +857,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						console.log(JSON.stringify(res))
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);

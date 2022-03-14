@@ -1,5 +1,5 @@
-var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://172.16.1.107:8081/';
+//var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://192.168.0.57:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -14,7 +14,12 @@ var appEmail = "buxia97@126.com";
 var rankList = ["小白","萌新","入门","熟手","大佬","巨佬","传说","古神"];
 
 //头衔对应的背景颜色
-var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#CC3399","#FF0033","#660033","#000000"];
+var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#660033","#000000"];
+
+//链接规则(用于站内链接自动跳转)，请根据自己的网站文件链接自由发挥，比如我的就是
+//https://www.ruletree.club/archives/2824/
+
+var linkRule =WEB_URL+"archives/{cid}/"
 
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
@@ -75,8 +80,8 @@ module.exports = {
 	GetAppEmail:function(){
 		return appEmail;
 	},
-	isAds:function(){
-		return isAds;
+	GetLinkRule:function(){
+		return linkRule;
 	},
 	GetSwiperid:function(){
 		return swiperid;

@@ -39,8 +39,16 @@
 				<view class="cu-item userinfo" v-else  @tap="toLink('../user/useredit')">
 					<view class="cu-avatar round lg" :style="userInfo.style"></view>
 					<view class="content">
-						<view class="text-grey" v-if="userInfo.screenName">{{userInfo.screenName}}</view>
-						<view class="text-grey" v-else>{{userInfo.name}}</view>
+						<view class="text-grey">
+							<block v-if="userInfo.screenName">
+								{{userInfo.screenName}}
+							</block>
+							<block v-else>
+								{{userInfo.name}}
+							</block>
+							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
+							<text class="userlv customize" v-if="userInfo.customize!=''">{{userInfo.customize}}</text>
+						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
 								{{userInfo.mail}}
@@ -229,6 +237,7 @@
 				group:"",
 				
 				feedback:API.GetFeedback(),
+				userlvStyle:"",
 				
 			}
 		},
@@ -355,6 +364,13 @@
 						});
 					}
 				});
+			},
+			getUserLv(i){
+				var that = this;
+				var rankList = API.GetRankList();
+				var rankStyle = API.GetRankStyle();
+				that.userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return rankList[i];
 			},
 			toLink(text){
 				var that = this;
