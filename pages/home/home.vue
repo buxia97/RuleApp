@@ -104,7 +104,7 @@
 					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)">
 						<view class="topic-main">
 							<image :src="item.imgUrl"></image>
-							<view class="topic-text">{{item.name}}</view>
+							<view class="topic-text">{{replaceSpecialChar(item.name)}}</view>
 						</view>
 					</view>
 				</view>
@@ -126,7 +126,7 @@
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>
 						<view class="desc">
-							<view class="text-content">{{item.title}}</view>
+							<view class="text-content">{{replaceSpecialChar(item.title)}}</view>
 							<view class="text-i">
 								<view class="cu-tag bg-blue light sm round" v-if="item.category.length>0">{{item.category[0].name}}</view>
 								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
@@ -152,7 +152,7 @@
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
 					<view class="title">
-						<view class="text-cut">{{item.title}}</view>
+						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 					</view>
 					<view class="content">
 						<!-- <image v-if="item.images.length > 0" :src="item.images[0]"
@@ -777,6 +777,14 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			replaceSpecialChar(text) {
+			  text = text.replace(/&quot;/g, '"');
+			  text = text.replace(/&amp;/g, '&');
+			  text = text.replace(/&lt;/g, '<');
+			  text = text.replace(/&gt;/g, '>');
+			  text = text.replace(/&nbsp;/g, ' ');
+			  return text;
 			}
 		},
 		

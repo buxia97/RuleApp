@@ -25,6 +25,11 @@
 					</view>
 					<view class="user-text">
 						{{name}}
+						<view class="userinfo-lv">
+							<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
+							<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
+						</view>
+						
 					</view>
 				</view>
 			</view>
@@ -81,10 +86,9 @@
 								<view class="cu-avatar round" :style="item.style"></view>
 								<view class="content">
 									<view class="text-grey">{{item.author}}
-									<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
-									<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text></view>
-									<view class="text-content text-df">
-										{{item.text}}
+									</view>
+									<view class="text-content text-df break-all">
+										<rich-text :nodes="markHtml(item.text)"></rich-text>
 									</view>
 									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
 										<view class="flex" @tap="toInfoComment(item.cid,item.contenTitle)">
@@ -127,6 +131,7 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	import owo from '../../static/owo/OwO.js'
 	export default {
 		data() {
 			return {
@@ -139,7 +144,8 @@
 				commentsList:[],
 				
 				userList:[],
-				
+				owo:owo,
+				owoList:[],
 				
 				type:0,
 				
@@ -154,6 +160,8 @@
 				uid:0,
 				avatar:"",
 				name:"",
+				customize:"",
+				lv:"",
 				
 				
 			}
@@ -198,6 +206,13 @@
 			that.uid =  res.uid;
 			that.avatar =  res.avatar;
 			that.name =  res.name;
+			that.getUserInfo();
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoList = owoList;
 			that.getContentsList(false);
 			
 		},
@@ -218,6 +233,65 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			getUserLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankList = API.GetRankList();
+				return rankList[i];
+			},
+			getUserLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
+			},
+			markHtml(text){
+				var that = this;
+				var owoList=that.owoList;
+				for(var i in owoList){
+				
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
+			},
+			getUserInfo(){
+				var that = this;
+				Net.request({
+					
+					url: API.getUserInfo(),
+					data:{
+						"key":that.uid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.lv = res.data.data.lv;
+							that.customize = res.data.data.customize;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			loadMore(){
 				var that = this;
@@ -458,6 +532,17 @@
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
+			}
 		}
 	}
 </script>

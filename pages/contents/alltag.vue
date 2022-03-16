@@ -6,10 +6,15 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					全部标签
+					全部标签<block v-if="type=='edit'">(多选)</block>
 				</view>
-				<view class="action">
+				<!--  #ifdef H5 || APP-PLUS -->
+				<block v-if="type=='edit'">
+				<view class="action" @tap="submit">
+					<text class="cu-btn bg-blue text-sm radius">确定</text>
 				</view>
+				</block>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -26,12 +31,19 @@
 			</view>
 			<view class="tags">
 				
-				<text class="tags-box" v-for="(item,index) in tagList"  @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
+				<text class="tags-box" v-for="(item,index) in tagList"  @tap='toCategoryContents("#"+item.name+"#",item.mid,index)' :class="item.active==1?'active':''">
 					{{item.name}}
 				</text>
 				
 			</view>
 		</view>
+		<!--  #ifdef MP -->
+		<block v-if="type=='edit'">
+		<view class="post-update bg-blue" @tap="submit">
+			<text class="cuIcon-upload"></text>
+		</view>
+		</block>
+		<!--  #endif -->
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -57,6 +69,8 @@
 				searchText:"",
 				
 				isLoading:0,
+				type:"all",
+				curNum:0,
 				
 			}
 		},
@@ -72,12 +86,15 @@
 			// #endif
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getTagList();
+			if(res.type){
+				that.type = res.type;
+			}
 		},
 		methods: {
 			back(){
@@ -107,7 +124,30 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
-								that.tagList = list;
+								var newList = [];
+								for(var i in list){
+									list[i].active = 0;
+									if(that.type=="edit"){
+										if(localStorage.getItem('ctag')){
+											var clist= localStorage.getItem('ctag');
+											var arr = clist.split(",");
+											
+											for(var j in arr){
+												if(arr[j]!=""){
+													var index = Number(arr[j]);
+													if(list[i].mid == index){
+														list[i].active=1;
+														that.curNum++;
+													}
+													
+												}
+											}
+										}
+										
+									}
+									newList.push(list[i]);
+								}
+								that.tagList = newList;
 								
 								localStorage.setItem('tagList',JSON.stringify(that.tagList));
 							}
@@ -125,12 +165,31 @@
 					}
 				})
 			},
-			toCategoryContents(title,id){
+			toCategoryContents(title,id,index){
 				var that = this;
-				var type="meta";
-				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
-				});
+				if(that.type=="all"){
+					var type="meta";
+					uni.navigateTo({
+						url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+					});
+				}else{
+					
+					if(that.tagList[index].active==1){
+						that.curNum--;
+						that.tagList[index].active=0;
+					}else{
+						if(that.curNum>4){
+							uni.showToast({
+								title: "最多选择五个标签",
+								icon: 'none'
+							});
+							return false;
+						}
+						that.curNum++;
+						that.tagList[index].active=1;
+					}
+					
+				}
 			},
 			searchTag(){
 				var that = this;
@@ -148,7 +207,32 @@
 					that.tagList = tagList;
 				}
 				
-			}
+			},
+			submit(){
+				var that = this;
+				var ctag ="";
+				var list = that.tagList;
+				for(var i in list){
+					if(list[i].active==1){
+						ctag += ","+list[i].mid;
+					}
+				}
+				if(ctag==""){
+					uni.showToast({
+						title: "请选择分类",
+						icon: 'none'
+					});
+					return false;
+				}
+				localStorage.setItem('ctag',ctag);
+				//存入本地缓存后，恢复原本
+				var old_list = that.tagList;
+				for(var i in list){
+					that.tagList[i].active=0;
+				}
+				that.back();
+				
+			},
 		}
 	}
 </script>

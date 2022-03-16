@@ -47,7 +47,7 @@
 								{{userInfo.name}}
 							</block>
 							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
-							<text class="userlv customize" v-if="userInfo.customize!=''">{{userInfo.customize}}</text>
+							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
@@ -410,6 +410,19 @@
 						if(res.data.code==0){
 							localStorage.removeItem('userinfo');
 							localStorage.removeItem('token');
+							that.userInfo = null;
+						}else{
+							if(localStorage.getItem('userinfo')){
+								
+								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+								if(res.data.data.customize){
+									userInfo.customize = res.data.data.customize;
+								}
+								if(res.data.data.lv){
+									userInfo.lv = res.data.data.lv;
+								}
+							}
+							
 						}
 					},
 					fail: function(res) {

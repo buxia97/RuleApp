@@ -19,7 +19,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="info" style="margin-top: 20upx;">
 			<view class="info-title">
-				{{title}}
+				{{replaceSpecialChar(title)}}
 			</view>
 			<view class="info-tyle">
 				<text class="text-blue" v-if="category.length>0" @tap="toCategoryContents(category)">{{category[0].name}}</text>
@@ -48,7 +48,7 @@
 								</view> </view>
 						</view>
 						<view class="action" @tap="toUserContents(userInfo)">
-							<view class="text-blue">作品</view>
+							<view class="text-blue">信息</view>
 							
 						</view>
 					</view>
@@ -396,8 +396,9 @@
 				}
 				var owoList=that.owoList;
 				for(var i in owoList){
-					if(text.indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
@@ -407,8 +408,9 @@
 				var that = this;
 				var owoList=that.owoList;
 				for(var i in owoList){
-					if(text.indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+				
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
@@ -416,13 +418,17 @@
 			},
 			getUserLv(i){
 				var that = this;
+				if(!i){
+					var i = 0;
+				}
 				var rankList = API.GetRankList();
-				var rankStyle = API.GetRankStyle();
-				that.userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return rankList[i];
 			},
 			getUserLvStyle(i){
 				var that = this;
+				if(!i){
+					var i = 0;
+				}
 				var rankStyle = API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
@@ -601,6 +607,8 @@
 								
 							}else{
 								that.moreText="没有更多评论了";
+								localStorage.removeItem('commentsList_'+that.cid);
+								that.commentsList = [];
 							}
 							
 						}
@@ -1060,6 +1068,17 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
 			}
 		}
 	}

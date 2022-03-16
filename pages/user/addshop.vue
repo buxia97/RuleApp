@@ -196,7 +196,7 @@
 		},
 		onHide() {
 			var that = this;
-			localStorage.removeItem('userShopinfo')
+			
 		},
 		onShow(){
 			var that = this;
@@ -252,7 +252,8 @@
 					
 					that.focus(res.height);
 				}
-			})
+			});
+			localStorage.removeItem('userShopinfo')
 		},
 		methods: {
 			ToisText(i){

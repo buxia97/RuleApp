@@ -30,7 +30,7 @@
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
 					<view class="title">
-						<view class="text-cut">{{item.title}}</view>
+						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 					</view>
 					<view class="content">
 						<image v-if="item.images.length>0" :src="item.images[0]"
@@ -427,6 +427,14 @@
 				    url: '../contents/search'
 				});
 			},
+			replaceSpecialChar(text) {
+			  text = text.replace(/&quot;/g, '"');
+			  text = text.replace(/&amp;/g, '&');
+			  text = text.replace(/&lt;/g, '<');
+			  text = text.replace(/&gt;/g, '>');
+			  text = text.replace(/&nbsp;/g, ' ');
+			  return text;
+			}
 		}
 	}
 </script>

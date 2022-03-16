@@ -138,8 +138,9 @@
 				var that = this;
 				var owoList=that.owoList;
 				for(var i in owoList){
-					if(text.indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(text,owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+				
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
@@ -217,11 +218,17 @@
 			},
 			getUserLv(i){
 				var that = this;
+				if(!i){
+					var i = 0;
+				}
 				var rankList = API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
 				var that = this;
+				if(!i){
+					var i = 0;
+				}
 				var rankStyle = API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
@@ -247,6 +254,17 @@
 				// 返回
 				return result;
 			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
+			}
 		}
 	}
 </script>

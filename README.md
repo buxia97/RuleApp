@@ -15,7 +15,7 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 
 后端接口下载地址（首先需要安装Typecho程序）：
 
-[接口下载及安装](https://www.ruletree.club/archives/2661/)
+[接口下载及安装](https://www.ruletree.club/archives/2786/)
 
 测试对接用接口地址：
 
@@ -27,9 +27,9 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 
 1.编辑utils/api.js，设置接口地址，网站地址，群地址。同时设置各种数据调用的id和mid。
 
-2.编辑manifest.json设置社会化登录。
+2.编辑manifest.json设置社会化登录，微信支付，外部启动等。
 
-3.对象存储上传和本地上传的切换，请修改utils/api.js中的upload方法
+3.对象存储上传，远程FTP上传及本地上传的切换，请修改utils/api.js中的upload方法
 
 详细安装打包教程可参考：[uniapp从基本配置到打包发布，详细流程](https://www.ruletree.club/archives/2894/)
 

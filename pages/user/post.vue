@@ -75,6 +75,8 @@
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
 				<text class="cuIcon-attentionforbidfill" @tap="toHideText"></text>
+				
+				<text class="cuIcon-tag" :class="tag!=''?'text-blue':''" @tap="addTag"></text>
 				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
 				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
 				<text class="cuIcon-read" @tap="toIsShow"></text>
@@ -136,6 +138,8 @@
 				<view class="setShop-main">
 					<view class="setShop-title">
 						选择付费内容插入文章
+						<text class="setShop-close cuIcon-close" @tap="isShop=0"></text>
+						
 					</view>
 
 					<scroll-view class="setShop-list" scroll-y>
@@ -179,6 +183,7 @@
 				//文章表单部分
 				title:"",
 				category:"",
+				tag:"",
 				categoryText:"",
 				text:'',
 				textRead:"",
@@ -221,12 +226,14 @@
 				that.categoryText = "已选择";
 				that.category = localStorage.getItem('clist');
 			}
-			
+			if(localStorage.getItem('ctag')){
+				that.tag = localStorage.getItem('ctag');
+			}
 			that.owoList = that.owo.data.paopao.container;
 		},
 		onHide() {
 			var that = this;
-			localStorage.removeItem('clist')
+			//localStorage.removeItem('clist')
 		},
 		onLoad(res) {
 			var that = this;
@@ -270,7 +277,8 @@
 					
 					that.focus(res.height);
 				}
-			})
+			});
+			localStorage.removeItem('clist')
 		},
 		methods: {
 			markHtml(text){
@@ -528,6 +536,7 @@
 				var data = {
 					'title':that.title,
 					'category':that.category,
+					'tag':that.tag,
 					'text':that.text,
 					'sid':that.shopID
 				}
@@ -556,6 +565,7 @@
 						})
 						if(res.data.code==1){
 							localStorage.removeItem('clist');
+							localStorage.removeItem('ctag');
 							var timer = setTimeout(function() {
 								that.back();
 							}, 1000)
@@ -589,10 +599,10 @@
 					'cid':that.cid,
 					'title':that.title,
 					'category':that.category,
+					'tag':that.tag,
 					'text':that.text,
 					'sid':that.shopID
 				}
-				console.log(JSON.stringify(data));
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -618,6 +628,7 @@
 						})
 						if(res.data.code==1){
 							localStorage.removeItem('clist');
+							localStorage.removeItem('ctag');
 							var timer = setTimeout(function() {
 								that.back();
 							}, 1000)
@@ -676,6 +687,19 @@
 								that.category = clist;
 								
 							}
+							if(res.data.tag.length>0){
+								var list = res.data.tag;
+								var ctag ="";
+								for(var i in list){
+							
+									ctag += ","+list[i].mid;
+									
+								}
+								localStorage.setItem('ctag',ctag);
+								that.tag = ctag;
+								
+							}
+							
 							that.text=res.data.text;
 						}
 					},
@@ -797,6 +821,12 @@
 				var that = this;
 				uni.navigateTo({
 				    url: '../contents/allcategory?type=edit'
+				});
+			},
+			addTag(){
+				var that = this;
+				uni.navigateTo({
+				    url: '../contents/alltag?type=edit'
 				});
 			}
 			

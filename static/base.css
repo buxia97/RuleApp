@@ -420,6 +420,10 @@ page{
 	float: left;
 	opacity: 0.9;
 }
+.tags text.tags-box.active{
+	color: #0081ff;
+	background-color: #cce6ff;
+}
 .info-content .tags{
 	padding: 0upx;
 	border-top: solid 1px #f9f9f9;
@@ -968,11 +972,20 @@ page{
 .setShop-title{
 	text-align: center;
 	margin-bottom: 30upx;
+	position: relative;
 }
 .setShop-list{
 	background-color: #f3f3f3;
 	height: 670upx;
 	padding: 0upx 10upx;
+}
+.setShop-close{
+	position: absolute;
+	right: -10upx;
+	top: -15upx;
+	font-size: 38upx;
+	font-weight: bold;
+	color: #CE292C;
 }
 .setShop-list-box{
 	width: 100%;
@@ -1311,7 +1324,7 @@ page{
 }
 .user-info-main{
 	position: absolute;
-	height: 350upx;
+	height: 370upx;
 	width: 100%;
 	z-index: 5;
 	background-color: rgba(0,0,0,0.2);
@@ -1390,4 +1403,7 @@ page{
 .userlv.customize{
 	background-color: #ba21a8;
 	color: #fff;
+}
+.userinfo-lv{
+	padding-top: 10upx;
 }
