@@ -154,7 +154,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+cid+"&title="+title
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			getCommentsList(isPage){
@@ -231,7 +231,7 @@
 				var that = this;
 				var cid = that.cid;
 				uni.navigateTo({
-				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
 			},
 			

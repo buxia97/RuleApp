@@ -105,27 +105,41 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.recommendList, function(item, index) {
+  var l0 = _vm.__map(_vm.Topic, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m0 = _vm.formatDate(item.created)
+    var m0 = _vm.replaceSpecialChar(item.name)
     return {
       $orig: $orig,
       m0: m0
     }
   })
 
-  var l1 = _vm.__map(_vm.contentsList, function(item, index) {
+  var l1 = _vm.__map(_vm.recommendList, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m1 = _vm.subText(item.text, 80)
-    var m2 = _vm.formatNumber(item.views)
-    var m3 = _vm.formatDate(item.created)
+    var m1 = _vm.replaceSpecialChar(item.title)
+    var m2 = _vm.formatDate(item.created)
     return {
       $orig: $orig,
       m1: m1,
-      m2: m2,
-      m3: m3
+      m2: m2
+    }
+  })
+
+  var l2 = _vm.__map(_vm.contentsList, function(item, index) {
+    var $orig = _vm.__get_orig(item)
+
+    var m3 = _vm.replaceSpecialChar(item.title)
+    var m4 = _vm.subText(item.text, 80)
+    var m5 = _vm.formatNumber(item.views)
+    var m6 = _vm.formatDate(item.created)
+    return {
+      $orig: $orig,
+      m3: m3,
+      m4: m4,
+      m5: m5,
+      m6: m6
     }
   })
 
@@ -134,7 +148,8 @@ var render = function() {
     {
       $root: {
         l0: l0,
-        l1: l1
+        l1: l1,
+        l2: l2
       }
     }
   )
@@ -386,7 +401,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 451));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -537,12 +552,10 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
-          var isAds = API.isAds();
-          if (isAds == 1) {
-            if (res.data) {
-              that.ads = res.data.ad1.split("|");
-            }
+          if (res.data.isAds == 1) {
+            that.ads = res.data.ad1.split("|");
           }
+
 
         },
         fail: function fail(res) {
@@ -805,7 +818,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/foreverblog' });
+        url: '/pages/contents/foreverblog' });
 
 
     },
@@ -813,28 +826,28 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/comments' });
+        url: '/pages/contents/comments' });
 
     },
     toSearch: function toSearch() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
     },
     toUsers: function toUsers() {
       var that = this;
 
       uni.navigateTo({
-        url: '../user/userlist' });
+        url: '/pages/user/userlist' });
 
     },
     toCategoryContents: function toCategoryContents(title, id) {
       var that = this;
       var type = "meta";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
     },
     toAllContents: function toAllContents() {
@@ -842,14 +855,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var type = "all";
       var title = "全部文章";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=0" });
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=0" });
 
     },
     toInfo: function toInfo(data) {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     subText: function subText(text, num) {
@@ -891,14 +904,17 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       plus.runtime.getProperty(plus.runtime.appid, function (inf) {
+
         that.wgtVer = inf.version; //获取当前版本号
         that.versionCode = inf.versionCode;
         var version = inf.versionCode;
         Net.request({
           url: API.GetUpdateUrl(),
+          header: {
+            'content-type': 'application/json' },
+
           method: 'get',
           success: function success(res) {
-
             var versionCode = res.data.versionCode;
             that.versionUrl = res.data.versionUrl;
             that.versionTitle = res.data.version;
@@ -927,7 +943,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
           },
           fail: function fail(res) {
-
+            console.log("更新地址请求失败！" + API.GetUpdateUrl());
           } });
 
 
@@ -947,6 +963,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
 
 
+    },
+    replaceSpecialChar: function replaceSpecialChar(text) {
+      text = text.replace(/&quot;/g, '"');
+      text = text.replace(/&amp;/g, '&');
+      text = text.replace(/&lt;/g, '<');
+      text = text.replace(/&gt;/g, '>');
+      text = text.replace(/&nbsp;/g, ' ');
+      return text;
     } },
 
 

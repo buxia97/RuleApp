@@ -327,7 +327,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+        url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
     },
     logout: function logout() {

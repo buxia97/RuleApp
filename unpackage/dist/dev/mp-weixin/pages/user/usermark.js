@@ -338,18 +338,11 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         } });
 
     },
-    toPost: function toPost() {
-      var that = this;
-
-      uni.navigateTo({
-        url: '../user/post' });
-
-    },
     toInfo: function toInfo(data) {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     subText: function subText(text, num) {
@@ -381,7 +374,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

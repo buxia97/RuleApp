@@ -197,7 +197,7 @@
 			toUser(){
 				var that = this;
 				uni.navigateTo({
-				    url: '../manage/users?type=get'
+				    url: '/pages/manage/users?type=get'
 				});
 			}
 		}

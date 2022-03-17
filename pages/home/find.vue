@@ -287,41 +287,41 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			toCategoryContents(title,id){
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			toTopContents(title,id){
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type=top&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type=top&id="+id
 				});
 			},
 			toInfo(data){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			toAlltag(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/alltag'
+				    url: '/pages/contents/alltag'
 				});
 			},
 			toAllcategory(){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/allcategory'
+				    url: '/pages/contents/allcategory'
 				});
 			},
 			toGroup(){

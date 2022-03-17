@@ -271,7 +271,7 @@
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			formatDate(datetime) {
@@ -292,42 +292,42 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			toPage(title,cid){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+cid+"&title="+title
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			toSearch(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			toRand(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/randlist'
+				    url: '/pages/contents/randlist'
 				});
 			},
 			toImagetoday(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/imagetoday'
+				    url: '/pages/contents/imagetoday'
 				});
 			},
 			toShop(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/shop'
+				    url: '/pages/contents/shop'
 				});
 			},
 			userStatus() {

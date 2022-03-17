@@ -318,7 +318,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 451));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -333,7 +333,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       token: "",
       isLoading: 0,
       raiders: API.GetRaiders(),
-
+      toolid: 0,
       featured: API.GetFeatured() };
 
   },
@@ -368,7 +368,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
     that.NavBar = this.CustomBar;
 
-    that.getMetaContents(58);
+    that.toolid = API.GetTool();
+    that.getMetaContents(that.toolid);
   },
   methods: {
     allCache: function allCache() {
@@ -420,7 +421,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
       var type = "meta";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
     },
     formatDate: function formatDate(datetime) {
@@ -441,42 +442,42 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     toPage: function toPage(title, cid) {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+        url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
     },
     toSearch: function toSearch() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
     },
     toRand: function toRand() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/randlist' });
+        url: '/pages/contents/randlist' });
 
     },
     toImagetoday: function toImagetoday() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/imagetoday' });
+        url: '/pages/contents/imagetoday' });
 
     },
     toShop: function toShop() {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/shop' });
+        url: '/pages/contents/shop' });
 
     },
     userStatus: function userStatus() {

@@ -150,7 +150,7 @@
 					});
 					var timer = setTimeout(function() {
 						uni.navigateTo({
-							url: '../user/login'
+							url: '/pages/user/login'
 						});
 						clearTimeout('timer')
 					}, 1000)
@@ -230,7 +230,7 @@
 				});
 				var timer = setTimeout(function() {
 					uni.navigateTo({
-						url: '../user/login'
+						url: '/pages/user/login'
 					});
 					clearTimeout('timer')
 				}, 1000)
@@ -289,13 +289,13 @@
 			toShop(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '../user/addshop'
+				    url: '/pages/user/addshop'
 				});
 			},
 			editShop(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '../user/addshop?type=edit'+'&sid='+sid
+				    url: '/pages/user/addshop?type=edit'+'&sid='+sid
 				});
 			},
 			auditShop(sid){
@@ -313,7 +313,7 @@
 				});
 				var timer = setTimeout(function() {
 					uni.navigateTo({
-						url: '../user/login'
+						url: '/pages/user/login'
 					});
 					clearTimeout('timer')
 				}, 1000)

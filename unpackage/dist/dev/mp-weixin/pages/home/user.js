@@ -97,6 +97,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var m0 = !(_vm.userInfo == null) ? _vm.getUserLv(_vm.userInfo.lv) : null
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        m0: m0
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -345,7 +354,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 451));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -360,7 +377,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       isClock: 0,
       group: "",
 
-      feedback: API.GetFeedback() };
+      feedback: API.GetFeedback(),
+      userlvStyle: "" };
 
 
   },
@@ -488,6 +506,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         } });
 
     },
+    getUserLv: function getUserLv(i) {
+      var that = this;
+      var rankList = API.GetRankList();
+      var rankStyle = API.GetRankStyle();
+      that.userlvStyle = "color:#fff;background-color: " + rankStyle[i];
+      return rankList[i];
+    },
     toLink: function toLink(text) {
       var that = this;
 
@@ -506,7 +531,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+        url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
     },
     userStatus: function userStatus() {
@@ -526,6 +551,19 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           if (res.data.code == 0) {
             _index.localStorage.removeItem('userinfo');
             _index.localStorage.removeItem('token');
+            that.userInfo = null;
+          } else {
+            if (_index.localStorage.getItem('userinfo')) {
+
+              var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
+              if (res.data.data.customize) {
+                userInfo.customize = res.data.data.customize;
+              }
+              if (res.data.data.lv) {
+                userInfo.lv = res.data.data.lv;
+              }
+            }
+
           }
         },
         fail: function fail(res) {
@@ -615,7 +653,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
     },
     toGroup: function toGroup() {
@@ -649,12 +687,12 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
       uni.navigateTo({
-        url: '../user/setup' });
+        url: '/pages/user/setup' });
 
     },
     toManage: function toManage() {
       uni.navigateTo({
-        url: '../user/manage' });
+        url: '/pages/user/manage' });
 
     } },
 

@@ -34,7 +34,7 @@
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>
 						<view class="desc">
-							<view class="text-content">{{item.title}}</view>
+							<view class="text-content">{{replaceSpecialChar(item.title)}}</view>
 							<view>
 								<view class="cu-tag bg-green light sm round" v-if="item.status=='publish'">已发布</view>
 								<view class="cu-tag bg-orange light sm round" v-if="item.status=='waiting'">待审核</view>
@@ -200,14 +200,14 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/post'
+					url: '/pages/user/post'
 				});
 			},
 			toEdit(cid){
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/post?type=edit'+'&cid='+cid
+					url: '/pages/user/post?type=edit'+'&cid='+cid
 				});
 			},
 			subText(text,num){
@@ -232,6 +232,17 @@
 				// 返回
 				return result;
 			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
+			}
 		}
 	}
 </script>

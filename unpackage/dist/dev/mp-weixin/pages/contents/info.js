@@ -120,18 +120,19 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var m0 = _vm.created != "" ? _vm.formatDate(_vm.created) : null
-  var m1 = _vm.formatNumber(_vm.likes)
+  var m0 = _vm.replaceSpecialChar(_vm.title)
+  var m1 = _vm.created != "" ? _vm.formatDate(_vm.created) : null
+  var m2 = _vm.formatNumber(_vm.likes)
 
   var l0 = _vm.__map(_vm.commentsList, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m2 = _vm.commentsList.length > 0 ? _vm.markCommentHtml(item.text) : null
-    var m3 = _vm.commentsList.length > 0 ? _vm.formatDate(item.created) : null
+    var m3 = _vm.commentsList.length > 0 ? _vm.markCommentHtml(item.text) : null
+    var m4 = _vm.commentsList.length > 0 ? _vm.formatDate(item.created) : null
     return {
       $orig: $orig,
-      m2: m2,
-      m3: m3
+      m3: m3,
+      m4: m4
     }
   })
 
@@ -141,6 +142,7 @@ var render = function() {
       $root: {
         m0: m0,
         m1: m1,
+        m2: m2,
         l0: l0
       }
     }
@@ -179,6 +181,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -456,12 +474,14 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         checked: false,
         hot: false }],
 
-      ads: "" };
+      ads: "",
+      userlvStyle: "" };
 
 
   },
   components: {
     mpHtml: mpHtml },
+
 
   onReachBottom: function onReachBottom() {
     //触底后执行的方法，比如无限加载之类的
@@ -490,6 +510,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       that.toIsMark();
     }
     //that.allCache();
+
 
   },
   onPullDownRefresh: function onPullDownRefresh() {
@@ -562,8 +583,9 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       }
       var owoList = that.owoList;
       for (var i in owoList) {
-        if (text.indexOf(owoList[i].data) != -1) {
-          text = text.replace(owoList[i].data, "<img src='" + owoList[i].icon + "' class='tImg' />");
+
+        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
+          text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='" + owoList[i].icon + "' class='tImg' />");
 
         }
       }
@@ -573,12 +595,30 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       var that = this;
       var owoList = that.owoList;
       for (var i in owoList) {
-        if (text.indexOf(owoList[i].data) != -1) {
-          text = text.replace(owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");
+
+        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
+          text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");
 
         }
       }
       return text;
+    },
+    getUserLv: function getUserLv(i) {
+      var that = this;
+      if (!i) {
+        var i = 0;
+      }
+      var rankList = API.GetRankList();
+      return rankList[i];
+    },
+    getUserLvStyle: function getUserLvStyle(i) {
+      var that = this;
+      if (!i) {
+        var i = 0;
+      }
+      var rankStyle = API.GetRankStyle();
+      var userlvStyle = "color:#fff;background-color: " + rankStyle[i];
+      return userlvStyle;
     },
     replaceAll: function replaceAll(string, search, replace) {
       return string.split(search).join(replace);
@@ -594,14 +634,14 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       var id = data.uid;
       var type = "user";
       uni.navigateTo({
-        url: '../contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
+        url: '/pages/contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
 
     },
     toTagsContents: function toTagsContents(title, id) {
       var that = this;
       var type = "meta";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
     },
     toCategoryContents: function toCategoryContents(data) {
@@ -610,7 +650,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       var id = data[0].mid;
       var type = "meta";
       uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
     },
     loadMore: function loadMore() {
@@ -632,11 +672,8 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
-          var isAds = API.isAds();
-          if (isAds == 1) {
-            if (res.data) {
-              that.ads = res.data.ad3.split("|");
-            }
+          if (res.data.isAds == 1) {
+            that.ads = res.data.ad1.split("|");
           }
 
         },
@@ -716,7 +753,8 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
     getCommentsList: function getCommentsList(isPage, id) {
       var that = this;
       var data = {
-        "cid": id };
+        "cid": id,
+        "status": "approved" };
 
       var page = that.page;
       if (isPage) {
@@ -756,6 +794,11 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
             } else {
               that.moreText = "没有更多评论了";
+              if (that.page == 1) {
+                _index.localStorage.removeItem('commentsList_' + that.cid);
+                that.commentsList = [];
+              }
+
             }
 
           }
@@ -795,7 +838,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       } else {
         var cid = that.cid;
         uni.navigateTo({
-          url: '../contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
+          url: '/pages/contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
 
       }
 
@@ -969,7 +1012,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
-
+          console.log(JSON.stringify(res));
           setTimeout(function () {
             uni.hideLoading();
           }, 500);
@@ -979,7 +1022,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
           if (res.data.code == 1) {
             that.isMark = 1;
-            that.toIsMark();
+            //that.toIsMark();
           }
 
         },
@@ -1012,7 +1055,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
-
+          console.log(JSON.stringify(res));
           setTimeout(function () {
             uni.hideLoading();
           }, 500);
@@ -1022,7 +1065,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
           if (res.data.code == 1) {
             that.isMark = 0;
-            that.toIsMark();
+            //that.toIsMark();
           }
 
         },
@@ -1081,9 +1124,11 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
     ToShare: function ToShare() {
 
       var that = this;
-      var url = API.GetWebUrl() + "archives/" + that.cid + "/";
+      var linkRule = API.GetLinkRule();
+      var url = linkRule.replace("{cid}", that.cid);
       if (that.type != "post") {
-        url = API.GetWebUrl() + that.slug + ".html";
+        var pageRule = API.GetPageRule();
+        url = pageRule.replace("{slug}", that.slug);
       }
 
 
@@ -1198,14 +1243,14 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         return false;
       }
       uni.navigateTo({
-        url: '../contents/shopinfo?sid=' + sid });
+        url: '/pages/contents/shopinfo?sid=' + sid });
 
     },
     toSearch: function toSearch() {
       var that = this;
 
       uni.redirectTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
     },
     toAds: function toAds(url) {
@@ -1215,6 +1260,17 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
 
 
+    },
+    replaceSpecialChar: function replaceSpecialChar(text) {
+      if (!text) {
+        return false;
+      }
+      text = text.replace(/&quot;/g, '"');
+      text = text.replace(/&amp;/g, '&');
+      text = text.replace(/&lt;/g, '<');
+      text = text.replace(/&gt;/g, '>');
+      text = text.replace(/&nbsp;/g, ' ');
+      return text;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

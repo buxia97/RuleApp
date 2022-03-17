@@ -624,7 +624,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/addshopinfo'
+				    url: '/pages/user/addshopinfo'
 				});
 			},
 			getInfo(sid){

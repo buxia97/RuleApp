@@ -184,18 +184,11 @@
 					}
 				})
 			},
-			toPost(){
-				var that = this;
-				
-				uni.navigateTo({
-					url: '../user/post'
-				});
-			},
 			toInfo(data){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			subText(text,num){
@@ -227,7 +220,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 		}

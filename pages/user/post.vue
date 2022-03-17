@@ -739,7 +739,7 @@
 					});
 					var timer = setTimeout(function() {
 						uni.navigateTo({
-							url: '../user/login'
+							url: '/pages/user/login'
 						});
 						clearTimeout('timer')
 					}, 1000)
@@ -820,13 +820,13 @@
 			toCategory(){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/allcategory?type=edit'
+				    url: '/pages/contents/allcategory?type=edit'
 				});
 			},
 			addTag(){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/alltag?type=edit'
+				    url: '/pages/contents/alltag?type=edit'
 				});
 			}
 			

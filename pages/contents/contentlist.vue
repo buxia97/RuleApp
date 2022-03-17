@@ -214,7 +214,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			getMetaList(){
@@ -424,7 +424,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			replaceSpecialChar(text) {

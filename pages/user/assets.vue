@@ -131,13 +131,13 @@
 			userrecharge(){
 				var that = this;
 				uni.navigateTo({
-				    url: '../user/userrecharge'
+				    url: '/pages/user/userrecharge'
 				});
 				
 			},
 			userwithdraw(){
 				uni.navigateTo({
-				    url: '../user/userwithdraw'
+				    url: '/pages/user/userwithdraw'
 				});
 			},
 			userStatus() {

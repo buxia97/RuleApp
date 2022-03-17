@@ -284,13 +284,13 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../user/register' });
+        url: '/pages/user/register' });
 
     },
     toFoget: function toFoget() {
       var that = this;
       uni.navigateTo({
-        url: '../user/foget' });
+        url: '/pages/user/foget' });
 
     },
     toQQlogin: function toQQlogin() {

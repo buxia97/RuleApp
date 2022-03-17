@@ -295,14 +295,18 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 //
 //
 var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, commentsList: [], moreText: "加载更多", page: 1, isLoading: 0, owo: _OwO.default, owoList: [] };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
-    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;that.page = 1;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;var owo = that.owo.data;var owoList = [];for (var i in owo) {owoList = owoList.concat(owo[i].container);}that.owoList = owoList;that.getCommentsList(false);}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";if (that.isLoad == 0) {that.getCommentsList(true);}}, markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (text.indexOf(owoList[i].data) != -1) {text = text.replace(owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");}}
+    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;that.page = 1;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;var owo = that.owo.data;var owoList = [];for (var i in owo) {owoList = owoList.concat(owo[i].container);}that.owoList = owoList;that.getCommentsList(false);}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";if (that.isLoad == 0) {that.getCommentsList(true);}}, markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");}
+      }
       return text;
+    },
+    replaceAll: function replaceAll(string, search, replace) {
+      return string.split(search).join(replace);
     },
     toInfo: function toInfo(cid, title) {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+        url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
     },
     getCommentsList: function getCommentsList(isPage) {
@@ -379,7 +383,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
       var cid = that.cid;
       uni.navigateTo({
-        url: '../contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
+        url: '/pages/contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
 
     },
 
@@ -396,6 +400,17 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
       // 返回
       return result;
+    },
+    replaceSpecialChar: function replaceSpecialChar(text) {
+      if (!text) {
+        return false;
+      }
+      text = text.replace(/&quot;/g, '"');
+      text = text.replace(/&amp;/g, '&');
+      text = text.replace(/&lt;/g, '<');
+      text = text.replace(/&gt;/g, '>');
+      text = text.replace(/&nbsp;/g, ' ');
+      return text;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

@@ -243,7 +243,7 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, num: "", modalName: null, token: '', assets: "" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.userStatus();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, userwithdrawlist: function userwithdrawlist() {var that = this;uni.navigateTo({ url: '../user/userwithdrawlist' });}, userStatus: function userStatus() {var that = this;var token = "";if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, num: "", modalName: null, token: '', assets: "" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.userStatus();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, userwithdrawlist: function userwithdrawlist() {var that = this;uni.navigateTo({ url: '/pages/user/userwithdrawlist' });}, userStatus: function userStatus() {var that = this;var token = "";if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
         token = userInfo.token;
       }
       Net.request({
@@ -344,7 +344,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
     },
     topay: function topay() {
       uni.navigateTo({
-        url: '../user/pay' });
+        url: '/pages/user/pay' });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

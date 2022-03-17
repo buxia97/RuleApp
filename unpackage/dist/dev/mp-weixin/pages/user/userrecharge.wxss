@@ -407,6 +407,10 @@ page{
 	float: left;
 	opacity: 0.9;
 }
+.tags text.tags-box.active{
+	color: #0081ff;
+	background-color: #cce6ff;
+}
 .info-content .tags{
 	padding: 0rpx;
 	border-top: solid 1px #f9f9f9;
@@ -802,12 +806,14 @@ page{
 .shop-img image{
 	width: 100%;
 	border-radius: 15rpx;
+	background-color: #f3f3f3;
 }
 .shop-title{
 	font-size: 22rpx;
 	margin-top: 10rpx;
 	margin-bottom: 15rpx;
 	overflow: hidden;
+	height: 70rpx;
 	text-overflow: ellipsis;
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
@@ -950,11 +956,20 @@ page{
 .setShop-title{
 	text-align: center;
 	margin-bottom: 30rpx;
+	position: relative;
 }
 .setShop-list{
 	background-color: #f3f3f3;
 	height: 670rpx;
 	padding: 0rpx 10rpx;
+}
+.setShop-close{
+	position: absolute;
+	right: -10rpx;
+	top: -15rpx;
+	font-size: 38rpx;
+	font-weight: bold;
+	color: #CE292C;
 }
 .setShop-list-box{
 	width: 100%;
@@ -1290,7 +1305,7 @@ page{
 }
 .user-info-main{
 	position: absolute;
-	height: 350rpx;
+	height: 370rpx;
 	width: 100%;
 	z-index: 5;
 	background-color: rgba(0,0,0,0.2);
@@ -1343,11 +1358,35 @@ page{
 }
 .foreverblog-text{
 	background-color: #f3f3f3;
+	color: #666;
+}
+.foreverblog-text view{
+	word-break: break-all;
 }
 .foreverblog-ico{
 	margin-left: 10rpx;
 	font-size: 38rpx !important;
 	color: #0081FF;
+}
+.foreverblog-title{
+	color: #333;
+	font-size: 30rpx;
+}
+.userlv{
+	font-size: 24rpx;
+	background-color: #cecece;
+	line-height: 25rpx;
+	padding: 4rpx 15rpx;
+	border-radius: 8rpx;
+	margin-left: 10rpx;
+	margin-top: -4rpx;
+}
+.userlv.customize{
+	background-color: #ba21a8;
+	color: #fff;
+}
+.userinfo-lv{
+	padding-top: 10rpx;
 }
 page{
 	background-color: #fff;

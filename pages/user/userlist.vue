@@ -200,7 +200,7 @@
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			}
 		}

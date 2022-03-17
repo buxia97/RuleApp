@@ -10,9 +10,9 @@
 		</view>
 		<scroll-view scroll-y class="agreement">
 			<view class="agreement-title">一、关于我们</view>
-			<view class="agreement-text">{{appname}}是一站式技术服务社区。本协议中的"您''与"用户"指任何使用和/或访问本服 务的个人。</view>
+			<view class="agreement-text">{{appname}}是一站式技术服务社区。本协议中的您与用户指任何使用和/或访问本服务的个人。</view>
 			<view class="agreement-title">二、协议目的</view>
-			<view class="agreement-text">本用户协议、隐私政策及本服务发布的其他 政策（以下合称"本协议"）是我们为您提供本服务 以供使用及访问所依据的条款。通过本协议，您将了解{{appname}}向您提供本服务的方式、本服务所允 许或禁止的活动、应用问题及其他重要信息，以及相关方的权利义务内容。请您仔细阅读本协议，若您使用本服务，则视为您已经与{{appname}}达成具有法律约束力的协议。若您不接受本协议，请勿使用本服务。</view>
+			<view class="agreement-text">本用户协议、隐私政策及本服务发布的其他 政策（以下合称本协议）是我们为您提供本服务 以供使用及访问所依据的条款。通过本协议，您将了解{{appname}}向您提供本服务的方式、本服务所允 许或禁止的活动、应用问题及其他重要信息，以及相关方的权利义务内容。请您仔细阅读本协议，若您使用本服务，则视为您已经与{{appname}}达成具有法律约束力的协议。若您不接受本协议，请勿使用本服务。</view>
 			<view class="agreement-title">三、使用资格</view>
 			<view class="agreement-text">您需具有符合适用本服务的法定年龄要求，方可使用本服务。一般指年满18周岁，若您未满18周岁，则需您的父母或法定监护人同意后方可使用。</view>
 			<view class="agreement-title">四、使用权限</view>
@@ -101,10 +101,10 @@
 				mail:'',
 				url:'',
 				
-				appname:API.GetAppName(),
-				email:API.GetAppEmail(),
+				appname:"",
+				email:"",
 				
-				token:'',
+				token:''
 				
 			}
 		},
@@ -118,7 +118,8 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			that.appname = API.GetAppName();
+			that.email = API.GetAppEmail();
 		},
 		onLoad() {
 			var that = this;
@@ -131,7 +132,7 @@
 				uni.navigateBack({
 					delta: 1
 				});
-			},
+			}
 		}
 	}
 </script>

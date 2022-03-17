@@ -437,7 +437,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
       } else {
         uni.navigateTo({
-          url: '../contents/shoptext?sid=' + data.id });
+          url: '/pages/contents/shoptext?sid=' + data.id });
 
       }
     },
@@ -486,7 +486,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var id = data.uid;
       var type = "user";
       uni.navigateTo({
-        url: '../contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
+        url: '/pages/contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

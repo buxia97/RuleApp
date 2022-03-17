@@ -307,7 +307,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       if (that.type == "all") {
         var type = "meta";
         uni.navigateTo({
-          url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+          url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
       } else {
 

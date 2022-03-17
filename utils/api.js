@@ -1,5 +1,5 @@
 var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://192.168.0.57:8081/';
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -18,9 +18,8 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 
 //链接规则(用于站内链接自动跳转)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
-
-var linkRule =WEB_URL+"archives/{cid}/"
-
+var linkRule =WEB_URL+"archives/{cid}/" //普通文章
+var pageRule =WEB_URL+"{slug}.html" //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
 //首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
@@ -83,6 +82,10 @@ module.exports = {
 	GetLinkRule:function(){
 		return linkRule;
 	},
+	GetPageRule:function(){
+		return pageRule;
+	},
+	
 	GetSwiperid:function(){
 		return swiperid;
 	},

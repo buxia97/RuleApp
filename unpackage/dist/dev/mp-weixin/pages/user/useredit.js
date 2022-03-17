@@ -386,28 +386,28 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../user/mailedit' });
+        url: '/pages/user/mailedit' });
 
     },
     toAddress: function toAddress() {
       var that = this;
 
       uni.navigateTo({
-        url: '../user/address' });
+        url: '/pages/user/address' });
 
     },
     toPay: function toPay() {
       var that = this;
 
       uni.navigateTo({
-        url: '../user/pay' });
+        url: '/pages/user/pay' });
 
     },
     toBind: function toBind() {
       var that = this;
 
       uni.navigateTo({
-        url: '../user/userbind' });
+        url: '/pages/user/userbind' });
 
     },
     toGravatar: function toGravatar() {

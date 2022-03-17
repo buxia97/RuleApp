@@ -254,28 +254,28 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/mailedit'
+				    url: '/pages/user/mailedit'
 				});
 			},
 			toAddress(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/address'
+				    url: '/pages/user/address'
 				});
 			},
 			toPay(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/pay'
+				    url: '/pages/user/pay'
 				});
 			},
 			toBind(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/userbind'
+				    url: '/pages/user/userbind'
 				});
 			},
 			toGravatar(){

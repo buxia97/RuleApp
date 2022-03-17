@@ -150,7 +150,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../manage/usersedit?uid='+id
+				    url: '/pages/manage/usersedit?uid='+id
 				});
 			},
 			formatDate(datetime) {

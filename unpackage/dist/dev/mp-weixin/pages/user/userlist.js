@@ -332,7 +332,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var id = data.uid;
       var type = "user";
       uni.navigateTo({
-        url: '../contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
+        url: '/pages/contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

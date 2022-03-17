@@ -100,14 +100,16 @@ var render = function() {
   var l0 = _vm.__map(_vm.contentsList, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m0 = _vm.subText(item.text, 80)
-    var m1 = _vm.formatNumber(item.views)
-    var m2 = _vm.formatDate(item.created)
+    var m0 = _vm.replaceSpecialChar(item.title)
+    var m1 = _vm.subText(item.text, 80)
+    var m2 = _vm.formatNumber(item.views)
+    var m3 = _vm.formatDate(item.created)
     return {
       $orig: $orig,
       m0: m0,
       m1: m1,
-      m2: m2
+      m2: m2,
+      m3: m3
     }
   })
 
@@ -368,7 +370,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     getMetaList: function getMetaList() {
@@ -578,8 +580,16 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/search' });
+        url: '/pages/contents/search' });
 
+    },
+    replaceSpecialChar: function replaceSpecialChar(text) {
+      text = text.replace(/&quot;/g, '"');
+      text = text.replace(/&amp;/g, '&');
+      text = text.replace(/&lt;/g, '<');
+      text = text.replace(/&gt;/g, '>');
+      text = text.replace(/&nbsp;/g, ' ');
+      return text;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

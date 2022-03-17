@@ -26,7 +26,9 @@
 					<view class="user-text">
 						{{name}}
 						<view class="userinfo-lv">
+							<!--  #ifdef H5 || APP-PLUS -->
 							<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
+							<!--  #endif -->
 							<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
 						</view>
 						
@@ -438,7 +440,7 @@
 				var that = this;
 				var cid = that.cid;
 				uni.navigateTo({
-				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
 			},
 			toPost(){
@@ -492,14 +494,14 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			toInfoComment(cid,title){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+cid+"&title="+title
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			ToCopy(text) {

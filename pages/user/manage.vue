@@ -37,7 +37,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/users')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/users')">
 							<view class="index-sort-i">
 								<text class="cuIcon-friend"></text>
 							</view>
@@ -49,7 +49,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/contents')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/contents')">
 							<view class="index-sort-i">
 								<text class="cuIcon-text"></text>
 							</view>
@@ -61,7 +61,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/comments')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/comments')">
 							<view class="index-sort-i">
 								<text class="cuIcon-favorfill"></text>
 							</view>
@@ -73,7 +73,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/shop')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/shop')">
 							<view class="index-sort-i">
 								<text class="cuIcon-shop"></text>
 							</view>
@@ -85,7 +85,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/recharge')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/recharge')">
 							<view class="index-sort-i">
 								<text class="cuIcon-pay"></text>
 							</view>
@@ -97,7 +97,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../manage/withdraw')">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/withdraw')">
 							<view class="index-sort-i">
 								<text class="cuIcon-vipcard"></text>
 							</view>

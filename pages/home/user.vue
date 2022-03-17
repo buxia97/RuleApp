@@ -36,7 +36,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="cu-item userinfo" v-else  @tap="toLink('../user/useredit')">
+				<view class="cu-item userinfo" v-else  @tap="toLink('/pages/user/useredit')">
 					<view class="cu-avatar round lg" :style="userInfo.style"></view>
 					<view class="content">
 						<view class="text-grey">
@@ -62,15 +62,15 @@
 					<text class="clock-btn" @tap="toClock" v-if="isClock==0">签到</text>
 					<text class="clock-btn istap" v-else>已签到</text>
 					<view class="user-data grid col-3" v-if="userInfo!=null">
-						<view class="user-data-box" @tap="toLink('../user/userpost')">
+						<view class="user-data-box" @tap="toLink('/pages/user/userpost')">
 							<view class="user-data-value">{{userData.contentsNum}}</view>
 							<view class="user-data-title">文章</view>
 						</view>
-						<view class="user-data-box" @tap="toLink('../user/usercomments')">
+						<view class="user-data-box" @tap="toLink('/pages/user/usercomments')">
 							<view class="user-data-value">{{userData.commentsNum}}</view>
 							<view class="user-data-title">评论</view>
 						</view>
-						<view class="user-data-box" @tap="toLink('../user/assets')">
+						<view class="user-data-box" @tap="toLink('/pages/user/assets')">
 							<view class="user-data-value">{{userData.assets}}</view>
 							<view class="user-data-title">积分</view>
 						</view>
@@ -84,7 +84,7 @@
 			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/useredit')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/useredit')">
 							<view class="index-sort-i">
 								<text class="cuIcon-edit"></text>
 							</view>
@@ -96,7 +96,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/inbox')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/inbox')">
 							<view class="index-sort-i">
 								<text class="cuIcon-message"></text>
 							</view>
@@ -108,7 +108,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/usermark')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/usermark')">
 							<view class="index-sort-i">
 								<text class="cuIcon-favorfill"></text>
 							</view>
@@ -120,7 +120,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/userpost')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/userpost')">
 							<view class="index-sort-i">
 								<text class="cuIcon-writefill"></text>
 							</view>
@@ -132,7 +132,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/myshop')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/myshop')">
 							<view class="index-sort-i">
 								<text class="cuIcon-present"></text>
 							</view>
@@ -154,7 +154,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box" @tap="toLink('../user/order')">
+				<view class="index-sort-box" @tap="toLink('/pages/user/order')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i">
@@ -281,7 +281,7 @@
 				var that = this;
 				// #ifdef APP-PLUS || H5
 				uni.navigateTo({
-					url: '../user/login'
+					url: '/pages/user/login'
 				});
 				// #endif
 				// #ifdef MP-WEIXIN
@@ -390,7 +390,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+cid+"&title="+title
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			userStatus() {
@@ -512,7 +512,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			toGroup(){
@@ -546,12 +546,12 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/setup'
+				    url: '/pages/user/setup'
 				});
 			},
 			toManage(){
 				uni.navigateTo({
-				    url: '../user/manage'
+				    url: '/pages/user/manage'
 				});
 			}
 		},

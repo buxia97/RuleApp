@@ -39,7 +39,9 @@
 								<block v-else>
 									{{userInfo.name}}
 								</block>
+								<!--  #ifdef H5 || APP-PLUS -->
 								<text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text>
+								<!--  #endif -->
 								<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
 							</view>
 							<view class="text-gray text-sm flex">
@@ -127,7 +129,9 @@
 								<view class="content">
 									<view class="text-grey">
 										{{item.author}}
+										<!--  #ifdef H5 || APP-PLUS -->
 										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 									</view>
 									<view class="text-content text-df break-all">
@@ -295,6 +299,7 @@
 		},
 		components: {
 		  mpHtml,
+
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -447,14 +452,14 @@
 				var id= data.uid;
 				var type="user";
 				uni.navigateTo({
-				    url: '../contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			},
 			toTagsContents(title,id){
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			toCategoryContents(data){
@@ -463,7 +468,7 @@
 				var id= data[0].mid;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			loadMore(){
@@ -607,8 +612,11 @@
 								
 							}else{
 								that.moreText="没有更多评论了";
-								localStorage.removeItem('commentsList_'+that.cid);
-								that.commentsList = [];
+								if(that.page==1){
+									localStorage.removeItem('commentsList_'+that.cid);
+									that.commentsList = [];
+								}
+								
 							}
 							
 						}
@@ -648,7 +656,7 @@
 				}else{
 					var cid = that.cid;
 					uni.navigateTo({
-					    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+					    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 					});
 				}
 				
@@ -929,14 +937,16 @@
 				var result = document.execCommand("copy") 
 				textarea.remove();
 				
-			// #endif
+				// #endif
 			},
 			ToShare(){
 				
 				var that = this;
-				var url = API.GetWebUrl()+"archives/"+that.cid+"/"
+				var linkRule = API.GetLinkRule();
+				var url = linkRule.replace("{cid}",that.cid)
 				if(that.type!="post"){
-					url = API.GetWebUrl()+that.slug+".html"
+					var pageRule = API.GetPageRule();
+					url = pageRule.replace("{slug}",that.slug);
 				}
 				// #ifdef APP-PLUS
 				uni.shareWithSystem({
@@ -1051,14 +1061,14 @@
 					return false;
 				}
 				uni.navigateTo({
-				    url: '../contents/shopinfo?sid='+sid
+				    url: '/pages/contents/shopinfo?sid='+sid
 				});
 			},
 			toSearch(){
 				var that = this;
 				
 				uni.redirectTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			toAds(url){

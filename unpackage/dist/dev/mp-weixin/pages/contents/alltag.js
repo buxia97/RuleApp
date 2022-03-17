@@ -175,6 +175,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -219,14 +231,19 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, tagList: [], searchText: "", isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;that.getTagList();}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getTagList: function getTagList() {var that = this;var data = {
-        "type": "tag" };
-
-      Net.request({
-        url: API.getMetasList(),
-        data: {
-          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
-          "limit": 10000,
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, tagList: [], searchText: "", isLoading: 0, type: "all", curNum: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.getTagList();if (res.type) {that.type = res.type;}}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getTagList: function getTagList() {var that = this;var data = { "type": "tag" };Net.request({ url: API.getMetasList(), data: { "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)), "limit": 10000,
           "page": 1,
           "order": "count" },
 
@@ -239,7 +256,30 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
-              that.tagList = list;
+              var newList = [];
+              for (var i in list) {
+                list[i].active = 0;
+                if (that.type == "edit") {
+                  if (_index.localStorage.getItem('ctag')) {
+                    var clist = _index.localStorage.getItem('ctag');
+                    var arr = clist.split(",");
+
+                    for (var j in arr) {
+                      if (arr[j] != "") {
+                        var index = Number(arr[j]);
+                        if (list[i].mid == index) {
+                          list[i].active = 1;
+                          that.curNum++;
+                        }
+
+                      }
+                    }
+                  }
+
+                }
+                newList.push(list[i]);
+              }
+              that.tagList = newList;
 
               _index.localStorage.setItem('tagList', JSON.stringify(that.tagList));
             }
@@ -257,12 +297,31 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         } });
 
     },
-    toCategoryContents: function toCategoryContents(title, id) {
+    toCategoryContents: function toCategoryContents(title, id, index) {
       var that = this;
-      var type = "meta";
-      uni.navigateTo({
-        url: '../contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
+      if (that.type == "all") {
+        var type = "meta";
+        uni.navigateTo({
+          url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
+      } else {
+
+        if (that.tagList[index].active == 1) {
+          that.curNum--;
+          that.tagList[index].active = 0;
+        } else {
+          if (that.curNum > 4) {
+            uni.showToast({
+              title: "最多选择五个标签",
+              icon: 'none' });
+
+            return false;
+          }
+          that.curNum++;
+          that.tagList[index].active = 1;
+        }
+
+      }
     },
     searchTag: function searchTag() {
       var that = this;
@@ -279,6 +338,31 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         }
         that.tagList = tagList;
       }
+
+    },
+    submit: function submit() {
+      var that = this;
+      var ctag = "";
+      var list = that.tagList;
+      for (var i in list) {
+        if (list[i].active == 1) {
+          ctag += "," + list[i].mid;
+        }
+      }
+      if (ctag == "") {
+        uni.showToast({
+          title: "请选择分类",
+          icon: 'none' });
+
+        return false;
+      }
+      _index.localStorage.setItem('ctag', ctag);
+      //存入本地缓存后，恢复原本
+      var old_list = that.tagList;
+      for (var i in list) {
+        that.tagList[i].active = 0;
+      }
+      that.back();
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

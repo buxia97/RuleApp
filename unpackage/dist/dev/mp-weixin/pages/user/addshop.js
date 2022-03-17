@@ -114,7 +114,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var node = function node() {__webpack_require__.e(/*! require.ensure | components/mp-html/node/node */ "components/mp-html/node/node").then((function () {return resolve(__webpack_require__(/*! ./node/node */ 450));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var node = function node() {__webpack_require__.e(/*! require.ensure | components/mp-html/node/node */ "components/mp-html/node/node").then((function () {return resolve(__webpack_require__(/*! ./node/node */ 458));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 
 
 
@@ -876,12 +876,17 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, modalName: "", metaList: [{ "name": "实体商品", "mid": 1 }, { "name": "源码", "mid": 2 }, { "name": "软件工具", "mid": 3 }, { "name": "付费阅读", "mid": 4 }], token: "", isShow: false, curHeight: 0, jpHeight: 0, screenHeight: 0, postheight: 0, poststyle: "", readstyle: "", isText: 0, //文章表单部分
       title: "", category: -1, categoryText: "", text: '', isInfo: 0, link: { title: "", url: "" }, //页面状态
-      type: "add", sid: 0, start: -1 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.token = userInfo.token;}if (_index.localStorage.getItem('userShopinfo')) {that.isInfo = 1;}}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;if (res.type) {that.type = res.type;if (res.sid) {that.sid = res.sid;that.getInfo(that.sid);}} //键盘弹出相关
+      type: "add", sid: 0, start: -1 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onHide: function onHide() {var that = this;}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.token = userInfo.token;}if (_index.localStorage.getItem('userShopinfo')) {that.isInfo = 1;}}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;if (res.type) {that.type = res.type;if (res.sid) {that.sid = res.sid;that.getInfo(that.sid);}} //键盘弹出相关
     var screenHeight = uni.getSystemInfoSync().screenHeight;var statusHeight = uni.getSystemInfoSync().statusBarHeight;var inputHeight = screenHeight - statusHeight - 292;that.screenHeight = screenHeight - that.NavBar;that.postheight = inputHeight;that.poststyle = "height:" + inputHeight + "px";that.readstyle = "height:" + (inputHeight + 30) + "px";uni.onKeyboardHeightChange(function (res) {//监听软键盘的高度 
       //当点击软键盘自带的收起按钮的时候也就是会隐藏软键盘 这时候监听到的软键盘的高度就是0 、
       //让输入框取消焦点 这时候再去输入内容的时候 输入框就会弹起
-      if (res.height == 0) {that.focalize(res.height);} else {that.curHeight = res.height;that.focus(res.height);}});}, methods: { ToisText: function ToisText(i) {var that = this;that.isText = i;if (that.curHeight != 0 && that.isText == 1) {that.focus(that.curHeight);}uni.getSelectedTextRange({ success: function success(res) {//console.log('getSelectedTextRange res', res.start, res.end);
-          that.start = res.start;} });
+      if (res.height == 0) {that.focalize(res.height);} else {that.curHeight = res.height;that.focus(res.height);}});_index.localStorage.removeItem('userShopinfo');}, methods: { ToisText: function ToisText(i) {var that = this;that.isText = i;if (that.curHeight != 0 && that.isText == 1) {that.focus(that.curHeight);
+      }
+      uni.getSelectedTextRange({
+        success: function success(res) {
+          //console.log('getSelectedTextRange res', res.start, res.end);
+          that.start = res.start;
+        } });
 
 
     },
@@ -1239,7 +1244,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../user/addshopinfo' });
+        url: '/pages/user/addshopinfo' });
 
     },
     getInfo: function getInfo(sid) {

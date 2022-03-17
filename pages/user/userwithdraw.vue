@@ -103,7 +103,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/userwithdrawlist'
+					url: '/pages/user/userwithdrawlist'
 				});
 			},
 			userStatus() {
@@ -212,7 +212,7 @@
 			},
 			topay(){
 				uni.navigateTo({
-				    url: '../user/pay'
+				    url: '/pages/user/pay'
 				});
 			}
 		}

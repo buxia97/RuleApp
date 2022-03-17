@@ -42,7 +42,9 @@
 									<view class="cu-avatar round" :style="item.style"></view>
 									<view class="content">
 										<view class="text-grey">{{item.author}}
+										<!--  #ifdef H5 || APP-PLUS -->
 										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 										</view>
 										<view class="text-content text-df break-all">
@@ -207,7 +209,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+cid+"&title="+title
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			searchTag(){
@@ -291,7 +293,7 @@
 			commentsAdd(title,coid,reply,cid){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
+				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
 			},
 			

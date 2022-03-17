@@ -1,6 +1,12 @@
 <script>
+	// #ifdef H5
+	import pageAnimation from './components/page-animation-pro'
+	// #endif
 	import Vue from 'vue'
 	export default {
+		// #ifdef H5
+		mixins: [pageAnimation],
+		// #endif
 		onLaunch: function() {
 			uni.getSystemInfo({
 				success: function(e) {
@@ -23,6 +29,11 @@
 					// #ifdef MP-ALIPAY
 					Vue.prototype.StatusBar = e.statusBarHeight;
 					Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
+					// #endif
+					
+					// #ifdef MP-QQ
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					Vue.prototype.CustomBar = e.statusBarHeight + 45;
 					// #endif
 				}
 			})

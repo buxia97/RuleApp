@@ -118,11 +118,13 @@ var render = function() {
       ? _vm.__map(_vm.commentsList, function(item, index) {
           var $orig = _vm.__get_orig(item)
 
-          var m3 =
+          var m3 = _vm.commentsList.length > 0 ? _vm.markHtml(item.text) : null
+          var m4 =
             _vm.commentsList.length > 0 ? _vm.formatDate(item.created) : null
           return {
             $orig: $orig,
-            m3: m3
+            m3: m3,
+            m4: m4
           }
         })
       : null
@@ -292,131 +294,209 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, contentsList: [], commentsList: [], userList: [], type: 0, page: 1, moreText: "加载更多", isLoad: 0, isLoading: 0, title: "", uid: 0, avatar: "", name: "" };}, onShow: function onShow() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
-    var that = this;if (that.isLoad == 0) {that.loadMore();}}, onPullDownRefresh: function onPullDownRefresh() {var that = this;var i = that.type;that.page = 1;that.moreText = "加载更多";that.isLoad = 0;if (i == 0) {that.getContentsList(false);} else {that.getCommentsList(false);}}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.title = res.title;that.uid = res.uid;that.avatar = res.avatar;that.name = res.name;that.getContentsList(false);}, methods: { toType: function toType(i) {var that = this;that.type = i;that.page = 1;that.moreText = "加载更多";that.isLoad = 0;if (i == 0) {that.getContentsList(false);} else {that.getCommentsList(false);}}, back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";that.isLoad = 1;if (that.type == 0) {that.getContentsList(true);} else {that.getCommentsList(true);}}, reload: function reload() {var that = this;if (that.type == 0) {that.getContentsList();} else {that.getCommentsList();}}, getContentsList: function getContentsList(isPage) {var that = this;var data = { "type": "post", "authorId": that.uid };var page = that.page;if (isPage) {page++;}
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
+
+
+var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));var _methods;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
+{
+  data: function data() {
+    return {
+      StatusBar: this.StatusBar,
+      CustomBar: this.CustomBar,
+      NavBar: this.StatusBar + this.CustomBar,
+
+      contentsList: [],
+
+      commentsList: [],
+
+      userList: [],
+      owo: _OwO.default,
+      owoList: [],
+
+      type: 0,
+
+      page: 1,
+      moreText: "加载更多",
+
+      isLoad: 0,
+
+      isLoading: 0,
+
+      title: "",
+      uid: 0,
+      avatar: "",
+      name: "",
+      customize: "",
+      lv: "" };
+
+
+
+  },
+  onShow: function onShow() {
+    var that = this;
+
+
+
+
+
+
+
+  },
+  onReachBottom: function onReachBottom() {
+    //触底后执行的方法，比如无限加载之类的
+    var that = this;
+    if (that.isLoad == 0) {
+      that.loadMore();
+    }
+
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    var that = this;
+    var i = that.type;
+    that.page = 1;
+    that.moreText = "加载更多";
+    that.isLoad = 0;
+    if (i == 0) {
+      that.getContentsList(false);
+    } else {
+      that.getCommentsList(false);
+    }
+  },
+  onLoad: function onLoad(res) {
+    var that = this;
+
+    that.NavBar = this.CustomBar;
+
+
+    that.title = res.title;
+    that.uid = res.uid;
+    that.avatar = res.avatar;
+    that.name = res.name;
+    that.getUserInfo();
+    var owo = that.owo.data;
+    var owoList = [];
+    for (var i in owo) {
+      owoList = owoList.concat(owo[i].container);
+    }
+    that.owoList = owoList;
+    that.getContentsList(false);
+
+  },
+  methods: (_methods = {
+    toType: function toType(i) {
+      var that = this;
+      that.type = i;
+      that.page = 1;
+      that.moreText = "加载更多";
+      that.isLoad = 0;
+      if (i == 0) {
+        that.getContentsList(false);
+      } else {
+        that.getCommentsList(false);
+      }
+    },
+    back: function back() {
+      uni.navigateBack({
+        delta: 1 });
+
+    },
+    getUserLv: function getUserLv(i) {
+      var that = this;
+      if (!i) {
+        var i = 0;
+      }
+      var rankList = API.GetRankList();
+      return rankList[i];
+    },
+    getUserLvStyle: function getUserLvStyle(i) {
+      var that = this;
+      if (!i) {
+        var i = 0;
+      }
+      var rankStyle = API.GetRankStyle();
+      var userlvStyle = "color:#fff;background-color: " + rankStyle[i];
+      return userlvStyle;
+    },
+    markHtml: function markHtml(text) {
+      var that = this;
+      var owoList = that.owoList;
+      for (var i in owoList) {
+
+        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
+          text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");
+
+        }
+      }
+      return text;
+    },
+    replaceAll: function replaceAll(string, search, replace) {
+      return string.split(search).join(replace);
+    },
+    getUserInfo: function getUserInfo() {
+      var that = this;
+      Net.request({
+
+        url: API.getUserInfo(),
+        data: {
+          "key": that.uid },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          if (res.data.code == 1) {
+            that.lv = res.data.data.lv;
+            that.customize = res.data.data.customize;
+          }
+        },
+        fail: function fail(res) {
+          uni.showToast({
+            title: "网络开小差了哦",
+            icon: 'none' });
+
+        } });
+
+    },
+    loadMore: function loadMore() {
+      var that = this;
+      that.moreText = "正在加载中...";
+      that.isLoad = 1;
+      if (that.type == 0) {
+        that.getContentsList(true);
+      } else {
+        that.getCommentsList(true);
+      }
+
+    },
+    reload: function reload() {
+      var that = this;
+      if (that.type == 0) {
+        that.getContentsList();
+      } else {
+        that.getCommentsList();
+      }
+
+    },
+    getContentsList: function getContentsList(isPage) {
+      var that = this;
+      var data = {
+        "type": "post",
+        "authorId": that.uid };
+
+      var page = that.page;
+      if (isPage) {
+        page++;
+      }
       Net.request({
         url: API.getContentsList(),
         data: {
@@ -532,7 +612,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
       var cid = that.cid;
       uni.navigateTo({
-        url: '../contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
+        url: '/pages/contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
 
     },
     toPost: function toPost() {
@@ -556,50 +636,48 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         return text;
       }
 
-    },
-    formatDate: function formatDate(datetime) {
-      var datetime = new Date(parseInt(datetime * 1000));
-      // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
-      var year = datetime.getFullYear(),
-      month = ("0" + (datetime.getMonth() + 1)).slice(-2),
-      date = ("0" + datetime.getDate()).slice(-2),
-      hour = ("0" + datetime.getHours()).slice(-2),
-      minute = ("0" + datetime.getMinutes()).slice(-2);
-      //second = ("0" + date.getSeconds()).slice(-2);
-      // 拼接
-      var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-      // 返回
-      return result;
-    },
-    toInfo: function toInfo(data) {
-      var that = this;
+    } }, _defineProperty(_methods, "getUserLv", function getUserLv(
+  i) {
+    var that = this;
+    var rankList = API.GetRankList();
+    return rankList[i];
+  }), _defineProperty(_methods, "getUserLvStyle", function getUserLvStyle(
+  i) {
+    var that = this;
+    var rankStyle = API.GetRankStyle();
+    var userlvStyle = "color:#fff;background-color: " + rankStyle[i];
+    return userlvStyle;
+  }), _defineProperty(_methods, "formatDate", function formatDate(
+  datetime) {
+    var datetime = new Date(parseInt(datetime * 1000));
+    // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+    var year = datetime.getFullYear(),
+    month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+    date = ("0" + datetime.getDate()).slice(-2),
+    hour = ("0" + datetime.getHours()).slice(-2),
+    minute = ("0" + datetime.getMinutes()).slice(-2);
+    //second = ("0" + date.getSeconds()).slice(-2);
+    // 拼接
+    var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+    // 返回
+    return result;
+  }), _defineProperty(_methods, "toInfo", function toInfo(
+  data) {
+    var that = this;
 
-      uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+    uni.navigateTo({
+      url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
-    },
-    toInfoComment: function toInfoComment(cid, title) {
-      var that = this;
+  }), _defineProperty(_methods, "toInfoComment", function toInfoComment(
+  cid, title) {
+    var that = this;
 
-      uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+    uni.navigateTo({
+      url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
-    },
-    ToCopy: function ToCopy(text) {
-      var that = this;
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }), _defineProperty(_methods, "ToCopy", function ToCopy(
+  text) {
+    var that = this;
 
 
 
@@ -611,10 +689,34 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
 
 
 
-    },
-    formatNumber: function formatNumber(num) {
-      return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num;
-    } } };exports.default = _default;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }), _defineProperty(_methods, "formatNumber", function formatNumber(
+  num) {
+    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num;
+  }), _defineProperty(_methods, "replaceSpecialChar", function replaceSpecialChar(
+  text) {
+    if (!text) {
+      return false;
+    }
+    text = text.replace(/&quot;/g, '"');
+    text = text.replace(/&amp;/g, '&');
+    text = text.replace(/&lt;/g, '<');
+    text = text.replace(/&gt;/g, '>');
+    text = text.replace(/&nbsp;/g, ' ');
+    return text;
+  }), _methods) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

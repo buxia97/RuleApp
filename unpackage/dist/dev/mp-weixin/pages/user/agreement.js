@@ -299,7 +299,7 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', screenName: '', password: '', repassword: '', mail: '', url: '', appname: API.GetAppName(), email: API.GetAppEmail(), token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });} } };exports.default = _default;
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, uid: 0, name: '', screenName: '', password: '', repassword: '', mail: '', url: '', appname: "", email: "", token: '' };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;that.appname = API.GetAppName();that.email = API.GetAppEmail();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });} } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

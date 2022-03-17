@@ -947,7 +947,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -5293,8 +5293,7 @@ if (typeof window === 'object' && typeof window.document === 'object') {
 /***/ (function(module, exports) {
 
 var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://172.16.1.107:8081/';
-
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -5305,10 +5304,16 @@ var appName = "规则之树";
 var appEmail = "buxia97@126.com";
 //全局数据调用部分【重要】
 
+//用户头衔，自己修改名词
+var rankList = ["小白", "萌新", "入门", "熟手", "大佬", "巨佬", "传说", "古神"];
 
-//是否开启广告（改为1则显示广告，具体配置在apiResult.php）
-var _isAds = 1;
+//头衔对应的背景颜色
+var rankStyle = ["#6699CC", "#666699", "#009933", "#FF9900", "#ff007f", "#FF0033", "#660033", "#000000"];
 
+//链接规则(用于站内链接自动跳转)，请根据自己的网站文件链接自由发挥，比如我的就是
+//https://www.ruletree.club/archives/2824/
+var linkRule = WEB_URL + "archives/{cid}/"; //普通文章
+var pageRule = WEB_URL + "{slug}.html"; //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394;
 //首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
@@ -5356,15 +5361,25 @@ var aboutme = 2;
 
 
 module.exports = (_module$exports = {
+  GetRankList: function GetRankList() {
+    return rankList;
+  },
+  GetRankStyle: function GetRankStyle() {
+    return rankStyle;
+  },
   GetAppName: function GetAppName() {
     return appName;
   },
   GetAppEmail: function GetAppEmail() {
     return appEmail;
   },
-  isAds: function isAds() {
-    return _isAds;
+  GetLinkRule: function GetLinkRule() {
+    return linkRule;
   },
+  GetPageRule: function GetPageRule() {
+    return pageRule;
+  },
+
   GetSwiperid: function GetSwiperid() {
     return swiperid;
   },
@@ -5537,8 +5552,9 @@ function isCommnet() {
 }), _defineProperty(_module$exports, "upload",
 
 function upload() {
-  //return API_URL + 'upload/localUpload';//OSS对象存储接口
+  //return API_URL + 'upload/ossUpload';//OSS对象存储接口
   return API_URL + 'upload/cosUpload'; //COS对象存储接口
+  //return API_URL + 'upload/ftpUpload'; //远程ftp上传接口
   //return API_URL + 'upload/localUpload'; //本地上传接口
 }), _defineProperty(_module$exports, "shopList",
 function shopList() {
@@ -11236,7 +11252,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -11257,14 +11273,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -11350,7 +11366,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));

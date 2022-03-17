@@ -218,7 +218,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/agreement'
+				    url: '/pages/user/agreement'
 				});
 			},
 		}

@@ -200,7 +200,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 443));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 451));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -299,7 +299,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
         var timer = setTimeout(function () {
           uni.navigateTo({
-            url: '../user/login' });
+            url: '/pages/user/login' });
 
           clearTimeout('timer');
         }, 1000);
@@ -379,7 +379,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
         var timer = setTimeout(function () {
           uni.navigateTo({
-            url: '../user/login' });
+            url: '/pages/user/login' });
 
           clearTimeout('timer');
         }, 1000);
@@ -438,19 +438,19 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     toShop: function toShop(sid) {
       var that = this;
       uni.navigateTo({
-        url: '../user/addshop' });
+        url: '/pages/user/addshop' });
 
     },
     sellOrder: function sellOrder() {
       var that = this;
       uni.navigateTo({
-        url: '../user/sellorder' });
+        url: '/pages/user/sellorder' });
 
     },
     editShop: function editShop(sid) {
       var that = this;
       uni.navigateTo({
-        url: '../user/addshop?type=edit' + '&sid=' + sid });
+        url: '/pages/user/addshop?type=edit' + '&sid=' + sid });
 
     } },
 

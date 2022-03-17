@@ -152,13 +152,13 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/register'
+					url: '/pages/user/register'
 				});
 			},
 			toFoget(){
 				var that = this;
 				uni.navigateTo({
-					url: '../user/foget'
+					url: '/pages/user/foget'
 				});
 			},
 			toQQlogin(){

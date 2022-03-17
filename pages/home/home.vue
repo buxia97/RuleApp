@@ -632,7 +632,7 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../contents/foreverblog'
+					url: '/pages/contents/foreverblog'
 				});
 				
 			},
@@ -640,28 +640,28 @@
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/comments'
+				    url: '/pages/contents/comments'
 				});
 			},
 			toSearch(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/search'
+				    url: '/pages/contents/search'
 				});
 			},
 			toUsers(){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../user/userlist'
+				    url: '/pages/user/userlist'
 				});
 			},
 			toCategoryContents(title,id){
 				var that = this;
 				var type="meta";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			toAllContents(){
@@ -669,14 +669,14 @@
 				var type="all";
 				var title="全部文章";
 				uni.navigateTo({
-				    url: '../contents/contentlist?title='+title+"&type="+type+"&id=0"
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id=0"
 				});
 			},
 			toInfo(data){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '../contents/info?cid='+data.cid+"&title="+data.title
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			subText(text,num){

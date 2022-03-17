@@ -175,7 +175,7 @@
 				if(that.type=="all"){
 					var type="meta";
 					uni.navigateTo({
-					    url: '../contents/contentlist?title='+title+"&type="+type+"&id="+id
+					    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 					});
 				}else{
 					

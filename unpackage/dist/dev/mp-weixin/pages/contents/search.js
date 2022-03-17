@@ -611,14 +611,14 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var id = data.uid;
       var type = "user";
       uni.navigateTo({
-        url: '../contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
+        url: '/pages/contents/userinfo?title=' + title + "&name=" + name + "&uid=" + id + "&avatar=" + encodeURIComponent(data.avatar) });
 
     },
     commentsAdd: function commentsAdd(title, coid, reply) {
       var that = this;
       var cid = that.cid;
       uni.navigateTo({
-        url: '../contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
+        url: '/pages/contents/commentsadd?cid=' + cid + "&coid=" + coid + "&title=" + title + "&isreply=" + reply });
 
     },
     toPost: function toPost() {
@@ -661,14 +661,14 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     toInfoComment: function toInfoComment(cid, title) {
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + cid + "&title=" + title });
+        url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
     },
     ToCopy: function ToCopy(text) {
