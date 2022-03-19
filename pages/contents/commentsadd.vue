@@ -146,11 +146,11 @@
 						position:'bottom',
 					});
 					uni.navigateTo({
-					    url: '../user/login'
+					    url: '/pages/user/login'
 					});
 					var timer = setTimeout(function() {
 						uni.navigateTo({
-						    url: '../user/login'
+						    url: '/pages/user/login'
 						});
 						clearTimeout('timer')
 					}, 1000)

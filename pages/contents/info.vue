@@ -650,7 +650,7 @@
 						icon: 'none'
 					})
 					uni.navigateTo({
-					    url: '../user/login'
+					    url: '/pages/user/login'
 					});
 					return false;
 				}else{

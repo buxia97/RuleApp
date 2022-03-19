@@ -15,7 +15,7 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="text-tips margin-top text-center text-gray text-sm">
-			只显示最近30条记录，请及时保存信息
+			只显示最近60条记录，请及时保存信息
 		</view>
 		<view class="no-data" v-if="orderList.length==0">
 			暂时没有数据
@@ -36,7 +36,21 @@
 				</view>
 				<view class="order-btn" v-if="item.shopInfo">
 					<text class="text-red">{{item.shopInfo.price}} 积分</text>
+					<text class="text-green margin-left" @tap="toMerchant(item.merchantEmail)">联系商家</text>
 					<text class="text-blue" @tap="toInfo(item.shopInfo)">查看收费内容</text>
+				</view>
+			</view>
+		</view>
+		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">商户联系信息</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<text class="text-blue" @tap="ToCopy(merchantEmail)">{{merchantEmail}}</text>
 				</view>
 			</view>
 		</view>
@@ -66,6 +80,9 @@
 				token:"",
 				orderList:[],
 				
+				merchantEmail:"",
+				
+				modalName: null,
 				isLoading:0,
 			}
 		},
@@ -99,6 +116,12 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			getType(i){
 				var arr = ["实体商品","源码","软件工具","付费阅读"];
@@ -146,7 +169,7 @@
 			shopInfo(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/shopinfo?sid='+sid
+				    url: '/pages/contents/shopinfo?sid='+sid
 				});
 			},
 			toInfo(data){
@@ -157,7 +180,7 @@
 					})
 				}else{
 					uni.navigateTo({
-					    url: '../contents/shoptext?sid='+data.id
+					    url: '/pages/contents/shoptext?sid='+data.id
 					});
 				}
 			},
@@ -174,7 +197,48 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
-			}
+			},
+			toMerchant(text){
+				var that = this;
+				if(!text||text==""){
+					uni.showToast({
+						title: "该商户无联系方式或已失效",
+						icon: 'none'
+					})
+					return false;
+					
+				}
+				that.merchantEmail = text;
+				that.modalName = "Modal";
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+				// #endif
+			},
 
 		}
 	}

@@ -14,9 +14,9 @@
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="text-tips margin-top text-center text-gray text-sm">
+		<!-- <view class="text-tips margin-top text-center text-gray text-sm">
 			只显示最近30条记录，请及时处理
-		</view>
+		</view> -->
 		<view class="no-data" v-if="orderList.length==0">
 			暂时没有数据
 		</view>
@@ -36,9 +36,13 @@
 				</view>
 				<view class="order-btn" v-if="item.shopInfo">
 					<text class="text-red">{{item.shopInfo.price}} 积分</text>
+					<text class="text-green margin-left" @tap="toUser(item.userEmail)">联系用户</text>
 					<text class="text-blue" v-if="item.shopInfo.type==1" @tap="addressInfo(item.address)">查看用户地址</text>
 				</view>
 			</view>
+		</view>
+		<view class="load-more" @tap="loadMore" v-if="orderList.length>0">
+			<text>{{moreText}}</text>
 		</view>
 		
 		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
@@ -54,6 +58,20 @@
 				</view>
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='Modal1'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">用户联系信息</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<text class="text-blue" @tap="ToCopy(userEmail)">{{userEmail}}</text>
+				</view>
+			</view>
+		</view>
+		
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -81,8 +99,11 @@
 				orderList:[],
 				
 				address:"",
-				
+				userEmail:"",
 				modalName: null,
+				
+				page:1,
+				moreText:"加载更多",
 				
 				isLoading:0,
 			}
@@ -94,6 +115,13 @@
 			}, 1000)
 			
 		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			if(that.isLoad==0){
+				that.loadMore();
+			}
+		},
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
@@ -103,7 +131,7 @@
 			if(localStorage.getItem('token')){
 				that.token=localStorage.getItem('token');
 			}
-			that.getOrderList();
+			that.getOrderList(false);
 		},
 		onLoad() {
 			var that = this;
@@ -128,9 +156,21 @@
 				var arr = ["实体商品","源码","软件工具","付费阅读"];
 				return arr[i-1];
 			},
-			getOrderList(){
+			loadMore(){
 				var that = this;
+				that.moreText="正在加载中...";
+				that.isLoad=1;
+				that.getOrderList(true);
+			},
+			getOrderList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
 				var data = {
+					"limit":8,
+					"page":page,
 					"token":that.token
 				}
 				Net.request({
@@ -142,12 +182,21 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+						//console.log(JSON.stringify(res));
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
-							
-								that.orderList = list;
+								if(isPage){
+									that.page++;
+									that.orderList = that.orderList.concat(list);
+								}else{
+									that.orderList = list;
+								}
 								
+							}else{
+								that.moreText="没有更多数据了";
 							}
 						}
 						var timer = setTimeout(function() {
@@ -156,6 +205,8 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.moreText="加载更多";
+						that.isLoad=0;
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'
@@ -191,6 +242,47 @@
 				var that = this;
 				that.address = text;
 				this.modalName ="Modal";
+			},
+			toUser(text){
+				var that = this;
+				if(!text||text==""){
+					uni.showToast({
+						title: "该用户未配置邮箱或已失效",
+						icon: 'none'
+					})
+					return false;
+					
+				}
+				that.userEmail = text;
+				this.modalName ="Modal1";
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+				// #endif
 			}
 
 		}

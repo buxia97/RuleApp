@@ -455,14 +455,14 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/post'
+					url: '/pages/user/post'
 				});
 			},
 			toEdit(cid){
 				var that = this;
 				
 				uni.navigateTo({
-					url: '../user/post?type=edit'+'&cid='+cid
+					url: '/pages/user/post?type=edit'+'&cid='+cid
 				});
 			},
 			subText(text,num){

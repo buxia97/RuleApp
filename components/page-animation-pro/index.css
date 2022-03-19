@@ -1,0 +1,100 @@
+/* #ifdef H5 */
+uni-page{
+	opacity: 0;
+}
+uni-page.page-animation-enter {
+	transition: all 225ms ease;
+}
+uni-page.page-animation-leave {
+	transition: all 225ms ease;
+}
+uni-page.page-show {
+	opacity: 1;
+}
+
+/* slide-in-right */
+uni-page.slide-in-right-enter {
+	transform: translateX(20px);
+}
+uni-page.slide-in-right-leave {
+	/* 在页面上使用 transform 会导致页面内的 fixed 定位渲染为 absolute，需要在动画完成后移除 */
+	transform: translateX(0);
+}
+uni-page.slide-in-right-back-enter { 
+	transform: translateX(20px);
+}
+uni-page.slide-in-right-back-leave{
+	transform: translateX(0);
+}
+
+/* slide-in-left */
+uni-page.slide-in-left-enter {
+	transform: translateX(-20px);
+}
+uni-page.slide-in-left-leave {
+	transform: translateX(0);
+}
+uni-page.slide-in-left-back-enter { 
+	transform: translateX(-20px);
+}
+uni-page.slide-in-left-back-leave{
+	transform: translateX(0);
+}
+
+/* slide-in-top */
+uni-page.slide-in-top-enter {
+	transform: translateY(-20px);
+}
+uni-page.slide-in-top-leave {
+	transform: translateY(0);
+}
+uni-page.slide-in-top-back-enter { 
+	transform: translateY(-20px);
+}
+uni-page.slide-in-top-back-leave{
+	transform: translateY(0);
+}
+
+/* slide-in-bottom */
+uni-page.slide-in-bottom-enter {
+	transform: translateY(20px);
+}
+uni-page.slide-in-bottom-leave {
+	transform: translateY(0);
+}
+uni-page.slide-in-bottom-back-enter { 
+	transform: translateY(20px);
+}
+uni-page.slide-in-bottom-back-leave{
+	transform: translateY(0);
+}
+
+/* fade-in */
+uni-page.fade-in-enter {
+	opacity: 0;
+}
+uni-page.fade-in-leave {
+	opacity: 1;
+}
+uni-page.fade-in-back-enter { 
+	opacity: 1;
+}
+uni-page.fade-in-back-leave{
+	opacity: 0;
+}
+
+/* zoom-fade-in */
+uni-page.zoom-fade-in-enter {
+	transform:scale3d(1,1,1);
+}
+uni-page.zoom-fade-in-leave {
+	transform:scale3d(.1,.1,.1);
+}
+uni-page.zoom-fade-in-back-enter {
+	transform:scale3d(.1,.1,.1);
+}
+uni-page.zoom-fade-in-back-leave{
+	transform:scale3d(1,1,1);
+}
+
+/* #endif */
