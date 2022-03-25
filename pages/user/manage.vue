@@ -135,6 +135,16 @@
 				</view>
 			</view>
 		</view>
+		<view class="data-box">
+			<view class="cu-list menu">
+				<view class="cu-item" @tap="toWord">
+					<view class="content">
+						<text class="cuIcon-hotfill text-blue"></text>
+						<text>RuleAPP教程文档</text>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -275,6 +285,15 @@
 			},
 			toReward(){
 				var url = "https://www.ruletree.club/sponsor.html";
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			toWord(){
+				var url = "https://www.ruletree.club/tag/RuleApp/";
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

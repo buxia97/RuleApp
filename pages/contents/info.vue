@@ -612,7 +612,7 @@
 								
 							}else{
 								that.moreText="没有更多评论了";
-								if(that.page==1){
+								if(that.page==1&&!isPage){
 									localStorage.removeItem('commentsList_'+that.cid);
 									that.commentsList = [];
 								}

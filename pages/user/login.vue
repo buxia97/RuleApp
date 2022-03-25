@@ -234,9 +234,9 @@
 							icon: 'none',
 							duration: 3000
 						});
-						uni.showLoading({
-							title: "加载中"
-						});
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
 					}
 				});
 			},
@@ -311,9 +311,9 @@
 							icon: 'none',
 							duration: 3000
 						});
-						uni.showLoading({
-							title: "加载中"
-						});
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
 					}
 				});
 			},
@@ -389,9 +389,9 @@
 							icon: 'none',
 							duration: 3000
 						});
-						uni.showLoading({
-							title: "加载中"
-						});
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
 					}
 				});
 			}

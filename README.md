@@ -31,7 +31,11 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 
 3.对象存储上传，远程FTP上传及本地上传的切换，请修改utils/api.js中的upload方法
 
-详细安装打包教程可参考：[uniapp从基本配置到打包发布，详细流程](https://www.ruletree.club/archives/2894/)
+更多配置教程参考：[RuleAPP详细设置教程，手把手教你学会这款Typecho客户端](https://www.ruletree.club/archives/2955/)
+
+打包教程可参考：[uniapp从基本配置到打包发布，详细流程](https://www.ruletree.club/archives/2894/)
+
+IOS免签约打包可参考：[RuleApp苹果端ios免签约打包教程，详细说明](https://www.ruletree.club/archives/2845/)
 
 
 ## 基础功能
@@ -56,6 +60,5 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 
 在安装使用过程遇到的一切问题，BUG的反馈，以及演示版本的下载，都可以加QQ群讨论：675025692。
 
-IOS免签约打包教程：[点击进入](https://www.ruletree.club/archives/2845/)
 
 或者访问我的网站浏览更多信息：[规则之树](https://www.ruletree.club/archives/2649/)

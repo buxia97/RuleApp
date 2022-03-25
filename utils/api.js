@@ -1,5 +1,5 @@
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://127.0.0.1:8081/';
+var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -16,8 +16,9 @@ var rankList = ["小白","萌新","入门","熟手","大佬","巨佬","传说","
 //头衔对应的背景颜色
 var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#660033","#000000"];
 
-//链接规则(用于站内链接自动跳转)，请根据自己的网站文件链接自由发挥，比如我的就是
+//链接规则(用于站内链接自动跳转和文章分享)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
+//{cid}对应文章id，{slug}对应独立页面名称，其实本质上就是页面拼接。
 var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
