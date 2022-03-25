@@ -193,7 +193,8 @@
 				</view>
 			</view>
 			<view class="info-footer-btn">
-				<text class="cuIcon-appreciate" @tap="toLikes"></text>
+				<text class="cuIcon-appreciate" @tap="toLikes" v-if="isLikes==0"></text>
+				<text class="cuIcon-appreciatefill text-blue" @tap="toLikes" v-else></text>
 				<text class="cuIcon-favor" @tap="toMark" v-if="isMark==0"></text>
 				<text class="cuIcon-favorfill text-orange" @tap="rmMark" v-else></text>
 				<!-- <text class="cuIcon-recharge"  @tap="toReward"></text> -->
@@ -243,6 +244,7 @@
 				token:"",
 				
 				likes:0,
+				isLikes:0,
 				
 				type:"post",
 				
@@ -321,6 +323,7 @@
 				that.getIsCommnet();
 				that.getInfo(that.cid);
 				that.getCommentsList(false,that.cid);
+				
 			}
 			
 			if(localStorage.getItem('token')){
@@ -355,7 +358,17 @@
 			}
 			that.owoList = owoList;
 			
-			
+			if(localStorage.getItem('likeDate_'+that.cid)){
+				var data = localStorage.getItem('likeDate_'+that.cid);
+				var cur_date = new Date().getTime();
+				var c = Number(cur_date)-Number(data);
+				if(c>=86400000){
+					that.isLikes = 0;
+					localStorage.removeItem('likeDate_'+that.cid)
+				}else{
+					that.isLikes = 1;
+				}
+			}
 			that.allCache();
 			that.getInfo(that.cid);
 			that.getShopList();
@@ -749,7 +762,11 @@
 							title: res.data.msg,
 							icon: 'none'
 						})
+						
 						if(res.data.code==1){
+							var timestamp=new Date().getTime();
+							that.isLikes = 1;
+							localStorage.setItem('likeDate_'+that.cid,timestamp);
 							that.likes++;
 							//that.getInfo(that.cid);
 						}
@@ -794,6 +811,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						if(res.data.code==1){
 							that.isMark = res.data.data.isMark;
 							that.logid = res.data.data.logid;
@@ -830,7 +848,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						console.log(JSON.stringify(res))
+						//console.log(JSON.stringify(res))
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
@@ -839,6 +857,7 @@
 							icon: 'none'
 						})
 						if(res.data.code==1){
+							that.toIsMark();
 							that.isMark=1;
 							//that.toIsMark();
 						}
@@ -873,7 +892,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						console.log(JSON.stringify(res))
+						//console.log(JSON.stringify(res))
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
@@ -883,6 +902,7 @@
 						})
 						if(res.data.code==1){
 							that.isMark=0;
+							that.toIsMark();
 							//that.toIsMark();
 						}
 						
