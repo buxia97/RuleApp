@@ -157,7 +157,7 @@
 					return false
 				}
 				var data = {
-					"uid":uid
+					//"uid":uid
 				}
 				var page = that.page;
 				if(isPage){

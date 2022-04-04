@@ -530,6 +530,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						//console.log(JSON.stringify(res));
 						if(res.data.code==1){
 							that.userData = res.data.data;
 							that.isClock = res.data.data.isClock;

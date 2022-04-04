@@ -140,8 +140,13 @@
 					});
 					return false
 				}
+					
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				var authorId = userInfo.uid;
+				
 				var data = {
-					"type":"post"
+					"type":"post",
+					"authorId":authorId
 				}
 				var page = that.page;
 				if(isPage){
