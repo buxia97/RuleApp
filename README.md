@@ -62,3 +62,12 @@ IOS免签约打包可参考：[RuleApp苹果端ios免签约打包教程，详细
 
 
 或者访问我的网站浏览更多信息：[规则之树](https://www.ruletree.club/archives/2649/)
+
+
+## 配套会员中心
+
+目前RuleApp配套的网页端界面已经正式出炉，界面美观，性能优异，不依赖任何UI框架，原创的js页面渲染模式，感兴趣的可以通过下方链接了解。
+
+它可以配合APP完成扫码登录哦~
+
+[Typecho独立会员中心，前后端分离，充值付费功能集成，APP扫码登录](https://www.ruletree.club/archives/2979/)

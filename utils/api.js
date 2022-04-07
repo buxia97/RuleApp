@@ -1,5 +1,5 @@
-var API_URL = 'http://lvv.xyuipr.xyz/';
-//var API_URL = 'http://127.0.0.1:8081/';
+//var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://192.168.1.106:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -183,6 +183,9 @@ module.exports = {
 	},
 	userBindStatus:function(){
 		return API_URL + 'typechoUsers/userBindStatus';
+	},
+	setScan:function(){
+		return API_URL + 'typechoUsers/setScan';
 	},
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';

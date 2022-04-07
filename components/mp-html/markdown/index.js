@@ -3,7 +3,7 @@
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */
-const marked = require('./marked.min')
+const {marked} = require('./marked.min')
 let index = 0
 
 function Markdown (vm) {

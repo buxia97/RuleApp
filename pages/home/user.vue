@@ -15,9 +15,14 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					账户
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
+				<!--  #ifdef H5 -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
+				</view>
+				<!--  #endif -->
+				<!--  #ifdef APP-PLUS -->
+				<view class="action" @tap="toScan">
+					<text class="cuIcon-scan"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -637,6 +642,128 @@
 				uni.navigateTo({
 				    url: '/pages/user/manage'
 				});
+			},
+			toScan(){
+				var that = this;
+				uni.scanCode({
+					onlyFromCamera: false,
+					scanType: ['barCode', 'qrCode'],
+					success: function(res) {
+						console.log(JSON.stringify(res.result));
+						var text = res.result;
+						var strUrl= "^((https|http|ftp|rtsp|mms)?://)" +
+					   "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?"+
+					   "(([0-9]{1,3}\.){3}[0-9]{1,3}" +
+					   "|"+
+					   "([0-9a-z_!~*'()-]+\.)*" +
+					   "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\." +
+					   "[a-z]{2,6})" +
+					   "(:[0-9]{1,4})?"+
+					   "((/?)|"+
+					   "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+						var urlDemo = new RegExp(strUrl); 
+						if(urlDemo.test(text)) {
+							var linkRule = API.GetLinkRule();
+							var linkRuleArr = linkRule.split("{cid}");
+							if(text.indexOf(linkRuleArr[0])!=-1){
+								//是本站链接
+								var cid = text;
+								for(var i in linkRuleArr){
+									cid = cid.replace(linkRuleArr[i],"");
+								}
+								uni.navigateTo({
+									url: '/pages/contents/info?cid='+cid
+								});
+							}else{
+								// #ifdef MP
+								uni.setClipboardData({
+								  data: href,
+								  success: () =>
+									uni.showToast({
+									  title: '链接已复制'
+									})
+								})
+								// #endif
+								// #ifdef APP-PLUS
+								plus.runtime.openWeb(href)
+								// #endif
+							}
+						}else{
+							that.scanLogin(text);
+						}
+					}
+				});
+			},
+			scanLogin(text){
+				var that = this;
+				if(that.token==""){
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					return false;
+				}
+				if(that.isJSON(text)){
+					text = JSON.parse(text);
+				}else{
+					uni.showToast({
+						title: "无法解析的内容！",
+						icon: 'none'
+					})
+					return false;
+				}
+				if(text.type){
+					if(text.type!="Scan"){
+						uni.showToast({
+							title: "无法解析的内容！",
+							icon: 'none'
+						})
+						return false;
+					}
+				}
+				
+				Net.request({
+					
+					url: API.setScan(),
+					data:{
+						"token":that.token,
+						"codeContent":text.data,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			isJSON(str) {
+			
+			    if (typeof str == 'string') {
+			        try {
+			            var obj=JSON.parse(str);
+			            if(typeof obj == 'object' && obj ){
+			                return true;
+			            }else{
+			                return false;
+			            }
+			        } catch(e) {
+			            console.log('error：'+str+'!!!'+e);
+			            return false;
+			        }
+			    }
 			}
 		},
 		components: {
