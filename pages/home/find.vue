@@ -51,7 +51,7 @@
 				</view>
 			</view>
 			<view class="category grid col-3">
-				<view class="category-box"  v-for="(item,index) in metaList" v-if="item.parent==0" @tap="toCategoryContents(item.name,item.mid)">
+				<view class="category-box"  v-for="(item,index) in metaList" v-if="item.parent==0" @tap="toCategoryContents(item.name,item.mid)" :key="index">
 					<view class="category-main">
 						{{item.name}}
 					</view>
@@ -180,9 +180,13 @@
 			},
 			getTopList(){
 				var that = this;
+				var info = {
+					"type":"post"
+				}
 				Net.request({
 					url: API.getContentsList(),
 					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(info)),
 						"limit":5,
 						"page":1,
 						"order":"commentsNum"

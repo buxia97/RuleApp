@@ -16,7 +16,7 @@
 				暂时没有商品
 			</view>
 			<view class="shop-list grid col-2">
-				<view class="shop-box" v-for="(item,index) in shopList">
+				<view class="shop-box" v-for="(item,index) in shopList" :key="index">
 					<view class="shop-main">
 						<text class="bg-orange shop-status" v-if="item.status==0">待审核</text>
 						<text class="bg-green shop-status" v-if="item.status==1">已上架</text>

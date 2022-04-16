@@ -483,11 +483,11 @@ p{
 }
 
 ._h1 {
-  font-size: 2em;
+  font-size: 1.8em;
 }
 
 ._h2 {
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 ._h3 {
@@ -501,7 +501,25 @@ p{
 ._h6 {
   font-size: 0.67em;
 }
+h1 {
+  font-size: 1.8em;
+}
 
+h2 {
+  font-size: 1.3em;
+}
+
+h3 {
+  font-size: 1.17em;
+}
+
+h5 {
+  font-size: 0.83em;
+}
+
+h6 {
+  font-size: 0.67em;
+}
 ._h1,
 ._h2,
 ._h3,
@@ -510,6 +528,18 @@ p{
 ._h6 {
   display: block;
   font-weight: bold;
+	line-height: 1.5;
+  margin: 10px 0px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: block;
+  font-weight: bold;
+  line-height: 1.5;
   margin: 10px 0px;
 }
 

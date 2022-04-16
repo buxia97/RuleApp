@@ -31,7 +31,7 @@
 			</view>
 			<view class="tags">
 				
-				<text class="tags-box" v-for="(item,index) in tagList"  @tap='toCategoryContents("#"+item.name+"#",item.mid,index)' :class="item.active==1?'active':''">
+				<text class="tags-box" v-for="(item,index) in tagList"  @tap='toCategoryContents("#"+item.name+"#",item.mid,index)' :class="item.active==1?'active':''" :key="index">
 					{{item.name}}
 				</text>
 				

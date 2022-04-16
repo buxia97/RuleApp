@@ -312,9 +312,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     },
     getTopList: function getTopList() {
       var that = this;
+      var info = {
+        "type": "post" };
+
       Net.request({
         url: API.getContentsList(),
         data: {
+          "searchParams": JSON.stringify(API.removeObjectEmptyKey(info)),
           "limit": 5,
           "page": 1,
           "order": "commentsNum" },

@@ -68,9 +68,19 @@
 ._i {
   font-style: italic;
 }._h1 {
-  font-size: 2em;
+  font-size: 1.8em;
 }._h2 {
-  font-size: 1.5em;
+  font-size: 1.3em;
+}._h3 {
+  font-size: 1.17em;
+}._h5 {
+  font-size: 0.83em;
+}._h6 {
+  font-size: 0.67em;
+}._h1 {
+  font-size: 1.8em;
+}._h2 {
+  font-size: 1.3em;
 }._h3 {
   font-size: 1.17em;
 }._h5 {
@@ -85,6 +95,17 @@
 ._h6 {
   display: block;
   font-weight: bold;
+	line-height: 1.5;
+  margin: 10px 0px;
+}._h1,
+._h2,
+._h3,
+._h4,
+._h5,
+._h6 {
+  display: block;
+  font-weight: bold;
+  line-height: 1.5;
   margin: 10px 0px;
 }._h1,._h2,._h3,._h4,._h5,._h6{
 	margin: 10px 0px;

@@ -289,8 +289,8 @@ page{
 }
 .info-content{
 	background: #fff;
-	font-size: 28upx;
-	line-height: 50upx;
+	font-size: 31upx;
+	line-height:1.6;
 	padding: 10upx 30upx 40upx 30upx;
 }
 .user-form{

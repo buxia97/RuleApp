@@ -289,8 +289,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         return false;
       }
       var data = {
-        "uid": uid };
-
+        //"uid":uid
+      };
       var page = that.page;
       if (isPage) {
         page++;

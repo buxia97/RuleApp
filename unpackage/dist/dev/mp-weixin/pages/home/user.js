@@ -362,6 +362,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 451));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
@@ -422,11 +427,16 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
 
 
+      //that.toWexinlogin();
+      //return false;
 
 
 
 
-      that.toWexinlogin();
+
+      uni.navigateTo({
+        url: '/pages/user/login' });
+
 
     },
     toWexinlogin: function toWexinlogin() {
@@ -441,6 +451,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           uni.getUserInfo({
             provider: 'weixin',
             success: function success(infoRes) {
+              console.log(JSON.stringify(infoRes));
               var formdata = {
                 nickName: infoRes.userInfo.nickName,
                 //gender: infoRes.userInfo.gender,
@@ -449,7 +460,6 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
                 openId: infoRes.userInfo.openId,
                 accessToken: infoRes.userInfo.unionId };
 
-              console.log(JSON.stringify(infoRes));
               Net.request({
 
                 url: API.userApi(),
@@ -500,9 +510,88 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
             icon: 'none',
             duration: 3000 });
 
-          uni.showLoading({
-            title: "加载中" });
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 1000);
+        } });
 
+    },
+    toQQlogin: function toQQlogin() {
+      //QQ登陆
+      //后端直接根据access_token来判断用户的唯一性。
+      uni.showLoading({
+        title: "加载中" });
+
+      uni.login({
+        provider: 'qq',
+        success: function success(resp) {
+          var access_token = resp.authResult.access_token;
+          uni.getUserInfo({
+            provider: 'qq',
+            success: function success(infoRes) {
+
+              var formdata = {
+                nickName: infoRes.userInfo.nickname,
+                //gender: infoRes.userInfo.gender == '男' ? 1 : 2,
+                appLoginType: "qq",
+                headImgUrl: infoRes.userInfo.figureurl_qq_2,
+                openId: infoRes.userInfo.openId,
+                accessToken: access_token };
+
+
+              Net.request({
+
+                url: API.userApi(),
+                data: { "params": JSON.stringify(API.removeObjectEmptyKey(formdata)) },
+                header: {
+                  'Content-Type': 'application/x-www-form-urlencoded' },
+
+                method: "get",
+                dataType: 'json',
+                success: function success(res) {
+                  setTimeout(function () {
+                    uni.hideLoading();
+                  }, 1000);
+                  uni.showToast({
+                    title: res.data.msg,
+                    icon: 'none' });
+
+                  if (res.data.code == 1) {
+                    //保存用户信息
+                    _index.localStorage.setItem('userinfo', JSON.stringify(res.data.data));
+                    _index.localStorage.setItem('token', res.data.data.token);
+                    var timer = setTimeout(function () {
+                      uni.reLaunch({
+                        url: '/pages/home/home' });
+
+                      clearTimeout('timer');
+                    }, 1000);
+                  }
+                },
+                fail: function fail(res) {
+                  setTimeout(function () {
+                    uni.hideLoading();
+                  }, 1000);
+                  uni.showToast({
+                    title: "网络开小差了哦",
+                    icon: 'none' });
+
+                  uni.stopPullDownRefresh();
+                } });
+
+
+            } });
+
+        },
+        fail: function fail(err) {
+          uni.showToast({
+            title: '请求出错啦！',
+            icon: 'none',
+            duration: 3000 });
+
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 1000);
         } });
 
     },
@@ -588,6 +677,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
+          //console.log(JSON.stringify(res));
           if (res.data.code == 1) {
             that.userData = res.data.data;
             that.isClock = res.data.data.isClock;
@@ -694,6 +784,128 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       uni.navigateTo({
         url: '/pages/user/manage' });
 
+    },
+    toScan: function toScan() {
+      var that = this;
+      uni.scanCode({
+        onlyFromCamera: false,
+        scanType: ['barCode', 'qrCode'],
+        success: function success(res) {
+          console.log(JSON.stringify(res.result));
+          var text = res.result;
+          var strUrl = "^((https|http|ftp|rtsp|mms)?://)" +
+          "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" +
+          "(([0-9]{1,3}\.){3}[0-9]{1,3}" +
+          "|" +
+          "([0-9a-z_!~*'()-]+\.)*" +
+          "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\." +
+          "[a-z]{2,6})" +
+          "(:[0-9]{1,4})?" +
+          "((/?)|" +
+          "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+          var urlDemo = new RegExp(strUrl);
+          if (urlDemo.test(text)) {
+            var linkRule = API.GetLinkRule();
+            var linkRuleArr = linkRule.split("{cid}");
+            if (text.indexOf(linkRuleArr[0]) != -1) {
+              //是本站链接
+              var cid = text;
+              for (var i in linkRuleArr) {
+                cid = cid.replace(linkRuleArr[i], "");
+              }
+              uni.navigateTo({
+                url: '/pages/contents/info?cid=' + cid });
+
+            } else {
+
+              uni.setClipboardData({
+                data: href,
+                success: function success() {return (
+                    uni.showToast({
+                      title: '链接已复制' }));} });
+
+
+
+
+
+
+            }
+          } else {
+            that.scanLogin(text);
+          }
+        } });
+
+    },
+    scanLogin: function scanLogin(text) {
+      var that = this;
+      if (that.token == "") {
+        uni.showToast({
+          title: "请先登录",
+          icon: 'none' });
+
+        return false;
+      }
+      if (that.isJSON(text)) {
+        text = JSON.parse(text);
+      } else {
+        uni.showToast({
+          title: "无法解析的内容！",
+          icon: 'none' });
+
+        return false;
+      }
+      if (text.type) {
+        if (text.type != "Scan") {
+          uni.showToast({
+            title: "无法解析的内容！",
+            icon: 'none' });
+
+          return false;
+        }
+      }
+
+      Net.request({
+
+        url: API.setScan(),
+        data: {
+          "token": that.token,
+          "codeContent": text.data },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          uni.showToast({
+            title: res.data.msg,
+            icon: 'none' });
+
+
+        },
+        fail: function fail(res) {
+          uni.showToast({
+            title: "网络开小差了哦",
+            icon: 'none' });
+
+        } });
+
+    },
+    isJSON: function isJSON(str) {
+
+      if (typeof str == 'string') {
+        try {
+          var obj = JSON.parse(str);
+          if (typeof obj == 'object' && obj) {
+            return true;
+          } else {
+            return false;
+          }
+        } catch (e) {
+          console.log('error：' + str + '!!!' + e);
+          return false;
+        }
+      }
     } },
 
   components: {

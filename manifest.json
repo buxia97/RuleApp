@@ -2,8 +2,8 @@
     "name" : "规则之树",
     "appid" : "__UNI__8D6C809",
     "description" : "规则之树手机客户端",
-    "versionName" : "RuleTree App 1.0.13 beta",
-    "versionCode" : 23,
+    "versionName" : "RuleTree App 1.0.14 beta",
+    "versionCode" : 24,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -40,7 +40,8 @@
                     "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ],
-                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ]
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ],
+                "schemes" : "ruleapp"
             },
             "ios" : {},
             /* ios打包配置 */
@@ -56,6 +57,11 @@
                     "sina" : {
                         "appkey" : "1656619711",
                         "redirect_uri" : "https://www.ruletree.club/tepass/wb_login",
+                        "UniversalLinks" : ""
+                    },
+                    "weixin" : {
+                        "appid" : "",
+                        "appsecret" : "",
                         "UniversalLinks" : ""
                     }
                 },

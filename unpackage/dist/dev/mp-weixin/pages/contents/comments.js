@@ -227,10 +227,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
-
-
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
 //
@@ -306,8 +303,18 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, commentsList: [], owo: _OwO.default, owoList: [], moreText: "加载更多", page: 1, isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
-    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;var owo = that.owo.data;var owoList = [];for (var i in owo) {owoList = owoList.concat(owo[i].container);}that.owoList = owoList;that.getCommentsList(false);}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");}}return text;}, replaceAll: function replaceAll(string, search, replace) {return string.split(search).join(replace);}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";if (that.isLoad == 0) {that.getCommentsList(true);
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var owo = [];var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, commentsList: [], owo: owo, owoList: [], moreText: "加载更多", page: 1, isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
+    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;that.getCommentsList(false);}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");}}
+      return text;
+    },
+    replaceAll: function replaceAll(string, search, replace) {
+      return string.split(search).join(replace);
+    },
+    loadMore: function loadMore() {
+      var that = this;
+      that.moreText = "正在加载中...";
+      if (that.isLoad == 0) {
+        that.getCommentsList(true);
       }
     },
     toInfo: function toInfo(cid, title) {

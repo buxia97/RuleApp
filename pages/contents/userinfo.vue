@@ -133,7 +133,12 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	// #ifdef APP-PLUS || H5
 	import owo from '../../static/owo/OwO.js'
+	// #endif
+	// #ifdef MP
+	var owo = [];
+	// #endif
 	export default {
 		data() {
 			return {
@@ -209,12 +214,14 @@
 			that.avatar =  res.avatar;
 			that.name =  res.name;
 			that.getUserInfo();
+			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
 			for(var i in owo){
 				owoList = owoList.concat(owo[i].container);
 			}
 			that.owoList = owoList;
+			// #endif
 			that.getContentsList(false);
 			
 		},

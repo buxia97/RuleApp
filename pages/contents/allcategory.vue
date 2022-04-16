@@ -26,7 +26,7 @@
 				暂时没有数据
 			</view>
 			<view class="category grid col-3">
-				<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid,index)" :class="item.active==1?'active':''">
+				<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid,index)" :class="item.active==1?'active':''" :key="index">
 					<view class="category-main">
 						{{item.name}}
 					</view>

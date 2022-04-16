@@ -29,7 +29,7 @@
 				<view class="no-data" v-if="contentsList.length==0">
 					暂时没有数据
 				</view>
-				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)">
+				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)" :key="index">
 					<view class="content">
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>

@@ -18,7 +18,7 @@
 			<view class="no-data" v-if="contentsList.length==0">
 				暂时没有数据
 			</view>
-			<view class="cu-list menu-avatar comment foreverblog" v-for="(item,index) in contentsList" @tap="toPage(item.link)">
+			<view class="cu-list menu-avatar comment foreverblog" v-for="(item,index) in contentsList" @tap="toPage(item.link)" :key="index">
 				<view class="cu-item">
 					<view class="cu-avatar round"  :style="item.style"></view>
 					<view class="content">

@@ -344,14 +344,14 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../user/post' });
+        url: '/pages/user/post' });
 
     },
     toEdit: function toEdit(cid) {
       var that = this;
 
       uni.navigateTo({
-        url: '../user/post?type=edit' + '&cid=' + cid });
+        url: '/pages/user/post?type=edit' + '&cid=' + cid });
 
     },
     subText: function subText(text, num) {
@@ -380,7 +380,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
 
       uni.navigateTo({
-        url: '../contents/info?cid=' + data.cid + "&title=" + data.title });
+        url: '/pages/contents/info?cid=' + data.cid + "&title=" + data.title });
 
     },
     toPage: function toPage(href) {

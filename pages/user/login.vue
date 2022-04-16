@@ -28,7 +28,7 @@
 				</view>
 			</form>
 		</view>
-		<!-- #ifdef APP-PLUS || MP -->
+		<!-- #ifdef APP-PLUS -->
 		<view class="api-login grid col-3">
 			<view class="api-login-box" @tap="toQQlogin">
 				<image src="../../static/icon_qq.png"></image>
@@ -41,11 +41,23 @@
 			</view>
 		</view>
 		<!-- #endif -->
-		<!-- #ifdef APP-PLUS || H5 -->
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="api-login">
+			<view class="api-login-box" @tap="toWexinlogin">
+				<image src="../../static/icon_weixin.png"></image>
+			</view>
+		</view>
+		<!-- #endif -->
+		<!-- #ifdef MP-QQ -->
+		<view class="api-login">
+			<view class="api-login-box" @tap="toQQlogin">
+				<image src="../../static/icon_qq.png"></image>
+			</view>
+		</view>
+		<!-- #endif -->
 		<view class="user-foget">
 			<text @tap="toFoget">忘记密码？</text>
 		</view>
-		<!-- #endif -->
 	</view>
 </template>
 

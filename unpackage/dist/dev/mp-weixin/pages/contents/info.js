@@ -389,10 +389,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var mpHtml = function mpHtml() {Promise.all(/*! require.ensure | components/mp-html/mp-html */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mp-html/mp-html")]).then((function () {return resolve(__webpack_require__(/*! @/components/mp-html/mp-html */ 102));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var API = __webpack_require__(/*! ../../utils/api */ 19);
+var Net = __webpack_require__(/*! ../../utils/net */ 20);
 
 
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var mpHtml = function mpHtml() {Promise.all(/*! require.ensure | components/mp-html/mp-html */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mp-html/mp-html")]).then((function () {return resolve(__webpack_require__(/*! @/components/mp-html/mp-html */ 102));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
+
+
+var owo = [];var _default =
+
 {
   data: function data() {
     return {
@@ -425,13 +431,13 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       token: "",
 
       likes: 0,
+      isLikes: 0,
 
       type: "post",
 
       shopList: [],
       shopID: -1,
-
-      owo: _OwO.default,
+      owo: owo,
       owoList: [],
 
       isCommnet: 0,
@@ -503,6 +509,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       that.getIsCommnet();
       that.getInfo(that.cid);
       that.getCommentsList(false, that.cid);
+
     }
 
     if (_index.localStorage.getItem('token')) {
@@ -530,14 +537,26 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
     that.cid = res.cid;
     that.title = res.title;
 
-    var owo = that.owo.data;
-    var owoList = [];
-    for (var i in owo) {
-      owoList = owoList.concat(owo[i].container);
+
+
+
+
+
+
+
+
+
+    if (_index.localStorage.getItem('likeDate_' + that.cid)) {
+      var data = _index.localStorage.getItem('likeDate_' + that.cid);
+      var cur_date = new Date().getTime();
+      var c = Number(cur_date) - Number(data);
+      if (c >= 86400000) {
+        that.isLikes = 0;
+        _index.localStorage.removeItem('likeDate_' + that.cid);
+      } else {
+        that.isLikes = 1;
+      }
     }
-    that.owoList = owoList;
-
-
     that.allCache();
     that.getInfo(that.cid);
     that.getShopList();
@@ -573,34 +592,38 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
     markHtml: function markHtml(text) {
       var that = this;
       if (that.isCommnet == 1) {
-        text = that.replaceAll(text, "[hide]", "<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;'>");
+        text = that.replaceAll(text, "[hide]", "<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
         text = that.replaceAll(text, "[/hide]", "</div>");
-        text = that.replaceAll(text, "{hide}", "<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;'>");
+        text = that.replaceAll(text, "{hide}", "<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
         text = that.replaceAll(text, "{/hide}", "</div>");
       } else {
         text = text.replace(/\[hide(([\s\S])*?)\[\/hide\]/g, "<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
         text = text.replace(/{hide(([\s\S])*?){\/hide}/g, "<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
       }
-      var owoList = that.owoList;
-      for (var i in owoList) {
 
-        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
-          text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='" + owoList[i].icon + "' class='tImg' />");
 
-        }
-      }
+
+
+
+
+
+
+
+
       return text;
     },
     markCommentHtml: function markCommentHtml(text) {
       var that = this;
-      var owoList = that.owoList;
-      for (var i in owoList) {
 
-        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
-          text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");
 
-        }
-      }
+
+
+
+
+
+
+
+
       return text;
     },
     getUserLv: function getUserLv(i) {
@@ -686,7 +709,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
       var that = this;
       var data = {
         "key": that.cid,
-        "isMd": 1 };
+        "isMd": 0 };
 
 
       Net.request({
@@ -794,7 +817,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
             } else {
               that.moreText = "没有更多评论了";
-              if (that.page == 1) {
+              if (that.page == 1 && !isPage) {
                 _index.localStorage.removeItem('commentsList_' + that.cid);
                 that.commentsList = [];
               }
@@ -832,7 +855,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
           icon: 'none' });
 
         uni.navigateTo({
-          url: '../user/login' });
+          url: '/pages/user/login' });
 
         return false;
       } else {
@@ -931,7 +954,11 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
             title: res.data.msg,
             icon: 'none' });
 
+
           if (res.data.code == 1) {
+            var timestamp = new Date().getTime();
+            that.isLikes = 1;
+            _index.localStorage.setItem('likeDate_' + that.cid, timestamp);
             that.likes++;
             //that.getInfo(that.cid);
           }
@@ -976,6 +1003,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
+
           if (res.data.code == 1) {
             that.isMark = res.data.data.isMark;
             that.logid = res.data.data.logid;
@@ -1012,7 +1040,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
-          console.log(JSON.stringify(res));
+          //console.log(JSON.stringify(res))
           setTimeout(function () {
             uni.hideLoading();
           }, 500);
@@ -1021,6 +1049,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
             icon: 'none' });
 
           if (res.data.code == 1) {
+            that.toIsMark();
             that.isMark = 1;
             //that.toIsMark();
           }
@@ -1055,7 +1084,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
         method: "get",
         dataType: 'json',
         success: function success(res) {
-          console.log(JSON.stringify(res));
+          //console.log(JSON.stringify(res))
           setTimeout(function () {
             uni.hideLoading();
           }, 500);
@@ -1065,6 +1094,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
           if (res.data.code == 1) {
             that.isMark = 0;
+            that.toIsMark();
             //that.toIsMark();
           }
 

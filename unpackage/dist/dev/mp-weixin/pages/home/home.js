@@ -471,12 +471,34 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     }
     that.userStatus();
 
+
   },
   onLoad: function onLoad() {
     var that = this;
     that.loading();
 
     that.NavBar = this.CustomBar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -971,6 +993,48 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       text = text.replace(/&gt;/g, '>');
       text = text.replace(/&nbsp;/g, ' ');
       return text;
+    },
+    scanLogin: function scanLogin(text) {
+      var that = this;
+      var token;
+      if (!_index.localStorage.getItem('token')) {
+        uni.showToast({
+          title: "请先登录",
+          icon: 'none' });
+
+        return false;
+      } else {
+        token = _index.localStorage.getItem('token');
+      }
+      Net.request({
+
+        url: API.setScan(),
+        data: {
+          "token": token,
+          "codeContent": text },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          if (res.data.msg == "操作成功！") {
+            uni.showToast({
+              title: "授权登录成功！",
+              icon: 'none' });
+
+          }
+
+
+        },
+        fail: function fail(res) {
+          uni.showToast({
+            title: "网络开小差了哦",
+            icon: 'none' });
+
+        } });
+
     } },
 
 

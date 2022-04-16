@@ -101,7 +101,7 @@
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="topic grid col-4">
-					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)">
+					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
 						<view class="topic-main">
 							<image :src="item.imgUrl"></image>
 							<view class="topic-text">{{replaceSpecialChar(item.name)}}</view>
@@ -285,6 +285,7 @@
 			}
 			that.userStatus();
 			
+			
 		},
 		onLoad() {
 			var that = this;
@@ -294,6 +295,27 @@
 			// #endif
 			// #ifdef APP-PLUS
 			that.isUpdate(false);
+			// #endif
+			
+			// #ifdef APP-PLUS
+			//外部启动APP处理
+			var args= plus.runtime.arguments;  
+			if(args){  
+				
+				//跳转到文章
+				if(args.indexOf("?info=") != -1){
+					var arr = args.split("?info=");
+					uni.navigateTo({
+					    url: '/pages/contents/info?cid='+arr[1]
+					});
+				}
+				//判断是否是扫码登录
+				if(args.indexOf("?scan=") != -1){
+					var arr = args.split("?scan=");
+					that.scanLogin(arr[1]);
+				}
+			} 
+			
 			// #endif
 		},
 		onReachBottom() {
@@ -785,7 +807,49 @@
 			  text = text.replace(/&gt;/g, '>');
 			  text = text.replace(/&nbsp;/g, ' ');
 			  return text;
-			}
+			},
+			scanLogin(text){
+				var that = this;
+				var token;
+				if(!localStorage.getItem('token')){
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					return false;
+				}else{
+					token = localStorage.getItem('token');
+				}
+				Net.request({
+					
+					url: API.setScan(),
+					data:{
+						"token":token,
+						"codeContent":text,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.msg=="操作成功！"){
+							uni.showToast({
+								title: "授权登录成功！",
+								icon: 'none'
+							});
+						}
+						
+						
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		},
 		
 		components: {

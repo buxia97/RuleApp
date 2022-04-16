@@ -182,6 +182,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -233,19 +245,19 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, userName: "", password: "" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, login: function login() {var that = this;if (this.password == "" || this.userName == "") {uni.showToast({ title: "请输入正确的参数", icon: 'none', duration: 1000, position: 'bottom' });return false;}var data = { name: this.userName,
-        password: this.password };
-
-      uni.showLoading({
-        title: "加载中" });
-
-      Net.request({
-
-        url: API.userLogin(),
-        data: { "params": JSON.stringify(API.removeObjectEmptyKey(data)) },
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, userName: "", password: "" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, login: function login() {var that = this;if (this.password == "" || this.userName == "") {uni.showToast({ title: "请输入正确的参数", icon: 'none', duration: 1000, position: 'bottom' });return false;}var data = { name: this.userName, password: this.password };uni.showLoading({ title: "加载中" });Net.request({ url: API.userLogin(), data: { "params": JSON.stringify(API.removeObjectEmptyKey(data)) }, header: { 'Content-Type': 'application/x-www-form-urlencoded' },
         method: "get",
         dataType: 'json',
         success: function success(res) {
@@ -366,9 +378,9 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
             icon: 'none',
             duration: 3000 });
 
-          uni.showLoading({
-            title: "加载中" });
-
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 1000);
         } });
 
     },
@@ -443,9 +455,9 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
             icon: 'none',
             duration: 3000 });
 
-          uni.showLoading({
-            title: "加载中" });
-
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 1000);
         } });
 
     },
@@ -521,9 +533,9 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
             icon: 'none',
             duration: 3000 });
 
-          uni.showLoading({
-            title: "加载中" });
-
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 1000);
         } });
 
     } } };exports.default = _default;

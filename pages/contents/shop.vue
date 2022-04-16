@@ -44,7 +44,7 @@
 			</view>
 			<view class="shop-list grid col-2">
 				
-				<view class="shop-box" v-for="(item,index) in shopList">
+				<view class="shop-box" v-for="(item,index) in shopList" :key="index">
 					<view class="shop-main" @tap="shopInfo(item.id)">
 						<view class="shop-img">
 							<image :src="item.imgurl" mode="widthFix"></image>

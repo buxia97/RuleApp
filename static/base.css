@@ -290,7 +290,7 @@ page{
 .info-content{
 	background: #fff;
 	font-size: 28upx;
-	line-height: 50upx;
+	line-height:1.8;
 	padding: 10upx 30upx 40upx 30upx;
 }
 .user-form{

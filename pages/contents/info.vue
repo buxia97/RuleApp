@@ -62,7 +62,7 @@
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
 				<view class="content-shop">
-						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item)">
+						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item)" :key="index">
 							
 							<view class="cu-item shadow" >
 								<view class="content">
@@ -97,7 +97,7 @@
 				</view>
 				<view class="tags" v-if="tagList.length>0">
 					
-					<text class="tags-box" v-for="(item,index) in tagList"  @tap='toTagsContents("#"+item.name+"#",item.mid)'>
+					<text class="tags-box" v-for="(item,index) in tagList"  @tap='toTagsContents("#"+item.name+"#",item.mid)' :key="index">
 						{{item.name}}
 					</text>
 					
@@ -211,7 +211,12 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
+	// #ifdef APP-PLUS || H5
 	import owo from '../../static/owo/OwO.js'
+	// #endif
+	// #ifdef MP
+	var owo = [];
+	// #endif
 	export default {
 		data() {
 			return {
@@ -250,7 +255,6 @@
 				
 				shopList:[],
 				shopID:-1,
-				
 				owo:owo,
 				owoList:[],
 				
@@ -351,12 +355,14 @@
 			that.cid = res.cid;
 			that.title = res.title;
 			
+			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
 			for(var i in owo){
 				owoList = owoList.concat(owo[i].container);
 			}
 			that.owoList = owoList;
+			// #endif
 			
 			if(localStorage.getItem('likeDate_'+that.cid)){
 				var data = localStorage.getItem('likeDate_'+that.cid);
@@ -412,6 +418,7 @@
 					text = text.replace(/\[hide(([\s\S])*?)\[\/hide\]/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
 					text = text.replace(/{hide(([\s\S])*?){\/hide}/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
 				}
+				// #ifdef APP-PLUS || H5
 				var owoList=that.owoList;
 				for(var i in owoList){
 
@@ -420,10 +427,12 @@
 						
 					}
 				}
+				// #endif
 				return text;
 			},
 			markCommentHtml(text){
 				var that = this;
+				// #ifdef APP-PLUS || H5
 				var owoList=that.owoList;
 				for(var i in owoList){
 				
@@ -432,6 +441,7 @@
 						
 					}
 				}
+				// #endif
 				return text;
 			},
 			getUserLv(i){
@@ -517,7 +527,7 @@
 				var that = this;
 				var data = {
 					"key":that.cid,
-					"isMd":1,
+					"isMd":0,
 				}
 				
 				Net.request({

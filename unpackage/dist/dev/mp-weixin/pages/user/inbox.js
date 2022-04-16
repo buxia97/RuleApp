@@ -225,85 +225,92 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var owo = [];var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, commentsList: [], moreText: "加载更多", page: 1, token: "", isLoading: 0, owo: owo, owoList: [] };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
+    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');that.getCommentsList(false);}}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";
+      if (that.isLoad == 0) {
+        that.getCommentsList(true);
+      }
+    },
+    markHtml: function markHtml(text) {
+      var that = this;
+      var owoList = that.owoList;
+      for (var i in owoList) {
 
-
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, commentsList: [], moreText: "加载更多", page: 1, token: "", isLoading: 0, owo: _OwO.default, owoList: [] };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
-    var that = this;that.loadMore();}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');that.getCommentsList(false);}}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;var owo = that.owo.data;var owoList = [];for (var i in owo) {owoList = owoList.concat(owo[i].container);}that.owoList = owoList;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";if (that.isLoad == 0) {that.getCommentsList(true);}}, markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
+        if (that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1) {
           text = that.replaceAll(that.replaceSpecialChar(text), owoList[i].data, "<img src='/" + owoList[i].icon + "' class='tImg' />");
 
         }

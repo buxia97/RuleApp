@@ -284,17 +284,18 @@
 		methods:{
 			toLogin(){
 				var that = this;
-				// #ifdef APP-PLUS || H5
+				
+				// #ifdef MP-WEIXIN
+				//that.toWexinlogin();
+				//return false;
+				// #endif
+				// #ifdef MP-QQ
+				// that.toQQlogin();
+				// return false;
+				// #endif
 				uni.navigateTo({
 					url: '/pages/user/login'
 				});
-				// #endif
-				// #ifdef MP-WEIXIN
-				that.toWexinlogin();
-				// #endif
-				// #ifdef MP-QQ
-				that.toQQlogin();
-				// #endif
 				
 			},
 			toWexinlogin(){
@@ -309,6 +310,7 @@
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
+								console.log(JSON.stringify(infoRes));
 								let formdata = {
 									nickName: infoRes.userInfo.nickName,
 									//gender: infoRes.userInfo.gender,
@@ -317,7 +319,6 @@
 									openId: infoRes.userInfo.openId,
 									accessToken: infoRes.userInfo.unionId
 								};
-								console.log(JSON.stringify(infoRes));
 								Net.request({
 									
 									url: API.userApi(),

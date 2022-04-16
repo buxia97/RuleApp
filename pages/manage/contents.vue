@@ -31,7 +31,7 @@
 				暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
-				<view class="cu-item shadow"  v-for="(item,index) in contentsList">
+				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
 					<view class="content">
 						<view class="desc">
 							<view class="text-content">{{item.title}}</view>

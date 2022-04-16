@@ -200,9 +200,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
 
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
 //
@@ -271,18 +271,32 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, title: "", coid: 0, isreply: 0, cid: 0, text: "", userinfo: {}, token: "", isOwO: false, owo: _OwO.default, owoList: [], OwOtype: "paopao" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this; //获取用户信息
-    if (_index.localStorage.getItem('userinfo')) {that.userinfo = JSON.parse(_index.localStorage.getItem('userinfo'));}if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.title = res.title;that.coid = res.coid;that.isreply = res.isreply;that.cid = res.cid;that.owoList = that.owo.data.paopao.container;}, methods: { PickerChange: function PickerChange(e) {this.index = e.detail.value;}, back: function back() {uni.navigateBack({ delta: 1 });}, commentsadd: function commentsadd() {var that = this;if (that.token == "") {uni.showToast({ title: "请先登录",
+//
+//
+var owo = [];var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, title: "", coid: 0, isreply: 0, cid: 0, text: "", userinfo: {}, token: "", isOwO: false, owo: owo, owoList: [], OwOtype: "paopao" };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this; //获取用户信息
+    if (_index.localStorage.getItem('userinfo')) {that.userinfo = JSON.parse(_index.localStorage.getItem('userinfo'));}if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.title = res.title;that.coid = res.coid;that.isreply = res.isreply;that.cid = res.cid;}, methods: { PickerChange: function PickerChange(e) {
+      this.index = e.detail.value;
+    },
+    back: function back() {
+      uni.navigateBack({
+        delta: 1 });
+
+    },
+    commentsadd: function commentsadd() {
+      var that = this;
+      if (that.token == "") {
+        uni.showToast({
+          title: "请先登录",
           icon: 'none',
           duration: 1000,
           position: 'bottom' });
 
         uni.navigateTo({
-          url: '../user/login' });
+          url: '/pages/user/login' });
 
         var timer = setTimeout(function () {
           uni.navigateTo({
-            url: '../user/login' });
+            url: '/pages/user/login' });
 
           clearTimeout('timer');
         }, 1000);

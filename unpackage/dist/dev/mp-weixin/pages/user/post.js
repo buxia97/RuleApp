@@ -181,9 +181,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var _mpHtml = _interopRequireDefault(__webpack_require__(/*! @/components/mp-html/mp-html */ 102));
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
 //
@@ -339,15 +340,23 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, modalName: "", token: "", isShow: false, curHeight: 0, jpHeight: 0, screenHeight: 0, postheight: 0, poststyle: "", readstyle: "", isText: 0, //文章表单部分
+//
+//
+var owo = [];var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, modalName: "", token: "", isShow: false, curHeight: 0, jpHeight: 0, screenHeight: 0, postheight: 0, poststyle: "", readstyle: "", isText: 0, //文章表单部分
       title: "", category: "", tag: "", categoryText: "", text: '', textRead: "", link: { title: "", url: "" }, shopList: [], isShop: 0, shopID: -1, //页面状态
-      type: "add", cid: 0, isOwO: false, owo: _OwO.default, owoList: [], OwOtype: "paopao", start: -1 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.token = userInfo.token;}if (_index.localStorage.getItem('clist')) {that.categoryText = "已选择";that.category = _index.localStorage.getItem('clist');}if (_index.localStorage.getItem('ctag')) {that.tag = _index.localStorage.getItem('ctag');}that.owoList = that.owo.data.paopao.container;}, onHide: function onHide() {var that = this; //localStorage.removeItem('clist')
+      type: "add", cid: 0, isOwO: false, owo: owo, owoList: [], OwOtype: "paopao", start: -1 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('userinfo')) {var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));that.token = userInfo.token;}if (_index.localStorage.getItem('clist')) {that.categoryText = "已选择";that.category = _index.localStorage.getItem('clist');}if (_index.localStorage.getItem('ctag')) {that.tag = _index.localStorage.getItem('ctag');}}, onHide: function onHide() {var that = this; //localStorage.removeItem('clist')
   }, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;if (res.type) {that.type = res.type;if (res.cid) {that.cid = res.cid;that.getInfo(that.cid);}}that.getShopList(); //键盘弹出相关
     var screenHeight = uni.getSystemInfoSync().screenHeight;var statusHeight = uni.getSystemInfoSync().statusBarHeight;var inputHeight = screenHeight - statusHeight - 240;that.screenHeight = screenHeight - that.NavBar;that.postheight = inputHeight;that.poststyle = "height:" + inputHeight + "px";that.readstyle = "height:" + (inputHeight + 30) + "px";uni.onKeyboardHeightChange(function (res) {//监听软键盘的高度 
       //当点击软键盘自带的收起按钮的时候也就是会隐藏软键盘 这时候监听到的软键盘的高度就是0 、
       //让输入框取消焦点 这时候再去输入内容的时候 输入框就会弹起
       if (res.height == 0) {that.focalize(res.height);} else {that.curHeight = res.height;that.focus(res.height);}});_index.localStorage.removeItem('clist');}, methods: { markHtml: function markHtml(text) {var that = this;var owoList = that.owoList;for (var i in owoList) {if (text.indexOf(owoList[i].data) != -1) {text = text.replace(owoList[i].data, "<img src='" + owoList[i].icon + "' class='tImg' />");}}return text;}, ToisText: function ToisText(i) {var that = this;that.isText = i;if (that.curHeight != 0 && that.isText == 1) {that.focus(that.curHeight);}uni.getSelectedTextRange({ success: function success(res) {//console.log('getSelectedTextRange res', res.start, res.end);
-          that.start = res.start;} });}, insetText: function insetText(newStr) {var that = this;var start = that.start;var text = that.text;if (start == -1) {text += newStr;} else {text = text.slice(0, start) + newStr + text.slice(start);}that.text = text;that.textRead = that.markHtml(that.text);}, focus: function focus(h) {var that = this;if (that.isText == 0) {return false;}
+          that.start = res.start;} });}, insetText: function insetText(newStr) {var that = this;var start = that.start;var text = that.text;if (start == -1) {text += newStr;} else {text = text.slice(0, start) + newStr + text.slice(start);}that.text = text;that.textRead = that.markHtml(that.text);
+    },
+    focus: function focus(h) {
+      var that = this;
+      if (that.isText == 0) {
+        return false;
+      }
 
 
 

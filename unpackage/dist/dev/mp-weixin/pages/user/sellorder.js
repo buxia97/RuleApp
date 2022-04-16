@@ -219,6 +219,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -285,7 +303,29 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, isLoad: 0, token: "", orderList: [], address: "", modalName: null, isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;var timer = setTimeout(function () {uni.stopPullDownRefresh();}, 1000);}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}that.getOrderList();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, showModal: function showModal(e) {this.modalName = e.currentTarget.dataset.target;}, hideModal: function hideModal(e) {this.modalName = null;}, getType: function getType(i) {var arr = ["实体商品", "源码", "软件工具", "付费阅读"];return arr[i - 1];}, getOrderList: function getOrderList() {var that = this;var data = { "token": that.token };
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, isLoad: 0, token: "", orderList: [], address: "", userEmail: "", modalName: null, page: 1, moreText: "加载更多", isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;var timer = setTimeout(function () {uni.stopPullDownRefresh();}, 1000);}, onReachBottom: function onReachBottom() {//触底后执行的方法，比如无限加载之类的
+    var that = this;if (that.isLoad == 0) {that.loadMore();}}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}that.getOrderList(false);}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, showModal: function showModal(e) {this.modalName = e.currentTarget.dataset.target;}, hideModal: function hideModal(e) {this.modalName = null;}, getType: function getType(i) {var arr = ["实体商品", "源码", "软件工具", "付费阅读"];return arr[i - 1];}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";that.isLoad = 1;that.getOrderList(true);}, getOrderList: function getOrderList(isPage) {var that = this;var page = that.page;if (isPage) {page++;}var data = {
+        "limit": 8,
+        "page": page,
+        "token": that.token };
 
       Net.request({
         url: API.orderSellList(),
@@ -296,12 +336,21 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         method: "get",
         dataType: 'json',
         success: function success(res) {
+          that.isLoad = 0;
+          that.moreText = "加载更多";
+          //console.log(JSON.stringify(res));
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
+              if (isPage) {
+                that.page++;
+                that.orderList = that.orderList.concat(list);
+              } else {
+                that.orderList = list;
+              }
 
-              that.orderList = list;
-
+            } else {
+              that.moreText = "没有更多数据了";
             }
           }
           var timer = setTimeout(function () {
@@ -310,6 +359,8 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
           }, 300);
         },
         fail: function fail(res) {
+          that.moreText = "加载更多";
+          that.isLoad = 0;
           uni.showToast({
             title: "网络开小差了哦",
             icon: 'none' });
@@ -345,6 +396,47 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var that = this;
       that.address = text;
       this.modalName = "Modal";
+    },
+    toUser: function toUser(text) {
+      var that = this;
+      if (!text || text == "") {
+        uni.showToast({
+          title: "该用户未配置邮箱或已失效",
+          icon: 'none' });
+
+        return false;
+
+      }
+      that.userEmail = text;
+      this.modalName = "Modal1";
+    },
+    ToCopy: function ToCopy(text) {
+      var that = this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

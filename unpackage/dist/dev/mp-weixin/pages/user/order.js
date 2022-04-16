@@ -205,6 +205,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -257,12 +271,21 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, isLoad: 0, token: "", orderList: [], isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;var timer = setTimeout(function () {uni.stopPullDownRefresh();}, 1000);}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}that.getOrderList();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getType: function getType(i) {var arr = ["实体商品", "源码", "软件工具", "付费阅读"];return arr[i - 1];},
-    getOrderList: function getOrderList() {
-      var that = this;
-      var data = {
-        "token": that.token };
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, isLoad: 0, token: "", orderList: [], merchantEmail: "", modalName: null, isLoading: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;var timer = setTimeout(function () {uni.stopPullDownRefresh();}, 1000);}, onShow: function onShow() {var that = this;if (_index.localStorage.getItem('token')) {that.token = _index.localStorage.getItem('token');}that.getOrderList();}, onLoad: function onLoad() {var that = this;that.NavBar = this.CustomBar;}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, showModal: function showModal(e) {this.modalName = e.currentTarget.dataset.target;}, hideModal: function hideModal(e) {this.modalName = null;}, getType: function getType(i) {var arr = ["实体商品", "源码", "软件工具", "付费阅读"];return arr[i - 1];}, getOrderList: function getOrderList() {var that = this;var data = { "token": that.token };
       Net.request({
         url: API.orderList(),
         data: data,
@@ -300,7 +323,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
     shopInfo: function shopInfo(sid) {
       var that = this;
       uni.navigateTo({
-        url: '../contents/shopinfo?sid=' + sid });
+        url: '/pages/contents/shopinfo?sid=' + sid });
 
     },
     toInfo: function toInfo(data) {
@@ -311,7 +334,7 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
 
       } else {
         uni.navigateTo({
-          url: '../contents/shoptext?sid=' + data.id });
+          url: '/pages/contents/shoptext?sid=' + data.id });
 
       }
     },
@@ -328,6 +351,47 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
       // 返回
       return result;
+    },
+    toMerchant: function toMerchant(text) {
+      var that = this;
+      if (!text || text == "") {
+        uni.showToast({
+          title: "该商户无联系方式或已失效",
+          icon: 'none' });
+
+        return false;
+
+      }
+      that.merchantEmail = text;
+      that.modalName = "Modal";
+    },
+    ToCopy: function ToCopy(text) {
+      var that = this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

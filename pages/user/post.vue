@@ -40,13 +40,14 @@
 				</view>
 			</view>
 			<view class="edit-tool">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="OwO-box">
 					<text class="cuIcon-emoji" @tap="OwO"></text>
 					<!--表情-->
 					<view class="owo" v-if="isOwO">
 						<scroll-view class="owo-list" scroll-y>
 							<view class="owo-main">
-								<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
+								<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)" :key="index">
 									<image :src="'/'+item.icon" mode="aspectFill"></image>
 								</view>
 							</view>
@@ -68,6 +69,7 @@
 						</view>
 					</view>
 				</view>
+				<!--  #endif -->
 				<text @tap="showModal" data-target="RadioModal">H</text>
 				<text @tap="toBold">B</text>
 				<text @tap="toItalic">I</text>
@@ -143,7 +145,7 @@
 					</view>
 
 					<scroll-view class="setShop-list" scroll-y>
-						<view class="setShop-list-box" v-for="(item,index) in shopList" @tap="toShop(item.id)" :class="item.id==shopID?'cur':''">
+						<view class="setShop-list-box" v-for="(item,index) in shopList" @tap="toShop(item.id)" :class="item.id==shopID?'cur':''" :key="index">
 							<text class="cuIcon-moneybagfill text-red"></text>{{item.title}}
 						</view>
 
@@ -157,7 +159,12 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	// #ifdef APP-PLUS || H5
 	import owo from '../../static/owo/OwO.js'
+	// #endif
+	// #ifdef MP
+	var owo = [];
+	// #endif
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -229,7 +236,9 @@
 			if(localStorage.getItem('ctag')){
 				that.tag = localStorage.getItem('ctag');
 			}
+			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
+			// #endif
 		},
 		onHide() {
 			var that = this;

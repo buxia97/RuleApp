@@ -25,7 +25,8 @@ Highlight.prototype.onParse = function (node, vm) {
       i = className.indexOf('language-')
     }
     if (i === -1) {
-      className = 'language-text'
+		//类型为text的自动变成html
+      className = 'language-javascript'
       i = className.indexOf('language-')
     }
     i += 9
@@ -34,6 +35,7 @@ Highlight.prototype.onParse = function (node, vm) {
       if (className[j] === ' ') break
     }
     const lang = className.substring(i, j)
+	
     if (code.children.length && code.children[0].type === 'text') {
       const text = code.children[0].text.replace(/&amp;/g, '&')
       if (prism.languages[lang]) {

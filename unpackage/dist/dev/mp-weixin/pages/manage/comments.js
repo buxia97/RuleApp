@@ -242,10 +242,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var _methods;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var API = __webpack_require__(/*! ../../utils/api */ 19);
+var Net = __webpack_require__(/*! ../../utils/net */ 20);
 
 
-var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.js */ 77));var _methods;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
+
+
+var owo = [];var _default =
+
 {
   data: function data() {
     return {
@@ -264,7 +269,7 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
 
       isLoading: 0,
 
-      owo: _OwO.default,
+      owo: owo,
       owoList: [] };
 
 
@@ -297,12 +302,14 @@ var _OwO = _interopRequireDefault(__webpack_require__(/*! ../../static/owo/OwO.j
     that.NavBar = this.CustomBar;
 
 
-    var owo = that.owo.data;
-    var owoList = [];
-    for (var i in owo) {
-      owoList = owoList.concat(owo[i].container);
-    }
-    that.owoList = owoList;
+
+
+
+
+
+
+
+
     that.getCommentsList(false);
   },
   methods: (_methods = {

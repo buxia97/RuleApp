@@ -292,8 +292,13 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
 
         return false;
       }
+
+      var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
+      var authorId = userInfo.uid;
+
       var data = {
-        "type": "post" };
+        "type": "post",
+        "authorId": authorId };
 
       var page = that.page;
       if (isPage) {

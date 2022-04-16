@@ -26,13 +26,14 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-model="text" placeholder="如首次发布评论,将审核后再给予显示"></textarea>
 			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="comments-owo">
 				<text class="cuIcon-emoji" @tap="OwO"></text>
 				<!--表情-->
 				<view class="owo" v-if="isOwO">
 					<scroll-view class="owo-list" scroll-y>
 						<view class="owo-main">
-							<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)">
+							<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)" :key="index">
 								<image :src="'/'+item.icon" mode="aspectFill"></image>
 							</view>
 						</view>
@@ -54,6 +55,7 @@
 					</view>
 				</view>
 			</view>
+			<!--  #endif -->
 			<!--  #ifdef MP -->
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
@@ -70,7 +72,12 @@
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	
+	// #ifdef APP-PLUS || H5
 	import owo from '../../static/owo/OwO.js'
+	// #endif
+	// #ifdef MP
+	var owo = [];
+	// #endif
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -125,7 +132,14 @@
 			that.coid=res.coid;
 			that.isreply=res.isreply;
 			that.cid=res.cid;
-			that.owoList = that.owo.data.paopao.container;
+			// #ifdef APP-PLUS || H5
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoList = owoList;
+			// #endif
 		},
 		methods: {
 			PickerChange(e) {

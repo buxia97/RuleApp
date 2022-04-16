@@ -264,6 +264,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
   },
   onPullDownRefresh: function onPullDownRefresh() {
     var that = this;
+    that.getInfo(that.sid);
+    that.isBuyShop(that.sid);
   },
   onLoad: function onLoad(res) {
     var that = this;
@@ -274,7 +276,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
     if (res.sid) {
       that.sid = res.sid;
       that.getInfo(that.sid);
-      that.isBuyShop(that.sid);
+
     }
 
   },
@@ -298,7 +300,6 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
-
           uni.stopPullDownRefresh();
           that.shopinfo = res.data;
           that.title = res.data.title;
@@ -307,6 +308,10 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           that.imgurl = res.data.imgurl;
           that.price = res.data.price;
           that.num = res.data.num;
+          if (res.data.type != 1) {
+            that.isBuyShop(that.sid);
+          }
+
           that.getUserInfo(res.data.uid);
           var timer = setTimeout(function () {
             that.isLoading = 1;
@@ -385,10 +390,19 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
             //跳转订单页面
             var timer = setTimeout(function () {
               uni.redirectTo({
-                url: '../user/order' });
+                url: '/pages/user/order' });
 
               clearTimeout('timer');
             }, 1000);
+          } else {
+            if (res.data.msg == "购买实体商品前，需要先设置收货地址") {
+              var timer = setTimeout(function () {
+                uni.redirectTo({
+                  url: '/pages/user/address' });
+
+                clearTimeout('timer');
+              }, 1000);
+            }
           }
 
         },
