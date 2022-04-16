@@ -185,6 +185,7 @@
 				</view>
 			</view>
 		</view>
+		<!--  #ifdef H5 || APP-PLUS -->
 		<view class="data-box" v-if="group=='administrator'">
 			<view class="cu-list menu" @tap="toManage">
 				<view class="cu-item">
@@ -199,6 +200,7 @@
 				</view>
 			</view>
 		</view>
+		<!--  #endif -->
 		<view class="data-box">
 			<view class="cu-list menu">
 				<view class="cu-item" @tap="toGroup">

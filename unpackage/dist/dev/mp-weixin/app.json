@@ -8,7 +8,6 @@
     "pages/user/useredit",
     "pages/user/mailedit",
     "pages/user/inbox",
-    "pages/user/manage",
     "pages/user/userpost",
     "pages/user/post",
     "pages/user/login",
@@ -43,14 +42,7 @@
     "pages/contents/allcategory",
     "pages/contents/search",
     "pages/contents/userinfo",
-    "pages/contents/foreverblog",
-    "pages/manage/comments",
-    "pages/manage/contents",
-    "pages/manage/recharge",
-    "pages/manage/shop",
-    "pages/manage/users",
-    "pages/manage/usersedit",
-    "pages/manage/withdraw"
+    "pages/contents/foreverblog"
   ],
   "subPackages": [],
   "window": {
@@ -91,8 +83,6 @@
       }
     ]
   },
-  "usingComponents": {
-    "cu-custom": "/colorui/components/cu-custom"
-  },
-  "sitemapLocation": "sitemap80.json"
+  "usingComponents": {},
+  "sitemapLocation": "sitemap57.json"
 }

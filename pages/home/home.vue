@@ -185,13 +185,14 @@
 		</view>
 		<!--加载遮罩结束-->
 		<!--update-->
+		<!--  #ifdef APP-PLUS -->
 		<view class="update" v-if="Update==1">
 			<view class="update-bg">
 				
 			</view>
 			<view class="update-box">
 				<view class="update-main">
-					<image src="../../static/ic_ar.png"></image>
+					<image src="../../static/app-plus/ic_ar.png"></image>
 					<view class="update-title">发现新版本：{{versionTitle}}</view>
 					<view class="update-intro">{{versionIntro}}</view>
 					<view class="update-btn grid col-2">
@@ -209,6 +210,7 @@
 				</view>
 			</view>
 		</view>
+		<!--  #endif -->
 		<!--update结束-->
 	</view>
 </template>

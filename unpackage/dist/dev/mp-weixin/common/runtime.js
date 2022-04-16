@@ -109,7 +109,7 @@
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"colorui/components/cu-custom":"colorui/components/cu-custom","components/xxley-waves/waves":"components/xxley-waves/waves","components/mp-html/node/node":"components/mp-html/node/node","components/mp-html/mp-html":"components/mp-html/mp-html","components/mp-html/audio/audio":"components/mp-html/audio/audio"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"components/xxley-waves/waves":"components/xxley-waves/waves","components/mp-html/node/node":"components/mp-html/node/node","components/mp-html/mp-html":"components/mp-html/mp-html","components/mp-html/audio/audio":"components/mp-html/audio/audio"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

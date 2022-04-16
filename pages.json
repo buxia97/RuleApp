@@ -63,10 +63,7 @@
 			"path": "pages/user/inbox",
 			"style": {}
 		},
-		{
-			"path": "pages/user/manage",
-			"style": {}
-		},
+		
 		{
 			"path": "pages/user/userpost",
 			"style": {
@@ -250,12 +247,17 @@
 			"style": {
 				"enablePullDownRefresh":true
 			}
-		},
-		{
+		}
+		// #ifdef APP-PLUS || H5
+		,{
 			"path": "pages/manage/comments",
 			"style": {
 				"enablePullDownRefresh":true
 			}
+		},
+		{
+			"path": "pages/user/manage",
+			"style": {}
 		},
 		{
 			"path": "pages/manage/contents",
@@ -288,6 +290,7 @@
 				"enablePullDownRefresh":true
 			}
 		}
+		// #endif
 		
 	],
 	"globalStyle": {
