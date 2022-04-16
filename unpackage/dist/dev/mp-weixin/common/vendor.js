@@ -2091,7 +2091,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 107:
+/***/ 106:
 /*!****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/index.js ***!
   \****************************************************************/
@@ -2103,7 +2103,7 @@ uni$1;exports.default = _default;
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */var _require =
-__webpack_require__(/*! ./marked.min */ 108),marked = _require.marked;
+__webpack_require__(/*! ./marked.min */ 107),marked = _require.marked;
 var index = 0;
 
 function Markdown(vm) {
@@ -2135,7 +2135,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 108:
+/***/ 107:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/marked.min.js ***!
   \*********************************************************************/
@@ -2151,7 +2151,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 109:
+/***/ 108:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/index.js ***!
   \*************************************************************/
@@ -2161,7 +2161,7 @@ module.exports = Markdown;
 /**
  * @fileoverview audio 插件
  */
-var context = __webpack_require__(/*! ./context */ 110);
+var context = __webpack_require__(/*! ./context */ 109);
 var index = 0;
 
 function Audio(vm) {
@@ -2192,6 +2192,22 @@ Audio.prototype.onLoad = function () {var _this = this;
 };
 
 module.exports = Audio;
+
+/***/ }),
+
+/***/ 109:
+/*!***************************************************************!*\
+  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var ctx = {};
+
+module.exports = {
+  get: function get(id) {return ctx[id];},
+  set: function set(id, vm) {ctx[id] = vm;},
+  remove: function remove(id) {ctx[id] = undefined;} };
 
 /***/ }),
 
@@ -2325,22 +2341,6 @@ function normalizeComponent (
 /***/ }),
 
 /***/ 110:
-/*!***************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var ctx = {};
-
-module.exports = {
-  get: function get(id) {return ctx[id];},
-  set: function set(id, vm) {ctx[id] = vm;},
-  remove: function remove(id) {ctx[id] = undefined;} };
-
-/***/ }),
-
-/***/ 111:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/index.js ***!
   \*****************************************************************/
@@ -2351,9 +2351,9 @@ module.exports = {
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
  */
-var prism = __webpack_require__(/*! ./prism.min */ 112);
-var config = __webpack_require__(/*! ./config */ 113);
-var Parser = __webpack_require__(/*! ../parser */ 114);
+var prism = __webpack_require__(/*! ./prism.min */ 111);
+var config = __webpack_require__(/*! ./config */ 112);
+var Parser = __webpack_require__(/*! ../parser */ 113);
 
 function Highlight(vm) {
   this.vm = vm;
@@ -2438,7 +2438,7 @@ module.exports = Highlight;
 
 /***/ }),
 
-/***/ 112:
+/***/ 111:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/prism.min.js ***!
   \*********************************************************************/
@@ -2456,7 +2456,7 @@ Prism.languages.javascript = Prism.languages.extend("clike", { "class-name": [Pr
 
 /***/ }),
 
-/***/ 113:
+/***/ 112:
 /*!******************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/config.js ***!
   \******************************************************************/
@@ -2471,7 +2471,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 114:
+/***/ 113:
 /*!********************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/parser.js ***!
   \********************************************************/
@@ -3705,7 +3705,7 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 115:
+/***/ 114:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/search/index.js ***!
   \**************************************************************/
@@ -3844,7 +3844,7 @@ module.exports = Search;
 
 /***/ }),
 
-/***/ 116:
+/***/ 115:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/index.js ***!
   \*************************************************************/
@@ -3859,7 +3859,7 @@ function Style() {
 }
 
 
-var Parser = __webpack_require__(/*! ./parser */ 117);
+var Parser = __webpack_require__(/*! ./parser */ 116);
 
 Style.prototype.onParse = function (node, vm) {
   // 获取样式
@@ -3981,7 +3981,7 @@ module.exports = Style;
 
 /***/ }),
 
-/***/ 117:
+/***/ 116:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/parser.js ***!
   \**************************************************************/
@@ -4166,14 +4166,14 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 118:
+/***/ 117:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/img-cache/index.js ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 119);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
+/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 118);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
   name: 'imgcache',
   prefix: 'imgcache_' };
 
@@ -4315,18 +4315,18 @@ module.exports = ImgCache;
 
 /***/ }),
 
-/***/ 119:
+/***/ 118:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 120);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 119);
 
 /***/ }),
 
-/***/ 120:
+/***/ 119:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -4357,7 +4357,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 121);
+module.exports = __webpack_require__(/*! ./runtime */ 120);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -4374,7 +4374,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 121:
+/***/ 120:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/

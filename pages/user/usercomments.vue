@@ -72,8 +72,11 @@
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
-	// #ifdef APP-PLUS || H5
-	import owo from '../../static/owo/OwO.js'
+	// #ifdef APP-PLUS
+	import owo from '../../static/app-plus/owo/OwO.js'
+	// #endif
+	// #ifdef H5
+	import owo from '../../static/h5/owo/OwO.js'
 	// #endif
 	// #ifdef MP
 	var owo = [];
