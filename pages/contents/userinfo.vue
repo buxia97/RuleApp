@@ -35,6 +35,7 @@
 					</view>
 				</view>
 			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="search-type grid col-2">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
@@ -43,6 +44,7 @@
 					<text>评论</text>
 				</view>
 			</view>
+			<!--  #endif -->
 			<view class="cu-card article no-card" v-if="type==0">
 				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 					<view class="cu-item shadow">

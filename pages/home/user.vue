@@ -63,9 +63,11 @@
 					</view>
 					
 				</view>
+				
 				<block v-if="userInfo!=null">
 					<text class="clock-btn" @tap="toClock" v-if="isClock==0">签到</text>
 					<text class="clock-btn istap" v-else>已签到</text>
+					<!--  #ifdef H5 || APP-PLUS -->
 					<view class="user-data grid col-3" v-if="userInfo!=null">
 						<view class="user-data-box" @tap="toLink('/pages/user/userpost')">
 							<view class="user-data-value">{{userData.contentsNum}}</view>
@@ -80,6 +82,7 @@
 							<view class="user-data-title">积分</view>
 						</view>
 					</view>
+					<!--  #endif -->
 				</block>
 				
 			</view>
@@ -123,6 +126,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/userpost')">
@@ -135,6 +139,7 @@
 						</view>
 					</waves>
 				</view>
+				
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/myshop')">
@@ -147,6 +152,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #endif -->
 				<view class="index-sort-box"  @tap="toPage('帮助与反馈',feedback)">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -159,6 +165,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box" @tap="toLink('/pages/user/order')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -183,6 +190,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
@@ -202,7 +210,9 @@
 		</view>
 		<!--  #endif -->
 		<view class="data-box">
+			
 			<view class="cu-list menu">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="cu-item" @tap="toGroup">
 					<view class="content">
 						<text class="cuIcon-friendfill  text-blue"></text>
@@ -221,6 +231,15 @@
 						<text>Github</text>
 					</view>
 				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="cu-item" @tap="toSetUp">
+					<view class="content">
+						<text class="cuIcon-settingsfill text-gray"></text>
+						<text>系统设置</text>
+					</view>
+				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 	</view>

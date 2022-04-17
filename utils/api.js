@@ -5,6 +5,8 @@ var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
+//对于个人小程序，不能有评论，充值，商品和发布文章，所以在小程序端是不会显示这些的，因为不可能过审，但如果是企业，可以去页面上自行去除我的判断代码。
+
 //下面主要用于用户协议
 var appName="规则之树";
 var appEmail = "buxia97@126.com";
@@ -86,7 +88,6 @@ module.exports = {
 	GetPageRule:function(){
 		return pageRule;
 	},
-	
 	GetSwiperid:function(){
 		return swiperid;
 	},

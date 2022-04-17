@@ -59,6 +59,7 @@
 			"path": "pages/user/mailedit",
 			"style": {}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/inbox",
 			"style": {}
@@ -85,6 +86,7 @@
 				"softinputMode": "adjustResize"
 			}
 		},
+		// #endif
 		{
 			"path": "pages/user/login",
 			"style": {}
@@ -101,14 +103,17 @@
 			"path": "pages/user/setup",
 			"style": {}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/usercomments",
 			"style": {}
 		},
+		// #endif
 		{
 			"path": "pages/user/usermark",
 			"style": {}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/address",
 			"style": {}
@@ -153,10 +158,12 @@
 			"path": "pages/user/userwithdrawlist",
 			"style": {}
 		},
+		// #endif
 		{
 			"path": "pages/user/agreement",
 			"style": {}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/userbind",
 			"style": {}
@@ -169,6 +176,7 @@
 			"path": "pages/contents/commentsadd",
 			"style": {}
 		},
+		// #endif
 		{
 			"path": "pages/contents/contentlist",
 			"style": {}
@@ -187,6 +195,7 @@
 				
 			}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/contents/shop",
 			"style": {
@@ -205,7 +214,7 @@
 				"enablePullDownRefresh":true
 			}
 		},
-
+		// #endif
 		{
 			"path": "pages/contents/info",
 			"style": {

@@ -52,6 +52,7 @@
 					</view>
 				</waves>
 			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toComments">
@@ -64,6 +65,21 @@
 					</view>
 				</waves>
 			</view>
+			<!--  #endif -->
+			<!--  #ifdef MP -->
+			<view class="index-sort-box">
+				<waves itemClass="butclass">
+					<view class="index-sort-main" @tap="toImagetoday">
+						<view class="index-sort-i">
+							<text class="cuIcon-picfill"></text>
+						</view>
+						<view class="index-sort-text">
+							图库
+						</view>
+					</view>
+				</waves>
+			</view>
+			<!--  #endif -->
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toCategoryContents('软件中心',softwareid)">
@@ -786,6 +802,13 @@
 					})
 					
 				})
+			},
+			toImagetoday(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/imagetoday'
+				});
 			},
 			closeUpdate(){
 				var that = this;

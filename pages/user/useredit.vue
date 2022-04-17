@@ -20,7 +20,9 @@
 		<form>
 			<view class="user-edit-header margin-top">
 				<image :src="avatar"></image>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text>
+				<!--  #endif -->
 			</view>
 			<view class="cu-form-group">
 				<view class="title">用户名</view>
@@ -48,6 +50,7 @@
 				<input placeholder="请再次输入密码" v-model="repassword" name="input"></input>
 			</view>
 		</form>
+		<!--  #ifdef H5 || APP-PLUS -->
 		<view class="cu-list menu">
 			<view class="cu-item margin-top" @tap="toBind">
 				<view class="content">
@@ -74,6 +77,7 @@
 				</view>
 			</view>
 		</view>
+		<!--  #endif -->
 		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">

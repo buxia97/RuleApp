@@ -81,6 +81,7 @@
 							
 					</view>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="content-btn grid col-2">
 					<view class="content-btn-box">
 						<view class="content-btn-i" @tap="toLikes">
@@ -95,6 +96,33 @@
 						</view>
 					</view>
 				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="content-btn grid col-2">
+					<view class="content-btn-box">
+						<view class="content-btn-i" @tap="toLikes" v-if="isLikes==0">
+							<text class="cuIcon-appreciate btn-i"></text>
+							<text>点赞( {{formatNumber(likes)}} )</text>
+						</view>
+						<view class="content-btn-i" @tap="toLikes" v-else>
+							<text class="cuIcon-appreciatefill text-blue btn-i"></text>
+							<text>点赞( {{formatNumber(likes)}} )</text>
+						</view>
+					</view>
+					<view class="content-btn-box"  @tap="toMark"  v-if="isMark==0">
+						<view class="content-btn-i">
+							<text class="cuIcon-favor btn-i"></text>
+							<text>收藏</text>
+						</view>
+					</view>
+					<view class="content-btn-box"  @tap="rmMark"  v-else>
+						<view class="content-btn-i">
+							<text class="cuIcon-favorfill btn-i"></text>
+							<text>已收藏</text>
+						</view>
+					</view>
+				</view>
+				<!--  #endif -->
 				<view class="tags" v-if="tagList.length>0">
 					
 					<text class="tags-box" v-for="(item,index) in tagList"  @tap='toTagsContents("#"+item.name+"#",item.mid)' :key="index">
@@ -106,6 +134,7 @@
 			<view class="ads-box" v-if="ads!=''">
 				<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
 			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="data-box">
 				<view class="cu-bar bg-white">
 					<view class="action data-box-title">
@@ -162,7 +191,9 @@
 				</view>
 				<view style="height: 100upx"></view>
 			</view>
+			<!--  #endif -->
 		</view>
+		<!--  #ifdef H5 || APP-PLUS -->
 		<!--打赏选择-->
 		<view class="cu-modal bottom-modal" :class="modalName=='ChooseModal'?'show':''" @tap="hideModal">
 			<view class="cu-dialog" @tap.stop="">
@@ -179,6 +210,7 @@
 				</view>
 			</view>
 		</view>
+		<!--  #endif -->
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -186,6 +218,7 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<!--  #ifdef H5 || APP-PLUS -->
 		<view class="info-footer grid col-2">
 			<view class="info-footer-input">
 				<view class="info-input-box"  @tap="commentsAdd(title,0,0)">
@@ -204,6 +237,7 @@
 				
 			</view>
 		</view>
+		<!--  #endif -->
 	</view>
 </template>
 <script>
@@ -327,9 +361,13 @@
 			that.page=1;
 			
 			if(that.cid!=0){
+				
 				that.getIsCommnet();
+				
 				that.getInfo(that.cid);
+				// #ifdef H5 || APP-PLUS
 				that.getCommentsList(false,that.cid);
+				// #endif
 				
 			}
 			
@@ -346,7 +384,9 @@
 			
 			var timer = setTimeout(function() {
 				that.getInfo(that.cid);
+				// #ifdef H5 || APP-PLUS
 				that.getCommentsList(false,that.cid);
+				// #endif
 			}, 1000)
 		},
 		onLoad(res) {
@@ -381,7 +421,9 @@
 			that.allCache();
 			that.getInfo(that.cid);
 			that.getShopList();
+			// #ifdef H5 || APP-PLUS
 			that.getCommentsList(false,that.cid);
+			// #endif
 			
 			
 			var ctx = this.$refs.article;
@@ -561,7 +603,11 @@
 							localStorage.setItem('postInfo_'+that.cid,JSON.stringify(res.data));
 							var timer = setTimeout(function() {
 								that.allCache();
-							}, 200)
+							}, 200);
+							var timer = setTimeout(function() {
+								that.isLoading=1;
+								clearTimeout('timer')
+							}, 300)
 							
 						}
 					},
@@ -646,10 +692,7 @@
 							}
 							
 						}
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
+						
 					},
 					fail: function(res) {
 						uni.stopPullDownRefresh();
@@ -1046,6 +1089,11 @@
 			},
 			getIsCommnet(){
 				var that = this;
+				// #ifdef MP
+				that.isCommnet=1;
+				that.getInfo(that.cid);
+				return false;
+				// #endif
 				var token= "";
 				if(localStorage.getItem('userinfo')){
 					

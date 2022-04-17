@@ -45,6 +45,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('../user/post?type=add')">
@@ -57,6 +58,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toRand">
@@ -105,6 +107,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -129,6 +132,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view class="data-box">
