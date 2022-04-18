@@ -2408,8 +2408,8 @@ if (typeof window === 'object' && typeof window.document === 'object') {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://192.168.1.106:8081/';
+var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 

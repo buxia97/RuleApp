@@ -797,7 +797,7 @@
 							
 						},
 						fail:function(res){
-							console.log("更新地址请求失败！"+ API.GetUpdateUrl());
+							
 						}
 					})
 					
@@ -842,38 +842,10 @@
 						icon: 'none'
 					})
 					return false;
-				}else{
-					token = localStorage.getItem('token');
 				}
-				Net.request({
-					
-					url: API.setScan(),
-					data:{
-						"token":token,
-						"codeContent":text,
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						if(res.data.msg=="操作成功！"){
-							uni.showToast({
-								title: "授权登录成功！",
-								icon: 'none'
-							});
-						}
-						
-						
-					},
-					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
-					}
-				})
+				uni.navigateTo({
+				    url: '/pages/user/scan?text='+text
+				});
 			},
 		},
 		

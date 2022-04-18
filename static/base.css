@@ -107,7 +107,7 @@ page{
 	background-color: #eb550f;
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
-	background-color: #607d8b;
+	background-color: #4343e7;
 }
 .index-sort .index-sort-box:nth-child(9) .index-sort-i{
 	background-color: #ff9f10;
@@ -1406,4 +1406,27 @@ page{
 }
 .userinfo-lv{
 	padding-top: 10upx;
+}
+.scan-user{
+	padding-top: 350upx;
+}
+.scan-user image{
+	width: 160upx;
+	border-radius: 50%;
+	height: 160upx;
+	margin-bottom: 20upx;
+}
+.scan-user-name{
+	font-size: 34upx;
+	font-weight: bold;
+	margin-bottom: 20upx;
+}
+.scan-user-btn{
+	margin-top: 100upx;
+}
+.scan-user-btn .cu-btn{
+	height: 90upx;
+	border-radius: 8upx;
+	width: 400upx;
+	margin-bottom: 20px;
 }

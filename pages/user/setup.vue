@@ -35,16 +35,6 @@
 			</view>
 			<!--  #endif -->
 		</view>
-		<view class="cu-list menu margin-top" >
-			<view class="cu-item" @tap="toPage('关于平台',aboutme)">
-				<view class="content">
-					<text>关于平台</text>
-				</view>
-				<view class="action">
-					<text class="cuIcon-right"></text>
-				</view>
-			</view>
-		</view>
 		<view class="logout" v-if="token!=''" @tap="logout">
 			<view class="logout-main">
 				<text class="text-red">退出登录</text>
@@ -77,7 +67,6 @@
 				userInfo:null,
 				token:"",
 				
-				aboutme:API.GetAboutme()
 				
 			}
 		},
@@ -190,13 +179,6 @@
 					})
 					
 				})
-			},
-			toPage(title,cid){
-				var that = this;
-				
-				uni.navigateTo({
-				    url: '/pages/contents/info?cid='+cid+"&title="+title
-				});
 			},
 			logout(){
 				var that = this;

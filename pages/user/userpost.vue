@@ -17,6 +17,14 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="search-type grid col-2">
+				<view class="search-type-box" @tap="toType('waiting')" :class="type=='waiting'?'active':''">
+					<text>待审核</text>
+				</view>
+				<view class="search-type-box" @tap="toType('publish')" :class="type=='publish'?'active':''">
+					<text>已发布</text>
+				</view>
+			</view>
 			<view class="cu-card article no-card">
 				<!--  #ifdef MP -->
 				<view class="all-btn">
@@ -78,6 +86,7 @@
 				contentsList:[],
 				
 				isLoading:0,
+				type:"waiting",
 			}
 		},
 		onPullDownRefresh(){
@@ -146,7 +155,8 @@
 				
 				var data = {
 					"type":"post",
-					"authorId":authorId
+					"authorId":authorId,
+					"status":that.type
 				}
 				var page = that.page;
 				if(isPage){
@@ -180,10 +190,11 @@
 									that.contentsList = list;
 								}
 								
-								
-								localStorage.setItem('userContentsList',JSON.stringify(that.contentsList));
 							}else{
 								that.moreText="没有更多文章了";
+								if(!isPage){
+									that.contentsList = list;
+								}
 							}
 						}
 						var timer = setTimeout(function() {
@@ -214,6 +225,14 @@
 				uni.navigateTo({
 					url: '/pages/user/post?type=edit'+'&cid='+cid
 				});
+			},
+			toType(i){
+				var that = this;
+				that.type=i;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				that.getContentsList(false);
 			},
 			subText(text,num){
 				if(text.length < null){

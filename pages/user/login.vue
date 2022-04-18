@@ -176,9 +176,7 @@
 			toQQlogin(){
 				//QQ登陆
 				//后端直接根据access_token来判断用户的唯一性。
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'qq',
 					success: resp => {
@@ -195,7 +193,9 @@
 									openId: infoRes.userInfo.openId,
 									accessToken: access_token
 								};
-								
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.userApi(),
@@ -255,9 +255,7 @@
 			toWexinlogin(){
 				//微信登陆
 				//后端直接根据unionId来判断用户的唯一性。
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'weixin',
 					success: res => {
@@ -284,7 +282,9 @@
 								formdata.type = "applets";
 								formdata.js_code = js_code;
 								// #endif
-								console.log(JSON.stringify(formdata));
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.userApi(),
@@ -344,9 +344,7 @@
 			toWeibologin(){
 				//微博登陆
 				//后端直接根据access_token来判断用户的唯一性。
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'sinaweibo',
 					success: res => {
@@ -364,6 +362,9 @@
 									appLoginType: 'SINAWEIBO'
 
 								};
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.userApi(),

@@ -59,6 +59,14 @@
 			"path": "pages/user/mailedit",
 			"style": {}
 		},
+		{
+			"path": "pages/user/media",
+			"style": {}
+		},
+		{
+			"path": "pages/user/scan",
+			"style": {}
+		},
 		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/inbox",

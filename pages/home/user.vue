@@ -180,12 +180,12 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toSetUp">
+						<view class="index-sort-main" @tap="toLink('/pages/user/assets')">
 							<view class="index-sort-i">
-								<text class="cuIcon-settingsfill"></text>
+								<text class="cuIcon-choicenessfill"></text>
 							</view>
 							<view class="index-sort-text">
-								设置
+								财务中心
 							</view>
 						</view>
 					</waves>
@@ -212,34 +212,36 @@
 		<view class="data-box">
 			
 			<view class="cu-list menu">
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="cu-item" @tap="toGroup">
-					<view class="content">
-						<text class="cuIcon-friendfill  text-blue"></text>
-						<text>QQ交流群</text>
-					</view>
-				</view>
-				<view class="cu-item" @tap="toWeb">
-					<view class="content">
-						<text class="cuIcon-circlefill text-brown"></text>
-						<text>官网网站</text>
-					</view>
-				</view>
-				<view class="cu-item" @tap="toGithub">
-					<view class="content">
-						<text class="cuIcon-github text-black"></text>
-						<text>Github</text>
-					</view>
-				</view>
-				<!--  #endif -->
-				<!--  #ifdef MP -->
 				<view class="cu-item" @tap="toSetUp">
 					<view class="content">
-						<text class="cuIcon-settingsfill text-gray"></text>
+						<text class="cuIcon-settingsfill text-blue"></text>
 						<text>系统设置</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="cu-item" @tap="toSetUp">
+					<view class="content">
+						<text class="cuIcon-newfill text-blue"></text>
+						<text>社交媒体</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
 					</view>
 				</view>
 				<!--  #endif -->
+				<view class="cu-item" @tap="toPage('关于平台',aboutme)">
+					<view class="content">
+						<text class="cuIcon-servicefill text-blue"></text>
+						<text>关于我们</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
+				
 			</view>
 		</view>
 	</view>
@@ -264,6 +266,8 @@
 				
 				feedback:API.GetFeedback(),
 				userlvStyle:"",
+				
+				aboutme:API.GetAboutme()
 				
 			}
 		},
@@ -543,6 +547,15 @@
 					}
 				})
 			},
+			toGroup(){
+				var url = API.GetGroupUrl();
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
 			getUserData() {
 				var that = this;
 				Net.request({
@@ -626,33 +639,7 @@
 				    url: '/pages/contents/search'
 				});
 			},
-			toGroup(){
-				var url = API.GetGroupUrl();
-				// #ifdef APP-PLUS
-				plus.runtime.openURL(url) 
-				// #endif
-				// #ifdef H5
-				window.open(url)
-				// #endif
-			},
-			toWeb(){
-				var url = API.GetWebUrl();
-				// #ifdef APP-PLUS
-				plus.runtime.openURL(url) 
-				// #endif
-				// #ifdef H5
-				window.open(url)
-				// #endif
-			},
-			toGithub(){
-				var url = API.GetGithubUrl();
-				// #ifdef APP-PLUS
-				plus.runtime.openURL(url) 
-				// #endif
-				// #ifdef H5
-				window.open(url)
-				// #endif
-			},
+			
 			toSetUp(){
 				var that = this;
 				
@@ -671,7 +658,6 @@
 					onlyFromCamera: false,
 					scanType: ['barCode', 'qrCode'],
 					success: function(res) {
-						console.log(JSON.stringify(res.result));
 						var text = res.result;
 						var strUrl= "^((https|http|ftp|rtsp|mms)?://)" +
 					   "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?"+
@@ -743,33 +729,17 @@
 						return false;
 					}
 				}
+				uni.navigateTo({
+				    url: '/pages/user/scan?text='+text.data
+				});
 				
-				Net.request({
-					
-					url: API.setScan(),
-					data:{
-						"token":that.token,
-						"codeContent":text.data,
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						uni.showToast({
-							title: res.data.msg,
-							icon: 'none'
-						})
-						
-					},
-					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
-					}
-				})
+			},
+			toPage(title,cid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/info?cid='+cid+"&title="+title
+				});
 			},
 			isJSON(str) {
 			

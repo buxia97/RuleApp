@@ -27,6 +27,8 @@ export const pageIndexSetting = [
 	{path:'pages/user/userwithdrawlist',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/user/agreement',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/user/userbind',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/user/media',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/user/scan',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/contents/comments',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/contents/commentsadd',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/contents/contentlist',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},

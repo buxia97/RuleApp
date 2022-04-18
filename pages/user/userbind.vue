@@ -131,9 +131,7 @@
 				//QQ登陆
 				//后端直接根据access_token来判断用户的唯一性。
 				var that = this;
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'qq',
 					success: resp => {
@@ -150,7 +148,9 @@
 									openId: infoRes.userInfo.openId,
 									accessToken: access_token
 								};
-								
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.apiBind(),
@@ -207,12 +207,11 @@
 				//微信登陆
 				//后端直接根据unionId来判断用户的唯一性。
 				var that = this;
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'weixin',
 					success: res => {
+						var js_code = res.code;
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
@@ -220,10 +219,22 @@
 									nickName: infoRes.userInfo.nickName,
 									//gender: infoRes.userInfo.gender,
 									appLoginType:"weixin",
-				                    headImgUrl: infoRes.userInfo.avatarUrl,
-									openId: infoRes.userInfo.openId,
-									accessToken: infoRes.userInfo.unionId
+								    headImgUrl: infoRes.userInfo.avatarUrl,
+									// openId: infoRes.userInfo.openId,
+									// accessToken: infoRes.userInfo.unionId,
 								};
+								// #ifdef APP-PLUS
+								formdata.openId=infoRes.userInfo.openId;
+								formdata.accessToken=infoRes.userInfo.unionId,
+								formdata.type = "app";
+								// #endif
+								// #ifdef MP-WEIXIN
+								formdata.type = "applets";
+								formdata.js_code = js_code;
+								// #endif
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.apiBind(),
@@ -280,9 +291,7 @@
 				//微博登陆
 				//后端直接根据access_token来判断用户的唯一性。
 				var that = this;
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				uni.login({
 					provider: 'sinaweibo',
 					success: res => {
@@ -300,6 +309,9 @@
 									appLoginType: 'SINAWEIBO'
 			
 								};
+								uni.showLoading({
+									title: "加载中"
+								});
 								Net.request({
 									
 									url: API.apiBind(),
