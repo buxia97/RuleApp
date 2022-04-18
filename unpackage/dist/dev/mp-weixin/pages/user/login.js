@@ -393,6 +393,8 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
       uni.login({
         provider: 'weixin',
         success: function success(res) {
+
+          var js_code = res.code;
           uni.getUserInfo({
             provider: 'weixin',
             success: function success(infoRes) {
@@ -401,10 +403,20 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
                 nickName: infoRes.userInfo.nickName,
                 //gender: infoRes.userInfo.gender,
                 appLoginType: "weixin",
-                headImgUrl: infoRes.userInfo.avatarUrl,
-                openId: infoRes.userInfo.openId,
-                accessToken: infoRes.userInfo.unionId };
+                headImgUrl: infoRes.userInfo.avatarUrl
+                // openId: infoRes.userInfo.openId,
+                // accessToken: infoRes.userInfo.unionId,
+              };
 
+
+
+
+
+
+              formdata.type = "applets";
+              formdata.js_code = js_code;
+
+              console.log(JSON.stringify(formdata));
               Net.request({
 
                 url: API.userApi(),

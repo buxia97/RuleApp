@@ -261,6 +261,8 @@
 				uni.login({
 					provider: 'weixin',
 					success: res => {
+						
+						var js_code = res.code;
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
@@ -270,9 +272,19 @@
 									//gender: infoRes.userInfo.gender,
 									appLoginType:"weixin",
 				                    headImgUrl: infoRes.userInfo.avatarUrl,
-									openId: infoRes.userInfo.openId,
-									accessToken: infoRes.userInfo.unionId
+									// openId: infoRes.userInfo.openId,
+									// accessToken: infoRes.userInfo.unionId,
 								};
+								// #ifdef APP-PLUS
+								formdata.openId=infoRes.userInfo.openId;
+								formdata.accessToken=infoRes.userInfo.unionId,
+								formdata.type = "app";
+								// #endif
+								// #ifdef MP-WEIXIN
+								formdata.type = "applets";
+								formdata.js_code = js_code;
+								// #endif
+								console.log(JSON.stringify(formdata));
 								Net.request({
 									
 									url: API.userApi(),
