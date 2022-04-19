@@ -1,6 +1,10 @@
 export const pageIndexSetting = [
 	//在这里配置h5下的页面打开效果
 	//{path:'',animaName:'',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/home/home',animaName:"no-animation",pageIn:"no-animation",pageOut:"no-animation"},
+	{path:'pages/home/find',animaName:"no-animation",pageIn:"no-animation",pageOut:"no-animation"},
+	{path:'pages/home/tool',animaName:"no-animation",pageIn:"no-animation",pageOut:"no-animation"},
+	{path:'pages/home/user',animaName:"no-animation",pageIn:"no-animation",pageOut:"no-animation"},
 	{path:'pages/user/userlist',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/user/useredit',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/user/mailedit',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},

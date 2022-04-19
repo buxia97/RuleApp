@@ -85,11 +85,17 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<!--  #ifdef APP-PLUS -->
+		<Tabbar :current="1"></Tabbar>
+		<!--  #endif -->
 	</view>
 </template>
 
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
+	// #ifdef APP-PLUS
+	import Tabbar from '@/pages/components/tabBar.vue'
+	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
@@ -120,6 +126,9 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
+			uni.hideTabBar({
+				animation: false
+			})
 			that.getAds();
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
@@ -346,9 +355,18 @@
 				// #endif
 			}
 		},
+		// #ifdef APP-PLUS
+		components: {
+			waves,
+			Tabbar
+		},
+		// #endif
+		
+		// #ifdef H5 || MP
 		components: {
 			waves
-		}
+		},
+		// #endif
 	}
 </script>
 

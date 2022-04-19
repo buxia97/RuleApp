@@ -26,16 +26,19 @@
 		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 		 :autoplay="true" interval="5000" duration="500">
 			<swiper-item v-for="(item,index) in swiperList" :key="index"  @tap="toInfo(item)">
-				<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-				<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
-				<view class="swiper-text">
-					<view class="swiper-title">
-						{{item.title}}
-					</view>
-					<view class="swiper-intro">
-						{{item.intro}}
+				<view class="swiper-box">
+					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
+					<view class="swiper-text">
+						<view class="swiper-title">
+							{{item.title}}
+						</view>
+						<view class="swiper-intro">
+							{{item.intro}}
+						</view>
 					</view>
 				</view>
+				
 			</swiper-item>
 		</swiper>
 		<view class="index-sort grid col-4">
@@ -80,18 +83,34 @@
 				</waves>
 			</view>
 			<!--  #endif -->
+			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toCategoryContents('软件中心',softwareid)">
+					<view class="index-sort-main" @tap="toShop">
 						<view class="index-sort-i">
-							<text class="cuIcon-repairfill"></text>
+							<text class="cuIcon-taoxiaopu"></text>
 						</view>
 						<view class="index-sort-text">
-							软件中心
+							积分商城
 						</view>
 					</view>
 				</waves>
 			</view>
+			<!--  #endif -->
+			<!--  #ifdef MP -->
+			<view class="index-sort-box">
+				<waves itemClass="butclass">
+					<view class="index-sort-main" @tap="toRand">
+						<view class="index-sort-i">
+							<text class="cuIcon-refresh"></text>
+						</view>
+						<view class="index-sort-text">
+							随机阅读
+						</view>
+					</view>
+				</waves>
+			</view>
+			<!--  #endif -->
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toUsers">
@@ -115,16 +134,14 @@
 					<text>查看全部</text><text class="cuIcon-right"></text>
 				</view>
 			</view>
-			<scroll-view scroll-x="true">
-				<view class="topic grid col-4">
-					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
-						<view class="topic-main">
-							<image :src="item.imgUrl"></image>
-							<view class="topic-text">{{replaceSpecialChar(item.name)}}</view>
-						</view>
+			<view class="topic grid col-2">
+				<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
+					<view class="topic-main">
+						<image :src="item.imgUrl" mode="aspectFill"></image>
+						<view class="topic-text">{{replaceSpecialChar(item.name)}}</view>
 					</view>
 				</view>
-			</scroll-view>
+			</view>
 		</view>
 		<view class="data-box">
 			<view class="cu-bar bg-white">
@@ -228,11 +245,17 @@
 		</view>
 		<!--  #endif -->
 		<!--update结束-->
+		<!--  #ifdef APP-PLUS -->
+		<Tabbar :current="0"></Tabbar>
+		<!--  #endif -->
 	</view>
 </template>
 
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
+	// #ifdef APP-PLUS
+	import Tabbar from '@/pages/components/tabBar.vue'
+	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
@@ -290,6 +313,10 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
+			 uni.hideTabBar({
+				animation: false
+			})
+			
 			that.getAds();
 			
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
@@ -727,6 +754,13 @@
 				}
 				
 			},
+			toShop(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/shop'
+				});
+			},
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
 				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -825,6 +859,13 @@
 				window.open(url)
 				// #endif
 			},
+			toRand(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/randlist'
+				});
+			},
 			replaceSpecialChar(text) {
 			  text = text.replace(/&quot;/g, '"');
 			  text = text.replace(/&amp;/g, '&');
@@ -849,9 +890,18 @@
 			},
 		},
 		
+		// #ifdef APP-PLUS
+		components: {
+			waves,
+			Tabbar
+		},
+		// #endif
+		
+		// #ifdef H5 || MP
 		components: {
 			waves
-		}
+		},
+		// #endif
 	}
 </script>
 

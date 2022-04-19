@@ -11,7 +11,9 @@ uni-page.page-animation-leave {
 uni-page.page-show {
 	opacity: 1;
 }
-
+uni-page.no-animation {
+	transition:none !important;
+}
 /* slide-in-right */
 uni-page.slide-in-right-enter {
 	transform: translateX(20px);

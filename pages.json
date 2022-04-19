@@ -331,11 +331,15 @@
 			}
 		]
 	},
+
 	"tabBar": {
 		"color": "#333333",
 		"selectedColor": "#54b5db", 
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
+		// #ifdef APP-PLUS
+		"height":"0px",
+		// #endif
 		"list": [
 			{
 				"text": "首页",
@@ -366,5 +370,6 @@
 	
 	
 	}
+
 
 }

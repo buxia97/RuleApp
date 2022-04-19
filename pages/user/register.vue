@@ -34,7 +34,7 @@
 					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userRegister">立即注册</button>
+					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="userRegister">立即注册</button>
 					<text class="text-blue text-right margin-top" @tap="toAgreement">注册即为同意 《用户协议》</text>
 				</view>
 			</form>

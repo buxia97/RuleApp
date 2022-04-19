@@ -23,7 +23,7 @@
 					<input name="input" placeholder="用户密码" type="password" v-model="password"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="login">立即登录</button>
+					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="login">立即登录</button>
 					
 				</view>
 			</form>

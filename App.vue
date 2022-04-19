@@ -8,6 +8,11 @@
 		mixins: [pageAnimation],
 		// #endif
 		onLaunch: function() {
+			// #ifdef APP-PLUS
+			 uni.hideTabBar({
+				animation: false
+			})
+			// #endif
 			uni.getSystemInfo({
 				success: function(e) {
 					// #ifndef MP
@@ -238,15 +243,17 @@
 		border-radius: 0upx !important;
 	}
 	.uni-swiper-dot.uni-swiper-dot-active{
-		background-color: #54b5db !important;
+		background-color: #0081FF !important;
 		opacity: 0.8;
 		
 	}
 	.uni-swiper-dot.uni-swiper-dot-active::after{
-		background-color: #54b5db !important;
+		background-color: #0081FF !important;
 		height: 8upx !important;
 	}
-	
+	.uni-swiper-dots-horizontal{
+		bottom: 40upx !important;
+	}
 	.tags .tags-box span{
 		white-space:nowrap;
 	}

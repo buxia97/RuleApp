@@ -31,7 +31,7 @@
 					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="userFoget">确认修改</button>
+					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="userFoget">确认修改</button>
 				</view>
 			</form>
 		</view>

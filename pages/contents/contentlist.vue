@@ -21,12 +21,13 @@
 				{{item.name}}
 			</view>
 		</scroll-view>
+		
+		<view class="cu-card article no-card">
 		<scroll-view scroll-x class="bg-white nav metaList" scroll-with-animation :scroll-left="scrollLeft" style="margin-top: 20upx;" v-if="type=='top'">
 			<view class="cu-item" :class="item.order==orderCur?'text-blue cur':''" v-for="(item,index) in topList" :key="index" @tap="topSelect" :data-order="item.order">
 				{{item.name}}
 			</view>
 		</scroll-view>
-		<view class="cu-card article no-card" style="margin-top: 20upx;">
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
 					<view class="title">

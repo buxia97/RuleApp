@@ -136,12 +136,7 @@
 			that.isreply=res.isreply;
 			that.cid=res.cid;
 			// #ifdef APP-PLUS || H5
-			var owo = that.owo.data;
-			var owoList=[];
-			for(var i in owo){
-				owoList = owoList.concat(owo[i].container);
-			}
-			that.owoList = owoList;
+			that.owoList = that.owo.data.paopao.container;
 			// #endif
 		},
 		methods: {
