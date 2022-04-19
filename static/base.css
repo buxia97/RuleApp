@@ -1447,3 +1447,14 @@ page{
 .screen-swiper{
 	background-color: #fff;
 }
+.vip-maim{
+	padding: 15upx 30upx;
+}
+.vip-maim>view{
+	padding: 40upx 15upx;
+	border-radius: 20upx;
+}
+.vip-maim>view text{
+	font-size:35upx;
+	margin-left: 10upx;
+}

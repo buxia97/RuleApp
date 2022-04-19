@@ -72,7 +72,14 @@
 									<view class="desc">
 										<view class="text-content">{{item.title}}</view>
 										<view class="text-i">
-											<text class="text-red">{{item.price}} 积分</text>
+											<text class="text-red">
+												<block v-if="item.price>0">
+												{{item.price}} 积分
+												</block>
+												<block v-else>
+												免费
+												</block>
+											</text>
 											<text class="cuIcon-cart"></text>
 										</view>
 									</view>

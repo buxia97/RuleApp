@@ -53,6 +53,7 @@
 							</block>
 							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
 							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
+							<text class="userlv bg-gray isVIP">VIP</text>
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
@@ -222,7 +223,7 @@
 					</view>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="cu-item" @tap="toSetUp">
+				<view class="cu-item" @tap="toMedia">
 					<view class="content">
 						<text class="cuIcon-newfill text-blue"></text>
 						<text>社交媒体</text>
@@ -648,7 +649,11 @@
 				    url: '/pages/contents/search'
 				});
 			},
-			
+			toMedia(){
+				uni.navigateTo({
+				    url: '/pages/user/media'
+				});
+			},
 			toSetUp(){
 				var that = this;
 				

@@ -529,9 +529,9 @@
 				}else{
 					that.contensUpdate();
 				}
-				if(that.shopID!=-1){
-					that.mountShop();
-				}
+				// if(that.shopID!=-1){
+				// 	that.mountShop();
+				// }
 				
 			},
 			contensAdd() {

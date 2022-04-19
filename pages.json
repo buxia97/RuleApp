@@ -116,6 +116,10 @@
 			"path": "pages/user/usercomments",
 			"style": {}
 		},
+		{
+			"path": "pages/user/buyvip",
+			"style": {}
+		},
 		// #endif
 		{
 			"path": "pages/user/usermark",

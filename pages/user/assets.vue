@@ -21,9 +21,16 @@
 				<text class="cu-btn bg-blue radius" @tap="userrecharge">在线充值</text>
 				<text class="cu-btn bg-red radius" @tap="userwithdraw">快捷提现</text>
 			</view>
+			<view class="vip-maim">
+				<view class="bg-gradual-blue text-center shadow-blur">
+					<view class="text-lg text-bold">您当前不是VIP用户</view>
+					<view class="margin-top-sm text-Abc">开通VIP，可享受全站商品1折优惠<text class="cuIcon-question"  @tap="showModal" data-target="DialogModal1"></text></view>
+					<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="buyvip">立即开通</view>
+				</view>
+			</view>
 		</view>
 		<view class="text-tips margin-top text-center text-gray text-sm">
-			只显示最近30条充值记录
+			只显示最近30条资产记录
 		</view>
 		<view class="no-data" v-if="orderList.length==0">
 			暂时没有数据
@@ -39,7 +46,7 @@
 					<view class="order-time">{{formatDate(item.created)}}</view>
 				</view>
 				<view class="order-btn">
-					<text class="text-red">￥ {{item.totalAmount}} = {{item.totalAmount*100}} 积分</text>
+					<text class="text-red">{{item.totalAmount}}积分</text>
 					<text class="text-yellow pay-status" v-if="item.status==0">未支付</text>
 					<text class="text-green pay-status" v-if="item.status==1">已支付</text>
 				</view>
@@ -52,7 +59,21 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">VIP开通说明</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					<view>开通VIP后，在有效期结束之前，您将享受全站所有商品（无论类型）的对应折扣优惠。但因为商品采用积分结算，而积分仅能为整数，所以在进行折扣计算时，将默认已整数结果进行计算。所以，对于VIP用户，小于或等于1积分的商品，将视为免费。价格大于1的商品，将省略小数点后部分。</view>
+				</view>
+			</view>
+		</view>
 	</view>
+	
 </template>
 
 <script>
@@ -75,6 +96,8 @@
 				orderList:[],
 				
 				isLoading:0,
+				
+				modalName: null,
 				
 			}
 		},
@@ -114,6 +137,12 @@
 					delta: 1
 				});
 			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
 			toLink(text){
 				var that = this;
 				
@@ -138,6 +167,11 @@
 			userwithdraw(){
 				uni.navigateTo({
 				    url: '/pages/user/userwithdraw'
+				});
+			},
+			buyvip(){
+				uni.navigateTo({
+				    url: '/pages/user/buyvip'
 				});
 			},
 			userStatus() {
