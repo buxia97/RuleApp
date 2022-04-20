@@ -525,16 +525,16 @@
 				var that = this;
 				var type = that.type;
 				if(type=="add"){
-					that.contensAdd();
+					that.contentsAdd();
 				}else{
-					that.contensUpdate();
+					that.contentsUpdate();
 				}
 				// if(that.shopID!=-1){
 				// 	that.mountShop();
 				// }
 				
 			},
-			contensAdd() {
+			contentsAdd() {
 				var that = this;
 				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
@@ -557,7 +557,7 @@
 				});
 				Net.request({
 					
-					url: API.contensAdd(),
+					url: API.contentsAdd(),
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,
@@ -596,7 +596,7 @@
 					}
 				})
 			},
-			contensUpdate() {
+			contentsUpdate() {
 				var that = this;
 				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
@@ -620,7 +620,7 @@
 				});
 				Net.request({
 					
-					url: API.contensUpdate(),
+					url: API.contentsUpdate(),
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,

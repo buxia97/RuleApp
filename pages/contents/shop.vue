@@ -53,7 +53,12 @@
 							{{item.title}}
 						</view>
 						<view class="shop-info">
-							<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">积分</text>
+							<block v-if="isvip==1">
+								<text class="shop-price text-yellow text-bold">{{parseInt(item.price * vipDiscount)}}</text><text class="text-sm margin-left-sm text-yellow">积分</text>
+							</block>
+							<block v-else>
+								<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">积分</text>
+							</block>
 							<text class="cuIcon-cart"></text>
 						</view>
 					</view>
@@ -100,6 +105,12 @@
 				isLoading:0,
 				searchText:"",
 				
+				vipDiscount:0,
+				vipPrice:0,
+				scale:0,
+				isvip:0,
+				vip:0,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -136,6 +147,8 @@
 			that.isLoad=0;
 			that.page=1;
 			that.allCache();
+			that.getVipInfo();
+			that.userStatus();
 			
 		},
 		onLoad() {
@@ -250,7 +263,68 @@
 				uni.navigateTo({
 				    url: '/pages/contents/shopinfo?sid='+sid
 				});
-			}
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vipDiscount=res.data.data.vipDiscount;
+							that.vipPrice=res.data.data.vipPrice;
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			userStatus() {
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vip = res.data.data.vip;
+							that.isvip = res.data.data.isvip;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		},
 		components: {
 			waves

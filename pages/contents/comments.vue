@@ -32,7 +32,19 @@
 										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
 										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
-										
+										<!--  #ifdef H5 || APP-PLUS -->
+										<block v-if="item.isvip==1">
+											<block v-if="item.vip==1">
+												<text class="isVIP bg-gradual-red">VIP</text>
+											</block>
+											<block v-else>
+												<text class="isVIP bg-yellow">VIP</text>
+											</block>
+										</block>
+										<block v-else>
+											<text class="userlv bg-gray isVIP">VIP</text>
+										</block>
+										<!--  #endif -->
 										</view>
 										<view class="text-content text-df break-all">
 											<rich-text :nodes="markHtml(item.text)"></rich-text>

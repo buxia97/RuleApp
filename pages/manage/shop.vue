@@ -12,6 +12,23 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="cu-bar bg-white search">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
+				</view>
+			</view>
+			<view class="search-type grid col-2">
+				<view class="search-type-box" @tap="toType(0)" :class="status==0?'active':''">
+					<text>待审核</text>
+				</view>
+				<view class="search-type-box" @tap="toType(1)" :class="status==1?'active':''">
+					<text>已上架</text>
+				</view>
+				<!-- <view class="search-type-box" @tap="toType(2)" :class="status==2?'active':''">
+					<text>已禁用</text>
+				</view> -->
+			</view>
 			<view class="no-data" v-if="shopList.length==0">
 				暂时没有商品
 			</view>
@@ -72,6 +89,8 @@
 				page:1,
 				moreText:"加载更多",
 				type:1,
+				searchText:"",
+				status:0,
 				
 				isLoading:0,
 				
@@ -157,7 +176,7 @@
 					return false
 				}
 				var data = {
-					//"uid":uid
+					"status":that.status
 				}
 				var page = that.page;
 				if(isPage){
@@ -168,6 +187,7 @@
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":6,
+						"searchKey":that.searchText,
 						"page":page,
 					},
 					header:{
@@ -286,6 +306,13 @@
 				});
 				
 			},
+			searchTag(){
+				var that = this;
+				var searchText = that.searchText;
+				that.page=1;
+				that.getShopList();
+			
+			},
 			toShop(sid){
 				var that = this;
 				uni.navigateTo({
@@ -367,7 +394,15 @@
 						}
 					}
 				});
-			}
+			},
+			toType(i){
+				var that = this;
+				that.status=i;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				that.getShopList(false);
+			},
 			
 		},
 		components: {

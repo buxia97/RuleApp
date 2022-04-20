@@ -93,7 +93,7 @@
 			getImageList(){
 				var that = this;
 				Net.request({
-					url: API.contensImage(),
+					url: API.contentsImage(),
 					data:{},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

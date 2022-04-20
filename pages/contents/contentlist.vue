@@ -279,6 +279,8 @@
 				var page = that.page;
 				if(isPage){
 					page++;
+				}else{
+					that.contentsList = [];
 				}
 				var data = {
 					"searchParams":JSON.stringify(API.removeObjectEmptyKey(info)),

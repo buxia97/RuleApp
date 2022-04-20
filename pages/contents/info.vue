@@ -61,31 +61,87 @@
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
+				
 				<view class="content-shop">
-						<view class="cu-card article no-card" v-for="(item,index) in shopList"  @tap="shopInfo(item)" :key="index">
-							
-							<view class="cu-item shadow" >
-								<view class="content">
-									<text class="info-shop-status cu-btn bg-orange" v-if="item.status!=1">未上架</text>
+						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">
+							<block v-if="item.type==1">
+								<view class="shop-tool text-center">
+									<view class="shop-name">
+										实体商品
+									</view>
 									<image :src="item.imgurl"
 									 mode="aspectFill"></image>
-									<view class="desc">
-										<view class="text-content">{{item.title}}</view>
-										<view class="text-i">
-											<text class="text-red">
-												<block v-if="item.price>0">
-												{{item.price}} 积分
-												</block>
-												<block v-else>
-												免费
-												</block>
-											</text>
-											<text class="cuIcon-cart"></text>
-										</view>
+									<view class="text-content">{{item.title}}</view>
+									<view class="tool-price" v-if="isBuy==0">
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+									</view>
+									<view class="tool-price">
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">立即下单</text>
+										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>
-							</view>
-							
+							</block>
+							<!--源码-->
+							<block v-if="item.type==2">
+								<view class="shop-tool text-center">
+									<view class="shop-name">
+										源码
+									</view>
+									<image :src="item.imgurl"
+									 mode="aspectFill"></image>
+									<view class="text-content">{{item.title}}</view>
+									<view class="tool-price" v-if="isBuy==0">
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+									</view>
+									<view class="tool-price" v-if="isBuy==1">
+										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
+										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
+									</view>
+									<view class="tool-price" v-else>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后下载</text>
+										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
+									</view>
+								</view>
+							</block>
+							<!--工具-->
+							<block v-if="item.type==3">
+								<view class="shop-tool text-center">
+									<view class="shop-name">
+										软件工具
+									</view>
+									<image :src="item.imgurl"
+									 mode="aspectFill"></image>
+									<view class="text-content">{{item.title}}</view>
+									<view class="tool-price" v-if="isBuy==0">
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+									</view>
+									<view class="tool-price" v-if="isBuy==1">
+										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
+										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
+									</view>
+									<view class="tool-price" v-else>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后下载</text>
+										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
+									</view>
+								</view>
+							</block>
+							<!--付费阅读-->
+							<block v-if="item.type==4">
+								<view class="shop-tool text-center">
+									<view class="shop-name">
+										付费阅读
+									</view>
+									<view class="tool-price" v-if="isBuy==0">
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+									</view>
+									<view class="tool-price" v-if="isBuy==1">
+										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
+									</view>
+									<view class="tool-price" v-else>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后阅读剩余内容</text>
+									</view>
+								</view>
+							</block>
 					</view>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
@@ -169,6 +225,19 @@
 										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
 										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
+										<!--  #ifdef H5 || APP-PLUS -->
+										<block v-if="item.isvip==1">
+											<block v-if="item.vip==1">
+												<text class="isVIP bg-gradual-red">VIP</text>
+											</block>
+											<block v-else>
+												<text class="isVIP bg-yellow">VIP</text>
+											</block>
+										</block>
+										<block v-else>
+											<text class="userlv bg-gray isVIP">VIP</text>
+										</block>
+										<!--  #endif -->
 									</view>
 									<view class="text-content text-df break-all">
 										<rich-text :nodes="markCommentHtml(item.text)"></rich-text>
@@ -343,7 +412,12 @@
 					hot: false,
 				}],
 				ads:"",
-				userlvStyle:""
+				userlvStyle:"",
+				vipDiscount:0,
+				vipPrice:0,
+				scale:0,
+				
+				isBuy:0,
 				
 			}
 		},
@@ -383,7 +457,7 @@
 				that.toIsMark();
 			}
 			//that.allCache();
-			
+			that.getVipInfo();
 			
 		},
 		onPullDownRefresh(){
@@ -427,8 +501,9 @@
 			}
 			that.allCache();
 			that.getInfo(that.cid);
-			that.getShopList();
+			
 			// #ifdef H5 || APP-PLUS
+			that.getShopList();
 			that.getCommentsList(false,that.cid);
 			// #endif
 			
@@ -553,6 +628,34 @@
 					that.getCommentsList(true,that.cid);
 				}
 				
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vipDiscount=res.data.data.vipDiscount;
+							that.vipPrice=res.data.data.vipPrice;
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
 			},
 			getAds(){
 				var that = this;
@@ -1076,11 +1179,13 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						//console.log(JSON.stringify(res));
 						if(res.data.code==1){
 							var list = res.data.data;
 							that.shopList = list;
 							if(list.length>0){
 								that.shopID = list[0].id;
+								that.isBuyShop(that.shopID);
 							}
 							
 						}
@@ -1177,7 +1282,141 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			isBuyShop(sid){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"sid":sid,
+					"token":token
+				}
+				Net.request({
+					url: API.isBuyShop(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							that.isBuy=1;
+						}
+						
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			shopBuy(sid){
+				var that = this;
+				var token= "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+							url: '../user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				var data = {
+					"token":token,
+					"sid":sid
+				}
+				uni.showModal({
+					title: '确定购买此商品吗?',
+					content: ' ',
+					success: function(res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							Net.request({
+								url: API.buyShop(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: res.data.msg,
+										icon: 'none'
+									})
+									if(res.data.code==1){
+										
+										
+										//跳转订单页面
+										var timer = setTimeout(function() {
+											uni.redirectTo({
+											    url: '/pages/user/order'
+											});
+											clearTimeout('timer')
+										}, 1000)
+									}else{
+										if(res.data.msg=="购买实体商品前，需要先设置收货地址"){
+											var timer = setTimeout(function() {
+												uni.redirectTo({
+												    url: '/pages/user/address'
+												});
+												clearTimeout('timer')
+											}, 1000)
+										}
+									}
+										
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						}
+					}
+				});
+				
+			},
+			toShopValue(id,type){
+				var that = this;
+				if(type==1){
+					uni.showToast({
+						title: "实体商品请留意快递信息",
+						icon: 'none'
+					})
+				}else{
+					uni.navigateTo({
+					    url: '/pages/contents/shoptext?sid='+id
+					});
+				}
+			},
 		}
 	}
 </script>

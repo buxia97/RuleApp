@@ -21,10 +21,18 @@
 				<text class="cu-btn bg-blue radius" @tap="userrecharge">在线充值</text>
 				<text class="cu-btn bg-red radius" @tap="userwithdraw">快捷提现</text>
 			</view>
-			<view class="vip-maim">
+			<view class="vip-maim" v-if="isvip==1">
+				<view class="bg-gradual-red text-center shadow-blur">
+					<view class="text-lg text-bold">欢迎您，尊贵的VIP用户</view>
+					<view class="margin-top-sm text-Abc">正在享受全站商品{{tovipDiscount(vipDiscount)}}折优惠，及VIP专属头衔！</view>
+					<view class="margin-top-sm text-Abc">到期时间：{{formatDate(vip)}}</view>
+					<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="buyvip">立即续期</view>
+				</view>
+			</view>
+			<view class="vip-maim" v-else>
 				<view class="bg-gradual-blue text-center shadow-blur">
 					<view class="text-lg text-bold">您当前不是VIP用户</view>
-					<view class="margin-top-sm text-Abc">开通VIP，可享受全站商品1折优惠<text class="cuIcon-question"  @tap="showModal" data-target="DialogModal1"></text></view>
+					<view class="margin-top-sm text-Abc">开通VIP，可享受全站商品{{tovipDiscount(vipDiscount)}}折优惠<text class="cuIcon-question"  @tap="showModal" data-target="DialogModal1"></text></view>
 					<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="buyvip">立即开通</view>
 				</view>
 			</view>
@@ -92,12 +100,18 @@
 				userInfo:null,
 				token:"",
 				assets:"",
+				isvip:0,
+				vip:0,
 				
 				orderList:[],
 				
 				isLoading:0,
 				
 				modalName: null,
+				
+				vipDiscount:0,
+				vipPrice:0,
+				scale:0
 				
 			}
 		},
@@ -123,7 +137,7 @@
 				that.userStatus();
 				that.getOrderList();
 			}
-			
+			that.getVipInfo();
 		},
 		onLoad() {
 			var that = this;
@@ -188,9 +202,10 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
 						if(res.data.code==1){
 							that.assets = res.data.data.assets;
+							that.vip = res.data.data.vip;
+							that.isvip = res.data.data.isvip;
 						}
 					},
 					fail: function(res) {
@@ -253,6 +268,44 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vipDiscount=res.data.data.vipDiscount;
+							that.vipPrice=res.data.data.vipPrice;
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			tovipDiscount(num){
+				if(Number(num)<=0){
+					return 0;
+				}else{
+					num = num.toString();
+					num = num.replace("0.","");
+					return num;
+				}
+				
 			}
 		},
 		components: {

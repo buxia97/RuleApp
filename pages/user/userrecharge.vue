@@ -21,24 +21,32 @@
 				<!--  #ifdef MP-WEIXIN || APP-PLUS -->
 				<text class="cu-btn text-blue radius" @tap="toPayType(1)" :class="payType=='1'?'active':''">微信支付</text>
 				<!--  #endif -->
+				<text class="cu-btn text-blue radius" @tap="toPayType(2)" :class="payType=='2'?'active':''">卡密充值</text>
 			</view>
-			<block v-if="isToPay==0">
+			<block  v-if="payType==1||payType==0">
+				<block v-if="isToPay==0">
+					<view class="userrecharge-form">
+						<input placeholder="请输入充值金额(￥),最低5元" type="number" name="input" v-model="num"></input>
+						<button class="cu-btn bg-yellow radius" @tap="pay">确定充值</button>
+					</view>
+				</block>
+				<block v-if="isToPay==1">
+					<view class="userrecharge-code">
+						<image :src="codeImg"></image>
+					</view>
+					<view class="userrecharge-btn">
+						<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
+						<text class="cu-btn bg-yellow radius" @tap="toAlipay()">打开支付宝</text>
+					</view>
+				</block>
+			</block>
+			<block  v-if="payType==2">
 				<view class="userrecharge-form">
-					<input placeholder="请输入充值金额(￥),最低5元" name="input" v-model="num"></input>
-					<button class="cu-btn bg-yellow radius" @tap="pay">确定充值</button>
+					<input placeholder="请填入充值码" name="input" type="text" v-model="num"></input>
+					<button class="cu-btn bg-yellow radius" @tap="tokenPay">确定充值</button>
 				</view>
 			</block>
-			<block v-if="isToPay==1">
-				<view class="userrecharge-code">
-					<image :src="codeImg"></image>
-				</view>
-				<view class="userrecharge-btn">
-					<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
-					<text class="cu-btn bg-yellow radius" @tap="toAlipay()">打开支付宝</text>
-				</view>
-			</block>
-			
-			<view class="userrecharge-intro">
+			<view class="userrecharge-intro" v-if="payType==1||payType==0">
 				<view class="userrecharge-intro-title">
 					充值注意：
 				</view>
@@ -46,10 +54,24 @@
 					1.如果支付宝未成功开启，可尝试保存二维码再进行扫码支付，部分设备可能无权限打开支付宝。
 				</view>
 				<view class="userrecharge-intro-text">
-					2.充值金额与网站积分的比例为<text class="text-red text-bold"> 1:100 </text>，最低充值金额<text class="text-red text-bold"> 5 </text>元。
+					2.充值金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低充值金额<text class="text-red text-bold"> 5 </text>元。
 				</view>
 				<view class="userrecharge-intro-text">
 					3.如果充值金额未到账，请查看账户中的充值记录，并立即反馈。
+				</view>
+			</view>
+			<view class="userrecharge-intro"  v-if="payType==2">
+				<view class="userrecharge-intro-title">
+					充值注意：
+				</view>
+				<view class="userrecharge-intro-text">
+					1.请填写正确的充值码，注意空格与特殊符号。
+				</view>
+				<view class="userrecharge-intro-text">
+					2.充值金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>。
+				</view>
+				<view class="userrecharge-intro-text">
+					3.充值码在进行充值操作后，将失效。
 				</view>
 			</view>
 		</view>
@@ -79,6 +101,10 @@
 				codeImg:'',
 				alipayUrl:"",
 				
+				vipDiscount:0,
+				vipPrice:0,
+				scale:0
+				
 				
 			}
 		},
@@ -103,6 +129,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.isToPay = 0;
+			that.getVipInfo();
 		},
 		onLoad() {
 			var that = this;
@@ -163,9 +190,7 @@
 			},
 			aliPay(){
 				var that = this;
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -175,6 +200,9 @@
 					"num":that.num,
 					"token":token
 				}
+				uni.showLoading({
+					title: "加载中"
+				});
 				Net.request({
 					url: API.scancodePay(),
 					data:data,
@@ -215,9 +243,7 @@
 			},
 			wxPay() {
 				var that = this;
-				uni.showLoading({
-					title: "加载中"
-				});
+				
 				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -227,6 +253,9 @@
 					"price":that.num,
 					"token":token
 				}
+				uni.showLoading({
+					title: "加载中"
+				});
 				Net.request({
 					url: API.wxPay(),
 					data:data,
@@ -239,7 +268,7 @@
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
-						console.log(JSON.stringify(data.data))
+						//console.log(JSON.stringify(data.data))
 						uni.requestPayment({
 							provider: 'wxpay',
 							orderInfo: JSON.stringify(data.data), //微信、支付宝订单数据
@@ -272,6 +301,65 @@
 					}
 				});
 			},
+			tokenPay(){
+				var that = this;
+				
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				if(that.num==""){
+					uni.showToast({
+						title: "请输入充值码！",
+						icon: 'none'
+					})
+					return false;
+				}
+				var data = {
+					"key":that.num,
+					"token":token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					url: API.tokenPay(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							
+							var timer = setTimeout(function() {
+								that.back();
+								clearTimeout('timer')
+							}, 1000)
+						}
+						
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},	
 			toAlipay(){
 				var that = this;
 				var url = that.alipayUrl;
@@ -315,7 +403,35 @@
 					icon: "none"
 				});
 				// #endif
-			}
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vipDiscount=res.data.data.vipDiscount;
+							that.vipPrice=res.data.data.vipPrice;
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
 
 		},
 		components: {

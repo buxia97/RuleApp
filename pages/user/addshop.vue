@@ -223,6 +223,9 @@
 				if(res.sid){
 					that.sid = res.sid;
 					that.getInfo(that.sid);
+				}else{
+					localStorage.removeItem('userShopinfo');
+					that.isInfo=0;
 				}
 			}
 			
@@ -253,7 +256,8 @@
 					that.focus(res.height);
 				}
 			});
-			localStorage.removeItem('userShopinfo')
+			
+			
 		},
 		methods: {
 			ToisText(i){

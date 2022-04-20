@@ -54,7 +54,7 @@
 								<text class="cuIcon-text"></text>
 							</view>
 							<view class="index-sort-text">
-								文章管理
+								内容管理
 							</view>
 						</view>
 					</waves>
@@ -103,6 +103,30 @@
 							</view>
 							<view class="index-sort-text">
 								提现审核
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i">
+								<text class="cuIcon-ticket"></text>
+							</view>
+							<view class="index-sort-text">
+								卡密管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i">
+								<text class="cuIcon-file"></text>
+							</view>
+							<view class="index-sort-text">
+								数据清理
 							</view>
 						</view>
 					</waves>

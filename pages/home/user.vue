@@ -53,7 +53,19 @@
 							</block>
 							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
 							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
-							<text class="userlv bg-gray isVIP">VIP</text>
+							<!--  #ifdef H5 || APP-PLUS -->
+							<block v-if="userInfo.isvip==1">
+								<block v-if="userInfo.vip==1">
+									<text class="isVIP bg-gradual-red">VIP</text>
+								</block>
+								<block v-else>
+									<text class="isVIP bg-yellow">VIP</text>
+								</block>
+							</block>
+							<block v-else>
+								<text class="userlv bg-gray isVIP">VIP</text>
+							</block>
+							<!--  #endif -->
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
@@ -536,6 +548,7 @@
 							localStorage.removeItem('token');
 							that.userInfo = null;
 						}else{
+							
 							if(localStorage.getItem('userinfo')){
 								
 								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -545,6 +558,13 @@
 								if(res.data.data.lv){
 									userInfo.lv = res.data.data.lv;
 								}
+								if(res.data.data.isvip){
+									userInfo.isvip = res.data.data.isvip;
+								}
+								if(res.data.data.vip){
+									userInfo.vip = res.data.data.vip;
+								}
+								that.userInfo = userInfo;
 							}
 							
 						}

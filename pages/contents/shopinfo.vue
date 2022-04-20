@@ -34,15 +34,21 @@
 				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
 			</view>
 		</view>
-		<view class="shopinfo-bar grid col-2" v-if="isBuy==0">
+		<view class="shopinfo-bar grid col-2" v-if="isBuy==0||type==1">
 			<view class="shopinfo-price">
-				{{price}} 积分
+				<block v-if="isvip==1">
+					{{parseInt(price * vipDiscount)}} 积分
+					<text class="text-yellow margin-left text-sm">VIP优惠</text>
+				</block>
+				<block v-else>
+					{{price}} 积分
+				</block>
 			</view>
 			<view class="shopinfo-btn">
 				<text class="cu-btn bg-blue radius" @tap="shopBuy">立即购买</text>
 			</view>
 		</view>
-		<view class="shopinfo-bar grid col-2" v-if="isBuy==1">
+		<view class="shopinfo-bar grid col-2" v-if="isBuy==1&&type!=1">
 			<view class="shopinfo-price">
 				已购买
 			</view>
@@ -87,6 +93,12 @@
 				isBuy:0,
 				shopinfo:{},
 				
+				vipDiscount:0,
+				vipPrice:0,
+				scale:0,
+				isvip:0,
+				vip:0,
+				
 				
 			}
 		},
@@ -104,7 +116,8 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			that.getVipInfo();
+			that.userStatus();
 			
 		},
 		onPullDownRefresh(){
@@ -347,7 +360,68 @@
 				uni.navigateTo({
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
-			}
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vipDiscount=res.data.data.vipDiscount;
+							that.vipPrice=res.data.data.vipPrice;
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			userStatus() {
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				Net.request({
+					
+					url: API.userStatus(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.vip = res.data.data.vip;
+							that.isvip = res.data.data.isvip;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		},
 		
 	}
