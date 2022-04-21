@@ -207,6 +207,9 @@ module.exports = {
 	removeLog:function(){
 		return API_URL + 'typechoUserlog/removeLog';
 	},
+	dataClean:function(){
+		return API_URL + 'typechoUserlog/dataClean';
+	},
 	
 	
 	getCommentsList:function(){

@@ -319,6 +319,9 @@
 		},
 		{
 			"path": "pages/manage/metasedit"
+		},
+		{
+			"path": "pages/manage/clean"
 		}
 		// #endif
 		

@@ -121,7 +121,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/clean')">
 							<view class="index-sort-i">
 								<text class="cuIcon-file"></text>
 							</view>
