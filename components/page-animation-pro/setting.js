@@ -55,4 +55,7 @@ export const pageIndexSetting = [
 	{path:'pages/manage/users',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/usersedit',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/withdraw',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/manage/tokenpay',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/manage/metas',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/manage/metasedit',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 ]

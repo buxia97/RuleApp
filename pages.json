@@ -310,6 +310,15 @@
 			"style": {
 				"enablePullDownRefresh":true
 			}
+		},
+		{
+			"path": "pages/manage/tokenpay"
+		},
+		{
+			"path": "pages/manage/metas"
+		},
+		{
+			"path": "pages/manage/metasedit"
 		}
 		// #endif
 		

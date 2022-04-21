@@ -345,8 +345,13 @@ module.exports = {
 	tokenPayList:function(){
 		return API_URL + 'pay/tokenPayList';
 	},
-	marktoken:function(){
-		return API_URL + 'pay/marktoken';
+	tokenPayExcel:function(){
+		return API_URL + 'pay/tokenPayExcel';
+	},
+	
+	
+	madetoken:function(){
+		return API_URL + 'pay/madetoken';
 	},
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

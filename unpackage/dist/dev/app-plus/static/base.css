@@ -1007,10 +1007,43 @@ page{
 	background-color: #ccc;
 }
 .content-shop .cu-card{
-	box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2);
+	/* box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2); */
+	border: solid 1px #ddd;
 	border-radius: 10upx;
 	overflow: auto;
-	padding-top: 30upx;
+}
+.content-shop  .shop-name{
+	padding: 10upx 20upx;
+}
+.shop-tool{
+	padding: 40upx 20px;
+	position: relative;
+}
+.shop-tool .text-content{
+	font-weight: bold;
+	font-size: 30upx;
+	margin-bottom:5upx;
+}
+.shop-tool .cu-btn{
+	border-radius: 5upx;
+	margin: 10upx 10upx 0upx 10upx;
+}
+.shop-tool .tool-price{
+	font-size: 30upx;
+}
+.shop-tool .shop-name{
+	position: absolute;
+	color: #999;
+	top: 0upx;
+	right: 0upx;
+	text-align: right;
+}
+.shop-tool image{
+	width: 180upx;
+	border-radius: 10upx;
+	height: 180upx;
+	margin: 0upx auto;
+	background-color: #F3F3F3;
 }
 .content-shop .cu-card.article>.cu-item .content .text-content{
 	color: #000;
@@ -1446,4 +1479,30 @@ page{
 }
 .screen-swiper{
 	background-color: #fff;
+}
+.vip-maim{
+	padding: 15upx 30upx;
+}
+.vip-maim>view{
+	padding: 40upx 10upx;
+	border-radius: 20upx;
+}
+.vip-maim>view text{
+	font-size:35upx;
+	margin-left: 10upx;
+}
+.isVIP{
+	font-size: 24upx;
+	line-height: 25upx;
+	padding: 4upx 15upx;
+	border-radius: 8upx;
+	margin-left: 10upx;
+	margin-top: -4upx;
+}
+.fullpost-btn{
+	padding: 15upx;
+}
+.fullpost-btn .cu-btn{
+	margin: 10upx;
+	border-radius: 6upx;
 }

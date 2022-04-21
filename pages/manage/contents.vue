@@ -13,9 +13,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="fullpost-btn">
-				<text class="cu-btn bg-blue">分类标签</text>
-				
-				<text class="cu-btn bg-blue">已推荐文章</text>
+				<text class="cu-btn bg-blue" @tap="toMetas">分类标签</text>
 			</view>
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
@@ -497,7 +495,14 @@
 				        }
 				    }
 				});
-			}
+			},
+			toMetas(){
+				var that = this;
+				
+				uni.navigateTo({
+					url: '/pages/manage/metas'
+				});
+			},
 		}
 	}
 </script>

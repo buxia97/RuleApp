@@ -62,7 +62,13 @@
 				
 				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
 				
-				<view class="content-shop">
+				<view class="shop-value" v-if="shopValue!=''">
+					<view class="shop-value-title">
+						付费内容
+					</view>
+					<mp-html :content="shopValue" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
+				</view>
+				<view class="content-shop" v-if="shopValue==''">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">
 							<block v-if="item.type==1">
 								<view class="shop-tool text-center">
@@ -418,6 +424,7 @@
 				scale:0,
 				
 				isBuy:0,
+				shopValue:"",
 				
 			}
 		},
@@ -1185,7 +1192,7 @@
 							that.shopList = list;
 							if(list.length>0){
 								that.shopID = list[0].id;
-								that.isBuyShop(that.shopID);
+								that.isBuyShop(that.shopID,list[0].type);
 							}
 							
 						}
@@ -1283,7 +1290,7 @@
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
 			},
-			isBuyShop(sid){
+			isBuyShop(sid,type){
 				var that = this;
 				var token = "";
 				
@@ -1307,6 +1314,9 @@
 						//console.log(JSON.stringify(res));
 						if(res.data.code==1){
 							that.isBuy=1;
+							if(type==4){
+								that.toShopValue(sid,type);
+							}
 						}
 						
 					},
@@ -1410,6 +1420,49 @@
 					uni.showToast({
 						title: "实体商品请留意快递信息",
 						icon: 'none'
+					})
+				}else if(type==4){
+					var that = this;
+					var token = "";
+					if(localStorage.getItem('token')){
+						token=localStorage.getItem('token');
+					}
+					var data = {
+						"key":id,
+						"token":token
+					}
+					Net.request({
+						url: API.shopInfo(),
+						data:data,
+						header:{
+							'Content-Type':'application/x-www-form-urlencoded'
+						},
+						method: "get",
+						dataType: 'json',
+						success: function(res) {
+							
+							uni.stopPullDownRefresh();
+							if(res.data.value){
+								that.shopValue = res.data.value;
+							}
+							
+					
+							var timer = setTimeout(function() {
+								that.isLoading=1;
+								clearTimeout('timer')
+							}, 300)
+						},
+						fail: function(res) {
+							uni.stopPullDownRefresh();
+							uni.showToast({
+								title: "网络开小差了哦",
+								icon: 'none'
+							})
+							var timer = setTimeout(function() {
+								that.isLoading=1;
+								clearTimeout('timer')
+							}, 300)
+						}
 					})
 				}else{
 					uni.navigateTo({

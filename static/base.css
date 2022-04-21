@@ -1506,3 +1506,45 @@ page{
 	margin: 10upx;
 	border-radius: 6upx;
 }
+.post-link-type{
+	margin-top: 10upx;
+}
+.post-link-box{
+	padding: 10upx;
+	color: #666;
+}
+.post-link-box.cur{
+	color: #0081FF;
+}
+.tokenList-box{
+	padding: 30upx;
+	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+}
+.tokenList-box .tokenList-info{
+	color: #666;
+	overflow: hidden;
+	margin-top: 15upx;
+}
+.tokenList-box .tokenList-info .cu-btn{
+	position: absolute;
+	right: 30upx;
+	top: 38upx;
+	border-radius: 8upx;
+}
+.shop-value-title{
+	padding-left: 20upx;
+	font-size: 30upx;
+	font-weight: bold;
+	color: #333;
+	line-height: 1;
+	border-left: 8upx solid #0081FF;
+}
+.meta-id{
+	float: right;
+	color: #666;
+	font-size: 26upx;
+}
+.meta-main{
+	line-height: 40upx;
+}

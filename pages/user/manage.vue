@@ -109,7 +109,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/tokenpay')">
 							<view class="index-sort-i">
 								<text class="cuIcon-ticket"></text>
 							</view>

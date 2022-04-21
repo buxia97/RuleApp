@@ -123,7 +123,16 @@
 				<view class="padding-xl">
 					<input placeholder="链接标题" v-model="link.title"/>
 					<input placeholder="http(s)://"  v-model="link.url"/>
+					<view class="post-link-type grid col-2">
+						<view class="post-link-box" @tap="toPostlinktype(0)" :class="postlinktype==0?'cur':''">
+							<text>超链接</text>
+						</view>
+						<view class="post-link-box" @tap="toPostlinktype(1)" :class="postlinktype==1?'cur':''">
+							<text>远程图片</text>
+						</view>
+					</view>
 				</view>
+				
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
 						<button class="cu-btn line-blue text-blue" @tap="hideModal">取消</button>
@@ -213,6 +222,8 @@
 				owo:owo,
 				owoList:[],
 				OwOtype:"paopao",
+				
+				postlinktype:0,
 				
 				start:-1,
 				
@@ -452,7 +463,13 @@
 					});
 					return false
 				}
-				var text = "["+link.title+"]("+link.url+")";
+				var text;
+				if(that.postlinktype==0){
+					text = "["+link.title+"]("+link.url+")";
+				}
+				if(that.postlinktype==1){
+					text = "!["+link.title+"]("+link.url+")";
+				}
 				//that.text+=text;
 				//that.text+=text;
 				that.insetText(text);
@@ -840,6 +857,10 @@
 				uni.navigateTo({
 				    url: '/pages/contents/alltag?type=edit'
 				});
+			},
+			toPostlinktype(i){
+				var that = this;
+				that.postlinktype = i;
 			}
 			
 		}
