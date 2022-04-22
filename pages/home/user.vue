@@ -106,7 +106,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/useredit')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #006493;">
 								<text class="cuIcon-edit"></text>
 							</view>
 							<view class="index-sort-text">
@@ -118,7 +118,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/inbox')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #ff7a06;">
 								<text class="cuIcon-message"></text>
 							</view>
 							<view class="index-sort-text">
@@ -156,7 +156,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/myshop')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #0aa347;">
 								<text class="cuIcon-present"></text>
 							</view>
 							<view class="index-sort-text">
@@ -182,7 +182,7 @@
 				<view class="index-sort-box" @tap="toLink('/pages/user/order')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #f8c909;">
 								<text class="cuIcon-baby"></text>
 							</view>
 							<view class="index-sort-text">

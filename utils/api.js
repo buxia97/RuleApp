@@ -26,35 +26,6 @@ var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
-//首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
-var Topic=[
-	{
-		"mid":165,
-		"name":"#Typecho#",
-		"imgUrl":"../../static/img/topic1.jpg"
-	},
-	{
-		"mid":2,
-		"name":"#编程#",
-		"imgUrl":"../../static/img/topic2.jpg"
-	},
-	{
-		"mid":24,
-		"name":"#APP开发#",
-		"imgUrl":"../../static/img/topic3.jpg"
-	},
-	{
-		"mid":3,
-		"name":"#短篇文学#",
-		"imgUrl":"../../static/img/topic4.jpg"
-	},
-];
-//推荐文章,后面的数字为mid，为typecho数据库的标签和分类id
-var recommend = 397;
-//软件中心链接,后面的数字为mid，为typecho数据库的标签和分类id
-var software = 58;
-//工具页数据调用id,后面的数字为mid，为typecho数据库的标签和分类id
-var tool = 58;
 //精选作品mid,后面的数字为mid，为typecho数据库的标签和分类id
 var featured = 397;
 
@@ -91,18 +62,6 @@ module.exports = {
 	},
 	GetSwiperid:function(){
 		return swiperid;
-	},
-	GetTopic:function(){
-		return Topic;
-	},
-	GetRecommend:function(){
-		return recommend;
-	},
-	GetSoftware:function(){
-		return software;
-	},
-	GetTool:function(){
-		return tool;
 	},
 	GetFeatured:function(){
 		return featured;

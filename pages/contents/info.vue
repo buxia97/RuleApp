@@ -43,6 +43,16 @@
 								<text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text>
 								<!--  #endif -->
 								<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
+								<!--  #ifdef H5 || APP-PLUS -->
+								<block v-if="userInfo.isvip==1">
+									<block v-if="userInfo.vip==1">
+										<text class="isVIP bg-gradual-red">VIP</text>
+									</block>
+									<block v-else>
+										<text class="isVIP bg-yellow">VIP</text>
+									</block>
+								</block>
+								<!--  #endif -->
 							</view>
 							<view class="text-gray text-sm flex">
 								<view class="text-cut">
@@ -239,9 +249,6 @@
 											<block v-else>
 												<text class="isVIP bg-yellow">VIP</text>
 											</block>
-										</block>
-										<block v-else>
-											<text class="userlv bg-gray isVIP">VIP</text>
 										</block>
 										<!--  #endif -->
 									</view>

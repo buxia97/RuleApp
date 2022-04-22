@@ -48,6 +48,8 @@ export const pageIndexSetting = [
 	{path:'pages/contents/search',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/contents/userinfo',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/contents/foreverblog',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/contents/metas',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/contents/recommend',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/comments',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/contents',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/recharge',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},

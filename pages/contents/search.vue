@@ -34,21 +34,36 @@
 			<view class="cu-card article no-card" v-if="type==0">
 				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 					<view class="cu-item shadow">
+						<block v-if="item.images.length==0">
+							<view class="content-author content-header">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
 						<view class="title">
-							<view class="text-cut">{{item.title}}</view>
+							<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 						</view>
-						<view class="content">
-							<image v-if="item.images.length>0" :src="item.images[0]"
-							 mode="aspectFill"></image>
+						<view class="content article-content">
+							
+							 <image v-if="item.images.length > 0" :src="item.images[0]"
+							  mode="aspectFill"></image>
+							 
 							<view class="desc">
 								<view class="text-content"> {{subText(item.text,80)}}</view>
-								<view>
-									<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-									<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-									<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-									<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+								<view class="content-author" v-if="item.images.length>0">
+									<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+									<text class="content-author-name">{{item.authorInfo.name}}</text>
+									<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
 								</view>
 							</view>
+						</view>
+						<view class="article-content-btn">
+							<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+						
+							<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 						</view>
 					</view>
 				</view>
@@ -451,20 +466,6 @@
 				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
 			},
-			toPost(){
-				var that = this;
-				
-				uni.navigateTo({
-					url: '/pages/user/post'
-				});
-			},
-			toEdit(cid){
-				var that = this;
-				
-				uni.navigateTo({
-					url: '/pages/user/post?type=edit'+'&cid='+cid
-				});
-			},
 			subText(text,num){
 				if(text.length < null){
 					return text.substring(0,num)+"……"
@@ -531,6 +532,14 @@
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
+			replaceSpecialChar(text) {
+			  text = text.replace(/&quot;/g, '"');
+			  text = text.replace(/&amp;/g, '&');
+			  text = text.replace(/&lt;/g, '<');
+			  text = text.replace(/&gt;/g, '>');
+			  text = text.replace(/&nbsp;/g, ' ');
+			  return text;
+			}
 		}
 	}
 </script>

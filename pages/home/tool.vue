@@ -13,7 +13,7 @@
 				</view>
 				<!--  #endif -->
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					工具库
+					工具
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toSearch">
@@ -32,11 +32,11 @@
 					
 				</view>
 			</view>
-			<view class="index-sort grid col-4">
+			<view class="index-sort grid col-3 tool-sort">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toPage('使用攻略',raiders)">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #ff7300;">
 								<text class="cuIcon-appreciate"></text>
 							</view>
 							<view class="index-sort-text">
@@ -49,7 +49,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('../user/post?type=add')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #c16000;">
 								<text class="cuIcon-edit"></text>
 							</view>
 							<view class="index-sort-text">
@@ -88,17 +88,17 @@
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> 创意区
+					<text class="cuIcon-titles text-rule"></text> 站内入口
 				</view>
 				<view class="action more">
 					
 				</view>
 			</view>
-			<view class="index-sort grid col-4">
+			<view class="index-sort grid col-3 tool-sort">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toImagetoday">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #039a54;">
 								<text class="cuIcon-picfill"></text>
 							</view>
 							<view class="index-sort-text">
@@ -111,7 +111,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #7f165e;">
 								<text class="cuIcon-read"></text>
 							</view>
 							<view class="index-sort-text">
@@ -123,7 +123,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toShop">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #ff3333;">
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
 							<view class="index-sort-text">
@@ -138,26 +138,41 @@
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> 实用工具
+					<text class="cuIcon-titles text-rule"></text> 创意区
 				</view>
-				<view class="action more"  @tap="toCategoryContents('实用工具',toolid)">
-					<text>阅读更多</text><text class="cuIcon-right"></text>
+				<view class="action more">
+					
 				</view>
 			</view>
-			<view class="cu-card article no-card">
-				<view class="cu-item shadow"  v-for="(item,index) in toolList" :key="index" @tap="toInfo(item)">
-					<view class="content">
-						<image v-if="item.images.length>0" :src="item.images[0]"
-						 mode="aspectFill"></image>
-						<view class="desc">
-							<view class="text-content">{{item.title}}</view>
-							<view class="text-i">
-								<view class="cu-tag bg-blue light sm round" v-if="item.category.length>0">{{item.category[0].name}}</view>
-								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+			<view class="index-sort grid col-3 tool-sort">
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toForeverblog">
+							<view class="index-sort-i toClub">
+								<text class="cuIcon-upstagefill"></text>
+							</view>
+							<view class="index-sort-text">
+								十年之约
 							</view>
 						</view>
-					</view>
+					</waves>
+					
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #4a7aff;">
+								<text class="cuIcon-newfill"></text>
+							</view>
+							<view class="index-sort-text">
+								聊天室<text class="text-sm text-gray margin-left-sm">开发中</text>
+							</view>
+						</view>
+					</waves>
+					
+				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<!--加载遮罩-->
@@ -199,7 +214,6 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			that.getMetaContents(API.GetTool());
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)
@@ -232,8 +246,6 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.toolid = API.GetTool();
-			that.getMetaContents(that.toolid);
 		},
 		methods:{
 			allCache(){
@@ -242,52 +254,7 @@
 					that.toolList = JSON.parse(localStorage.getItem('toolList'));
 				}
 			},
-			getMetaContents(meta){
-				var that = this;
-				var data = {
-					"mid":meta
-				}
-				Net.request({
-					url: API.getMetaContents(),
-					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":5,
-						"page":1,
-						"order":"created"
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-								that.toolList = list;
-								localStorage.setItem('toolList',JSON.stringify(list));
-							}
-						}
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					},
-					fail: function(res) {
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					}
-				})
-			},
-			toCategoryContents(title,id){
-				var that = this;
-				var type="meta";
-				uni.navigateTo({
-				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
-				});
-			},
+
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
 				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -358,6 +325,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoading=1;
 						if(res.data.code==0){
 							localStorage.removeItem('userinfo');
 							localStorage.removeItem('token');

@@ -41,9 +41,6 @@
 												<text class="isVIP bg-yellow">VIP</text>
 											</block>
 										</block>
-										<block v-else>
-											<text class="userlv bg-gray isVIP">VIP</text>
-										</block>
 										<!--  #endif -->
 										</view>
 										<view class="text-content text-df break-all">

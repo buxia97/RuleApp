@@ -73,7 +73,7 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toImagetoday">
-						<view class="index-sort-i">
+						<view class="index-sort-i" style="background-color: #039a54;">
 							<text class="cuIcon-picfill"></text>
 						</view>
 						<view class="index-sort-text">
@@ -87,7 +87,7 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toShop">
-						<view class="index-sort-i">
+						<view class="index-sort-i" style="background-color: #ff3333;">
 							<text class="cuIcon-taoxiaopu"></text>
 						</view>
 						<view class="index-sort-text">
@@ -101,7 +101,7 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toRand">
-						<view class="index-sort-i">
+						<view class="index-sort-i" style="background-color: #2eabbf;">
 							<text class="cuIcon-refresh"></text>
 						</view>
 						<view class="index-sort-text">
@@ -114,7 +114,7 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toUsers">
-						<view class="index-sort-i">
+						<view class="index-sort-i" style="background-color: #aa55ff;">
 							<text class="cuIcon-peoplefill"></text>
 						</view>
 						<view class="index-sort-text">
@@ -130,15 +130,16 @@
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 热门专题
 				</view>
-				<view class="action more" @tap="toAllContents">
+				<view class="action more" @tap="toMetas">
 					<text>查看全部</text><text class="cuIcon-right"></text>
 				</view>
 			</view>
 			<view class="topic grid col-2">
 				<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
 					<view class="topic-main">
-						<image :src="item.imgUrl" mode="aspectFill"></image>
-						<view class="topic-text">{{replaceSpecialChar(item.name)}}</view>
+						<image :src="item.imgurl" mode="aspectFill"></image>
+						<view class="topic-text" v-if="item.type=='tag'">#{{replaceSpecialChar(item.name)}}#</view>
+						<view class="topic-text" v-else>{{replaceSpecialChar(item.name)}}</view>
 					</view>
 				</view>
 			</view>
@@ -148,7 +149,7 @@
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 推荐文章
 				</view>
-				<view class="action more" @tap="toAllContents">
+				<view class="action more" @tap="toRecommend">
 					<text>阅读更多</text><text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -184,25 +185,36 @@
 			</scroll-view>
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
+					<block v-if="item.images.length==0">
+						<view class="content-author content-header">
+							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<text class="content-author-name">{{item.authorInfo.name}}</text>
+							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						</view>
+					</block>
 					<view class="title">
 						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 					</view>
-					<view class="content">
-						<!-- <image v-if="item.images.length > 0" :src="item.images[0]"
-						 mode="aspectFill"></image> -->
+					<view class="content article-content">
+						
 						 <image v-if="item.images.length > 0" :src="item.images[0]"
 						  mode="aspectFill"></image>
 						 
 						<view class="desc">
 							<view class="text-content"> {{subText(item.text,80)}}</view>
-							<view>
-								<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-								<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-								<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-
-								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+							<view class="content-author" v-if="item.images.length>0">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
 							</view>
 						</view>
+					</view>
+					<view class="article-content-btn">
+						<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+						<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+						<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+					
+						<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 					</view>
 				</view>
 			</view>
@@ -267,12 +279,11 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				
 				cardCur: 0,
-				softwareid:API.GetSoftware(),
 				swiperList: [],
 				recommendList:[],
 				contentsList:[],
 				metaList:[],
-				Topic:API.GetTopic(),
+				Topic:[],
 				dotStyle: false,
 				towerStart: 0,
 				direction: '100000',
@@ -376,7 +387,8 @@
 				var that = this;
 				that.page = 1;
 				that.getSwiper(API.GetSwiperid());
-				that.getRecommend(API.GetRecommend());
+				that.getTopPic();
+				that.getRecommend();
 				that.getMetaList();
 				that.getContentsList(false);
 			},
@@ -420,6 +432,9 @@
 				}
 				if(localStorage.getItem('contentsList_'+meta)){
 					that.contentsList = JSON.parse(localStorage.getItem('contentsList_'+meta));
+				}
+				if(localStorage.getItem('Topic')){
+					that.Topic = JSON.parse(localStorage.getItem('Topic'));
 				}
 			},
 			getAds(){
@@ -491,17 +506,18 @@
 					}
 				})
 			},
-			getRecommend(id){
+			getRecommend(){
 				var that = this;
 				var data = {
-					"mid":id
+					"isrecommend":1
 				}
 				Net.request({
-					url: API.getMetaContents(),
+					url: API.getContentsList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
+						"order":"created"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -552,6 +568,44 @@
 								}];
 								that.metaList = meta.concat(list);
 								localStorage.setItem('metaList',JSON.stringify(that.metaList));
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			getTopPic(){
+				var that = this;
+				var data = {
+					"isrecommend":"1"
+				}
+				Net.request({
+					url: API.getMetasList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":4,
+						"page":1,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								that.Topic = list;
+								localStorage.setItem('Topic',JSON.stringify(that.Topic));
 							}
 						}
 						var timer = setTimeout(function() {
@@ -842,6 +896,20 @@
 				
 				uni.navigateTo({
 				    url: '/pages/contents/imagetoday'
+				});
+			},
+			toMetas(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/metas'
+				});
+			},
+			toRecommend(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/recommend'
 				});
 			},
 			closeUpdate(){

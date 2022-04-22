@@ -254,6 +254,14 @@
 			"style": {}
 		},
 		{
+			"path": "pages/contents/metas",
+			"style": {}
+		},
+		{
+			"path": "pages/contents/recommend",
+			"style": {}
+		},
+		{
 			"path": "pages/contents/search",
 			"style": {}
 		},
