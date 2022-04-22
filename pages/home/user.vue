@@ -258,6 +258,7 @@
 			</view>
 		</view>
 		<!--  #ifdef APP-PLUS -->
+		<view style="height: 100upx;"></view>
 		<Tabbar :current="3"></Tabbar>
 		<!--  #endif -->
 	</view>

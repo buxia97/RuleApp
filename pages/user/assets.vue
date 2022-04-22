@@ -117,7 +117,16 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+				that.userStatus();
+				that.getOrderList();
+			}
+			that.getVipInfo();
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onShow(){
 			var that = this;
@@ -230,6 +239,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						uni.stopPullDownRefresh()
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -244,6 +254,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'

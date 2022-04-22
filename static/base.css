@@ -1016,7 +1016,6 @@ page{
 	margin: 0 auto;
 	background-color: #fff;
 	width: 550upx;
-	height: 800upx;
 	border-radius: 10upx;
 	padding: 30upx;
 }
@@ -1596,4 +1595,8 @@ page{
 }
 .meta-main{
 	line-height: 40upx;
+}
+.setShop-btn{
+	height: 60upx;
+	margin-top: 20upx;
 }

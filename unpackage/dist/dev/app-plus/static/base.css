@@ -84,6 +84,11 @@ page{
 	/* box-shadow: 1px 2px 2px rgba(0,0,0,.15); */
 	opacity: 0.8;
 }
+.tool-sort .index-sort-i{
+	width: 90upx;
+	height: 90upx;
+	line-height: 90upx;
+}
 .index-sort-text{
 	font-size: 26upx;
 }
@@ -202,9 +207,53 @@ page{
 	-webkit-line-clamp:3;
 	word-break: break-all;
 }
+.cu-card.article>.cu-item .content.article-content .text-content{
+	-webkit-line-clamp:2;
+	height: 2.8em;
+	overflow: hidden;
+}
+.cu-card.article>.cu-item .content.article-content {
+	display: block;
+}
+.cu-card.article>.cu-item .content.article-content>image{
+	float: left;
+	height: 5.5em;
+}
+.cu-card.article>.cu-item  .article-content-btn{
+	padding: 0px 30upx;
+	margin-top: 20upx;
+}
+.content-author{
+	line-height: 45upx;
+	height: 45upx;
+	overflow: hidden;
+	margin-top: 25upx;
+	font-size: 24upx;
+	color: #666;
+}
+.content-author image{
+	width: 45upx;
+	display: block;
+	float: left;
+	height: 45upx;
+	margin-right: 15upx;
+	border-radius: 50%;
+}
+.cu-card.article>.cu-item .title{
+	line-height: 70upx;
+	margin-top: 15upx;
+	margin-bottom: 5upx;
+}
+.content-author .article-category{
+	float: right;
+}
+.content-author.content-header{
+	padding: 0upx 30upx;
+}
 .data-box  .cu-card.article>.cu-item .content>image{
 	width: 220upx;
 	height: 6em;
+	
 	border-radius: 15upx;
 }
 .text-rule{
@@ -967,7 +1016,6 @@ page{
 	margin: 0 auto;
 	background-color: #fff;
 	width: 550upx;
-	height: 800upx;
 	border-radius: 10upx;
 	padding: 30upx;
 }
@@ -1505,4 +1553,50 @@ page{
 .fullpost-btn .cu-btn{
 	margin: 10upx;
 	border-radius: 6upx;
+}
+.post-link-type{
+	margin-top: 10upx;
+}
+.post-link-box{
+	padding: 10upx;
+	color: #666;
+}
+.post-link-box.cur{
+	color: #0081FF;
+}
+.tokenList-box{
+	padding: 30upx;
+	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+}
+.tokenList-box .tokenList-info{
+	color: #666;
+	overflow: hidden;
+	margin-top: 15upx;
+}
+.tokenList-box .tokenList-info .cu-btn{
+	position: absolute;
+	right: 30upx;
+	top: 38upx;
+	border-radius: 8upx;
+}
+.shop-value-title{
+	padding-left: 20upx;
+	font-size: 30upx;
+	font-weight: bold;
+	color: #333;
+	line-height: 1;
+	border-left: 8upx solid #0081FF;
+}
+.meta-id{
+	float: right;
+	color: #666;
+	font-size: 26upx;
+}
+.meta-main{
+	line-height: 40upx;
+}
+.setShop-btn{
+	height: 60upx;
+	margin-top: 20upx;
 }

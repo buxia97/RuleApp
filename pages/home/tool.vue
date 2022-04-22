@@ -183,6 +183,7 @@
 		</view>
 		<!--加载遮罩结束-->
 		<!--  #ifdef APP-PLUS -->
+		<view style="height: 100upx;"></view>
 		<Tabbar :current="2"></Tabbar>
 		<!--  #endif -->
 	</view>
@@ -304,11 +305,26 @@
 				    url: '/pages/contents/imagetoday'
 				});
 			},
+			toForeverblog(){
+				var that = this;
+				
+				uni.navigateTo({
+					url: '/pages/contents/foreverblog'
+				});
+				
+			},
 			toShop(){
 				var that = this;
 				
 				uni.navigateTo({
 				    url: '/pages/contents/shop'
+				});
+			},
+			toCategoryContents(title,id){
+				var that = this;
+				var type="meta";
+				uni.navigateTo({
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
 			userStatus() {

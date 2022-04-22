@@ -129,6 +129,7 @@
 				var that = this;
 				that.type=i;
 				that.page=1;
+				that.metaList = [];
 				that.moreText="加载更多";
 				that.isLoad=0;
 				that.getMetaList(false);
@@ -157,6 +158,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						uni.stopPullDownRefresh()
 						that.isLoad=0;
 						//console.log(JSON.stringify(res))
 						that.moreText="加载更多";
@@ -183,6 +185,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						uni.stopPullDownRefresh()
 						that.moreText="加载更多";
 						that.isLoad=0;
 						var timer = setTimeout(function() {
@@ -221,6 +224,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);

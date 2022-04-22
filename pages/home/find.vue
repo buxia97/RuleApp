@@ -86,6 +86,7 @@
 		</view>
 		<!--加载遮罩结束-->
 		<!--  #ifdef APP-PLUS -->
+		<view style="height: 100upx;"></view>
 		<Tabbar :current="1"></Tabbar>
 		<!--  #endif -->
 	</view>

@@ -156,7 +156,9 @@
 		},
 		{
 			"path": "pages/user/assets",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/user/userwithdraw",
@@ -323,7 +325,10 @@
 			"path": "pages/manage/tokenpay"
 		},
 		{
-			"path": "pages/manage/metas"
+			"path": "pages/manage/metas",
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/manage/metasedit"

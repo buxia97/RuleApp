@@ -152,7 +152,6 @@
 					"type":that.type,
 					"token":token,
 				}
-				console.log(JSON.stringify(data))
 				uni.showLoading({
 					title: "加载中"
 				});

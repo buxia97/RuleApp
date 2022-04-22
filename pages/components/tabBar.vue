@@ -1,5 +1,5 @@
 <template>
-	<view style="height: 100upx;"></view>
+	
     <view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
 		<block  v-for="(item, index) in list" 
 			    :key="index">
