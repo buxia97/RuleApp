@@ -388,7 +388,29 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 191));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var _methods;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 77));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -404,7 +426,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       group: "",
 
       feedback: API.GetFeedback(),
-      userlvStyle: "" };
+      userlvStyle: "",
+
+      aboutme: API.GetAboutme() };
 
 
   },
@@ -414,6 +438,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
   },
   onShow: function onShow() {
     var that = this;
+
+
+
 
 
 
@@ -443,7 +470,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
 
   },
-  methods: {
+  methods: (_methods = {
     toLogin: function toLogin() {
       var that = this;
 
@@ -663,6 +690,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
             _index.localStorage.removeItem('token');
             that.userInfo = null;
           } else {
+
             if (_index.localStorage.getItem('userinfo')) {
 
               var userInfo = JSON.parse(_index.localStorage.getItem('userinfo'));
@@ -672,6 +700,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
               if (res.data.data.lv) {
                 userInfo.lv = res.data.data.lv;
               }
+              if (res.data.data.isvip) {
+                userInfo.isvip = res.data.data.isvip;
+              }
+              if (res.data.data.vip) {
+                userInfo.vip = res.data.data.vip;
+              }
+              that.userInfo = userInfo;
             }
 
           }
@@ -682,6 +717,15 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
             icon: 'none' });
 
         } });
+
+    },
+    toGroup: function toGroup() {
+      var url = API.GetGroupUrl();
+
+
+
+
+
 
     },
     getUserData: function getUserData() {
@@ -767,31 +811,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         url: '/pages/contents/search' });
 
     },
-    toGroup: function toGroup() {
-      var url = API.GetGroupUrl();
-
-
-
-
-
-
-    },
-    toWeb: function toWeb() {
-      var url = API.GetWebUrl();
-
-
-
-
-
-
-    },
-    toGithub: function toGithub() {
-      var url = API.GetGithubUrl();
-
-
-
-
-
+    toMedia: function toMedia() {
+      uni.navigateTo({
+        url: '/pages/user/media' });
 
     },
     toSetUp: function toSetUp() {
@@ -812,7 +834,6 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         onlyFromCamera: false,
         scanType: ['barCode', 'qrCode'],
         success: function success(res) {
-          console.log(JSON.stringify(res.result));
           var text = res.result;
           var strUrl = "^((https|http|ftp|rtsp|mms)?://)" +
           "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" +
@@ -884,50 +905,42 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           return false;
         }
       }
-
-      Net.request({
-
-        url: API.setScan(),
-        data: {
-          "token": that.token,
-          "codeContent": text.data },
-
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
-        method: "get",
-        dataType: 'json',
-        success: function success(res) {
-          uni.showToast({
-            title: res.data.msg,
-            icon: 'none' });
+      uni.navigateTo({
+        url: '/pages/user/scan?text=' + text.data });
 
 
-        },
-        fail: function fail(res) {
-          uni.showToast({
-            title: "网络开小差了哦",
-            icon: 'none' });
+    } }, _defineProperty(_methods, "toPage", function toPage(
+  title, cid) {
+    var that = this;
 
-        } });
+    uni.navigateTo({
+      url: '/pages/contents/info?cid=' + cid + "&title=" + title });
 
-    },
-    isJSON: function isJSON(str) {
+  }), _defineProperty(_methods, "isJSON", function isJSON(
+  str) {
 
-      if (typeof str == 'string') {
-        try {
-          var obj = JSON.parse(str);
-          if (typeof obj == 'object' && obj) {
-            return true;
-          } else {
-            return false;
-          }
-        } catch (e) {
-          console.log('error：' + str + '!!!' + e);
+    if (typeof str == 'string') {
+      try {
+        var obj = JSON.parse(str);
+        if (typeof obj == 'object' && obj) {
+          return true;
+        } else {
           return false;
         }
+      } catch (e) {
+        console.log('error：' + str + '!!!' + e);
+        return false;
       }
-    } },
+    }
+  }), _methods),
+
+
+
+
+
+
+
+
 
   components: {
     waves: waves } };exports.default = _default;

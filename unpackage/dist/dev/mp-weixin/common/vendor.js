@@ -947,7 +947,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -2408,8 +2408,9 @@ if (typeof window === 'object' && typeof window.document === 'object') {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://127.0.0.1:8081/';
+var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'https://api.ruletree.club/';
+
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -2435,35 +2436,6 @@ var linkRule = WEB_URL + "archives/{cid}/"; //普通文章
 var pageRule = WEB_URL + "{slug}.html"; //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394;
-//首页专题（mid为typecho数据库的标签和分类id，调用的文章就是该标签或者分类下文章）
-var Topic = [
-{
-  "mid": 165,
-  "name": "#Typecho#",
-  "imgUrl": "../../static/img/topic1.jpg" },
-
-{
-  "mid": 2,
-  "name": "#编程#",
-  "imgUrl": "../../static/img/topic2.jpg" },
-
-{
-  "mid": 24,
-  "name": "#APP开发#",
-  "imgUrl": "../../static/img/topic3.jpg" },
-
-{
-  "mid": 3,
-  "name": "#短篇文学#",
-  "imgUrl": "../../static/img/topic4.jpg" }];
-
-
-//推荐文章,后面的数字为mid，为typecho数据库的标签和分类id
-var recommend = 397;
-//软件中心链接,后面的数字为mid，为typecho数据库的标签和分类id
-var software = 58;
-//工具页数据调用id,后面的数字为mid，为typecho数据库的标签和分类id
-var tool = 58;
 //精选作品mid,后面的数字为mid，为typecho数据库的标签和分类id
 var featured = 397;
 
@@ -2500,18 +2472,6 @@ module.exports = (_module$exports = {
   },
   GetSwiperid: function GetSwiperid() {
     return swiperid;
-  },
-  GetTopic: function GetTopic() {
-    return Topic;
-  },
-  GetRecommend: function GetRecommend() {
-    return recommend;
-  },
-  GetSoftware: function GetSoftware() {
-    return software;
-  },
-  GetTool: function GetTool() {
-    return tool;
   },
   GetFeatured: function GetFeatured() {
     return featured;
@@ -2615,6 +2575,9 @@ module.exports = (_module$exports = {
   } }, _defineProperty(_module$exports, "removeLog",
 function removeLog() {
   return API_URL + 'typechoUserlog/removeLog';
+}), _defineProperty(_module$exports, "dataClean",
+function dataClean() {
+  return API_URL + 'typechoUserlog/dataClean';
 }), _defineProperty(_module$exports, "getCommentsList",
 
 
@@ -2638,21 +2601,28 @@ function getMetaContents() {
 }), _defineProperty(_module$exports, "getMetasList",
 function getMetasList() {
   return API_URL + 'typechoMetas/metasList';
+}), _defineProperty(_module$exports, "geMetaInfo",
+function geMetaInfo() {
+  return API_URL + 'typechoMetas/metaInfo';
+}), _defineProperty(_module$exports, "editMeta",
+function editMeta() {
+  return API_URL + 'typechoMetas/editMeta';
 }), _defineProperty(_module$exports, "getContentsList",
+
 function getContentsList() {
-  return API_URL + 'typechoContents/contensList';
+  return API_URL + 'typechoContents/contentsList';
 }), _defineProperty(_module$exports, "getContentsInfo",
 function getContentsInfo() {
   return API_URL + 'typechoContents/contentsInfo';
-}), _defineProperty(_module$exports, "contensAdd",
-function contensAdd() {
-  return API_URL + 'typechoContents/contensAdd';
-}), _defineProperty(_module$exports, "contensUpdate",
+}), _defineProperty(_module$exports, "contentsAdd",
+function contentsAdd() {
+  return API_URL + 'typechoContents/contentsAdd';
+}), _defineProperty(_module$exports, "contentsUpdate",
 
-function contensUpdate() {
-  return API_URL + 'typechoContents/contensUpdate';
-}), _defineProperty(_module$exports, "contensImage",
-function contensImage() {
+function contentsUpdate() {
+  return API_URL + 'typechoContents/contentsUpdate';
+}), _defineProperty(_module$exports, "contentsImage",
+function contentsImage() {
   return API_URL + 'typechoContents/ImagePexels';
 }), _defineProperty(_module$exports, "allData",
 function allData() {
@@ -2670,6 +2640,10 @@ function getForeverblog() {
 
 function isCommnet() {
   return API_URL + 'typechoContents/isCommnet';
+}), _defineProperty(_module$exports, "toRecommend",
+
+function toRecommend() {
+  return API_URL + 'typechoContents/toRecommend';
 }), _defineProperty(_module$exports, "upload",
 
 function upload() {
@@ -2701,6 +2675,12 @@ function isBuyShop() {
 }), _defineProperty(_module$exports, "auditShop",
 function auditShop() {
   return API_URL + 'typechoShop/auditShop';
+}), _defineProperty(_module$exports, "getVipInfo",
+function getVipInfo() {
+  return API_URL + 'typechoShop/vipInfo';
+}), _defineProperty(_module$exports, "buyVIP",
+function buyVIP() {
+  return API_URL + 'typechoShop/buyVIP';
 }), _defineProperty(_module$exports, "orderList",
 function orderList() {
   return API_URL + 'typechoUserlog/orderList';
@@ -2720,6 +2700,10 @@ function scancodePay() {
 
 function wxPay() {
   return API_URL + 'pay/WxPay';
+}), _defineProperty(_module$exports, "tokenPay",
+
+function tokenPay() {
+  return API_URL + 'pay/tokenPay';
 }), _defineProperty(_module$exports, "qrCode",
 
 
@@ -2728,9 +2712,19 @@ function qrCode() {
 }), _defineProperty(_module$exports, "payLogList",
 function payLogList() {
   return API_URL + 'pay/payLogList';
+}), _defineProperty(_module$exports, "tokenPayList",
+
+function tokenPayList() {
+  return API_URL + 'pay/tokenPayList';
+}), _defineProperty(_module$exports, "tokenPayExcel",
+function tokenPayExcel() {
+  return API_URL + 'pay/tokenPayExcel';
+}), _defineProperty(_module$exports, "madetoken",
+
+
+function madetoken() {
+  return API_URL + 'pay/madetoken';
 }), _defineProperty(_module$exports, "IsNull", function IsNull(
-
-
 obj) {
   return obj != null && obj != undefined;
 }), _defineProperty(_module$exports, "randomHexColor", function randomHexColor()
@@ -2846,7 +2840,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 203:
+/***/ 235:
 /*!****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/index.js ***!
   \****************************************************************/
@@ -2858,7 +2852,7 @@ module.exports = {
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */var _require =
-__webpack_require__(/*! ./marked.min */ 204),marked = _require.marked;
+__webpack_require__(/*! ./marked.min */ 236),marked = _require.marked;
 var index = 0;
 
 function Markdown(vm) {
@@ -2890,7 +2884,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 204:
+/***/ 236:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/marked.min.js ***!
   \*********************************************************************/
@@ -2906,7 +2900,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 205:
+/***/ 237:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/index.js ***!
   \*************************************************************/
@@ -2916,7 +2910,7 @@ module.exports = Markdown;
 /**
  * @fileoverview audio 插件
  */
-var context = __webpack_require__(/*! ./context */ 206);
+var context = __webpack_require__(/*! ./context */ 238);
 var index = 0;
 
 function Audio(vm) {
@@ -2950,7 +2944,7 @@ module.exports = Audio;
 
 /***/ }),
 
-/***/ 206:
+/***/ 238:
 /*!***************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
   \***************************************************************/
@@ -2966,7 +2960,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 207:
+/***/ 239:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/index.js ***!
   \*****************************************************************/
@@ -2977,9 +2971,9 @@ module.exports = {
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
  */
-var prism = __webpack_require__(/*! ./prism.min */ 208);
-var config = __webpack_require__(/*! ./config */ 209);
-var Parser = __webpack_require__(/*! ../parser */ 210);
+var prism = __webpack_require__(/*! ./prism.min */ 240);
+var config = __webpack_require__(/*! ./config */ 241);
+var Parser = __webpack_require__(/*! ../parser */ 242);
 
 function Highlight(vm) {
   this.vm = vm;
@@ -3064,7 +3058,7 @@ module.exports = Highlight;
 
 /***/ }),
 
-/***/ 208:
+/***/ 240:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/prism.min.js ***!
   \*********************************************************************/
@@ -3082,7 +3076,7 @@ Prism.languages.javascript = Prism.languages.extend("clike", { "class-name": [Pr
 
 /***/ }),
 
-/***/ 209:
+/***/ 241:
 /*!******************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/config.js ***!
   \******************************************************************/
@@ -3097,7 +3091,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 210:
+/***/ 242:
 /*!********************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/parser.js ***!
   \********************************************************/
@@ -4331,7 +4325,7 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 211:
+/***/ 243:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/search/index.js ***!
   \**************************************************************/
@@ -4470,7 +4464,7 @@ module.exports = Search;
 
 /***/ }),
 
-/***/ 212:
+/***/ 244:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/index.js ***!
   \*************************************************************/
@@ -4485,7 +4479,7 @@ function Style() {
 }
 
 
-var Parser = __webpack_require__(/*! ./parser */ 213);
+var Parser = __webpack_require__(/*! ./parser */ 245);
 
 Style.prototype.onParse = function (node, vm) {
   // 获取样式
@@ -4607,7 +4601,7 @@ module.exports = Style;
 
 /***/ }),
 
-/***/ 213:
+/***/ 245:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/parser.js ***!
   \**************************************************************/
@@ -4792,14 +4786,14 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 214:
+/***/ 246:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/img-cache/index.js ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 215);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
+/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 247);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
   name: 'imgcache',
   prefix: 'imgcache_' };
 
@@ -4941,18 +4935,18 @@ module.exports = ImgCache;
 
 /***/ }),
 
-/***/ 215:
+/***/ 247:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 216);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 248);
 
 /***/ }),
 
-/***/ 216:
+/***/ 248:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -4983,7 +4977,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 217);
+module.exports = __webpack_require__(/*! ./runtime */ 249);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -5000,7 +4994,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 217:
+/***/ 249:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -11259,7 +11253,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -11280,14 +11274,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -11373,7 +11367,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));

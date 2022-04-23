@@ -7,6 +7,8 @@
     "pages/user/userlist",
     "pages/user/useredit",
     "pages/user/mailedit",
+    "pages/user/media",
+    "pages/user/scan",
     "pages/user/login",
     "pages/user/foget",
     "pages/user/register",
@@ -19,6 +21,8 @@
     "pages/contents/alltag",
     "pages/contents/randlist",
     "pages/contents/allcategory",
+    "pages/contents/metas",
+    "pages/contents/recommend",
     "pages/contents/search",
     "pages/contents/userinfo",
     "pages/contents/foreverblog"
@@ -63,5 +67,5 @@
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap74.json"
+  "sitemapLocation": "sitemap.json"
 }

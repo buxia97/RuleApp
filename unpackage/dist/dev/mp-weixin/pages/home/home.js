@@ -108,38 +108,40 @@ var render = function() {
   var l0 = _vm.__map(_vm.Topic, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m0 = _vm.replaceSpecialChar(item.name)
+    var m0 = item.type == "tag" ? _vm.replaceSpecialChar(item.name) : null
+    var m1 = !(item.type == "tag") ? _vm.replaceSpecialChar(item.name) : null
     return {
       $orig: $orig,
-      m0: m0
+      m0: m0,
+      m1: m1
     }
   })
 
   var l1 = _vm.__map(_vm.recommendList, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m1 = _vm.replaceSpecialChar(item.title)
-    var m2 = _vm.formatDate(item.created)
+    var m2 = _vm.replaceSpecialChar(item.title)
+    var m3 = _vm.formatDate(item.created)
     return {
       $orig: $orig,
-      m1: m1,
-      m2: m2
+      m2: m2,
+      m3: m3
     }
   })
 
   var l2 = _vm.__map(_vm.contentsList, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m3 = _vm.replaceSpecialChar(item.title)
-    var m4 = _vm.subText(item.text, 80)
-    var m5 = _vm.formatNumber(item.views)
-    var m6 = _vm.formatDate(item.created)
+    var m4 = _vm.replaceSpecialChar(item.title)
+    var m5 = _vm.subText(item.text, 80)
+    var m6 = _vm.formatNumber(item.views)
+    var m7 = _vm.formatDate(item.created)
     return {
       $orig: $orig,
-      m3: m3,
       m4: m4,
       m5: m5,
-      m6: m6
+      m6: m6,
+      m7: m7
     }
   })
 
@@ -419,7 +421,43 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 191));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 77));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -430,12 +468,11 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       NavBar: this.StatusBar + this.CustomBar,
 
       cardCur: 0,
-      softwareid: API.GetSoftware(),
       swiperList: [],
       recommendList: [],
       contentsList: [],
       metaList: [],
-      Topic: API.GetTopic(),
+      Topic: [],
       dotStyle: false,
       towerStart: 0,
       direction: '100000',
@@ -475,6 +512,10 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
   onShow: function onShow() {
     var that = this;
+
+
+
+
 
 
 
@@ -535,7 +576,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       var that = this;
       that.page = 1;
       that.getSwiper(API.GetSwiperid());
-      that.getRecommend(API.GetRecommend());
+      that.getTopPic();
+      that.getRecommend();
       that.getMetaList();
       that.getContentsList(false);
     },
@@ -579,6 +621,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       }
       if (_index.localStorage.getItem('contentsList_' + meta)) {
         that.contentsList = JSON.parse(_index.localStorage.getItem('contentsList_' + meta));
+      }
+      if (_index.localStorage.getItem('Topic')) {
+        that.Topic = JSON.parse(_index.localStorage.getItem('Topic'));
       }
     },
     getAds: function getAds() {
@@ -650,17 +695,18 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         } });
 
     },
-    getRecommend: function getRecommend(id) {
+    getRecommend: function getRecommend() {
       var that = this;
       var data = {
-        "mid": id };
+        "isrecommend": 1 };
 
       Net.request({
-        url: API.getMetaContents(),
+        url: API.getContentsList(),
         data: {
           "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
           "limit": 5,
-          "page": 1 },
+          "page": 1,
+          "order": "created" },
 
         header: {
           'Content-Type': 'application/x-www-form-urlencoded' },
@@ -711,6 +757,44 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
               that.metaList = meta.concat(list);
               _index.localStorage.setItem('metaList', JSON.stringify(that.metaList));
+            }
+          }
+          var timer = setTimeout(function () {
+            that.isLoading = 1;
+            clearTimeout('timer');
+          }, 300);
+        },
+        fail: function fail(res) {
+          var timer = setTimeout(function () {
+            that.isLoading = 1;
+            clearTimeout('timer');
+          }, 300);
+        } });
+
+    },
+    getTopPic: function getTopPic() {
+      var that = this;
+      var data = {
+        "isrecommend": "1" };
+
+      Net.request({
+        url: API.getMetasList(),
+        data: {
+          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
+          "limit": 4,
+          "page": 1 },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          if (res.data.code == 1) {
+            var list = res.data.data;
+            if (list.length > 0) {
+              that.Topic = list;
+              _index.localStorage.setItem('Topic', JSON.stringify(that.Topic));
             }
           }
           var timer = setTimeout(function () {
@@ -913,6 +997,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
       }
 
     },
+    toShop: function toShop() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '/pages/contents/shop' });
+
+    },
     formatDate: function formatDate(datetime) {
       var datetime = new Date(parseInt(datetime * 1000));
       // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -983,7 +1074,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
           },
           fail: function fail(res) {
-            console.log("更新地址请求失败！" + API.GetUpdateUrl());
+
           } });
 
 
@@ -994,6 +1085,20 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
       uni.navigateTo({
         url: '/pages/contents/imagetoday' });
+
+    },
+    toMetas: function toMetas() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '/pages/contents/metas' });
+
+    },
+    toRecommend: function toRecommend() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '/pages/contents/recommend' });
 
     },
     closeUpdate: function closeUpdate() {
@@ -1009,6 +1114,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
 
 
+
+    },
+    toRand: function toRand() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '/pages/contents/randlist' });
 
     },
     replaceSpecialChar: function replaceSpecialChar(text) {
@@ -1028,39 +1140,19 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
           icon: 'none' });
 
         return false;
-      } else {
-        token = _index.localStorage.getItem('token');
       }
-      Net.request({
-
-        url: API.setScan(),
-        data: {
-          "token": token,
-          "codeContent": text },
-
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
-        method: "get",
-        dataType: 'json',
-        success: function success(res) {
-          if (res.data.msg == "操作成功！") {
-            uni.showToast({
-              title: "授权登录成功！",
-              icon: 'none' });
-
-          }
-
-
-        },
-        fail: function fail(res) {
-          uni.showToast({
-            title: "网络开小差了哦",
-            icon: 'none' });
-
-        } });
+      uni.navigateTo({
+        url: '/pages/user/scan?text=' + text });
 
     } },
+
+
+
+
+
+
+
+
 
 
   components: {

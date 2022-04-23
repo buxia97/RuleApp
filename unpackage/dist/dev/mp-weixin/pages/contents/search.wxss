@@ -64,20 +64,28 @@ page{
 	/* box-shadow: 0px 0px 5px rgba(0,0,0,.1); */
 }
 .index-sort-main{
-	padding: 30rpx 0rpx;
+	padding: 25rpx 0rpx;
 }
 .index-sort-i{
 	width: 80rpx;
 	height: 80rpx;
 	line-height: 80rpx;
-	text-align: 80rpx;
+	text-align: center;
 	margin: 0 auto 10rpx auto;
-	background-color: #0081FF;
 	color: #fff;
+	background-color: #0081ff;
 	font-size: 36rpx;
 	border-radius: 50%;
-	box-shadow: 1px 2px 2px rgba(0,0,0,.15);
+	/* box-shadow: 1px 2px 2px rgba(0,0,0,.15); */
 	opacity: 0.8;
+}
+.tool-sort .index-sort-i{
+	width: 90rpx;
+	height: 90rpx;
+	line-height: 90rpx;
+}
+.index-sort-text{
+	font-size: 26rpx;
 }
 .index-sort .index-sort-box:nth-child(1) .index-sort-i{
 	background-color: #fbbd08;
@@ -101,7 +109,7 @@ page{
 	background-color: #eb550f;
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
-	background-color: #607d8b;
+	background-color: #4343e7;
 }
 .index-sort .index-sort-box:nth-child(9) .index-sort-i{
 	background-color: #ff9f10;
@@ -192,32 +200,75 @@ page{
 	-webkit-line-clamp:3;
 	word-break: break-all;
 }
+.cu-card.article>.cu-item .content.article-content .text-content{
+	-webkit-line-clamp:2;
+	height: 2.8em;
+	overflow: hidden;
+}
+.cu-card.article>.cu-item .content.article-content {
+	display: block;
+}
+.cu-card.article>.cu-item .content.article-content>image{
+	float: left;
+	height: 5.5em;
+}
+.cu-card.article>.cu-item  .article-content-btn{
+	padding: 0px 30rpx;
+	margin-top: 20rpx;
+}
+.content-author{
+	line-height: 45rpx;
+	height: 45rpx;
+	overflow: hidden;
+	margin-top: 25rpx;
+	font-size: 24rpx;
+	color: #666;
+}
+.content-author image{
+	width: 45rpx;
+	display: block;
+	float: left;
+	height: 45rpx;
+	margin-right: 15rpx;
+	border-radius: 50%;
+}
+.cu-card.article>.cu-item .title{
+	line-height: 70rpx;
+	margin-top: 15rpx;
+	margin-bottom: 5rpx;
+}
+.content-author .article-category{
+	float: right;
+}
+.content-author.content-header{
+	padding: 0rpx 30rpx;
+}
 .data-box  .cu-card.article>.cu-item .content>image{
 	width: 220rpx;
 	height: 6em;
+	
 	border-radius: 15rpx;
 }
 .text-rule{
 	color: #0081FF;
 }
 .topic{
-	height: 280rpx;
 	padding: 0rpx 15rpx;
-	width: 1400rpx;
+	width: 100%;
 }
 .topic-box{
-	padding:30rpx 10rpx;
+	padding:10rpx;
 }
 .topic-main{
 	border-radius: 15rpx;
 	overflow: hidden;
 	
-	height: 220rpx;
+	height: 160rpx;
 	position: relative;
 }
 .topic-main image{
 	width: 100%;
-	height: 220rpx;
+	height: 160rpx;
 	transition:0.3s all;
 	-webkit-transition:0.3s all;
 	-moz-transition:0.3s all;
@@ -231,9 +282,9 @@ page{
 .topic-text{
 	position: absolute;
 	width: 100%;
-	height: 220rpx;
+	height: 160rpx;
 	text-align: center;
-	line-height: 220rpx;
+	line-height: 160rpx;
 	top: 0px;
 	font-size: 30rpx;
 	left: 0px;
@@ -949,7 +1000,6 @@ page{
 	margin: 0 auto;
 	background-color: #fff;
 	width: 550rpx;
-	height: 800rpx;
 	border-radius: 10rpx;
 	padding: 30rpx;
 }
@@ -989,10 +1039,43 @@ page{
 	background-color: #ccc;
 }
 .content-shop .cu-card{
-	box-shadow: 0rpx 0rpx 18rpx rgba(0,0,0,0.2);
+	/* box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2); */
+	border: solid 1px #ddd;
 	border-radius: 10rpx;
 	overflow: auto;
-	padding-top: 30rpx;
+}
+.content-shop  .shop-name{
+	padding: 10rpx 20rpx;
+}
+.shop-tool{
+	padding: 40rpx 20px;
+	position: relative;
+}
+.shop-tool .text-content{
+	font-weight: bold;
+	font-size: 30rpx;
+	margin-bottom:5rpx;
+}
+.shop-tool .cu-btn{
+	border-radius: 5rpx;
+	margin: 10rpx 10rpx 0rpx 10rpx;
+}
+.shop-tool .tool-price{
+	font-size: 30rpx;
+}
+.shop-tool .shop-name{
+	position: absolute;
+	color: #999;
+	top: 0rpx;
+	right: 0rpx;
+	text-align: right;
+}
+.shop-tool image{
+	width: 180rpx;
+	border-radius: 10rpx;
+	height: 180rpx;
+	margin: 0rpx auto;
+	background-color: #F3F3F3;
 }
 .content-shop .cu-card.article>.cu-item .content .text-content{
 	color: #000;
@@ -1387,5 +1470,115 @@ page{
 }
 .userinfo-lv{
 	padding-top: 10rpx;
+}
+.scan-user{
+	padding-top: 350rpx;
+}
+.scan-user image{
+	width: 160rpx;
+	border-radius: 50%;
+	height: 160rpx;
+	margin-bottom: 20rpx;
+}
+.scan-user-name{
+	font-size: 34rpx;
+	font-weight: bold;
+	margin-bottom: 20rpx;
+}
+.scan-user-btn{
+	margin-top: 100rpx;
+}
+.scan-user-btn .cu-btn{
+	height: 90rpx;
+	border-radius: 8rpx;
+	width: 400rpx;
+	margin-bottom: 20px;
+}
+.uni-swiper-slides uni-swiper-item{
+	padding: 15rpx 25rpx;
+	box-sizing: border-box;
+}
+.uni-swiper-slides .swiper-box{
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	height: 100%;
+	box-sizing: border-box;
+	border-radius:30rpx;
+}
+.screen-swiper{
+	background-color: #fff;
+}
+.vip-maim{
+	padding: 15rpx 30rpx;
+}
+.vip-maim>view{
+	padding: 40rpx 10rpx;
+	border-radius: 20rpx;
+}
+.vip-maim>view text{
+	font-size:35rpx;
+	margin-left: 10rpx;
+}
+.isVIP{
+	font-size: 24rpx;
+	line-height: 25rpx;
+	padding: 4rpx 15rpx;
+	border-radius: 8rpx;
+	margin-left: 10rpx;
+	margin-top: -4rpx;
+}
+.fullpost-btn{
+	padding: 15rpx;
+}
+.fullpost-btn .cu-btn{
+	margin: 10rpx;
+	border-radius: 6rpx;
+}
+.post-link-type{
+	margin-top: 10rpx;
+}
+.post-link-box{
+	padding: 10rpx;
+	color: #666;
+}
+.post-link-box.cur{
+	color: #0081FF;
+}
+.tokenList-box{
+	padding: 30rpx;
+	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+}
+.tokenList-box .tokenList-info{
+	color: #666;
+	overflow: hidden;
+	margin-top: 15rpx;
+}
+.tokenList-box .tokenList-info .cu-btn{
+	position: absolute;
+	right: 30rpx;
+	top: 38rpx;
+	border-radius: 8rpx;
+}
+.shop-value-title{
+	padding-left: 20rpx;
+	font-size: 30rpx;
+	font-weight: bold;
+	color: #333;
+	line-height: 1;
+	border-left: 8rpx solid #0081FF;
+}
+.meta-id{
+	float: right;
+	color: #666;
+	font-size: 26rpx;
+}
+.meta-main{
+	line-height: 40rpx;
+}
+.setShop-btn{
+	height: 60rpx;
+	margin-top: 20rpx;
 }
 

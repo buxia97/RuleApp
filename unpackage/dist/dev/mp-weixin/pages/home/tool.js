@@ -97,24 +97,6 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.toolList, function(item, index) {
-    var $orig = _vm.__get_orig(item)
-
-    var m0 = _vm.formatDate(item.created)
-    return {
-      $orig: $orig,
-      m0: m0
-    }
-  })
-
-  _vm.$mp.data = Object.assign(
-    {},
-    {
-      $root: {
-        l0: l0
-      }
-    }
-  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -322,7 +304,29 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 191));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 77));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 19);
 var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 {
@@ -343,13 +347,16 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
   },
   onPullDownRefresh: function onPullDownRefresh() {
     var that = this;
-    that.getMetaContents(API.GetTool());
     var timer = setTimeout(function () {
       uni.stopPullDownRefresh();
     }, 1000);
   },
   onShow: function onShow() {
     var that = this;
+
+
+
+
 
 
 
@@ -372,8 +379,6 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
     that.NavBar = this.CustomBar;
 
-    that.toolid = API.GetTool();
-    that.getMetaContents(that.toolid);
   },
   methods: {
     allCache: function allCache() {
@@ -382,52 +387,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         that.toolList = JSON.parse(_index.localStorage.getItem('toolList'));
       }
     },
-    getMetaContents: function getMetaContents(meta) {
-      var that = this;
-      var data = {
-        "mid": meta };
 
-      Net.request({
-        url: API.getMetaContents(),
-        data: {
-          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
-          "limit": 5,
-          "page": 1,
-          "order": "created" },
-
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
-        method: "get",
-        dataType: 'json',
-        success: function success(res) {
-          if (res.data.code == 1) {
-            var list = res.data.data;
-            if (list.length > 0) {
-              that.toolList = list;
-              _index.localStorage.setItem('toolList', JSON.stringify(list));
-            }
-          }
-          var timer = setTimeout(function () {
-            that.isLoading = 1;
-            clearTimeout('timer');
-          }, 300);
-        },
-        fail: function fail(res) {
-          var timer = setTimeout(function () {
-            that.isLoading = 1;
-            clearTimeout('timer');
-          }, 300);
-        } });
-
-    },
-    toCategoryContents: function toCategoryContents(title, id) {
-      var that = this;
-      var type = "meta";
-      uni.navigateTo({
-        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
-
-    },
     formatDate: function formatDate(datetime) {
       var datetime = new Date(parseInt(datetime * 1000));
       // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -477,11 +437,26 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         url: '/pages/contents/imagetoday' });
 
     },
+    toForeverblog: function toForeverblog() {
+      var that = this;
+
+      uni.navigateTo({
+        url: '/pages/contents/foreverblog' });
+
+
+    },
     toShop: function toShop() {
       var that = this;
 
       uni.navigateTo({
         url: '/pages/contents/shop' });
+
+    },
+    toCategoryContents: function toCategoryContents(title, id) {
+      var that = this;
+      var type = "meta";
+      uni.navigateTo({
+        url: '/pages/contents/contentlist?title=' + title + "&type=" + type + "&id=" + id });
 
     },
     userStatus: function userStatus() {
@@ -498,6 +473,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
+          that.isLoading = 1;
           if (res.data.code == 0) {
             _index.localStorage.removeItem('userinfo');
             _index.localStorage.removeItem('token');
@@ -534,6 +510,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default =
 
 
     } },
+
+
+
+
+
+
+
+
 
   components: {
     waves: waves } };exports.default = _default;

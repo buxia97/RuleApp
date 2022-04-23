@@ -101,6 +101,11 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 3));function _i
 
 
   onLaunch: function onLaunch() {
+
+
+
+
+
     uni.getSystemInfo({
       success: function success(e) {
 
