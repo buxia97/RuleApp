@@ -124,7 +124,7 @@
         "title" : "规则之树",
         "domain" : "demo.color-ui.com",
         "router" : {
-            "base" : ""
+            "base" : "/h5/"
         }
     }
 }

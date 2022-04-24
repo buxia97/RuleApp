@@ -1035,6 +1035,9 @@ page{
 .setShop-list-box text{
 	margin-right: 10rpx;
 }
+.setShop-status{
+	text-align: right;
+}
 .setShop-list-box:hover,.setShop-list-box.cur{
 	background-color: #ccc;
 }

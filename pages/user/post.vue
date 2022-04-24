@@ -155,7 +155,14 @@
 
 					<scroll-view class="setShop-list" scroll-y>
 						<view class="setShop-list-box" v-for="(item,index) in shopList" @tap="toShop(item.id)" :class="item.id==shopID?'cur':''" :key="index">
-							<text class="cuIcon-moneybagfill text-red"></text>{{item.title}}
+							<view class="setShop-list-main">
+								<text class="cuIcon-moneybagfill text-red"></text>{{item.title}}
+							</view>
+							<view class="setShop-status">
+								<text v-if="item.cid!=-1">CID：{{item.cid}}</text>
+								<text v-else class="text-green">未插入文章</text>
+							</view>
+							
 						</view>
 
 					</scroll-view>
@@ -506,7 +513,7 @@
 									  	uni.hideLoading();
 									  }, 1000);
 								  }
-								  
+								  console.log(JSON.stringify(uploadFileRes))
 								var data = JSON.parse(uploadFileRes.data);
 								//var data = uploadFileRes.data;
 								uni.showToast({

@@ -4385,15 +4385,32 @@ scroll-view.cu-steps .cu-item {
 	border-radius: 0rpx !important;
 }
 .uni-swiper-dot.uni-swiper-dot-active{
-	background-color: #54b5db !important;
+	background-color: #0081FF !important;
 	opacity: 0.8;
 }
 .uni-swiper-dot.uni-swiper-dot-active::after{
-	background-color: #54b5db !important;
+	background-color: #0081FF !important;
 	height: 8rpx !important;
+}
+.uni-swiper-dots-horizontal{
+	bottom: 40rpx !important;
 }
 .tags .tags-box ._span{
 	white-space:nowrap;
+}
+.screen-swiper image, .screen-swiper video, .swiper-item image, .swiper-item video{
+	height: 360rpx;
+	border-radius: 30rpx;
+}
+swiper-item{
+	padding: 15rpx 25rpx;
+	box-sizing: border-box;
+}
+swiper-item .swiper-text{
+	width: calc(100% - 50rpx);
+	top: 15rpx;
+	height: 360rpx;
+	border-radius: 30rpx;
 }
 @keyframes show {
 0% {

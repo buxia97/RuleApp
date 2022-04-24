@@ -4398,6 +4398,20 @@ scroll-view.cu-steps .cu-item {
 .tags .tags-box ._span{
 	white-space:nowrap;
 }
+.screen-swiper image, .screen-swiper video, .swiper-item image, .swiper-item video{
+	height: 360rpx;
+	border-radius: 30rpx;
+}
+swiper-item{
+	padding: 15rpx 25rpx;
+	box-sizing: border-box;
+}
+swiper-item .swiper-text{
+	width: calc(100% - 50rpx);
+	top: 15rpx;
+	height: 360rpx;
+	border-radius: 30rpx;
+}
 @keyframes show {
 0% {
 		-webkit-transform: translateY(-50px);

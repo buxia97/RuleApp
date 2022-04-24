@@ -257,6 +257,23 @@
 	.tags .tags-box span{
 		white-space:nowrap;
 	}
+	/* #ifdef MP */
+	.screen-swiper image, .screen-swiper video, .swiper-item image, .swiper-item video{
+		height: 360upx;
+		border-radius: 30upx;
+	}
+	swiper-item{
+		padding: 15upx 25upx;
+		box-sizing: border-box;
+		
+	}
+	swiper-item .swiper-text{
+		width: calc(100% - 50upx);
+		top: 15upx;
+		height: 360upx;
+		border-radius: 30upx;
+	}
+	/* #endif	 */
 	@keyframes show {
 		0% {
 			transform: translateY(-50px);

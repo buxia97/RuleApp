@@ -30,6 +30,16 @@
 							<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
 							<!--  #endif -->
 							<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
+							<!--  #ifdef H5 || APP-PLUS -->
+							<block v-if="isvip==1">
+								<block v-if="vip==1">
+									<text class="isVIP bg-gradual-red">VIP</text>
+								</block>
+								<block v-else>
+									<text class="isVIP bg-yellow">VIP</text>
+								</block>
+							</block>
+							<!--  #endif -->
 						</view>
 						
 					</view>
@@ -174,6 +184,8 @@
 				name:"",
 				customize:"",
 				lv:"",
+				vip:"",
+				isvip:"",
 				
 				
 			}
@@ -295,6 +307,8 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
+							that.vip = res.data.data.vip;
+							that.isvip = res.data.data.isvip;
 							that.lv = res.data.data.lv;
 							that.customize = res.data.data.customize;
 						}

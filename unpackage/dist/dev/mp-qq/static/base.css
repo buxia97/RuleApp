@@ -11,7 +11,7 @@ page{
 }
 .header .cu-bar{
 	/*  #ifdef APP-PLUS || H5  */
-	box-shadow: 0px 0px 8upx rgba(0, 0, 0, 0.1);
+	/* box-shadow: 0px 0px 8upx rgba(0, 0, 0, 0.1); */
 	/*  #endif  */
 	
 }
@@ -69,20 +69,28 @@ page{
 	/* box-shadow: 0px 0px 5px rgba(0,0,0,.1); */
 }
 .index-sort-main{
-	padding: 30upx 0upx;
+	padding: 25upx 0upx;
 }
 .index-sort-i{
 	width: 80upx;
 	height: 80upx;
 	line-height: 80upx;
-	text-align: 80upx;
+	text-align: center;
 	margin: 0 auto 10upx auto;
-	background-color: #0081FF;
 	color: #fff;
+	background-color: #0081ff;
 	font-size: 36upx;
 	border-radius: 50%;
-	box-shadow: 1px 2px 2px rgba(0,0,0,.15);
+	/* box-shadow: 1px 2px 2px rgba(0,0,0,.15); */
 	opacity: 0.8;
+}
+.tool-sort .index-sort-i{
+	width: 90upx;
+	height: 90upx;
+	line-height: 90upx;
+}
+.index-sort-text{
+	font-size: 26upx;
 }
 .index-sort .index-sort-box:nth-child(1) .index-sort-i{
 	background-color: #fbbd08;
@@ -107,7 +115,7 @@ page{
 	background-color: #eb550f;
 }
 .index-sort .index-sort-box:nth-child(8) .index-sort-i{
-	background-color: #607d8b;
+	background-color: #4343e7;
 }
 .index-sort .index-sort-box:nth-child(9) .index-sort-i{
 	background-color: #ff9f10;
@@ -199,32 +207,75 @@ page{
 	-webkit-line-clamp:3;
 	word-break: break-all;
 }
+.cu-card.article>.cu-item .content.article-content .text-content{
+	-webkit-line-clamp:2;
+	height: 2.8em;
+	overflow: hidden;
+}
+.cu-card.article>.cu-item .content.article-content {
+	display: block;
+}
+.cu-card.article>.cu-item .content.article-content>image{
+	float: left;
+	height: 5.5em;
+}
+.cu-card.article>.cu-item  .article-content-btn{
+	padding: 0px 30upx;
+	margin-top: 20upx;
+}
+.content-author{
+	line-height: 45upx;
+	height: 45upx;
+	overflow: hidden;
+	margin-top: 25upx;
+	font-size: 24upx;
+	color: #666;
+}
+.content-author image{
+	width: 45upx;
+	display: block;
+	float: left;
+	height: 45upx;
+	margin-right: 15upx;
+	border-radius: 50%;
+}
+.cu-card.article>.cu-item .title{
+	line-height: 70upx;
+	margin-top: 15upx;
+	margin-bottom: 5upx;
+}
+.content-author .article-category{
+	float: right;
+}
+.content-author.content-header{
+	padding: 0upx 30upx;
+}
 .data-box  .cu-card.article>.cu-item .content>image{
 	width: 220upx;
 	height: 6em;
+	
 	border-radius: 15upx;
 }
 .text-rule{
 	color: #0081FF;
 }
 .topic{
-	height: 280upx;
 	padding: 0upx 15upx;
-	width: 1400upx;
+	width: 100%;
 }
 .topic-box{
-	padding:30upx 10upx;
+	padding:10upx;
 }
 .topic-main{
 	border-radius: 15upx;
 	overflow: hidden;
 	
-	height: 220upx;
+	height: 160upx;
 	position: relative;
 }
 .topic-main image{
 	width: 100%;
-	height: 220upx;
+	height: 160upx;
 	transition:0.3s all;
 	-webkit-transition:0.3s all;
 	-moz-transition:0.3s all;
@@ -239,9 +290,9 @@ page{
 .topic-text{
 	position: absolute;
 	width: 100%;
-	height: 220upx;
+	height: 160upx;
 	text-align: center;
-	line-height: 220upx;
+	line-height: 160upx;
 	top: 0px;
 	font-size: 30upx;
 	left: 0px;
@@ -290,7 +341,7 @@ page{
 .info-content{
 	background: #fff;
 	font-size: 28upx;
-	line-height: 50upx;
+	line-height:1.8;
 	padding: 10upx 30upx 40upx 30upx;
 }
 .user-form{
@@ -965,7 +1016,6 @@ page{
 	margin: 0 auto;
 	background-color: #fff;
 	width: 550upx;
-	height: 800upx;
 	border-radius: 10upx;
 	padding: 30upx;
 }
@@ -1001,14 +1051,50 @@ page{
 .setShop-list-box text{
 	margin-right: 10upx;
 }
+.setShop-status{
+	text-align: right;
+}
 .setShop-list-box:hover,.setShop-list-box.cur{
 	background-color: #ccc;
 }
 .content-shop .cu-card{
-	box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2);
+	/* box-shadow: 0upx 0upx 18upx rgba(0,0,0,0.2); */
+	border: solid 1px #ddd;
 	border-radius: 10upx;
 	overflow: auto;
-	padding-top: 30upx;
+}
+.content-shop  .shop-name{
+	padding: 10upx 20upx;
+}
+.shop-tool{
+	padding: 40upx 20px;
+	position: relative;
+}
+.shop-tool .text-content{
+	font-weight: bold;
+	font-size: 30upx;
+	margin-bottom:5upx;
+}
+.shop-tool .cu-btn{
+	border-radius: 5upx;
+	margin: 10upx 10upx 0upx 10upx;
+}
+.shop-tool .tool-price{
+	font-size: 30upx;
+}
+.shop-tool .shop-name{
+	position: absolute;
+	color: #999;
+	top: 0upx;
+	right: 0upx;
+	text-align: right;
+}
+.shop-tool image{
+	width: 180upx;
+	border-radius: 10upx;
+	height: 180upx;
+	margin: 0upx auto;
+	background-color: #F3F3F3;
 }
 .content-shop .cu-card.article>.cu-item .content .text-content{
 	color: #000;
@@ -1406,4 +1492,114 @@ page{
 }
 .userinfo-lv{
 	padding-top: 10upx;
+}
+.scan-user{
+	padding-top: 350upx;
+}
+.scan-user image{
+	width: 160upx;
+	border-radius: 50%;
+	height: 160upx;
+	margin-bottom: 20upx;
+}
+.scan-user-name{
+	font-size: 34upx;
+	font-weight: bold;
+	margin-bottom: 20upx;
+}
+.scan-user-btn{
+	margin-top: 100upx;
+}
+.scan-user-btn .cu-btn{
+	height: 90upx;
+	border-radius: 8upx;
+	width: 400upx;
+	margin-bottom: 20px;
+}
+.uni-swiper-slides uni-swiper-item{
+	padding: 15upx 25upx;
+	box-sizing: border-box;
+}
+.uni-swiper-slides .swiper-box{
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	height: 100%;
+	box-sizing: border-box;
+	border-radius:30upx;
+}
+.screen-swiper{
+	background-color: #fff;
+}
+.vip-maim{
+	padding: 15upx 30upx;
+}
+.vip-maim>view{
+	padding: 40upx 10upx;
+	border-radius: 20upx;
+}
+.vip-maim>view text{
+	font-size:35upx;
+	margin-left: 10upx;
+}
+.isVIP{
+	font-size: 24upx;
+	line-height: 25upx;
+	padding: 4upx 15upx;
+	border-radius: 8upx;
+	margin-left: 10upx;
+	margin-top: -4upx;
+}
+.fullpost-btn{
+	padding: 15upx;
+}
+.fullpost-btn .cu-btn{
+	margin: 10upx;
+	border-radius: 6upx;
+}
+.post-link-type{
+	margin-top: 10upx;
+}
+.post-link-box{
+	padding: 10upx;
+	color: #666;
+}
+.post-link-box.cur{
+	color: #0081FF;
+}
+.tokenList-box{
+	padding: 30upx;
+	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+}
+.tokenList-box .tokenList-info{
+	color: #666;
+	overflow: hidden;
+	margin-top: 15upx;
+}
+.tokenList-box .tokenList-info .cu-btn{
+	position: absolute;
+	right: 30upx;
+	top: 38upx;
+	border-radius: 8upx;
+}
+.shop-value-title{
+	padding-left: 20upx;
+	font-size: 30upx;
+	font-weight: bold;
+	color: #333;
+	line-height: 1;
+	border-left: 8upx solid #0081FF;
+}
+.meta-id{
+	float: right;
+	color: #666;
+	font-size: 26upx;
+}
+.meta-main{
+	line-height: 40upx;
+}
+.setShop-btn{
+	height: 60upx;
+	margin-top: 20upx;
 }

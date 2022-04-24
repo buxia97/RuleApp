@@ -187,6 +187,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 18); //
 //
 //
@@ -243,8 +246,22 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
-var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, tagList: [], searchText: "", isLoading: 0, type: "all", curNum: 0 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.getTagList();if (res.type) {that.type = res.type;}}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, getTagList: function getTagList() {var that = this;var data = { "type": "tag" };Net.request({ url: API.getMetasList(), data: { "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)), "limit": 10000,
-          "page": 1,
+//
+//
+//
+var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_require__(/*! ../../utils/net */ 20);var _default = { data: function data() {return { StatusBar: this.StatusBar, CustomBar: this.CustomBar, NavBar: this.StatusBar + this.CustomBar, tagList: [], searchText: "", isLoading: 0, type: "all", curNum: 0, moreText: "加载更多", page: 1 };}, onPullDownRefresh: function onPullDownRefresh() {var that = this;}, onShow: function onShow() {var that = this;}, onLoad: function onLoad(res) {var that = this;that.NavBar = this.CustomBar;that.getTagList(false);if (res.type) {that.type = res.type;}}, methods: { back: function back() {uni.navigateBack({ delta: 1 });}, loadMore: function loadMore() {var that = this;that.moreText = "正在加载中...";if (that.isLoad == 0) {that.getTagList(true);}}, getTagList: function getTagList(isPage) {var that = this;var data = { "type": "tag" };
+
+      var page = that.page;
+      if (isPage) {
+        page++;
+      }
+      Net.request({
+        url: API.getMetasList(),
+        data: {
+          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
+          "limit": 50,
+          "page": page,
+          "searchKey": that.searchText,
           "order": "count" },
 
         header: {
@@ -253,6 +270,8 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
         method: "get",
         dataType: 'json',
         success: function success(res) {
+          that.isLoading = 1;
+          that.isLoad = 0;
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
@@ -279,9 +298,18 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
                 }
                 newList.push(list[i]);
               }
-              that.tagList = newList;
+              //that.tagList = newList;
 
-              _index.localStorage.setItem('tagList', JSON.stringify(that.tagList));
+              if (isPage) {
+                that.page++;
+                that.tagList = that.tagList.concat(newList);
+              } else {
+                that.tagList = newList;
+              }
+              that.moreText = "加载更多";
+
+            } else {
+              that.moreText = "没有更多数据了";
             }
           }
           var timer = setTimeout(function () {
@@ -294,6 +322,9 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
             that.isLoading = 1;
             clearTimeout('timer');
           }, 300);
+          that.isLoading = 1;
+          that.isLoad = 0;
+          that.moreText = "加载更多";
         } });
 
     },
@@ -326,19 +357,8 @@ var API = __webpack_require__(/*! ../../utils/api */ 19);var Net = __webpack_req
     searchTag: function searchTag() {
       var that = this;
       var searchText = that.searchText;
-      if (searchText == "") {
-        that.getTagList();
-      } else {
-        var list = that.tagList;
-        var tagList = [];
-        for (var i in list) {
-          if (list[i].name.indexOf(searchText) != -1) {
-            tagList.push(list[i]);
-          }
-        }
-        that.tagList = tagList;
-      }
-
+      that.page = 1;
+      that.getTagList();
     },
     submit: function submit() {
       var that = this;

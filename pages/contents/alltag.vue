@@ -36,6 +36,9 @@
 				</text>
 				
 			</view>
+			<view class="load-more" @tap="loadMore" v-if="tagList.length>0">
+				<text>{{moreText}}</text>
+			</view>
 		</view>
 		<!--  #ifdef MP -->
 		<block v-if="type=='edit'">
@@ -71,6 +74,8 @@
 				isLoading:0,
 				type:"all",
 				curNum:0,
+				moreText:"加载更多",
+				page:1,
 				
 			}
 		},
@@ -91,7 +96,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.getTagList();
+			that.getTagList(false);
 			if(res.type){
 				that.type = res.type;
 			}
@@ -102,17 +107,29 @@
 					delta: 1
 				});
 			},
-			getTagList(){
+			loadMore(){
+				var that = this;
+				that.moreText="正在加载中...";
+				if(that.isLoad==0){
+					that.getTagList(true);
+				}
+			},
+			getTagList(isPage){
 				var that = this;
 				var data = {
 					"type":"tag"
+				}
+				var page = that.page;
+				if(isPage){
+					page++;
 				}
 				Net.request({
 					url: API.getMetasList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":10000,
-						"page":1,
+						"limit":50,
+						"page":page,
+						"searchKey":that.searchText,
 						"order":"count"
 					},
 					header:{
@@ -121,6 +138,8 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoading=1;
+						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -147,9 +166,18 @@
 									}
 									newList.push(list[i]);
 								}
-								that.tagList = newList;
+								//that.tagList = newList;
 								
-								localStorage.setItem('tagList',JSON.stringify(that.tagList));
+								if(isPage){
+									that.page++;
+									that.tagList = that.tagList.concat(newList);
+								}else{
+									that.tagList = newList;
+								}
+								that.moreText="加载更多";
+								
+							}else{
+								that.moreText="没有更多数据了";
 							}
 						}
 						var timer = setTimeout(function() {
@@ -162,6 +190,9 @@
 							that.isLoading=1;
 							clearTimeout('timer')
 						}, 300)
+						that.isLoading=1;
+						that.isLoad=0;
+						that.moreText="加载更多";
 					}
 				})
 			},
@@ -194,19 +225,8 @@
 			searchTag(){
 				var that = this;
 				var searchText = that.searchText;
-				if(searchText==""){
-					that.getTagList();
-				}else{
-					var list = that.tagList;
-					var tagList=[];
-					for(var i in list){
-						if(list[i].name.indexOf(searchText) != -1){
-							tagList.push(list[i]);
-						}
-					}
-					that.tagList = tagList;
-				}
-				
+				that.page=1;
+				that.getTagList();
 			},
 			submit(){
 				var that = this;

@@ -119,12 +119,13 @@ export default {
 	    display: block;
 	    height: 100upx;
 		float: left;
-		width: calc(25% - 31upx);
+		width: calc(25% - 32upx);
 		text-align: center;
 	    height: 100upx;
 		overflow: hidden;
 		border: none;
 		margin: 0;
+		padding: 0;
 		box-sizing: border-box;
 	}
 	.tabbar-item .item-img{

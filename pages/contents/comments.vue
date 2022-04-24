@@ -109,7 +109,7 @@
 				
 				moreText:"加载更多",
 				page:1,
-				
+				isLoad:0,
 				isLoading:0,
 				
 			}
@@ -224,6 +224,7 @@
 								}else{
 									that.commentsList = commentsList;
 								}
+								that.moreText="加载更多";
 							}else{
 								that.moreText="没有更多评论了";
 							}

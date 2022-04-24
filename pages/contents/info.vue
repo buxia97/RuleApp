@@ -546,10 +546,11 @@
 				if(localStorage.getItem('commentsList_'+cid)){
 					that.commentsList = JSON.parse(localStorage.getItem('commentsList_'+cid));
 				}
-				
+				 
 			},
 			markHtml(text){
 				var that = this;
+				
 				if(that.isCommnet==1){
 					text = that.replaceAll(text,"[hide]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
 					text = that.replaceAll(text,"[/hide]","</div>");
