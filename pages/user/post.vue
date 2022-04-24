@@ -167,7 +167,7 @@
 
 					</scroll-view>
 					<view class="setShop-btn text-center">
-						<text class="cu-btn radius bg-blue" @tap="toShop">添加商品</text>
+						<text class="cu-btn radius bg-blue" @tap="toAddShop">添加商品</text>
 					</view>
 				</view>
 			</view>
@@ -872,7 +872,7 @@
 				var that = this;
 				that.postlinktype = i;
 			},
-			toShop(){
+			toAddShop(){
 				var that = this;
 				uni.navigateTo({
 				    url: '/pages/user/addshop'
