@@ -20,11 +20,11 @@
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">商品价格</view>
-				<input placeholder="输入商品价格" type="number" name="input" v-model="price"  @tap="ToisText(0)"></input>
+				<input placeholder="输入商品价格" type="number" name="input" v-model="price"    @focus="ToisText(0)" @blur="ToisText(0)"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">商品数量</view>
-				<input placeholder="输入商品数量" type="number" name="input" v-model="num"  @tap="ToisText(0)"></input>
+				<input placeholder="输入商品数量" type="number" name="input" v-model="num"   @focus="ToisText(0)" @blur="ToisText(0)"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">缩略图

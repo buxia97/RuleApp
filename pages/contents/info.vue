@@ -1144,11 +1144,13 @@
 				
 				var that = this;
 				var linkRule = API.GetLinkRule();
-				var url = linkRule.replace("{cid}",that.cid)
+				var url = linkRule.replace("{cid}",that.cid);
+				//console.log(url);
 				if(that.type!="post"){
 					var pageRule = API.GetPageRule();
 					url = pageRule.replace("{slug}",that.slug);
 				}
+				
 				// #ifdef APP-PLUS
 				uni.shareWithSystem({
 				  href: url,

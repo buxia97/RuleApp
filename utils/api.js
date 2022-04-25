@@ -1,5 +1,5 @@
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'https://api.52xzv.cn/';
+var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'https://api.52xzv.cn/';
 
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';

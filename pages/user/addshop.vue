@@ -25,7 +25,7 @@
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">商品标题</view>
-				<input placeholder="输入商品标题" name="input" v-model="title"  @tap="ToisText(0)"></input>
+				<input placeholder="输入商品标题" name="input" v-model="title"   @focus="ToisText(0)" @blur="ToisText(0)"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">商品分类</view>

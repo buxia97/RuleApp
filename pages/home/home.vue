@@ -510,6 +510,7 @@
 			getRecommend(){
 				var that = this;
 				var data = {
+					"type":"post",
 					"isrecommend":1
 				}
 				Net.request({

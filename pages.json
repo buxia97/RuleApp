@@ -97,15 +97,21 @@
 		// #endif
 		{
 			"path": "pages/user/login",
-			"style": {}
+			"style": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/foget",
-			"style": {}
+			"style": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/register",
-			"style": {}
+			"style": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/setup",

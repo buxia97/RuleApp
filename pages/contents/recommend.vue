@@ -142,6 +142,7 @@
 				var that = this;
 				var data = {
 					"type":"post",
+					"isrecommend":1
 				}
 				var page = that.page;
 				if(isPage){
