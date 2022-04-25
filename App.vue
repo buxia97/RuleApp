@@ -40,6 +40,11 @@
 					Vue.prototype.StatusBar = e.statusBarHeight;
 					Vue.prototype.CustomBar = e.statusBarHeight + 45;
 					// #endif
+					
+					// #ifdef MP-BAIDU
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					Vue.prototype.CustomBar = e.statusBarHeight + 45;
+					// #endif
 				}
 			})
 

@@ -1,4 +1,4 @@
-var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'https://www.ruletree.club/';
 //var API_URL = 'https://api.52xzv.cn/';
 
 var WEB_URL = 'https://www.ruletree.club/';
