@@ -8,9 +8,11 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					用户登录
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toRegister">
 					<text>注册</text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -24,6 +26,10 @@
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="login">立即登录</button>
+					<!-- #ifdef MP -->
+					<button class="cu-btn bg-green margin-tb-sm lg" @tap="toRegister">注册新用户</button>
+					<!-- #endif -->
+					
 					
 				</view>
 			</form>
