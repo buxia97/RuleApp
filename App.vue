@@ -45,6 +45,11 @@
 					Vue.prototype.StatusBar = e.statusBarHeight;
 					Vue.prototype.CustomBar = e.statusBarHeight + 45;
 					// #endif
+					
+					// #ifdef MP-TOUTIAO
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					Vue.prototype.CustomBar = e.statusBarHeight + 45;
+					// #endif
 				}
 			})
 

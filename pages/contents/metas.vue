@@ -146,6 +146,13 @@
 			  text = text.replace(/&nbsp;/g, ' ');
 			  return text;
 			},
+			toCategoryContents(title,id){
+				var that = this;
+				var type="meta";
+				uni.navigateTo({
+				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
+				});
+			},
 		}
 	}
 </script>
