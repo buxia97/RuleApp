@@ -565,7 +565,7 @@
 								if(res.data.data.vip){
 									userInfo.vip = res.data.data.vip;
 								}
-								that.userInfo = userInfo;
+								//that.userInfo = userInfo;
 							}
 							
 						}
