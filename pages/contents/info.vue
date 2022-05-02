@@ -56,7 +56,7 @@
 							</view>
 							<view class="text-gray text-sm flex">
 								<view class="text-cut">
-									{{userInfo.mail}}
+									{{subText(userInfo.introduce,60)}}
 								</view> </view>
 						</view>
 						<view class="action" @tap="toUserContents(userInfo)">
@@ -89,7 +89,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
 									</view>
 									<view class="tool-price">
 										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">立即下单</text>
@@ -1480,6 +1480,18 @@
 					});
 				}
 			},
+			subText(text,num){
+				if(text){
+					if(text.length>num){
+						text = text.substring(0,num);
+						return text+"……";
+					}else{
+						return text;
+					}
+				}else{
+					return "Ta还没有个人介绍哦"
+				}
+			}
 		}
 	}
 </script>

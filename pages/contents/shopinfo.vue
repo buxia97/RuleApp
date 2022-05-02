@@ -166,6 +166,7 @@
 						that.imgurl = res.data.imgurl;
 						that.price = res.data.price;
 						that.num = res.data.num;
+						that.vipDiscount = res.data.vipDiscount;
 						if(res.data.type!=1){
 							that.isBuyShop(that.sid);
 						}
@@ -372,7 +373,7 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
-							that.vipDiscount=res.data.data.vipDiscount;
+							//that.vipDiscount=res.data.data.vipDiscount;
 							that.vipPrice=res.data.data.vipPrice;
 							that.scale=res.data.data.scale;
 						}

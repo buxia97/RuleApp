@@ -54,7 +54,7 @@
 						</view>
 						<view class="shop-info">
 							<block v-if="isvip==1">
-								<text class="shop-price text-yellow text-bold">{{parseInt(item.price * vipDiscount)}}</text><text class="text-sm margin-left-sm text-yellow">积分</text>
+								<text class="shop-price text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}}</text><text class="text-sm margin-left-sm text-yellow">积分</text>
 							</block>
 							<block v-else>
 								<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">积分</text>

@@ -21,11 +21,15 @@
 			<view class="cu-form-group margin-top">
 				<view class="title">商品价格</view>
 				<input placeholder="输入商品价格" type="number" name="input" v-model="price"    @focus="ToisText(0)" @blur="ToisText(0)"></input>
+				<view class="action">
+					<text class="text-red" @tap="showModal" data-target="RadioModal">设置VIP折扣</text>
+				</view>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">商品数量</view>
 				<input placeholder="输入商品数量" type="number" name="input" v-model="num"   @focus="ToisText(0)" @blur="ToisText(0)"></input>
 			</view>
+			
 			<view class="cu-form-group">
 				<view class="title">缩略图
 				</view>
@@ -107,6 +111,22 @@
 				</view>
 			</view>
 		</view>
+		<!--折扣选择-->
+		<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="RadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item" v-for="(item,index) in DiscountList" :key="index">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">{{item.name}}</view>
+								<radio class="round" :class="vipDiscount==item.value?'checked':''" :checked="vipDiscount==item.value?true:false"
+								 :value="item.value"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -142,6 +162,7 @@
 						"mid":4
 					}
 				],
+				
 				token:"",
 				
 				isShow:false,
@@ -159,6 +180,53 @@
 				value:'',
 				price:"",
 				num:"",
+				vipDiscount:"1.0",
+				DiscountList:[
+					{
+						name:"无折扣",
+						value:"1.0",
+					},
+					{
+						name:"九折",
+						value:"0.9",
+					},
+					{
+						name:"八折",
+						value:"0.8",
+					},
+					{
+						name:"七折",
+						value:"0.7",
+					},
+					{
+						name:"六折",
+						value:"0.6",
+					},
+					{
+						name:"五折",
+						value:"0.5",
+					},
+					{
+						name:"四折",
+						value:"0.4",
+					},
+					{
+						name:"三折",
+						value:"0.3",
+					},
+					{
+						name:"二折",
+						value:"0.2",
+					},
+					{
+						name:"一折",
+						value:"0.1",
+					},
+					{
+						name:"VIP免费",
+						value:"0.0",
+					},
+				],
 				
 				link:{
 					title:"",
@@ -300,6 +368,10 @@
 			},
 			hideModal() {
 				this.modalName = null
+			},
+			RadioChange(e) {
+				this.vipDiscount = e.detail.value;
+				this.hideModal();
 			},
 			textareaAInput(){
 				var that = this;
@@ -457,6 +529,7 @@
 					'price':that.price,
 					'num':that.num,
 					'value':that.value,
+					'vipDiscount':that.vipDiscount
 				}
 				localStorage.setItem('userShopinfo',JSON.stringify(data));
 				uni.showToast({

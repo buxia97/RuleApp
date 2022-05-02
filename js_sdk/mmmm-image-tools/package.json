@@ -1,0 +1,11 @@
+{
+    "id": "mmmm-image-tools",
+    "name": "image-tools",
+    "version": "1.4.0",
+    "description": "图像转换工具，可用于图像和base64的转换",
+    "keywords": [
+        "base64",
+        "保存",
+        "图像"
+    ]
+}

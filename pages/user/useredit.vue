@@ -21,7 +21,8 @@
 			<view class="user-edit-header margin-top">
 				<image :src="avatar"></image>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text>
+				<!-- <text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text> -->
+				<text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text>
 				<!--  #endif -->
 			</view>
 			<view class="cu-form-group">
@@ -40,6 +41,10 @@
 			<view class="cu-form-group">
 				<view class="title">网址</view>
 				<input placeholder="请输入网址" name="input" v-model="url"></input>
+			</view>
+			<view class="cu-form-group align-start">
+				<view class="title">个人简介</view>
+				<textarea v-model="introduce"  placeholder="输入个人简介"></textarea>
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">密码</view>
@@ -108,6 +113,7 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -125,6 +131,7 @@
 				mail:'',
 				url:'',
 				avatar:"",
+				introduce:"",
 				
 				modalName: null,
 				
@@ -143,6 +150,12 @@
 			// #endif
 			
 			that.getCacheInfo();
+			// #ifdef H5
+			if(localStorage.getItem('toAvatar')){
+				var toAvatar = JSON.parse(localStorage.getItem('toAvatar'));
+				that.avatarUpload(toAvatar.dataUrl);
+			}
+			// #endif
 		},
 		onLoad() {
 			var that = this;
@@ -173,6 +186,7 @@
 					that.url=userInfo.url;
 					that.token=userInfo.token;
 					that.avatar=userInfo.avatar;
+					that.introduce = userInfo.introduce;
 				}
 			},
 			userEdit() {
@@ -195,6 +209,7 @@
 					name:that.name,
 					screenName:that.screenName,
 					password:that.password,
+					introduce:that.introduce,
 					url:that.url,
 				}
 				uni.showLoading({
@@ -236,6 +251,7 @@
 								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 								userInfo.screenName=that.screenName;
 								userInfo.url=that.url;
+								userInfo.introduce = that.introduce;
 								localStorage.setItem('userinfo',JSON.stringify(userInfo));
 								that.getCacheInfo();
 							}
@@ -292,6 +308,68 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			toAvatar(){
+				const that = this;
+				  uni.navigateTo({
+					url: "../../uni_modules/buuug7-img-cropper/pages/cropper",
+					events: {
+					  imgCropped(event) {
+						// 监听裁剪完成
+						// 返回的 event 中包含了已经裁剪好图片的base64编码字符串
+						// 你可以使用 <image :src="imgDataUrl" mode="aspectFit"></image> 组件来展示裁剪后的图片
+						// 或者你可以将该字符串通过接口上传给服务器用来保存
+						console.log(event);
+						// do whatever you want
+						// upload to server
+					  },
+					},
+				  });
+			},
+			avatarUpload(base64){
+				var that = this;
+				base64ToPath(base64)
+				  .then(path => {
+					console.log(path);
+					var file = path;
+					const uploadTask = uni.uploadFile({
+					  url : API.upload(),
+					  filePath:file,
+					 //  header: {
+						// "Content-Type": "multipart/form-data",
+					 // },
+					  name: 'file',
+					  formData: {
+					   'token': that.token
+					  },
+					  success: function (uploadFileRes) {
+						  setTimeout(function () {
+						  	uni.hideLoading();
+						  }, 1000);
+							var data = JSON.parse(uploadFileRes.data);
+							//var data = uploadFileRes.data;
+							uni.showToast({
+								title: data.msg,
+								icon: 'none'
+							})
+							if(data.code==1){
+								
+								that.avatar = data.data.url;
+								console.log(that.avatar)
+								
+							}
+						},fail:function(){
+							setTimeout(function () {
+								uni.hideLoading();
+							}, 1000);
+						}
+						
+					   
+					});
+				  })
+				  .catch(error => {
+					console.error("失败"+error)
+				  })
 			}
 		}
 	}

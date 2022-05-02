@@ -178,6 +178,12 @@
 			"path": "pages/user/userwithdrawlist",
 			"style": {}
 		},
+		{
+			"path": "uni_modules/buuug7-img-cropper/pages/cropper",
+			"style": {
+			"navigationBarTitleText": "头像上传"
+			}
+		},
 		// #endif
 		{
 			"path": "pages/user/agreement",

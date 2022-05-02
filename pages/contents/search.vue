@@ -133,7 +133,7 @@
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
-								{{item.mail}}
+								{{subText(item.introduce,100)}}
 							</view> </view>
 					</view>
 					<view class="action">
@@ -539,6 +539,18 @@
 			  text = text.replace(/&gt;/g, '>');
 			  text = text.replace(/&nbsp;/g, ' ');
 			  return text;
+			},
+			subText(text,num){
+				if(text){
+					if(text.length>num){
+						text = text.substring(0,num);
+						return text+"……";
+					}else{
+						return text;
+					}
+				}else{
+					return "Ta还没有个人介绍哦"
+				}
 			}
 		}
 	}

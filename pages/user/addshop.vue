@@ -498,6 +498,7 @@
 					'price':userShopinfo.price,
 					'num':userShopinfo.num,
 					'value':userShopinfo.value,
+					'vipDiscount':userShopinfo.vipDiscount,
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -573,6 +574,7 @@
 					'price':userShopinfo.price,
 					'num':userShopinfo.num,
 					'value':userShopinfo.value,
+					'vipDiscount':userShopinfo.vipDiscount,
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -660,6 +662,7 @@
 							'price':res.data.price,
 							'num':res.data.num,
 							'value':res.data.value,
+							'vipDiscount':res.data.vipDiscount,
 						}
 						that.categoryText = that.metaList[that.category-1].name;
 						localStorage.setItem('userShopinfo',JSON.stringify(data));

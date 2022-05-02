@@ -22,7 +22,7 @@
 				<view class="cu-form-group">
 					<input name="input" v-model="mail" placeholder="请输入邮箱(必填)"></input>
 				</view>
-				<view class="cu-form-group">
+				<view class="cu-form-group" v-if="isEmail==1">
 					<input name="input" v-model="code" placeholder="请输入验证码"></input>
 					<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
 					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
@@ -61,6 +61,7 @@
 				code:"",
 				password:"",
 				repassword:"",
+				isEmail:1,
 				
 			}
 		},
@@ -74,7 +75,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			that.regConfig();
 		},
 		onLoad() {
 			var that = this;
@@ -93,7 +94,7 @@
 			},
 			userRegister() {
 				var that = this;
-				if (that.name == ""||that.code == ""||that.mail == ""||that.password == ""||that.repassword == "") {
+				if (that.name == ""||that.mail == ""||that.password == ""||that.repassword == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
 						icon:'none',
@@ -201,6 +202,30 @@
 							icon: 'none'
 						})
 						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			regConfig() {
+				var that = this;
+				Net.request({
+					
+					url: API.regConfig(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							that.isEmail = res.data.data.isEmail;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
 					}
 				})
 			},
