@@ -131,6 +131,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/invitation')">
+							<view class="index-sort-i" style="background-color: #0bb335;">
+								<text class="cuIcon-friendadd"></text>
+							</view>
+							<view class="index-sort-text">
+								邀请码管理
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<view class="data-box">

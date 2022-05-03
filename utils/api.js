@@ -153,6 +153,18 @@ module.exports = {
 	regConfig:function(){
 		return API_URL + 'typechoUsers/regConfig';
 	},
+	//邀请码注册相关
+	madeInvitation:function(){
+		return API_URL + 'typechoUsers/madeInvitation';
+	},
+	invitationList:function(){
+		return API_URL + 'typechoUsers/invitationList';
+	},
+	invitationExcel:function(){
+		return API_URL + 'typechoUsers/invitationExcel';
+	},
+	
+	
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
 	},

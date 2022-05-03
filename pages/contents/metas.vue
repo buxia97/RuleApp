@@ -105,6 +105,7 @@
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":14,
+						"order":"order",
 						"page":page,
 					},
 					header:{

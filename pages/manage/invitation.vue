@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					卡密管理
+					邀请码管理
 				</view>
 				<view class="action">
 					<text class="cu-btn bg-green radius"  @tap="showModal" data-target="tokenExcel">导出</text>
@@ -16,12 +16,6 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			<view class="cu-bar bg-white search">
-				<view class="search-form round">
-					<text class="cuIcon-search"></text>
-					<input type="text" placeholder="搜索Key或使用者UID" v-model="searchText"  @input="searchTag"></input>
-				</view>
-			</view>
 			<view class="search-type grid col-2">
 				<view class="search-type-box" @tap="toType(0)" :class="status==0?'active':''">
 					<text>未使用</text>
@@ -30,22 +24,22 @@
 					<text>已使用</text>
 				</view>
 			</view>
-			<view class="no-data" v-if="tokenList.length==0">
+			<view class="no-data" v-if="invitationList.length==0">
 				暂时没有数据
 			</view>
-			<view class="cu-item tokenList-box" v-for="(item,index) in tokenList" :key="index" >
+			<view class="cu-item tokenList-box" v-for="(item,index) in invitationList" :key="index" >
 				<view class="content">
-					<text class="text-bold">{{item.value}}</text>
+					<text class="text-bold">{{item.code}}</text>
 				</view>
 				<view class="tokenList-info">
 					<text class="tokenDate">
 						{{formatDate(item.created)}}
 					</text>
-					<text class="cu-btn text-blue" v-if="item.status==0" @tap="ToCopy(item.value)">复制</text>
-					<text class="cu-btn bg-white" v-else>UID:{{item.uid}}</text>
+					<text class="cu-btn text-blue" @tap="ToCopy(item.code)">复制</text>
+					
 				</view>
 			</view>
-			<view class="load-more" @tap="loadMore" v-if="tokenList.length>0">
+			<view class="load-more" @tap="loadMore" v-if="invitationList.length>0">
 				<text>{{moreText}}</text>
 			</view>
 		</view>
@@ -59,8 +53,7 @@
 					</view>
 				</view>
 				<view class="padding-xl">
-					<input placeholder="充值码数量,一次最大100" type="number" v-model="num"/>
-					<input placeholder="充值码等同积分" type="number"  v-model="price"/>
+					<input placeholder="邀请码数量,一次最大100" type="number" v-model="num"/>
 				</view>
 				
 				<view class="cu-bar bg-white justify-end">
@@ -75,13 +68,13 @@
 		<view class="cu-modal LinksModal" :class="modalName=='tokenExcel'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">导出充值码</view>
+					<view class="content">导出邀请码</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
 				<view class="padding-xl">
-					<text class="text-red">将导出未使用的充值码为Excel表格，填入过多条数可能导致数据库卡顿</text>
+					<text class="text-red">将导出未使用的邀请码为Excel表格，填入过多条数可能导致数据库卡顿</text>
 					<input placeholder="导出条数" type="number"  v-model="tokenNum"/>
 				</view>
 				
@@ -116,7 +109,7 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
-				tokenList:[],
+				invitationList:[],
 				page:1,
 				moreText:"加载更多",
 				isLoad:0,
@@ -151,7 +144,7 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.getTokenList();
+			that.getInvitationList();
 		},
 		onLoad() {
 			var that = this;
@@ -168,15 +161,15 @@
 			toType(i){
 				var that = this;
 				that.status=i;
-				that.tokenList = [];
+				that.invitationList = [];
 				that.page=1;
-				that.getTokenList();
+				that.getInvitationList();
 			},
 			loadMore(){
 				var that = this;
 				that.moreText="正在加载中...";
 				if(that.isLoad==0){
-					that.getTokenList(true);
+					that.getInvitationList(true);
 				}
 			},
 			showModal(e) {
@@ -187,7 +180,7 @@
 			},
 			toMade(){
 				var that = this;
-				if (that.num == ""||that.price == "") {
+				if (that.num == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
 						icon:'none',
@@ -204,7 +197,6 @@
 				}
 				var data = {
 					'num':that.num,
-					'price':that.price,
 					'token':token
 				}
 				uni.showLoading({
@@ -213,7 +205,7 @@
 				
 				Net.request({
 					
-					url: API.madetoken(),
+					url: API.madeInvitation(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -233,9 +225,9 @@
 						})
 						if(res.data.code==1){
 							that.status=0;
-							that.tokenList = [];
+							that.invitationList = [];
 							that.page=1;
-							that.getTokenList();
+							that.getInvitationList();
 							that.hideModal();
 							
 						}
@@ -252,7 +244,7 @@
 					}
 				})
 			},
-			getTokenList(isPage){
+			getInvitationList(isPage){
 				var that = this;
 				var page = that.page;
 				var token = "";
@@ -268,7 +260,7 @@
 					page++;
 				}
 				Net.request({
-					url: API.tokenPayList(),
+					url: API.invitationList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":20,
@@ -288,12 +280,12 @@
 							var list = res.data.data;
 							if(list.length>0){
 								
-								var tokenList = list;
+								var invitationList = list;
 								if(isPage){
 									that.page++;
-									that.tokenList = that.tokenList.concat(tokenList);
+									that.invitationList = that.invitationList.concat(invitationList);
 								}else{
-									that.tokenList = tokenList;
+									that.invitationList = invitationList;
 								}
 							}else{
 								that.moreText="没有更多数据了";
@@ -372,7 +364,7 @@
 					});
 					return false
 				}
-				var url = API.tokenPayExcel()+"?limit&token="+token;
+				var url = API.invitationExcel()+"?limit&token="+token;
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

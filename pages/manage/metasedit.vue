@@ -24,11 +24,15 @@
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">名称</view>
-				<input name="input" type="text" :value="name"></input>
+				<input name="input" type="text" v-model="name"></input>
 			</view>
 			<view class="cu-form-group align-start">
 				<view class="title">简介</view>
 				<textarea v-model="description" placeholder="多行文本输入框"></textarea>
+			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">排序</view>
+				<input name="input" type="number" v-model="order" placeholder="数值越大,排序越高"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">缩略图</view>
@@ -62,6 +66,7 @@
 				
 				mid:0,
 				name:'',
+				order:0,
 				imgurl:'',
 				description:'',
 				
@@ -113,6 +118,7 @@
 						if(res.data.code==1){
 							that.name = res.data.data.name;
 							that.imgurl = res.data.data.imgurl;
+							that.order = res.data.data.orderKey;
 							that.description = res.data.data.description;
 						}
 					},
@@ -146,6 +152,7 @@
 					name:that.name,
 					description:that.description,
 					imgurl:that.imgurl,
+					orderKey:that.order
 				}
 				uni.showLoading({
 					title: "加载中"

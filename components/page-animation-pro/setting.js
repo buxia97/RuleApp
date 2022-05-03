@@ -61,4 +61,5 @@ export const pageIndexSetting = [
 	{path:'pages/manage/metas',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/metasedit',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 	{path:'pages/manage/clean',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
+	{path:'pages/manage/invitation',animaName:'slide-in-right',pageIn:"slide-in-right",pageOut:"slide-in-left"},
 ]

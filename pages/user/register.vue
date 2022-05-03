@@ -33,6 +33,9 @@
 				<view class="cu-form-group">
 					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
 				</view>
+				<view class="cu-form-group" v-if="isInvite==1">
+					<input name="input" v-model="inviteCode" type="text" placeholder="请输入邀请码(必填)"></input>
+				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="userRegister">立即注册</button>
 					<text class="text-blue text-right margin-top" @tap="toAgreement">注册即为同意 《用户协议》</text>
@@ -62,6 +65,8 @@
 				password:"",
 				repassword:"",
 				isEmail:1,
+				isInvite:0,
+				inviteCode:"",
 				
 			}
 		},
@@ -116,7 +121,8 @@
 					'name':that.name,
 					'code':that.code,
 					'password':that.password,
-					'mail':that.mail
+					'mail':that.mail,
+					'inviteCode':that.inviteCode
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -219,6 +225,7 @@
 						//console.log(JSON.stringify(res));
 						if(res.data.code==1){
 							that.isEmail = res.data.data.isEmail;
+							that.isInvite = res.data.data.isInvite;
 						}
 					},
 					fail: function(res) {

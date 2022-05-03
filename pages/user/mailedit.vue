@@ -27,7 +27,7 @@
 				<view class="title">新邮箱</view>
 				<input placeholder="请输入新邮箱" v-model="mail" name="input"></input>
 			</view>
-			<view class="cu-form-group">
+			<view class="cu-form-group" v-if="isEmail==1">
 				<view class="title">验证码</view>
 				<input placeholder="填写新邮箱验证码" v-model="code" name="input"></input>
 				<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
@@ -60,6 +60,7 @@
 				code:'',
 				times: 60,
 				show:true,
+				isEmail:1,
 				
 				token:'',
 			}
@@ -76,6 +77,7 @@
 			// #endif
 			
 			that.getCacheInfo();
+			that.regConfig();
 		},
 		onLoad() {
 			var that = this;
@@ -236,7 +238,31 @@
 				  clearInterval(this.timer)
 				}
 			  },1000)
-			}
+			},
+			regConfig() {
+				var that = this;
+				Net.request({
+					
+					url: API.regConfig(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							that.isEmail = res.data.data.isEmail;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		}
 	}
 </script>

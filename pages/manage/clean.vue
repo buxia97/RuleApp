@@ -39,6 +39,20 @@
 					<text class="cu-btn bg-red  radius" @tap="dataClean(4)">确认清理</text>
 				</view>
 			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">清理已使用邀请码
+				</view>
+				<view class="action">
+					<text class="cu-btn bg-red  radius" @tap="dataClean(5)">确认清理</text>
+				</view>
+			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">清理超一年未登录用户
+				</view>
+				<view class="action">
+					<text class="cu-btn bg-red  radius" @tap="dataClean(6)">确认清理</text>
+				</view>
+			</view>
 		</form>
 	</view>
 </template>

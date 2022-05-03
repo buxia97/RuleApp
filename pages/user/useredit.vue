@@ -21,8 +21,8 @@
 			<view class="user-edit-header margin-top">
 				<image :src="avatar"></image>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<!-- <text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text> -->
-				<text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text>
+				<text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text>
+				<!-- <text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text> -->
 				<!--  #endif -->
 			</view>
 			<view class="cu-form-group">
@@ -113,7 +113,9 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	// #ifdef H5 || APP-PLUS 
 	import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
+	// #endif
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -355,6 +357,7 @@
 							if(data.code==1){
 								
 								that.avatar = data.data.url;
+								localStorage.removeItem('toAvatar');
 								console.log(that.avatar)
 								
 							}
