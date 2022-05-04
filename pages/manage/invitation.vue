@@ -351,7 +351,15 @@
 			toExcel(){
 				var that = this;
 				var token = "";
-				
+				if(that.tokenNum==""||that.tokenNum<1){
+					uni.showToast({
+						title:"请输入正确的条数",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
@@ -364,7 +372,7 @@
 					});
 					return false
 				}
-				var url = API.invitationExcel()+"?limit&token="+token;
+				var url = API.invitationExcel()+"?limit="+that.tokenNum+"&token="+token;
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

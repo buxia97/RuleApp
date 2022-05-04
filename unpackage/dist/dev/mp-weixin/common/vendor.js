@@ -324,7 +324,7 @@ var promiseInterceptor = {
 
 
 var SYNC_API_RE =
-/^\$|Window$|WindowStyle$|sendHostEvent|sendNativeEvent|restoreGlobal|getCurrentSubNVue|getMenuButtonBoundingClientRect|^report|interceptors|Interceptor$|getSubNVueById|requireNativePlugin|upx2px|hideKeyboard|canIUse|^create|Sync$|Manager$|base64ToArrayBuffer|arrayBufferToBase64|getLocale|setLocale/;
+/^\$|Window$|WindowStyle$|sendHostEvent|sendNativeEvent|restoreGlobal|requireGlobal|getCurrentSubNVue|getMenuButtonBoundingClientRect|^report|interceptors|Interceptor$|getSubNVueById|requireNativePlugin|upx2px|hideKeyboard|canIUse|^create|Sync$|Manager$|base64ToArrayBuffer|arrayBufferToBase64|getLocale|setLocale/;
 
 var CONTEXT_API_RE = /^create|Manager$/;
 
@@ -589,6 +589,14 @@ var getSystemInfo = {
   } };
 
 
+var showActionSheet = {
+  args: function args(fromArgs) {
+    if (typeof fromArgs === 'object') {
+      fromArgs.alertText = fromArgs.title;
+    }
+  } };
+
+
 // import navigateTo from 'uni-helpers/navigate-to'
 
 var protocols = {
@@ -596,7 +604,8 @@ var protocols = {
   // navigateTo,  // 由于在微信开发者工具的页面参数，会显示__id__参数，因此暂时关闭mp-weixin对于navigateTo的AOP
   previewImage: previewImage,
   getSystemInfo: getSystemInfo,
-  getSystemInfoSync: getSystemInfo };
+  getSystemInfoSync: getSystemInfo,
+  showActionSheet: showActionSheet };
 
 var todos = [
 'vibrate',
@@ -947,7 +956,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -2091,7 +2100,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 11:
+/***/ 14:
 /*!**********************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
   \**********************************************************************************************************/
@@ -2220,7 +2229,38 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 18:
+/***/ 2:
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ 21:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/js_sdk/mp-storage/mp-storage/index.js ***!
   \*****************************************************************/
@@ -2401,16 +2441,15 @@ if (typeof window === 'object' && typeof window.document === 'object') {
 
 /***/ }),
 
-/***/ 19:
+/***/ 22:
 /*!****************************************!*\
   !*** E:/APPpro/voss/规则之树/utils/api.js ***!
   \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://127.0.0.1:8081/';
-
+var _module$exports;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -2558,15 +2597,31 @@ module.exports = (_module$exports = {
   setScan: function setScan() {
     return API_URL + 'typechoUsers/setScan';
   },
+  userStatus: function userStatus() {
+    return API_URL + 'typechoUsers/userStatus';
+  },
+  regConfig: function regConfig() {
+    return API_URL + 'typechoUsers/regConfig';
+  },
+  //邀请码注册相关
+  madeInvitation: function madeInvitation() {
+    return API_URL + 'typechoUsers/madeInvitation';
+  },
+  invitationList: function invitationList() {
+    return API_URL + 'typechoUsers/invitationList';
+  },
+  invitationExcel: function invitationExcel() {
+    return API_URL + 'typechoUsers/invitationExcel';
+  },
+
+
   getMarkList: function getMarkList() {
     return API_URL + 'typechoUserlog/markList';
   },
   getIsMark: function getIsMark() {
     return API_URL + 'typechoUserlog/isMark';
   },
-  userStatus: function userStatus() {
-    return API_URL + 'typechoUsers/userStatus';
-  },
+
   addLog: function addLog() {
     return API_URL + 'typechoUserlog/addLog';
   },
@@ -2648,8 +2703,8 @@ function toRecommend() {
 
 function upload() {
   //return API_URL + 'upload/ossUpload';//OSS对象存储接口
-  //return API_URL + 'upload/cosUpload';//COS对象存储接口
-  return API_URL + 'upload/ftpUpload'; //远程ftp上传接口
+  return API_URL + 'upload/cosUpload'; //COS对象存储接口
+  //return API_URL + 'upload/ftpUpload'; //远程ftp上传接口
   //return API_URL + 'upload/localUpload'; //本地上传接口
 }), _defineProperty(_module$exports, "shopList",
 function shopList() {
@@ -2766,38 +2821,7 @@ json) {
 
 /***/ }),
 
-/***/ 2:
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 20:
+/***/ 23:
 /*!****************************************!*\
   !*** E:/APPpro/voss/规则之树/utils/net.js ***!
   \****************************************/
@@ -2840,7 +2864,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 235:
+/***/ 238:
 /*!****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/index.js ***!
   \****************************************************************/
@@ -2852,7 +2876,7 @@ module.exports = {
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */var _require =
-__webpack_require__(/*! ./marked.min */ 236),marked = _require.marked;
+__webpack_require__(/*! ./marked.min */ 239),marked = _require.marked;
 var index = 0;
 
 function Markdown(vm) {
@@ -2884,7 +2908,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 236:
+/***/ 239:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/marked.min.js ***!
   \*********************************************************************/
@@ -2900,7 +2924,7 @@ module.exports = Markdown;
 
 /***/ }),
 
-/***/ 237:
+/***/ 240:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/index.js ***!
   \*************************************************************/
@@ -2910,7 +2934,7 @@ module.exports = Markdown;
 /**
  * @fileoverview audio 插件
  */
-var context = __webpack_require__(/*! ./context */ 238);
+var context = __webpack_require__(/*! ./context */ 241);
 var index = 0;
 
 function Audio(vm) {
@@ -2944,7 +2968,7 @@ module.exports = Audio;
 
 /***/ }),
 
-/***/ 238:
+/***/ 241:
 /*!***************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
   \***************************************************************/
@@ -2960,7 +2984,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 239:
+/***/ 242:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/index.js ***!
   \*****************************************************************/
@@ -2971,9 +2995,9 @@ module.exports = {
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
  */
-var prism = __webpack_require__(/*! ./prism.min */ 240);
-var config = __webpack_require__(/*! ./config */ 241);
-var Parser = __webpack_require__(/*! ../parser */ 242);
+var prism = __webpack_require__(/*! ./prism.min */ 243);
+var config = __webpack_require__(/*! ./config */ 244);
+var Parser = __webpack_require__(/*! ../parser */ 245);
 
 function Highlight(vm) {
   this.vm = vm;
@@ -3058,7 +3082,7 @@ module.exports = Highlight;
 
 /***/ }),
 
-/***/ 240:
+/***/ 243:
 /*!*********************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/prism.min.js ***!
   \*********************************************************************/
@@ -3076,7 +3100,7 @@ Prism.languages.javascript = Prism.languages.extend("clike", { "class-name": [Pr
 
 /***/ }),
 
-/***/ 241:
+/***/ 244:
 /*!******************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/config.js ***!
   \******************************************************************/
@@ -3091,7 +3115,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 242:
+/***/ 245:
 /*!********************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/parser.js ***!
   \********************************************************/
@@ -4325,7 +4349,7 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 243:
+/***/ 246:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/search/index.js ***!
   \**************************************************************/
@@ -4464,7 +4488,7 @@ module.exports = Search;
 
 /***/ }),
 
-/***/ 244:
+/***/ 247:
 /*!*************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/index.js ***!
   \*************************************************************/
@@ -4479,7 +4503,7 @@ function Style() {
 }
 
 
-var Parser = __webpack_require__(/*! ./parser */ 245);
+var Parser = __webpack_require__(/*! ./parser */ 248);
 
 Style.prototype.onParse = function (node, vm) {
   // 获取样式
@@ -4601,7 +4625,7 @@ module.exports = Style;
 
 /***/ }),
 
-/***/ 245:
+/***/ 248:
 /*!**************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/style/parser.js ***!
   \**************************************************************/
@@ -4786,14 +4810,14 @@ module.exports = Parser;
 
 /***/ }),
 
-/***/ 246:
+/***/ 249:
 /*!*****************************************************************!*\
   !*** E:/APPpro/voss/规则之树/components/mp-html/img-cache/index.js ***!
   \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 247);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
+/* WEBPACK VAR INJECTION */(function(uni) {var _regeneratorRuntime = __webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 250);function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var data = {
   name: 'imgcache',
   prefix: 'imgcache_' };
 
@@ -4935,18 +4959,18 @@ module.exports = ImgCache;
 
 /***/ }),
 
-/***/ 247:
+/***/ 250:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 248);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 251);
 
 /***/ }),
 
-/***/ 248:
+/***/ 251:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -4977,7 +5001,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 249);
+module.exports = __webpack_require__(/*! ./runtime */ 252);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -4994,7 +5018,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 249:
+/***/ 252:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -5737,7 +5761,7 @@ if (hadRuntime) {
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/*!
  * Vue.js v2.6.11
- * (c) 2014-2021 Evan You
+ * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
 /*  */
@@ -9817,10 +9841,10 @@ function updateChildComponent (
     // keep a copy of raw propsData
     vm.$options.propsData = propsData;
   }
-
+  
   // fixed by xxxxxx update properties(mp runtime)
   vm._$updateProperties && vm._$updateProperties(vm);
-
+  
   // update listeners
   listeners = listeners || emptyObject;
   var oldListeners = vm.$options._parentListeners;
@@ -10346,12 +10370,12 @@ function initProps (vm, propsOptions) {
       defineReactive$$1(props, key, value, function () {
         if (!isRoot && !isUpdatingChildComponent) {
           {
-            if(vm.mpHost === 'mp-baidu' || vm.mpHost === 'mp-kuaishou'){//百度、快手 observer 在 setData callback 之后触发，直接忽略该 warn
+            if(vm.mpHost === 'mp-baidu' || vm.mpHost === 'mp-kuaishou' || vm.mpHost === 'mp-xhs'){//百度、快手、小红书 observer 在 setData callback 之后触发，直接忽略该 warn
                 return
             }
             //fixed by xxxxxx __next_tick_pending,uni://form-field 时不告警
             if(
-                key === 'value' &&
+                key === 'value' && 
                 Array.isArray(vm.$options.behaviors) &&
                 vm.$options.behaviors.indexOf('uni://form-field') !== -1
               ){
@@ -10363,7 +10387,7 @@ function initProps (vm, propsOptions) {
             var $parent = vm.$parent;
             while($parent){
               if($parent.__next_tick_pending){
-                return
+                return  
               }
               $parent = $parent.$parent;
             }
@@ -10691,10 +10715,10 @@ function initMixin (Vue) {
     initEvents(vm);
     initRender(vm);
     callHook(vm, 'beforeCreate');
-    !vm._$fallback && initInjections(vm); // resolve injections before data/props
+    !vm._$fallback && initInjections(vm); // resolve injections before data/props  
     initState(vm);
     !vm._$fallback && initProvide(vm); // resolve provide after data/props
-    !vm._$fallback && callHook(vm, 'created');
+    !vm._$fallback && callHook(vm, 'created');      
 
     /* istanbul ignore if */
     if ( true && config.performance && mark) {
@@ -11193,7 +11217,6 @@ function _diff(current, pre, path, result) {
                 var currentType = type(currentValue);
                 var preType = type(preValue);
                 if (currentType != ARRAYTYPE && currentType != OBJECTTYPE) {
-                    // NOTE 此处将 != 修改为 !==。涉及地方太多恐怕测试不到，如果出现数据对比问题，将其修改回来。
                     if (currentValue !== pre[key]) {
                         setResult(result, (path == '' ? '' : path + ".") + key, currentValue);
                     }
@@ -11253,7 +11276,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -11274,14 +11297,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -11367,7 +11390,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -11420,7 +11443,7 @@ function mountComponent$1(
       }
     }
   }
-
+  
   !vm._$fallback && callHook(vm, 'beforeMount');
 
   var updateComponent = function () {
@@ -11553,10 +11576,9 @@ function internalMixin(Vue) {
 
   Vue.prototype.$emit = function(event) {
     if (this.$scope && event) {
-      (this.$scope['_triggerEvent'] || this.$scope['triggerEvent'])
-        .call(this.$scope, event, {
-          __args__: toArray(arguments, 1)
-        })
+      (this.$scope['_triggerEvent'] || this.$scope['triggerEvent']).call(this.$scope, event, {
+        __args__: toArray(arguments, 1)
+      });
     }
     return oldEmit.apply(this, arguments)
   };
@@ -11621,7 +11643,7 @@ function internalMixin(Vue) {
       target = this;
     }
     // 解决动态属性添加
-    Vue.set(target, key, value)
+    Vue.set(target, key, value);
   };
 
   Vue.prototype.__set_sync = function(target, key, value) {
@@ -11629,7 +11651,7 @@ function internalMixin(Vue) {
       target = this;
     }
     // 解决动态属性添加
-    Vue.set(target, key, value)
+    Vue.set(target, key, value);
   };
 
   Vue.prototype.__get_orig = function(item) {
@@ -11762,7 +11784,7 @@ Vue.prototype.__patch__ = patch;
 // public mount method
 Vue.prototype.$mount = function(
     el ,
-    hydrating
+    hydrating 
 ) {
     return mountComponent$1(this, el, hydrating)
 };
@@ -12250,6 +12272,1296 @@ function resolveLocaleChain(locale) {
 /***/ (function(module, exports) {
 
 
+
+/***/ }),
+
+/***/ 6:
+/*!*************************************************************!*\
+  !*** ./node_modules/@dcloudio/uni-stat/dist/uni-stat.es.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(uni) {function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });if (superClass) _setPrototypeOf(subClass, superClass);}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));return true;} catch (e) {return false;}}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * 获取系统信息
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
+var sys = uni.getSystemInfoSync();
+
+// 访问开始即启动小程序，访问结束结分为：进入后台超过5min、在前台无任何操作超过30min、在新的来源打开小程序；
+var STAT_VERSION = '0.0.1';
+var STAT_URL = 'https://tongji.dcloud.io/uni/stat';
+var STAT_H5_URL = 'https://tongji.dcloud.io/uni/stat.gif';
+var PAGE_PVER_TIME = 1800; // 页面在前台无操作结束访问时间 单位s
+var APP_PVER_TIME = 300; // 应用在后台结束访问时间 单位s
+var OPERATING_TIME = 10; // 数据上报时间 单位s
+var DIFF_TIME = 60 * 1000 * 60 * 24;
+
+var statConfig = {
+  appid: '' };
+
+var titleJsons = {};
+
+
+
+
+
+
+statConfig = __webpack_require__(/*! uni-stat-config */ 7).default || __webpack_require__(/*! uni-stat-config */ 7);
+var pagesTitle = __webpack_require__(/*! uni-pages?{"type":"style"} */ 8).default;
+var pagesData = pagesTitle.pages;
+for (var i in pagesData) {var _style$navigationBar;
+  var style = pagesData[i];
+  var titleText =
+  // MP
+  style.navigationBarTitleText ||
+  // ali
+  style.defaultTitle || (
+  // H5 || App
+  (_style$navigationBar = style.navigationBar) === null || _style$navigationBar === void 0 ? void 0 : _style$navigationBar.titleText) ||
+  '';
+  if (titleText) {
+    titleJsons[i] = titleText;
+  }
+}
+
+
+
+var UUID_KEY = '__DC_STAT_UUID';
+var UUID_VALUE = '__DC_UUID_VALUE';
+
+function getUuid() {
+  var uuid = '';
+  if (get_platform_name() === 'n') {
+    try {
+      uuid = plus.runtime.getDCloudId();
+    } catch (e) {
+      uuid = '';
+    }
+    return uuid;
+  }
+
+  try {
+    uuid = uni.getStorageSync(UUID_KEY);
+  } catch (e) {
+    uuid = UUID_VALUE;
+  }
+
+  if (!uuid) {
+    uuid = Date.now() + '' + Math.floor(Math.random() * 1e7);
+    try {
+      uni.setStorageSync(UUID_KEY, uuid);
+    } catch (e) {
+      uni.setStorageSync(UUID_KEY, UUID_VALUE);
+    }
+  }
+  return uuid;
+}
+/**
+   * 获取配置信息 如 appid
+   */
+var stat_config = statConfig;
+
+var get_uuid = function get_uuid(statData) {
+  // 有可能不存在 deviceId（一般不存在就是出bug了），就自己生成一个
+  return sys.deviceId || getUuid();
+};
+
+var get_sgin = function get_sgin(statData) {
+  var arr = Object.keys(statData);
+  var sortArr = arr.sort();
+  var sgin = {};
+  var sginStr = '';
+  for (var i in sortArr) {
+    sgin[sortArr[i]] = statData[sortArr[i]];
+    sginStr += sortArr[i] + '=' + statData[sortArr[i]] + '&';
+  }
+
+  return {
+    sign: '',
+    options: sginStr.substr(0, sginStr.length - 1) };
+
+};
+
+var get_encodeURIComponent_options = function get_encodeURIComponent_options(statData) {
+  var data = {};
+  for (var prop in statData) {
+    data[prop] = encodeURIComponent(statData[prop]);
+  }
+  return data;
+};
+
+/**
+    * 获取当前平台
+    * 移动端  : 'n',
+    * h5	  : 'h5',
+    * 微信	  : 'wx',
+    * 阿里	  : 'ali',
+    * 百度	  : 'bd',
+    * 头条	  : 'tt',
+    * qq	  : 'qq',
+    * 快应用  : 'qn',
+    * 快手	  : 'ks',
+    * 飞书	  : 'lark',
+    * 快应用  : 'qw',
+    * 钉钉	  : 'dt'
+    */
+var get_platform_name = function get_platform_name() {var _platformList;
+  // 苹果审核代码中禁止出现 alipay 字样 ，需要特殊处理一下
+  var aliArr = ['y', 'a', 'p', 'mp-ali'];
+  var platformList = (_platformList = {
+    'app': 'n',
+    'app-plus': 'n',
+    h5: 'h5',
+    'mp-weixin': 'wx' }, _defineProperty(_platformList,
+  aliArr.reverse().join(''), 'ali'), _defineProperty(_platformList,
+  'mp-baidu', 'bd'), _defineProperty(_platformList,
+  'mp-toutiao', 'tt'), _defineProperty(_platformList,
+  'mp-qq', 'qq'), _defineProperty(_platformList,
+  'quickapp-native', 'qn'), _defineProperty(_platformList,
+  'mp-kuaishou', 'ks'), _defineProperty(_platformList,
+  'mp-lark', 'lark'), _defineProperty(_platformList,
+  'quickapp-webview', 'qw'), _platformList);
+
+  if (platformList["mp-weixin"] === 'ali') {
+    if (my && my.env) {
+      var clientName = my.env.clientName;
+      if (clientName === 'ap') return 'ali';
+      if (clientName === 'dingtalk') return 'dt';
+      // TODO 缺少 ali 下的其他平台
+    }
+  }
+  return platformList["mp-weixin"];
+};
+
+/**
+    * 获取小程序 appid
+    */
+var get_pack_name = function get_pack_name() {
+  var packName = '';
+  if (get_platform_name() === 'wx' || get_platform_name() === 'qq') {
+    // 兼容微信小程序低版本基础库
+    if (uni.canIUse('getAccountInfoSync')) {
+      packName = uni.getAccountInfoSync().miniProgram.appId || '';
+    }
+  }
+  if (get_platform_name() === 'n') ;
+  return packName;
+};
+
+/**
+    * 应用版本
+    */
+var get_version = function get_version() {
+  return get_platform_name() === 'n' ? plus.runtime.version : '';
+};
+
+/**
+    * 获取渠道
+    */
+var get_channel = function get_channel() {
+  var platformName = get_platform_name();
+  var channel = '';
+  if (platformName === 'n') {
+    channel = plus.runtime.channel;
+  }
+  return channel;
+};
+
+/**
+    * 获取小程序场景值
+    * @param {Object} options 页面信息
+    */
+var get_scene = function get_scene(options) {
+  var platformName = get_platform_name();
+  var scene = '';
+  if (options) {
+    return options;
+  }
+  if (platformName === 'wx') {
+    scene = uni.getLaunchOptionsSync().scene;
+  }
+  return scene;
+};
+
+/**
+    * 获取拼接参数
+    */
+var get_splicing = function get_splicing(data) {
+  var str = '';
+  for (var i in data) {
+    str += i + '=' + data[i] + '&';
+  }
+  return str.substr(0, str.length - 1);
+};
+
+/**
+    * 获取页面url，不包含参数
+    */
+var get_route = function get_route(pageVm) {
+  var _self = pageVm || get_page_vm();
+  if (get_platform_name() === 'bd') {
+    var mp_route = _self.$mp && _self.$mp.page && _self.$mp.page.is;
+    var scope_route = _self.$scope && _self.$scope.is;
+    return mp_route || scope_route || '';
+  } else {
+    return _self.route || _self.$scope && _self.$scope.route || _self.$mp && _self.$mp.page.route;
+  }
+};
+
+/**
+    * 获取页面url, 包含参数
+    */
+var get_page_route = function get_page_route(pageVm) {
+  // 从 app 进入应用 ，没有 $page ,获取不到路由 ，需要获取页面 尝试从 getCurrentPages 获取也页面实例
+  // FIXME 尽量不使用 getCurrentPages ，大部分获取路由是从 onHide 获取 ，这时可以获取到，如果是 onload ,则可能获取不到，比如 百度
+
+  var page = pageVm.$page || pageVm.$scope && pageVm.$scope.$page;
+  var lastPageRoute = uni.getStorageSync('_STAT_LAST_PAGE_ROUTE');
+  if (!page) return lastPageRoute || '';
+  // 如果找不到 fullPath 就取 route 的值
+  return page.fullPath === '/' ? page.route : page.fullPath || page.route;
+};
+
+/**
+    * 获取页面实例
+    */
+var get_page_vm = function get_page_vm() {
+  var pages = getCurrentPages();
+  var $page = pages[pages.length - 1];
+  if (!$page) return null;
+  return $page.$vm;
+};
+
+/**
+    * 获取页面类型
+    */
+var get_page_types = function get_page_types(self) {
+  // XXX 百度有问题 ，获取的都是 componet ,等待修复
+  if (self.mpType === 'page' || self.$mpType === 'page' || self.$mp && self.$mp.mpType === 'page' || self.
+  $options.mpType === 'page') {
+    return 'page';
+  }
+  if (self.mpType === 'app' || self.$mpType === 'app' || self.$mp && self.$mp.mpType === 'app' || self.$options.
+  mpType === 'app') {
+    return 'app';
+  }
+  return null;
+};
+
+/**
+    * 处理上报参数
+    * @param {Object}  需要处理的数据
+    */
+var handle_data = function handle_data(statData) {
+  var firstArr = [];
+  var contentArr = [];
+  var lastArr = [];var _loop = function _loop(
+  _i) {
+    var rd = statData[_i];
+    rd.forEach(function (elm) {
+      var newData = get_splicing(elm);
+      if (_i === 0) {
+        firstArr.push(newData);
+      } else if (_i === 3) {
+        lastArr.push(newData);
+      } else {
+        contentArr.push(newData);
+      }
+    });};for (var _i in statData) {_loop(_i);
+  }
+
+  firstArr.push.apply(firstArr, contentArr.concat(lastArr));
+  // 参数需要处理成字符串，方便上传
+  return JSON.stringify(firstArr);
+};
+
+
+/**
+    * 自定义事件参数校验
+    */
+var calibration = function calibration(eventName, options) {
+  //  login 、 share 、pay_success 、pay_fail 、register 、title
+  if (!eventName) {
+    console.error("uni.report Missing [eventName] parameter");
+    return true;
+  }
+  if (typeof eventName !== 'string') {
+    console.error("uni.report [eventName] Parameter type error, it can only be of type String");
+    return true;
+  }
+  if (eventName.length > 255) {
+    console.error("uni.report [eventName] Parameter length cannot be greater than 255");
+    return true;
+  }
+
+  if (typeof options !== 'string' && typeof options !== 'object') {
+    console.error('uni.report [options] Parameter type error, Only supports String or Object type');
+    return true;
+  }
+
+  if (typeof options === 'string' && options.length > 255) {
+    console.error("uni.report [options] Parameter length cannot be greater than 255");
+    return true;
+  }
+
+  if (eventName === 'title' && typeof options !== 'string') {
+    console.error("uni.report [eventName] When the parameter is title, the [options] parameter can only be of type String");
+
+
+    return true;
+  }
+};
+
+var get_page_name = function get_page_name(routepath) {
+  return titleJsons && titleJsons[routepath] || '';
+};
+
+var Report_Data_Time = 'Report_Data_Time';
+var Report_Status = 'Report_Status';
+var is_report_data = function is_report_data() {
+  return new Promise(function (resolve, reject) {
+    var start_time = '';
+    var end_time = new Date().getTime();
+    var diff_time = DIFF_TIME;
+    var report_status = 1;
+    try {
+      start_time = uni.getStorageSync(Report_Data_Time);
+      report_status = uni.getStorageSync(Report_Status);
+    } catch (e) {
+      start_time = '';
+      report_status = 1;
+    }
+
+    if (report_status === '') {
+      requestData(function (_ref) {var enable = _ref.enable;
+        uni.setStorageSync(Report_Data_Time, end_time);
+        uni.setStorageSync(Report_Status, enable);
+        if (enable === 1) {
+          resolve();
+        }
+      });
+      return;
+    }
+
+    if (report_status === 1) {
+      resolve();
+    }
+
+    if (!start_time) {
+      uni.setStorageSync(Report_Data_Time, end_time);
+      start_time = end_time;
+    }
+
+    if (end_time - start_time > diff_time) {
+      requestData(function (_ref2) {var enable = _ref2.enable;
+        uni.setStorageSync(Report_Data_Time, end_time);
+        uni.setStorageSync(Report_Status, enable);
+      });
+    }
+  });
+};
+
+var requestData = function requestData(done) {
+  var appid = "__UNI__8D6C809";
+  var formData = {
+    usv: STAT_VERSION,
+    conf: JSON.stringify({
+      ak: appid }) };
+
+
+  uni.request({
+    url: STAT_URL,
+    method: 'GET',
+    data: formData,
+    success: function success(res) {var
+      data = res.data;
+      if (data.ret === 0) {
+        typeof done === 'function' &&
+        done({
+          enable: data.enable });
+
+      }
+    },
+    fail: function fail(e) {
+      var report_status_code = 1;
+      try {
+        report_status_code = uni.getStorageSync(Report_Status);
+      } catch (e) {
+        report_status_code = 1;
+      }
+      if (report_status_code === '') {
+        report_status_code = 1;
+      }
+      typeof done === 'function' &&
+      done({
+        enable: report_status_code });
+
+    } });
+
+};
+
+var data = uni.getStorageSync('$$STAT__DBDATA') || {};
+var dbSet = function dbSet(name, value) {
+  if (!data) {
+    data = {};
+  }
+  data[name] = value;
+  uni.setStorageSync('$$STAT__DBDATA', data);
+};
+
+var dbGet = function dbGet(name) {
+  if (!data[name]) {
+    var dbdata = uni.getStorageSync('$$STAT__DBDATA');
+    if (!dbdata) {
+      dbdata = {};
+    }
+    if (!dbdata[name]) {
+      return undefined;
+    }
+    data[name] = dbdata[name];
+  }
+  return data[name];
+};
+
+var dbRemove = function dbRemove(name) {
+  if (data[name]) {
+    delete data[name];
+    uni.setStorageSync('$$STAT__DBDATA', data);
+  } else {
+    data = uni.getStorageSync('$$STAT__DBDATA');
+    if (data[name]) {
+      delete data[name];
+      uni.setStorageSync('$$STAT__DBDATA', data);
+    }
+  }
+};
+
+// 首次访问时间
+var FIRST_VISIT_TIME_KEY = '__first__visit__time';
+// 最后访问时间
+var LAST_VISIT_TIME_KEY = '__last__visit__time';
+/**
+                                                  * 获取当前时间
+                                                  */
+var get_time = function get_time() {
+  return parseInt(new Date().getTime() / 1000);
+};
+
+/**
+    * 获取首次访问时间
+    */
+var get_first_visit_time = function get_first_visit_time() {
+  var timeStorge = dbGet(FIRST_VISIT_TIME_KEY);
+  var time = 0;
+  if (timeStorge) {
+    time = timeStorge;
+  } else {
+    time = get_time();
+    dbSet(FIRST_VISIT_TIME_KEY, time);
+    // 首次访问需要 将最后访问时间置 0
+    dbRemove(LAST_VISIT_TIME_KEY);
+  }
+  return time;
+};
+
+/**
+    * 最后访问时间
+    */
+var get_last_visit_time = function get_last_visit_time() {
+  var timeStorge = dbGet(LAST_VISIT_TIME_KEY);
+  var time = 0;
+  if (timeStorge) {
+    time = timeStorge;
+  }
+  dbSet(LAST_VISIT_TIME_KEY, get_time());
+  return time;
+};
+
+// 页面停留时间记录key
+var PAGE_RESIDENCE_TIME = '__page__residence__time';
+var First_Page_Residence_Time = 0;
+var Last_Page_Residence_Time = 0;
+
+/**
+                                   * 设置页面停留时间
+                                   */
+var set_page_residence_time = function set_page_residence_time() {
+  First_Page_Residence_Time = get_time();
+  dbSet(PAGE_RESIDENCE_TIME, First_Page_Residence_Time);
+  return First_Page_Residence_Time;
+};
+
+/**
+    * 获取页面停留时间
+    */
+var get_page_residence_time = function get_page_residence_time() {
+  Last_Page_Residence_Time = get_time();
+  First_Page_Residence_Time = dbGet(PAGE_RESIDENCE_TIME);
+  return Last_Page_Residence_Time - First_Page_Residence_Time;
+};
+
+/**
+    * 获取总访问次数
+    */
+var TOTAL_VISIT_COUNT = '__total__visit__count';
+var get_total_visit_count = function get_total_visit_count() {
+  var timeStorge = dbGet(TOTAL_VISIT_COUNT);
+  var count = 1;
+  if (timeStorge) {
+    count = timeStorge;
+    count++;
+  }
+  dbSet(TOTAL_VISIT_COUNT, count);
+  return count;
+};
+
+var Set__First__Time = 0;
+var Set__Last__Time = 0;
+
+/**
+                          * 获取第一次时间
+                          */
+var get_first_time = function get_first_time() {
+  var time = new Date().getTime();
+  Set__First__Time = time;
+  Set__Last__Time = 0;
+  return time;
+};
+
+/**
+    * 获取最后一次时间
+    */
+var get_last_time = function get_last_time() {
+  var time = new Date().getTime();
+  Set__Last__Time = time;
+  return time;
+};
+
+/**
+    * 获取页面 \ 应用停留时间
+    */
+var get_residence_time = function get_residence_time(type) {
+  var residenceTime = 0;
+  if (Set__First__Time !== 0) {
+    residenceTime = Set__Last__Time - Set__First__Time;
+  }
+
+  residenceTime = parseInt(residenceTime / 1000);
+  residenceTime = residenceTime < 1 ? 1 : residenceTime;
+  if (type === 'app') {
+    var overtime = residenceTime > APP_PVER_TIME ? true : false;
+    return {
+      residenceTime: residenceTime,
+      overtime: overtime };
+
+  }
+  if (type === 'page') {
+    var _overtime = residenceTime > PAGE_PVER_TIME ? true : false;
+    return {
+      residenceTime: residenceTime,
+      overtime: _overtime };
+
+  }
+  return {
+    residenceTime: residenceTime };
+
+};
+
+// 统计数据默认值
+var statData = {
+  uuid: get_uuid(), // 设备标识
+  ut: get_platform_name(), // 平台类型
+  mpn: get_pack_name(), // 原生平台包名、小程序 appid
+  ak: stat_config.appid, // uni-app 应用 Appid
+  usv: STAT_VERSION, // 统计 sdk 版本
+  v: get_version(), // 应用版本，仅app
+  ch: get_channel(), // 渠道信息
+  cn: '', // 国家
+  pn: '', // 省份
+  ct: '', // 城市
+  t: get_time(), // 上报数据时的时间戳
+  tt: '',
+  p: sys.platform === 'android' ? 'a' : 'i', // 手机系统
+  brand: sys.brand || '', // 手机品牌
+  md: sys.model, // 手机型号
+  sv: sys.system.replace(/(Android|iOS)\s/, ''), // 手机系统版本
+  mpsdk: sys.SDKVersion || '', // x程序 sdk version
+  mpv: sys.version || '', // 小程序平台版本 ，如微信、支付宝
+  lang: sys.language, // 语言
+  pr: sys.pixelRatio, // pixelRatio 设备像素比
+  ww: sys.windowWidth, // windowWidth 可使用窗口宽度
+  wh: sys.windowHeight, // windowHeight 可使用窗口高度
+  sw: sys.screenWidth, // screenWidth 屏幕宽度
+  sh: sys.screenHeight // screenHeight 屏幕高度
+};var
+Report = /*#__PURE__*/function () {"use strict";
+  function Report() {_classCallCheck(this, Report);
+    // 页面实例
+    this.self = '';
+    // 进入应用标识
+    this.__licationShow = false;
+    // 离开应用标识
+    this.__licationHide = false;
+    // 统计默认值
+    this.statData = statData;
+    // 标题默认值
+    this._navigationBarTitle = {
+      config: '',
+      page: '',
+      report: '',
+      lt: '' };
+
+
+    // 页面参数
+    this._query = {};
+    // 页面最后停留页面的 url
+    // this._lastPageRoute = ''
+
+    // 注册拦截器
+    var registerInterceptor = typeof uni.addInterceptor === 'function';
+    if (registerInterceptor) {
+      this.addInterceptorInit();
+      this.interceptLogin();
+      this.interceptShare(true);
+      this.interceptRequestPayment();
+    }
+  }_createClass(Report, [{ key: "addInterceptorInit", value: function addInterceptorInit()
+
+    {
+      var self = this;
+      uni.addInterceptor('setNavigationBarTitle', {
+        invoke: function invoke(args) {
+          self._navigationBarTitle.page = args.title;
+        } });
+
+    } }, { key: "interceptLogin", value: function interceptLogin()
+
+    {
+      var self = this;
+      uni.addInterceptor('login', {
+        complete: function complete() {
+          self._login();
+        } });
+
+    } }, { key: "interceptShare", value: function interceptShare(
+
+    type) {
+      var self = this;
+      if (!type) {
+        self._share();
+        return;
+      }
+      uni.addInterceptor('share', {
+        success: function success() {
+          self._share();
+        },
+        fail: function fail() {
+          self._share();
+        } });
+
+    } }, { key: "interceptRequestPayment", value: function interceptRequestPayment()
+
+    {
+      var self = this;
+      uni.addInterceptor('requestPayment', {
+        success: function success() {
+          self._payment('pay_success');
+        },
+        fail: function fail() {
+          self._payment('pay_fail');
+        } });
+
+    } }, { key: "_login", value: function _login()
+
+    {
+      this.sendEventRequest({
+        key: 'login' },
+
+      0);
+
+    } }, { key: "_share", value: function _share()
+
+    {
+      this.sendEventRequest({
+        key: 'share' },
+      0);
+    } }, { key: "_payment", value: function _payment(
+    key) {
+      this.sendEventRequest({
+        key: key },
+      0);
+    }
+
+    /**
+       * 进入应用触发
+       */ }, { key: "applicationShow", value: function applicationShow()
+    {
+      // 通过 __licationHide 判断保证是进入后台后在次进入应用，避免重复上报数据
+      if (this.__licationHide) {
+        get_last_time();
+        var time = get_residence_time('app');
+        // 需要判断进入后台是否超过时限 ，默认是 30min ，是的话需要执行进入应用的上报
+        if (time.overtime) {
+          var lastPageRoute = uni.getStorageSync('_STAT_LAST_PAGE_ROUTE');
+          var options = {
+            path: lastPageRoute,
+            scene: this.statData.sc };
+
+          this.sendReportRequest(options);
+        }
+        // 状态重置
+        this.__licationHide = false;
+      }
+    }
+
+    /**
+       * 离开应用触发
+       * @param {Object} self
+       * @param {Object} type
+       */ }, { key: "applicationHide", value: function applicationHide(
+    self, type) {
+      if (!self) {
+        // 表示应用切换到后台 ，此时需要从页面栈获取页面实例
+        self = get_page_vm();
+      }
+      // 进入应用后台保存状态，方便进入前台后判断是否上报应用数据
+      this.__licationHide = true;
+      get_last_time();
+      var time = get_residence_time();
+      var route = get_page_route(self);
+      uni.setStorageSync('_STAT_LAST_PAGE_ROUTE', route);
+      this.sendHideRequest({
+        urlref: route,
+        urlref_ts: time.residenceTime },
+
+      type);
+
+      // 重置时间
+      get_first_time();
+    }
+
+    /**
+       * 进入页面触发
+       */ }, { key: "pageShow", value: function pageShow(
+    self) {
+      // 清空值 ，初始化 ，避免污染后面的上报数据
+      this._navigationBarTitle = {
+        config: '',
+        page: '',
+        report: '',
+        lt: '' };
+
+
+      var route = get_page_route(self);
+      var routepath = get_route(self);
+
+      this._navigationBarTitle.config = get_page_name(routepath);
+      // 表示应用触发 ，页面切换不触发之后的逻辑
+      if (this.__licationShow) {
+        get_first_time();
+        // this._lastPageRoute = route
+        uni.setStorageSync('_STAT_LAST_PAGE_ROUTE', route);
+        this.__licationShow = false;
+        return;
+      }
+
+      get_last_time();
+
+      var time = get_residence_time('page');
+      // 停留时间
+      if (time.overtime) {
+        var options = {
+          path: route,
+          scene: this.statData.sc };
+
+        this.sendReportRequest(options);
+      }
+      // 重置时间
+      get_first_time();
+    }
+
+    /**
+       * 离开页面触发
+       */ }, { key: "pageHide", value: function pageHide(
+    self) {
+      if (!this.__licationHide) {
+        get_last_time();
+        var time = get_residence_time('page');
+        var route = get_page_route(self);
+        var lastPageRoute = uni.getStorageSync('_STAT_LAST_PAGE_ROUTE');
+        if (!lastPageRoute) {
+          lastPageRoute = route;
+        }
+        uni.setStorageSync('_STAT_LAST_PAGE_ROUTE', route);
+        this.sendPageRequest({
+          url: route,
+          urlref: lastPageRoute,
+          urlref_ts: time.residenceTime });
+
+        // this._lastPageRoute = route
+        return;
+      }
+    }
+
+
+    /**
+       * 发送请求,应用维度上报
+       * @param {Object} options 页面信息
+       */ }, { key: "sendReportRequest", value: function sendReportRequest(
+    options) {
+      this._navigationBarTitle.lt = '1';
+      this._navigationBarTitle.config = get_page_name(options.path);
+      var is_opt = options.query && JSON.stringify(options.query) !== '{}';
+      var query = is_opt ? '?' + JSON.stringify(options.query) : '';
+      Object.assign(this.statData, {
+        lt: '1',
+        url: options.path + query || '',
+        t: get_time(),
+        sc: get_scene(options.scene),
+        fvts: get_first_visit_time(),
+        lvts: get_last_visit_time(),
+        tvc: get_total_visit_count() });
+
+      if (get_platform_name() === 'n') {
+        this.getProperty();
+      } else {
+        this.getNetworkInfo();
+      }
+    }
+
+    /**
+       * 发送请求,页面维度上报
+       * @param {Object} opt
+       */ }, { key: "sendPageRequest", value: function sendPageRequest(
+    opt) {var
+
+      url =
+
+
+      opt.url,urlref = opt.urlref,urlref_ts = opt.urlref_ts;
+      this._navigationBarTitle.lt = '11';
+      var options = {
+        ak: this.statData.ak,
+        uuid: this.statData.uuid,
+        lt: '11',
+        ut: this.statData.ut,
+        url: url,
+        tt: this.statData.tt,
+        urlref: urlref,
+        urlref_ts: urlref_ts,
+        ch: this.statData.ch,
+        usv: this.statData.usv,
+        t: get_time(),
+        p: this.statData.p };
+
+      this.request(options);
+    }
+
+    /**
+       * 进入后台上报数据
+       * @param {Object} opt
+       * @param {Object} type
+       */ }, { key: "sendHideRequest", value: function sendHideRequest(
+    opt, type) {var
+
+      urlref =
+
+      opt.urlref,urlref_ts = opt.urlref_ts;
+      var options = {
+        ak: this.statData.ak,
+        uuid: this.statData.uuid,
+        lt: '3',
+        ut: this.statData.ut,
+        urlref: urlref,
+        urlref_ts: urlref_ts,
+        ch: this.statData.ch,
+        usv: this.statData.usv,
+        t: get_time(),
+        p: this.statData.p };
+
+      this.request(options, type);
+    }
+
+    /**
+       * 自定义事件上报
+       */ }, { key: "sendEventRequest", value: function sendEventRequest()
+
+
+
+    {var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},_ref3$key = _ref3.key,key = _ref3$key === void 0 ? '' : _ref3$key,_ref3$value = _ref3.value,value = _ref3$value === void 0 ? '' : _ref3$value;
+      // const route = this._lastPageRoute
+      var routepath = get_route();
+      this._navigationBarTitle.config = get_page_name(routepath);
+      this._navigationBarTitle.lt = '21';
+      var options = {
+        ak: this.statData.ak,
+        uuid: this.statData.uuid,
+        lt: '21',
+        ut: this.statData.ut,
+        url: routepath,
+        ch: this.statData.ch,
+        e_n: key,
+        e_v: typeof value === 'object' ? JSON.stringify(value) : value.toString(),
+        usv: this.statData.usv,
+        t: get_time(),
+        p: this.statData.p };
+
+      this.request(options);
+    }
+
+    /**
+       * 获取wgt资源版本
+       */ }, { key: "getProperty", value: function getProperty()
+    {var _this = this;
+      plus.runtime.getProperty(plus.runtime.appid, function (wgtinfo) {
+        _this.statData.v = wgtinfo.version || '';
+        _this.getNetworkInfo();
+      });
+    }
+
+    /**
+       * 获取网络信息
+       */ }, { key: "getNetworkInfo", value: function getNetworkInfo()
+    {var _this2 = this;
+      uni.getNetworkType({
+        success: function success(result) {
+          _this2.statData.net = result.networkType;
+          _this2.getLocation();
+        } });
+
+    }
+
+    /**
+       * 获取位置信息
+       */ }, { key: "getLocation", value: function getLocation()
+    {var _this3 = this;
+      if (stat_config.getLocation) {
+        uni.getLocation({
+          type: 'wgs84',
+          geocode: true,
+          success: function success(result) {
+            if (result.address) {
+              _this3.statData.cn = result.address.country;
+              _this3.statData.pn = result.address.province;
+              _this3.statData.ct = result.address.city;
+            }
+
+            _this3.statData.lat = result.latitude;
+            _this3.statData.lng = result.longitude;
+            _this3.request(_this3.statData);
+          } });
+
+      } else {
+        this.statData.lat = 0;
+        this.statData.lng = 0;
+        this.request(this.statData);
+      }
+    }
+
+    /**
+       * 发送请求
+       * @param {Object} data 上报数据
+       * @param {Object} type 类型
+       */ }, { key: "request", value: function request(
+    data, type) {var _this4 = this;
+      var time = get_time();
+      var title = this._navigationBarTitle;
+      Object.assign(data, {
+        ttn: title.page,
+        ttpj: title.config,
+        ttc: title.report });
+
+
+      var uniStatData = dbGet('__UNI__STAT__DATA') || {};
+      if (!uniStatData[data.lt]) {
+        uniStatData[data.lt] = [];
+      }
+      // 加入队列
+      uniStatData[data.lt].push(data);
+      dbSet('__UNI__STAT__DATA', uniStatData);
+
+      var page_residence_time = get_page_residence_time();
+      // 判断时候到达上报时间 ，默认 10 秒上报
+      if (page_residence_time < OPERATING_TIME && !type) return;
+
+      // 时间超过，重新获取时间戳
+      set_page_residence_time();
+      var stat_data = handle_data(uniStatData);
+      var optionsData = {
+        usv: STAT_VERSION, //统计 SDK 版本号
+        t: time, //发送请求时的时间戮
+        requests: stat_data };
+
+
+      // 重置队列
+      dbRemove('__UNI__STAT__DATA');
+
+
+      {
+        if (data.ut === 'h5') {
+          this.imageRequest(optionsData);
+          return;
+        }
+      }
+
+      // XXX 安卓需要延迟上报 ，否则会有未知错误，需要验证处理
+      if (get_platform_name() === 'n' && this.statData.p === 'a') {
+        setTimeout(function () {
+          _this4.sendRequest(optionsData);
+        }, 200);
+        return;
+      }
+
+      this.sendRequest(optionsData);
+    } }, { key: "getIsReportData", value: function getIsReportData()
+
+    {
+      return is_report_data();
+    }
+
+    /**
+       * 数据上报
+       * @param {Object} optionsData 需要上报的数据
+       */ }, { key: "sendRequest", value: function sendRequest(
+    optionsData) {var _this5 = this;
+
+
+      {
+        this.getIsReportData().then(function () {
+          uni.request({
+            url: STAT_URL,
+            method: 'POST',
+            data: optionsData,
+            success: function success() {},
+            fail: function fail(e) {
+              if (++_this5._retry < 3) {
+                setTimeout(function () {
+                  _this5.sendRequest(optionsData);
+                }, 1000);
+              }
+            } });
+
+        });
+      }
+    }
+
+    /**
+       * h5 请求
+       */ }, { key: "imageRequest", value: function imageRequest(
+    data) {
+      this.getIsReportData().then(function () {
+        var image = new Image();
+        var options = get_sgin(get_encodeURIComponent_options(data)).options;
+        image.src = STAT_H5_URL + '?' + options;
+      });
+    } }, { key: "sendEvent", value: function sendEvent(
+
+    key, value) {
+      // 校验 type 参数
+      if (calibration(key, value)) return;
+
+      if (key === 'title') {
+        this._navigationBarTitle.report = value;
+        return;
+      }
+      this.sendEventRequest({
+        key: key,
+        value: typeof value === 'object' ? JSON.stringify(value) : value },
+
+      1);
+
+    } }]);return Report;}();var
+
+
+Stat = /*#__PURE__*/function (_Report) {"use strict";_inherits(Stat, _Report);var _super = _createSuper(Stat);_createClass(Stat, null, [{ key: "getInstance", value: function getInstance()
+    {
+      if (!uni.__stat_instance) {
+        uni.__stat_instance = new Stat();
+      }
+      return uni.__stat_instance;
+    } }]);
+  function Stat() {_classCallCheck(this, Stat);return _super.call(this);
+
+  }
+
+  /**
+     * 进入应用
+     * @param {Object} options 页面参数
+     * @param {Object} self	当前页面实例
+     */_createClass(Stat, [{ key: "launch", value: function launch(
+    options, self) {
+      // 初始化页面停留时间  start
+      set_page_residence_time();
+      this.__licationShow = true;
+      this.sendReportRequest(options, true);
+    } }, { key: "load", value: function load(
+    options, self) {
+      this.self = self;
+      this._query = options;
+    } }, { key: "appHide", value: function appHide(
+
+    self) {
+      this.applicationHide(self, true);
+    } }, { key: "appShow", value: function appShow(
+
+    self) {
+      this.applicationShow(self);
+    } }, { key: "show", value: function show(
+
+    self) {
+      this.self = self;
+      if (get_page_types(self) === 'page') {
+        this.pageShow(self);
+      }
+
+
+
+
+
+
+
+
+
+
+      if (get_page_types(self) === 'app') {
+        this.appShow();
+      }
+
+
+    } }, { key: "hide", value: function hide(
+
+    self) {
+      this.self = self;
+      if (get_page_types(self) === 'page') {
+        this.pageHide(self);
+      }
+
+
+
+
+
+
+
+
+
+
+      if (get_page_types(self) === 'app') {
+        this.appHide();
+      }
+
+
+    } }, { key: "error", value: function error(
+
+    em) {
+      // 开发工具内不上报错误
+      if (this._platform === 'devtools') {
+        if (true) {
+          console.info('当前运行环境为开发者工具，不上报数据。');
+          return;
+        }
+      }
+      var emVal = '';
+      if (!em.message) {
+        emVal = JSON.stringify(em);
+      } else {
+        emVal = em.stack;
+      }
+      var options = {
+        ak: this.statData.ak,
+        uuid: this.statData.uuid,
+        lt: '31',
+        ut: this.statData.ut,
+        ch: this.statData.ch,
+        mpsdk: this.statData.mpsdk,
+        mpv: this.statData.mpv,
+        v: this.statData.v,
+        em: emVal,
+        usv: this.statData.usv,
+        t: parseInt(new Date().getTime() / 1000),
+        p: this.statData.p };
+
+      this.request(options);
+    } }]);return Stat;}(Report);
+
+var Stat$1 = Stat;
+
+var stat = Stat$1.getInstance();
+
+// 用于判断是隐藏页面还是卸载页面
+var isHide = false;
+
+var lifecycle = {
+  onLaunch: function onLaunch(options) {
+    // 进入应用上报数据
+    stat.launch(options, this);
+  },
+  onLoad: function onLoad(options) {
+    stat.load(options, this);
+    // 重写分享，获取分享上报事件
+    if (this.$scope && this.$scope.onShareAppMessage) {
+      var oldShareAppMessage = this.$scope.onShareAppMessage;
+      this.$scope.onShareAppMessage = function (options) {
+        stat.interceptShare(false);
+        return oldShareAppMessage.call(this, options);
+      };
+    }
+  },
+  onShow: function onShow() {
+    isHide = false;
+    stat.show(this);
+  },
+  onHide: function onHide() {
+    isHide = true;
+    stat.hide(this);
+  },
+  onUnload: function onUnload() {
+    if (isHide) {
+      isHide = false;
+      return;
+    }
+    stat.hide(this);
+  },
+  onError: function onError(e) {
+    stat.error(e);
+  } };
+
+
+
+function main() {
+  {
+    console.log('uni统计开启,version:1');
+  }
+  if (true) {
+    uni.report = function (type, options) {};
+  } else { var Vue; }
+}
+
+main();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 7:
+/*!******************************************************!*\
+  !*** E:/APPpro/voss/规则之树/pages.json?{"type":"stat"} ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "__UNI__8D6C809" };exports.default = _default;
+
+/***/ }),
+
+/***/ 8:
+/*!*******************************************************!*\
+  !*** E:/APPpro/voss/规则之树/pages.json?{"type":"style"} ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/home/home": { "enablePullDownRefresh": true }, "pages/home/find": { "enablePullDownRefresh": true }, "pages/home/tool": { "enablePullDownRefresh": true }, "pages/home/user": {}, "pages/user/userlist": {}, "pages/user/useredit": {}, "pages/user/mailedit": {}, "pages/user/media": {}, "pages/user/scan": {}, "pages/user/login": { "softinputMode": "adjustResize" }, "pages/user/foget": { "softinputMode": "adjustResize" }, "pages/user/register": { "softinputMode": "adjustResize" }, "pages/user/setup": {}, "pages/user/usermark": {}, "pages/user/agreement": {}, "pages/contents/contentlist": {}, "pages/contents/imagetoday": { "enablePullDownRefresh": true }, "pages/contents/info": { "enablePullDownRefresh": true }, "pages/contents/alltag": {}, "pages/contents/randlist": {}, "pages/contents/allcategory": {}, "pages/contents/metas": {}, "pages/contents/recommend": {}, "pages/contents/search": {}, "pages/contents/userinfo": { "enablePullDownRefresh": true }, "pages/contents/foreverblog": { "enablePullDownRefresh": true } }, "globalStyle": { "navigationBarBackgroundColor": "#0081ff", "navigationBarTitleText": "规则之树", "navigationStyle": "custom", "navigationBarTextStyle": "black" } };exports.default = _default;
 
 /***/ })
 

@@ -66,6 +66,8 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "uniStatistics": {
+    "enable": true
+  },
+  "usingComponents": {}
 }

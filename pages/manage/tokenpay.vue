@@ -252,6 +252,12 @@
 					}
 				})
 			},
+			searchTag(){
+				var that = this;
+				var searchText = that.searchText;
+				that.page=1;
+				that.getTokenList()
+			},
 			getTokenList(isPage){
 				var that = this;
 				var page = that.page;
@@ -360,6 +366,15 @@
 				var that = this;
 				var token = "";
 				
+				if(that.tokenNum==""||that.tokenNum<1){
+					uni.showToast({
+						title:"请输入正确的条数",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
@@ -372,7 +387,7 @@
 					});
 					return false
 				}
-				var url = API.tokenPayExcel()+"?limit&token="+token;
+				var url = API.tokenPayExcel()+"?limit="+that.tokenNum+"&token="+token;
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
