@@ -115,7 +115,7 @@
 								<text class="cuIcon-read"></text>
 							</view>
 							<view class="index-sort-text">
-								广告位
+								广告位<text class="text-sm text-gray margin-left-sm">开发中</text>
 							</view>
 						</view>
 					</waves>

@@ -85,7 +85,7 @@
 			if(localStorage.getItem('userinfo')){
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				//that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 			}
 			if(localStorage.getItem('token')){
 				

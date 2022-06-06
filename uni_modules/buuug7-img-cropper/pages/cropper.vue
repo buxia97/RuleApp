@@ -63,6 +63,11 @@ export default {
 	sendmessage(event){
 		console.log(JSON.stringify(event));
 	},
+	back(){
+		uni.navigateBack({
+			delta: 1
+		});
+	},
 
     // handleH5Message(e) {
     //   console.log(`H5Message`);

@@ -21,8 +21,8 @@
 			<view class="user-edit-header margin-top">
 				<image :src="avatar"></image>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text>
-				<!-- <text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text> -->
+				<!-- <text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text> -->
+				<text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text>
 				<!--  #endif -->
 			</view>
 			<view class="cu-form-group">
@@ -133,6 +133,7 @@
 				mail:'',
 				url:'',
 				avatar:"",
+				avatarNew:"",
 				introduce:"",
 				
 				modalName: null,
@@ -205,6 +206,7 @@
 					}
 					
 				}
+				
 			
 				var data = {
 					uid:that.uid,
@@ -213,6 +215,9 @@
 					password:that.password,
 					introduce:that.introduce,
 					url:that.url,
+				}
+				if(that.avatarNew!=''){
+					data.avatar = that.avatarNew;
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -254,6 +259,10 @@
 								userInfo.screenName=that.screenName;
 								userInfo.url=that.url;
 								userInfo.introduce = that.introduce;
+								if(that.avatarNew!=''){
+									userInfo.avatar = that.avatarNew;
+								}
+								that.avatarNew = '';
 								localStorage.setItem('userinfo',JSON.stringify(userInfo));
 								that.getCacheInfo();
 							}
@@ -332,7 +341,6 @@
 				var that = this;
 				base64ToPath(base64)
 				  .then(path => {
-					console.log(path);
 					var file = path;
 					const uploadTask = uni.uploadFile({
 					  url : API.upload(),
@@ -348,18 +356,27 @@
 						  setTimeout(function () {
 						  	uni.hideLoading();
 						  }, 1000);
+						  console.log(JSON.stringify(uploadFileRes))
+						  
 							var data = JSON.parse(uploadFileRes.data);
 							//var data = uploadFileRes.data;
-							uni.showToast({
-								title: data.msg,
-								icon: 'none'
-							})
+							
+							
 							if(data.code==1){
-								
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
 								that.avatar = data.data.url;
+								that.avatarNew = data.data.url;
 								localStorage.removeItem('toAvatar');
-								console.log(that.avatar)
+								//console.log(that.avatar)
 								
+							}else{
+								uni.showToast({
+									title: "头像上传失败，请检查接口",
+									icon: 'none'
+								})
 							}
 						},fail:function(){
 							setTimeout(function () {

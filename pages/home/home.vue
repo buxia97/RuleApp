@@ -45,12 +45,12 @@
 			
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toForeverblog">
-						<view class="index-sort-i toClub">
-							<text class="cuIcon-upstagefill"></text>
+					<view class="index-sort-main" @tap='toTopContents("排行榜","commentsNum")'>
+						<view class="index-sort-i" style="background-color: #ff007f;">
+							<text class="cuIcon-crownfill"></text>
 						</view>
 						<view class="index-sort-text">
-							十年之约
+							排行榜
 						</view>
 					</view>
 				</waves>
@@ -898,6 +898,13 @@
 				
 				uni.navigateTo({
 				    url: '/pages/contents/imagetoday'
+				});
+			},
+			toTopContents(title,id){
+				var that = this;
+				var type="meta";
+				uni.navigateTo({
+				    url: '/pages/contents/contentlist?title='+title+"&type=top&id="+id
 				});
 			},
 			toMetas(){

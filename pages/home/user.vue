@@ -565,7 +565,10 @@
 								if(res.data.data.vip){
 									userInfo.vip = res.data.data.vip;
 								}
-								//that.userInfo = userInfo;
+								// if(res.data.data.avatar){
+								// 	that.userInfo = res.data.data.avatar;
+								// }
+								
 							}
 							
 						}
