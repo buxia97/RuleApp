@@ -256,6 +256,16 @@
 			</view>
 		</view>
 		<!--  #endif -->
+		<!--#ifdef APP-PLUS-->
+		<view class="Startupmap" v-if="!isStart">
+			<view class="Startupmap-close" @tap="toStart">
+				<text>跳过</text>
+			</view>
+			<view class="Startupmap-pic" @tap="toStartUrl">
+				<image :src="startImg.localUrl" mode="aspectFill"></image>
+			</view>
+		</view>
+		<!--#endif-->
 		<!--update结束-->
 		<!--  #ifdef APP-PLUS -->
 		<view style="height: 100upx;"></view>
@@ -312,6 +322,9 @@
 				
 				
 				ads:"",
+				
+				startImg:'',
+				isStart:false,
 			}
 		},
 		onPullDownRefresh(){
@@ -963,6 +976,106 @@
 				}
 				uni.navigateTo({
 				    url: '/pages/user/scan?text='+text
+				});
+			},
+			//自定义启动图广告相关
+			toStartUrl(){
+				if(localStorage.getItem('startImg')){
+					var imgData = JSON.parse(localStorage.getItem('startImg'));
+					//如果线上的图片与本地缓存图片相同，就不再进行下载
+					if(imgData.app_jump_address){
+						var url = imgData.app_jump_address;
+						if(url.indexOf("http") != -1){
+							plus.runtime.openWeb(url);
+						}else{
+							uni.navigateTo({
+							    url: url
+							});
+						}
+						
+					}else{
+						return false
+					}
+					
+				}else{
+					return false
+				}
+			},
+			appStartImg(){
+				var that = this;
+				if(localStorage.getItem('startImg')){
+					var imgData = JSON.parse(localStorage.getItem('startImg'));
+					//在请求之前，先为了性能载入上次图片
+					plus.io.resolveLocalFileSystemURL(imgData.localUrl, function(entry) {
+						console.log("启动图文件本地存在");
+						that.startImg = imgData;
+					}, function(e) {
+						console.log("启动图文件本地不存在");
+						localStorage.removeItem('startImg');
+						that.isStart=true;
+					});
+				}
+				Net.request({
+					url: API.appStartImg(),
+					method: 'get',
+					success: function(res) {
+						var data = res.data.data[0];
+						var app_img_url = res.data.data[0].app_img_url;
+						app_img_url = app_img_url.replace(/[\r\n]/g,"");
+						data.app_img_url = app_img_url;
+						that.Download(data);
+					},
+					fail:function(res){
+						
+					}
+				});
+			},
+			Download(startImg) {
+				var that = this;
+				var url = startImg.app_img_url;
+				if(localStorage.getItem('startImg')){
+					var imgData = JSON.parse(localStorage.getItem('startImg'));
+					//如果线上的图片与本地缓存图片相同，就不再进行下载
+					if(url == imgData.app_img_url){
+						console.log("启动图不更新");
+						//但是链接可能变化，所以需要载入缓存
+						var oldStartImg = that.startImg;
+						oldStartImg.app_jump_address = startImg.app_jump_address;
+						localStorage.setItem('startImg', JSON.stringify(oldStartImg));
+						return false;
+					}
+				}
+				uni.downloadFile({
+					url:url,//下载地址接口返回
+					success: (data) => {
+						if (data.statusCode === 200) {
+							//文件保存到本地
+							uni.saveFile({
+								tempFilePath: data.tempFilePath, //临时路径
+								success: function(res) {
+									// uni.showToast({
+									// 	icon: 'none',
+									// 	mask: true,
+									// 	title: '文件已保存：' + res.savedFilePath, //保存路径
+									// 	duration: 3000,
+									// });
+									
+									startImg.localUrl = res.savedFilePath;
+									localStorage.setItem('startImg', JSON.stringify(startImg));
+									console.log("启动图已更新"+startImg.localUrl);
+									that.startImg = startImg;
+								}
+							});
+						}
+					},
+					fail: (err) => {
+						console.log(err);
+						// uni.showToast({
+						// 	icon: 'none',
+						// 	mask: true,
+						// 	title: '失败请重新下载',
+						// });
+					},
 				});
 			},
 		},

@@ -135,6 +135,7 @@
 				uni.login({
 					provider: 'qq',
 					success: resp => {
+						var js_code = resp.code;
 						var access_token = resp.authResult.access_token;
 						uni.getUserInfo({
 							provider: 'qq',
@@ -145,9 +146,18 @@
 									//gender: infoRes.userInfo.gender == '男' ? 1 : 2,
 									appLoginType:"qq",
 				                    headImgUrl: infoRes.userInfo.figureurl_qq_2,
-									openId: infoRes.userInfo.openId,
-									accessToken: access_token
+									// openId: infoRes.userInfo.openId,
+									// accessToken: access_token
 								};
+								// #ifdef APP-PLUS
+								formdata.openId=infoRes.userInfo.openId;
+								formdata.accessToken=access_token,
+								formdata.type = "app";
+								// #endif
+								// #ifdef MP-QQ
+								formdata.type = "applets";
+								formdata.js_code = js_code;
+								// #endif
 								uni.showLoading({
 									title: "加载中"
 								});
