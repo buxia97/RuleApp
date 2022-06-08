@@ -341,7 +341,10 @@
 			 uni.hideTabBar({
 				animation: false
 			})
-			
+			//如果启动图还没有缓存过，第一次进来就不显示启动图了
+			if(!localStorage.getItem('appStart')){
+				that.isStart = true;
+			}
 			that.getAds();
 			
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
@@ -387,6 +390,12 @@
 			} 
 			
 			// #endif
+			setTimeout(function() {
+				that.isStart=true;
+			}, 5000); 
+			// #ifdef APP-PLUS
+			 that.appStartImg();
+			 //#endif
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -983,8 +992,8 @@
 				if(localStorage.getItem('startImg')){
 					var imgData = JSON.parse(localStorage.getItem('startImg'));
 					//如果线上的图片与本地缓存图片相同，就不再进行下载
-					if(imgData.app_jump_address){
-						var url = imgData.app_jump_address;
+					if(imgData.appStartUrl){
+						var url = imgData.appStartUrl;
 						if(url.indexOf("http") != -1){
 							plus.runtime.openWeb(url);
 						}else{
@@ -1003,26 +1012,26 @@
 			},
 			appStartImg(){
 				var that = this;
-				if(localStorage.getItem('startImg')){
-					var imgData = JSON.parse(localStorage.getItem('startImg'));
+				if(localStorage.getItem('appStart')){
+					var imgData = JSON.parse(localStorage.getItem('appStart'));
 					//在请求之前，先为了性能载入上次图片
 					plus.io.resolveLocalFileSystemURL(imgData.localUrl, function(entry) {
 						console.log("启动图文件本地存在");
 						that.startImg = imgData;
 					}, function(e) {
 						console.log("启动图文件本地不存在");
-						localStorage.removeItem('startImg');
+						localStorage.removeItem('appStart');
 						that.isStart=true;
 					});
 				}
 				Net.request({
-					url: API.appStartImg(),
+					url: API.GetAppStart(),
 					method: 'get',
 					success: function(res) {
-						var data = res.data.data[0];
-						var app_img_url = res.data.data[0].app_img_url;
-						app_img_url = app_img_url.replace(/[\r\n]/g,"");
-						data.app_img_url = app_img_url;
+						var data = res.data;
+						var appStartPic = res.data.appStartPic;
+						appStartPic = appStartPic.replace(/[\r\n]/g,"");
+						data.appStartPic = appStartPic;
 						that.Download(data);
 					},
 					fail:function(res){
@@ -1032,16 +1041,16 @@
 			},
 			Download(startImg) {
 				var that = this;
-				var url = startImg.app_img_url;
-				if(localStorage.getItem('startImg')){
-					var imgData = JSON.parse(localStorage.getItem('startImg'));
+				var url = startImg.appStartPic;
+				if(localStorage.getItem('appStart')){
+					var imgData = JSON.parse(localStorage.getItem('appStart'));
 					//如果线上的图片与本地缓存图片相同，就不再进行下载
-					if(url == imgData.app_img_url){
+					if(url == imgData.appStartPic){
 						console.log("启动图不更新");
 						//但是链接可能变化，所以需要载入缓存
 						var oldStartImg = that.startImg;
-						oldStartImg.app_jump_address = startImg.app_jump_address;
-						localStorage.setItem('startImg', JSON.stringify(oldStartImg));
+						oldStartImg.appStartUrl = startImg.appStartUrl;
+						localStorage.setItem('appStart', JSON.stringify(oldStartImg));
 						return false;
 					}
 				}
@@ -1061,7 +1070,7 @@
 									// });
 									
 									startImg.localUrl = res.savedFilePath;
-									localStorage.setItem('startImg', JSON.stringify(startImg));
+									localStorage.setItem('appStart', JSON.stringify(startImg));
 									console.log("启动图已更新"+startImg.localUrl);
 									that.startImg = startImg;
 								}

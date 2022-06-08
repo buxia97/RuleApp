@@ -80,6 +80,9 @@ module.exports = {
 	GetAds:function(){
 		return WEB_URL + 'apiResult.php?getAds=1';
 	},
+	GetAppStart:function(){
+		return WEB_URL + 'apiResult.php?appStart=1';
+	},
 	GetGithubUrl:function(){
 		return GithubUrl;
 	},
