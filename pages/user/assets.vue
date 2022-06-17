@@ -25,9 +25,11 @@
 				<view class="bg-gradual-red text-center shadow-blur">
 					<view class="text-lg text-bold">欢迎您，尊贵的VIP用户</view>
 					<view class="margin-top-sm text-Abc">正在享受全站商品{{tovipDiscount(vipDiscount)}}折优惠，及VIP专属头衔！</view>
-					<view class="margin-top-sm text-Abc">到期时间：{{formatDate(vip)}}</view>
+					<view class="margin-top-sm text-Abc" v-if="vip==1">到期时间：永久</view>
+					<view class="margin-top-sm text-Abc" v-else>到期时间：{{formatDate(vip)}}</view>
 					<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="buyvip">立即续期</view>
 				</view>
+				
 			</view>
 			<view class="vip-maim" v-else>
 				<view class="bg-gradual-blue text-center shadow-blur">

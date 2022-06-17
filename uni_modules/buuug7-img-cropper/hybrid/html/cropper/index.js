@@ -123,8 +123,6 @@ async function Init(params) {
           dataUrl: croppedCanvas.toDataURL(),
         },
       };
-
-    console.log(`postData`, postData);
       if (env.plus) {
         uni.postMessage(postData);
       } else if (env.h5) {

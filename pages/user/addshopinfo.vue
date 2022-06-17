@@ -20,14 +20,14 @@
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">商品价格</view>
-				<input placeholder="输入商品价格" type="number" name="input" v-model="price"    @focus="ToisText(0)" @blur="ToisText(0)"></input>
+				<input placeholder="输入商品价格" type="number" name="input" v-model="price"    @focus="ToisText(0)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></input>
 				<view class="action">
 					<text class="text-red" @tap="showModal" data-target="RadioModal">设置VIP折扣</text>
 				</view>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">商品数量</view>
-				<input placeholder="输入商品数量" type="number" name="input" v-model="num"   @focus="ToisText(0)" @blur="ToisText(0)"></input>
+				<input placeholder="输入商品数量" type="number" name="input" v-model="num"   @focus="ToisText(0)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></input>
 			</view>
 			
 			<view class="cu-form-group">
@@ -48,7 +48,7 @@
 				<text class="cuIcon-read" @tap="toIsShow"></text>
 			</view>
 			<view class="cu-form-group">
-				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="value" placeholder="收费显示内容,在这里设置文本,链接,或者联系信息" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)"></textarea>
+				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="value" placeholder="收费显示内容,在这里设置文本,链接,或者联系信息" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></textarea>
 				<scroll-view scroll-y class="text" v-if="isShow"  :style="readstyle">
 					<mp-html :content="value" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
 				</scroll-view>

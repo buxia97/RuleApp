@@ -18,9 +18,9 @@
     </web-view>
   </view>
 </template>
-
 <script>
-
+	import { localStorage } from '@/js_sdk/mp-storage/mp-storage/index.js'
+var wv;
 export default {
   name: "buuug7-img-cropper",
   data() {
@@ -38,6 +38,21 @@ export default {
 		var that = this;
 		// #ifdef APP-PLUS || MP
 		that.NavBar = this.CustomBar;
+		// #endif
+		// #ifdef APP-PLUS
+		
+		var currentWebview = this.$scope.$getAppWebview() //此对象相当于html5plus里的plus.webview.currentWebview()。在uni-app里vue页面直接使用plus.webview.currentWebview()无效，非v3编译模式使用this.$mp.page.$getAppWebview()
+		var that = this;
+		that.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
+		setTimeout(function() {
+			
+		    wv = currentWebview.children()[0]
+		    wv.setStyle({
+				top:uni.getSystemInfoSync().statusBarHeight + 44 ,
+				height:uni.getSystemInfoSync().windowHeight - 44 - uni.getSystemInfoSync().statusBarHeight,
+			})
+		}, 300); //如果是页面初始化调用时，需要延时一下
+		
 		// #endif
 	},
   mounted() {
@@ -59,9 +74,10 @@ export default {
         const eventChannel = this.getOpenerEventChannel();
         eventChannel.emit("imgCropped", { data: data.dataUrl });
       //}
+	  
     },
 	sendmessage(event){
-		console.log(JSON.stringify(event));
+		localStorage.setItem('toAvatar',JSON.stringify(event.detail.data[0]));
 	},
 	back(){
 		uni.navigateBack({

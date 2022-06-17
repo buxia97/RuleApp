@@ -25,7 +25,7 @@
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">商品标题</view>
-				<input placeholder="输入商品标题" name="input" v-model="title"   @focus="ToisText(0)" @blur="ToisText(0)"></input>
+				<input placeholder="输入商品标题" name="input" v-model="title"   @focus="ToisText(0)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">商品分类</view>
@@ -59,7 +59,7 @@
 				<text class="cuIcon-read" @tap="toIsShow"></text>
 			</view>
 			<view class="cu-form-group">
-				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="商品介绍" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)"></textarea>
+				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="商品介绍" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></textarea>
 				<scroll-view scroll-y class="text" v-if="isShow"  :style="readstyle">
 					<mp-html :content="text" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
 				</scroll-view>

@@ -153,12 +153,15 @@
 			// #endif
 			
 			that.getCacheInfo();
-			// #ifdef H5
+			
 			if(localStorage.getItem('toAvatar')){
 				var toAvatar = JSON.parse(localStorage.getItem('toAvatar'));
+				console.log(JSON.stringify(toAvatar));
 				that.avatarUpload(toAvatar.dataUrl);
+			}else{
+				console.log("没有头像缓存")
 			}
-			// #endif
+			
 		},
 		onLoad() {
 			var that = this;
@@ -338,6 +341,7 @@
 				  });
 			},
 			avatarUpload(base64){
+				
 				var that = this;
 				base64ToPath(base64)
 				  .then(path => {
@@ -356,20 +360,20 @@
 						  setTimeout(function () {
 						  	uni.hideLoading();
 						  }, 1000);
-						  console.log(JSON.stringify(uploadFileRes))
 						  
 							var data = JSON.parse(uploadFileRes.data);
 							//var data = uploadFileRes.data;
 							
 							
 							if(data.code==1){
-								uni.showToast({
-									title: data.msg,
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: data.msg,
+								// 	icon: 'none'
+								// })
 								that.avatar = data.data.url;
 								that.avatarNew = data.data.url;
 								localStorage.removeItem('toAvatar');
+								that.userEdit();
 								//console.log(that.avatar)
 								
 							}else{
