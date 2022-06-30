@@ -324,21 +324,17 @@
 				// #endif
 			},
 			toAvatar(){
+				// #ifdef APP-PLUS || H5
 				const that = this;
 				  uni.navigateTo({
 					url: "../../uni_modules/buuug7-img-cropper/pages/cropper",
 					events: {
 					  imgCropped(event) {
-						// 监听裁剪完成
-						// 返回的 event 中包含了已经裁剪好图片的base64编码字符串
-						// 你可以使用 <image :src="imgDataUrl" mode="aspectFit"></image> 组件来展示裁剪后的图片
-						// 或者你可以将该字符串通过接口上传给服务器用来保存
 						console.log(event);
-						// do whatever you want
-						// upload to server
 					  },
 					},
 				  });
+				// #endif
 			},
 			avatarUpload(base64){
 				
