@@ -13,7 +13,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="fullpost-btn">
-				<text class="cu-btn bg-blue" @tap="toMetas">分类标签</text>
+				<text class="cu-btn bg-blue" @tap="toMetas" v-if="group=='administrator'">分类标签</text>
 			</view>
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
@@ -53,7 +53,7 @@
 						</block>
 						
 						<text class="cu-btn text-blue radius" @tap="toEdit(item.cid)">编辑</text>
-						<text class="cu-btn text-red radius"  @tap="toDelete(item.cid)">删除</text>
+						<text class="cu-btn text-red radius"  @tap="toDelete(item.cid)" v-if="group=='administrator'">删除</text>
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
@@ -95,6 +95,8 @@
 				type:"waiting",
 				
 				isLoading:0,
+				
+				group:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -123,6 +125,11 @@
 			if(localStorage.getItem('token')){
 				that.token=localStorage.getItem('token');
 				that.getContentsList(false);
+			}
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
 			}
 			
 			

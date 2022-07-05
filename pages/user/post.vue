@@ -356,31 +356,31 @@
 					return false;
 				}
 				// #ifdef APP-PLUS
-				let screenHeight = uni.getSystemInfoSync().screenHeight;
-				let statusHeight= uni.getSystemInfoSync().statusBarHeight;
-				let inputHeight = screenHeight - statusHeight - 240;
-				that.screenHeight = screenHeight - statusHeight - 5;
-				let height = h;
-				let postheight = that.postheight - height;
+				// let screenHeight = uni.getSystemInfoSync().screenHeight;
+				// let statusHeight= uni.getSystemInfoSync().statusBarHeight;
+				// let inputHeight = screenHeight - statusHeight - 240;
+				// that.screenHeight = screenHeight - statusHeight - 5;
+				// let height = h;
+				// let postheight = that.postheight - height;
 
-				that.jpHeight =height - statusHeight;
+				// that.jpHeight =height - statusHeight;
 				
 				
-				that.postheight = postheight;
-				that.poststyle = "height:"+postheight+"px";
-				that.readstyle = "height:"+(inputHeight+30)+"px";
+				// that.postheight = postheight;
+				// that.poststyle = "height:"+postheight+"px";
+				// that.readstyle = "height:"+(inputHeight+30)+"px";
 				// #endif
 			},
 			focalize(h){
 				var that = this;
 				// #ifdef APP-PLUS
-				let screenHeight = uni.getSystemInfoSync().screenHeight;
-				let statusHeight= uni.getSystemInfoSync().statusBarHeight;
-				that.screenHeight = screenHeight - that.NavBar;
-				let inputHeight = screenHeight - statusHeight - 250;
-				that.jpHeight =0;
-				that.postheight = inputHeight;
-				that.poststyle = "height:"+inputHeight+"px";
+				// let screenHeight = uni.getSystemInfoSync().screenHeight;
+				// let statusHeight= uni.getSystemInfoSync().statusBarHeight;
+				// that.screenHeight = screenHeight - that.NavBar;
+				// let inputHeight = screenHeight - statusHeight - 250;
+				// that.jpHeight =0;
+				// that.postheight = inputHeight;
+				// that.poststyle = "height:"+inputHeight+"px";
 				// #endif
 			},
 			back(){

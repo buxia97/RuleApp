@@ -39,6 +39,13 @@
 				<input placeholder="为用户自定义头衔" name="input" v-model="customize"></input>
 			</view>
 			<view class="cu-form-group margin-top">
+				<view class="title">权限设置</view>
+				<input :value="groupText" name="input" disabled="true"></input>
+				<view class="action">
+					<text class="text-blue" @tap="showModal" data-target="groupModal">修改</text>
+				</view>
+			</view>
+			<view class="cu-form-group margin-top">
 				<view class="title">密码</view>
 				<input placeholder="请输入密码,不填则不修改" v-model="password" name="input"></input>
 			</view>
@@ -52,6 +59,21 @@
 			<text class="cuIcon-upload"></text>
 		</view>
 		<!--  #endif -->
+		<view class="cu-modal" :class="modalName=='groupModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="RadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item" v-for="(item,index) in groupList" :key="index">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">{{item.name}}</view>
+								<radio class="round" :class="group==item.group?'checked':''" :checked="group==item.group?true:false"
+								 :value="item.group" :data-name="item.name"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -75,6 +97,30 @@
 				url:'',
 				customize:'',
 				token:'',
+				
+				groupText:"贡献者",
+				group:"contributor",
+				groupList:[
+					{
+						name:"管理员",
+						group:"administrator"
+					},
+					{
+						name:"编辑",
+						group:"editor"
+					},
+					{
+						name:"贡献者",
+						group:"contributor"
+					},
+					{
+						name:"关注者",
+						group:"subscriber"
+					},
+				],
+				
+				modalName: null,
+				radio: 'radio1',
 				
 			}
 		},
@@ -165,7 +211,8 @@
 					password:that.password,
 					mail:that.mail,
 					url:that.url,
-					customize:that.customize
+					customize:that.customize,
+					group:that.group
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -211,6 +258,23 @@
 						uni.stopPullDownRefresh()
 					}
 				})
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			RadioChange(e) {
+				var that = this;
+				that.group = e.detail.value;
+				var list = that.groupList;
+				for(var i in list){
+					if(list[i].group == that.group){
+						that.groupText = list[i].name;
+					}
+				}
+				that.hideModal();
 			},
 		}
 	}

@@ -64,7 +64,7 @@
 										</view>
 									</view>
 									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'">审核</text>
-									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)">删除</text>
+									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)"  v-if="group=='administrator'">删除</text>
 								</view>
 					
 								
@@ -122,6 +122,7 @@
 				
 				owo:owo,
 				owoList:[],
+				group:"",
 				
 			}
 		},
@@ -145,7 +146,11 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+			}
 		},
 		onLoad() {
 			var that = this;

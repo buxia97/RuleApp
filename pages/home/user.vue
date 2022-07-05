@@ -207,15 +207,15 @@
 			</view>
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
-		<view class="data-box" v-if="group=='administrator'">
+		<view class="data-box" v-if="group=='administrator'||group=='editor'">
 			<view class="cu-list menu" @tap="toManage">
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-colorlens text-red"></text>
-						<text>管理员中心 </text>
+						<text>管理中心 </text>
 					</view>
 					<view class="action">
-						<text class="text-sm text-gray">仅管理员显示</text>
+						<text class="text-sm text-gray">仅管理员&编辑显示</text>
 						<text class="cuIcon-right"></text>
 					</view>
 				</view>

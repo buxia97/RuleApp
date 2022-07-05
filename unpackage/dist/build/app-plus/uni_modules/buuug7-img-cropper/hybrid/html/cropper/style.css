@@ -137,18 +137,21 @@ img {
   outline: thin dotted;
 }
 .file-upload-box .input-label {
-  border: 1px solid #eee;
-  background: #fff;
+	border: 1px solid #eee;
+	background: #fff;
 	width: 200px;
 	height: 200px;
 	margin:0px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: lighter;
-  color: #555;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	font-weight: lighter;
+	color: #555;
 }
 .upload-btn{
 	text-align: center;
+}
+.img-crop-area{
+	margin-top: 50px;
 }

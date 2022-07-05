@@ -35,7 +35,7 @@
 		</view>
 		<view class="data-box">
 			<view class="index-sort grid col-4">
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/users')">
 							<view class="index-sort-i">
@@ -83,7 +83,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/recharge')">
 							<view class="index-sort-i">
@@ -95,7 +95,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/withdraw')">
 							<view class="index-sort-i">
@@ -107,7 +107,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/tokenpay')">
 							<view class="index-sort-i">
@@ -119,7 +119,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/clean')">
 							<view class="index-sort-i">
@@ -131,7 +131,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/invitation')">
 							<view class="index-sort-i" style="background-color: #0bb335;">
@@ -145,42 +145,44 @@
 				</view>
 			</view>
 		</view>
-		<view class="data-box">
-			<view class="ruleApi-Info grid col-2" v-if="ruleApiInfo">
-				<view class="ruleApi-Info-box">
-					<view class="ruleApi-title">客户端最新版本</view>
-					<view class="ruleApi-name">RuleApp</view>
-					<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleappVersion}}</view>
-					<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleappDt)">获取</text>
-				</view>
-				<view class="ruleApi-Info-box">
-					<view class="ruleApi-title">服务端最新版本</view>
-					<view class="ruleApi-name">RuleApi</view>
-					<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleapiVersion}}</view>
-					<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleapiDt)">获取</text>
-				</view>
-			</view>
-		</view>
-		<view class="data-box">
-			<view class="cu-list menu">
-				<view class="cu-item" @tap="toReward">
-					<view class="content">
-						<text class="cuIcon-presentfill text-red"></text>
-						<text>打赏开发者</text>
+		<block v-if="group=='administrator'">
+			<view class="data-box">
+				<view class="ruleApi-Info grid col-2" v-if="ruleApiInfo">
+					<view class="ruleApi-Info-box">
+						<view class="ruleApi-title">客户端最新版本</view>
+						<view class="ruleApi-name">RuleApp</view>
+						<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleappVersion}}</view>
+						<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleappDt)">获取</text>
+					</view>
+					<view class="ruleApi-Info-box">
+						<view class="ruleApi-title">服务端最新版本</view>
+						<view class="ruleApi-name">RuleApi</view>
+						<view class="ruleApi-version text-gray">{{ruleApiInfo.ruleapiVersion}}</view>
+						<text class="cu-btn bg-blue" @tap="toUrl(ruleApiInfo.ruleapiDt)">获取</text>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="data-box">
-			<view class="cu-list menu">
-				<view class="cu-item" @tap="toWord">
-					<view class="content">
-						<text class="cuIcon-hotfill text-blue"></text>
-						<text>RuleAPP教程文档</text>
+			<view class="data-box">
+				<view class="cu-list menu">
+					<view class="cu-item" @tap="toReward">
+						<view class="content">
+							<text class="cuIcon-presentfill text-red"></text>
+							<text>打赏开发者</text>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
+			<view class="data-box">
+				<view class="cu-list menu">
+					<view class="cu-item" @tap="toWord">
+						<view class="content">
+							<text class="cuIcon-hotfill text-blue"></text>
+							<text>RuleAPP教程文档</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
 	</view>
 </template>
 
@@ -206,6 +208,8 @@
 				
 				ruleApiInfo:null,
 				
+				group:"",
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -222,7 +226,8 @@
 			if(localStorage.getItem('userinfo')){
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");";
+				that.group = that.userInfo.group;
 			}
 			if(localStorage.getItem('token')){
 				
