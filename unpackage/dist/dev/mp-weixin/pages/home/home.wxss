@@ -1584,5 +1584,41 @@ page{
 	height: 60rpx;
 	margin-top: 20rpx;
 }
+.Startupmap{
+	width: 100%;
+	height: 100vh;
+	z-index: 10000000;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+.Startupmap-pic{
+	width: 100%;
+	height: 100vh;
+	z-index: 1;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+.Startupmap-pic image{
+	width: 100%;
+	height: 100vh;
+}
+.Startupmap-close{
+	position: fixed;
+	width: 110rpx;
+	border-radius: 10rpx;
+	font-size: 24rpx;
+	height: 50rpx;
+	line-height: 50rpx;
+	background: rgba(0, 0, 0, 0.4);
+	text-align: center;
+	color: #fff;
+	top: 30rpx;
+	right: 30rpx;
+	z-index: 2;
+}
 
 

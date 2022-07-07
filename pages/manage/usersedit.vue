@@ -173,7 +173,14 @@
 							that.screenName = res.data.data.screenName;
 							that.mail = res.data.data.mail;
 							that.url = res.data.data.url;
+							that.group = res.data.data.group;
 							that.customize = res.data.data.customize;
+							var list = that.groupList;
+							for(var i in list){
+								if(list[i].group == that.group){
+									that.groupText = list[i].name;
+								}
+							}
 						}
 					},
 					fail: function(res) {

@@ -46,7 +46,7 @@
 						</view>
 						<view class="shop-info text-center">
 							<text class="shop-btn text-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
-							<text class="shop-btn text-red" @tap="deleteShop(item.id)">删除</text>
+							<text class="shop-btn text-red" @tap="deleteShop(item.id)" v-if="group=='administrator'">删除</text>
 						</view>
 					</view>
 				</view>
@@ -93,6 +93,7 @@
 				status:0,
 				
 				isLoading:0,
+				group:"",
 				
 			}
 		},
@@ -122,6 +123,7 @@
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.uid = that.userInfo.uid;
+				that.group = that.userInfo.group;
 				
 			}
 			if(localStorage.getItem('token')){

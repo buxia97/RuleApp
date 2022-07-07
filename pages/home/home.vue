@@ -946,9 +946,9 @@
 			closeUpdate(){
 				var that = this;
 				that.Update = 0;
-				uni.showTabBar({
-					animation: true
-				});
+				// uni.showTabBar({
+				// 	animation: true
+				// });
 			},
 			toAds(url){
 				// #ifdef APP-PLUS

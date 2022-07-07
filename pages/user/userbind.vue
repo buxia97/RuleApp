@@ -136,7 +136,10 @@
 					provider: 'qq',
 					success: resp => {
 						var js_code = resp.code;
-						var access_token = resp.authResult.access_token;
+						var access_token = "";
+						// #ifdef APP-PLUS
+						access_token = resp.authResult.access_token;
+						// #endif
 						uni.getUserInfo({
 							provider: 'qq',
 							success: function(infoRes) {
