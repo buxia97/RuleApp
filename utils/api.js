@@ -36,6 +36,8 @@ var feedback = 2689
 //关于我们文章id，typecho文章表cid
 var aboutme = 2
 
+//自定义字段配置（和可视化配置中心保持一致，英文逗号分割），默认的字段名称是小灯泡模板的abcimg字段，假如你的模板是用其它的字段进行判断，可以自己全局搜索abcimg进行修改，当然也可以什么都不做，这并不会导致使用出现问题。
+var fields = "abcimg";
 // #ifdef H5
 //var API_URL = '/';
 // #endif
@@ -73,6 +75,9 @@ module.exports = {
 	},
 	GetAboutme:function(){
 		return aboutme;
+	},
+	GetFields:function(){
+		return fields;
 	},
 	GetUpdateUrl:function(){
 		return WEB_URL + 'apiResult.php?update=1';
@@ -252,6 +257,14 @@ module.exports = {
 	//文章推荐
 	toRecommend:function(){
 		return API_URL + 'typechoContents/toRecommend';
+	},
+	//文章置顶
+	toTop:function(){
+		return API_URL + 'typechoContents/addTop';
+	},
+	//设置自定义字段
+	setFields:function(){
+		return API_URL + 'typechoContents/setFields';
 	},
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){

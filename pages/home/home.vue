@@ -183,6 +183,88 @@
 					{{item.name}}
 				</view>
 			</scroll-view>
+			<view class="cu-card article no-card topContents" v-for="(item,index) in topContents" :key="item.cid"  @tap="toInfo(item)" v-if="TabCur==0&&dataLoad">
+				<view class="cu-item shadow">
+					<view class="cu-item shadow">
+						<block v-if="item.images.length==0">
+							<view class="content-author content-header">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<view class="title">
+							<view class="text-cut"><text class="text-red">置顶</text>{{replaceSpecialChar(item.title)}}</view>
+						</view>
+						<block v-if="item.abcimg == 'mable'">
+							
+							<view class="article-imgMain grid col-3">
+								
+								<view class="article-img">
+									<image v-if="item.images.length > 0" :src="item.images[0]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="article-img">
+									<image v-if="item.images.length > 1" :src="item.images[1]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="article-img">
+									<image v-if="item.images.length > 2" :src="item.images[2]"
+									 mode="aspectFill"></image>
+								</view>
+							</view>
+							<view class="content-author content-header bigImg-style">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<block v-if="item.abcimg == 'bable'">
+							
+							<view class="content article-content">
+								<view class="article-big">
+									<image v-if="item.images.length > 0" :src="item.images[0]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="text-content"> {{subText(item.text,80)}}</view>
+							</view>
+							<view class="content-author content-header bigImg-style">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<block v-if="item.abcimg == 'able'||!item.abcimg">
+							<view class="content article-content">
+								
+								 <image v-if="item.images.length > 0" :src="item.images[0]"
+								  mode="aspectFill"></image>
+								 
+								<view class="desc">
+									<view class="text-content"> {{subText(item.text,80)}}</view>
+									<view class="content-author" v-if="item.images.length>0">
+										<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+										<text class="content-author-name">{{item.authorInfo.name}}</text>
+										<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+									</view>
+								</view>
+							</view>
+						</block>
+						
+						<view class="article-content-btn article-list-btn">
+							<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+						
+							<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+						</view>
+					</view>
+
+				</view>
+			</view>
+			<view class="dataLoad" v-if="!dataLoad">
+				<image src="../../static/loading.gif"></image>
+			</view>
 			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
 				<view class="cu-item shadow">
 					<block v-if="item.images.length==0">
@@ -195,21 +277,62 @@
 					<view class="title">
 						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 					</view>
-					<view class="content article-content">
+					<block v-if="item.abcimg == 'mable'">
 						
-						 <image v-if="item.images.length > 0" :src="item.images[0]"
-						  mode="aspectFill"></image>
-						 
-						<view class="desc">
-							<view class="text-content"> {{subText(item.text,80)}}</view>
-							<view class="content-author" v-if="item.images.length>0">
-								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-								<text class="content-author-name">{{item.authorInfo.name}}</text>
-								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						<view class="article-imgMain grid col-3">
+							
+							<view class="article-img">
+								<image v-if="item.images.length > 0" :src="item.images[0]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="article-img">
+								<image v-if="item.images.length > 1" :src="item.images[1]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="article-img">
+								<image v-if="item.images.length > 2" :src="item.images[2]"
+								 mode="aspectFill"></image>
 							</view>
 						</view>
-					</view>
-					<view class="article-content-btn">
+						<view class="content-author content-header bigImg-style">
+							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<text class="content-author-name">{{item.authorInfo.name}}</text>
+							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						</view>
+					</block>
+					<block v-if="item.abcimg == 'bable'">
+						
+						<view class="content article-content">
+							<view class="article-big">
+								<image v-if="item.images.length > 0" :src="item.images[0]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="text-content"> {{subText(item.text,80)}}</view>
+						</view>
+						<view class="content-author content-header bigImg-style">
+							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<text class="content-author-name">{{item.authorInfo.name}}</text>
+							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						</view>
+					</block>
+					<block v-if="item.abcimg == 'able'||!item.abcimg">
+						<view class="content article-content">
+							
+							 <image v-if="item.images.length > 0" :src="item.images[0]"
+							  mode="aspectFill"></image>
+							 
+							<view class="desc">
+								<view class="text-content"> {{subText(item.text,80)}}</view>
+								<view class="content-author" v-if="item.images.length>0">
+									<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+									<text class="content-author-name">{{item.authorInfo.name}}</text>
+									<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+								</view>
+							</view>
+						</view>
+					</block>
+					
+					<view class="article-content-btn article-list-btn">
 						<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
 						<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
 						<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
@@ -218,7 +341,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="load-more" @tap="loadMore">
+			<view class="load-more" @tap="loadMore" v-if="dataLoad">
 				<text>{{moreText}}</text>
 			</view>
 		</view>
@@ -293,6 +416,7 @@
 				swiperList: [],
 				recommendList:[],
 				contentsList:[],
+				topContents:[],
 				metaList:[],
 				Topic:[],
 				dotStyle: false,
@@ -325,6 +449,7 @@
 				
 				startImg:'',
 				isStart:false,
+				dataLoad:false,
 			}
 		},
 		onPullDownRefresh(){
@@ -413,6 +538,7 @@
 				that.getTopPic();
 				that.getRecommend();
 				that.getMetaList();
+				that.getTopContents();
 				that.getContentsList(false);
 			},
 			tabSelect(e) {
@@ -420,6 +546,8 @@
 				that.TabCur = e.currentTarget.dataset.id;
 				that.page = 1;
 				that.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+				that.contentsList = [];
+				that.dataLoad = false;
 				if(that.TabCur==0){
 					that.getContentsList(false);
 				}else{
@@ -456,6 +584,10 @@
 				if(localStorage.getItem('contentsList_'+meta)){
 					that.contentsList = JSON.parse(localStorage.getItem('contentsList_'+meta));
 				}
+				if(localStorage.getItem('topContents')){
+					that.topContents = JSON.parse(localStorage.getItem('topContents'));
+				}
+				
 				if(localStorage.getItem('Topic')){
 					that.Topic = JSON.parse(localStorage.getItem('Topic'));
 				}
@@ -541,7 +673,7 @@
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
-						"order":"created"
+						"order":"modified"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -645,10 +777,60 @@
 					}
 				})
 			},
+			getTopContents(){
+				var that = this;
+				var data = {
+					"type":"post",
+					"istop":1,
+				}
+				Net.request({
+					url: API.getContentsList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":5,
+						"page":1,
+						"order":"modified"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
+
+								that.topContents = contentsList;
+
+							}
+							localStorage.setItem('topContents',JSON.stringify(that.topContents));
+						}
+					},
+					fail: function(res) {
+					}
+				})
+			},
 			getContentsList(isPage){
 				var that = this;
 				var data = {
-					"type":"post"
+					"type":"post",
+					"istop":0,
 				}
 				var page = that.page;
 				if(isPage){
@@ -670,14 +852,32 @@
 					success: function(res) {
 						that.isLoad=0;
 						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
 								if(isPage){
 									that.page++;
-									that.contentsList = that.contentsList.concat(list);
+									that.contentsList = that.contentsList.concat(contentsList);
 								}else{
-									that.contentsList = list;
+									that.contentsList = contentsList;
 								}
 								
 								
@@ -697,7 +897,8 @@
 			getMetaContents(isPage,meta){
 				var that = this;
 				var data = {
-					"mid":meta
+					"mid":meta,
+					"type":"post"
 				}
 				var page = that.page;
 				if(isPage){
@@ -717,18 +918,34 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						if(!isPage){
+							that.dataLoad = true;
+						}
 						that.isLoad=0;
 						
 						that.moreText="加载更多";
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
 								if(isPage){
 									that.page++;
-									that.contentsList = that.contentsList.concat(list);
+									that.contentsList = that.contentsList.concat(contentsList);
 								}else{
-									that.contentsList = list;
+									that.contentsList = contentsList;
 								}
 								
 								

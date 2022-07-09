@@ -46,14 +46,17 @@
 						
 					</view>
 					<view class="manage-btn">
-						<text class="cu-btn text-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid)">快捷审核</text>
-						<block v-if="item.status!='waiting'">
-							<text class="cu-btn text-green radius" v-if="item.isrecommend==0"  @tap="addRecommend(item.cid)">推荐</text>
-							<text class="cu-btn text-grey radius" v-else  @tap="rmRecommend(item.cid)">取消推荐</text>
+						<text class="text-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid)">快捷审核</text>
+						<block v-if="item.status!='waiting'&&group=='administrator'">
+							<text class="text-green radius" v-if="item.isrecommend==0"  @tap="addRecommend(item.cid)">推荐</text>
+							<text class="text-grey radius" v-else  @tap="rmRecommend(item.cid)">取消推荐</text>
+							<text class="text-green radius" v-if="item.istop==0"  @tap="addTop(item.cid)">置顶</text>
+							<text class="text-grey radius" v-else  @tap="rmTop(item.cid)">取消置顶</text>
+							<text class="text-blue radius" @tap="setFields(item.cid,item.abcimg)">图文类型</text>
 						</block>
 						
-						<text class="cu-btn text-blue radius" @tap="toEdit(item.cid)">编辑</text>
-						<text class="cu-btn text-red radius"  @tap="toDelete(item.cid)" v-if="group=='administrator'">删除</text>
+						<text class="text-blue radius" @tap="toEdit(item.cid)">编辑</text>
+						<text class="text-red radius"  @tap="toDelete(item.cid)" v-if="group=='administrator'">删除</text>
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
@@ -69,6 +72,21 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="RadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item" v-for="(item,index) in abcimgList" :key="index">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">{{item.name}}</view>
+								<radio class="round" :class="abcimg==item.value?'checked':''" :checked="abcimg==item.value?true:false"
+								 :value="item.value"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -97,6 +115,24 @@
 				isLoading:0,
 				
 				group:"",
+				
+				modalName: null,
+				abcimg: 'able',
+				abcimgList:[
+					{
+						name:"默认",
+						value:"able"
+					},
+					{
+						name:"三图",
+						value:"mable"
+					},
+					{
+						name:"大图",
+						value:"bable"
+					},
+				],
+				curCid:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -209,11 +245,25 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
 								if(isPage){
 									that.page++;
-									that.contentsList = that.contentsList.concat(list);
+									that.contentsList = that.contentsList.concat(contentsList);
 								}else{
-									that.contentsList = list;
+									that.contentsList = contentsList;
 								}
 								
 							}else{
@@ -510,6 +560,128 @@
 				    }
 				});
 			},
+			addTop(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"istop":1,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要置顶该文章吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.toTop(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page=1;
+										that.moreText="加载更多";
+										that.isLoad=0;
+				            			that.getContentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			rmTop(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"istop":0,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要取消置顶该文章吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.toTop(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page=1;
+										that.moreText="加载更多";
+										that.isLoad=0;
+				            			that.getContentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
 			toMetas(){
 				var that = this;
 				
@@ -517,6 +689,88 @@
 					url: '/pages/manage/metas'
 				});
 			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			RadioChange(e) {
+				var abcimg = e.detail.value;
+				var cid = this.curCid;
+				this.setFields(cid,abcimg);
+			},
+			setFields(id,type){
+				var that = this;
+				that.curCid = id;
+				if(type){
+					that.abcimg = type;
+				}else{
+					that.abcimg = "able";
+				}
+				if(that.modalName == null){
+					that.modalName = "RadioModal";
+					return false;
+				}
+				
+				var token;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"cid":id,
+					"name":"abcimg",
+					"strvalue":that.abcimg,
+					"token":token
+				}
+				that.modalName = null;
+				uni.showLoading({
+					title: "加载中"
+				});
+				
+				Net.request({
+					url: API.setFields(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.modalName =  null;
+						that.abcimg = "able";
+						that.curCid = "";
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							that.page=1;
+							that.moreText="加载更多";
+							that.isLoad=0;
+							that.getContentsList();
+						}
+						
+					},
+					fail: function(res) {
+						that.modalName =  null;
+						that.abcimg = "able";
+						that.curCid = "";
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 		}
 	}
 </script>

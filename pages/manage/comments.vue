@@ -63,7 +63,7 @@
 											</view>
 										</view>
 									</view>
-									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'">审核</text>
+									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'" :class="group=='editor'?'editorStyle':''">审核</text>
 									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)"  v-if="group=='administrator'">删除</text>
 								</view>
 					

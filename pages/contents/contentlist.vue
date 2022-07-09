@@ -40,21 +40,61 @@
 					<view class="title">
 						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
 					</view>
-					<view class="content article-content">
+					<block v-if="item.abcimg == 'mable'">
 						
-						 <image v-if="item.images.length > 0" :src="item.images[0]"
-						  mode="aspectFill"></image>
-						 
-						<view class="desc">
-							<view class="text-content"> {{subText(item.text,80)}}</view>
-							<view class="content-author" v-if="item.images.length>0">
-								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-								<text class="content-author-name">{{item.authorInfo.name}}</text>
-								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						<view class="article-imgMain grid col-3">
+							
+							<view class="article-img">
+								<image v-if="item.images.length > 0" :src="item.images[0]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="article-img">
+								<image v-if="item.images.length > 1" :src="item.images[1]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="article-img">
+								<image v-if="item.images.length > 2" :src="item.images[2]"
+								 mode="aspectFill"></image>
 							</view>
 						</view>
-					</view>
-					<view class="article-content-btn">
+						<view class="content-author content-header bigImg-style">
+							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<text class="content-author-name">{{item.authorInfo.name}}</text>
+							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						</view>
+					</block>
+					<block v-if="item.abcimg == 'bable'">
+						
+						<view class="content article-content">
+							<view class="article-big">
+								<image v-if="item.images.length > 0" :src="item.images[0]"
+								 mode="aspectFill"></image>
+							</view>
+							<view class="text-content"> {{subText(item.text,80)}}</view>
+						</view>
+						<view class="content-author content-header bigImg-style">
+							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<text class="content-author-name">{{item.authorInfo.name}}</text>
+							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+						</view>
+					</block>
+					<block v-if="item.abcimg == 'able'||!item.abcimg">
+						<view class="content article-content">
+							
+							 <image v-if="item.images.length > 0" :src="item.images[0]"
+							  mode="aspectFill"></image>
+							 
+							<view class="desc">
+								<view class="text-content"> {{subText(item.text,80)}}</view>
+								<view class="content-author" v-if="item.images.length>0">
+									<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+									<text class="content-author-name">{{item.authorInfo.name}}</text>
+									<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+								</view>
+							</view>
+						</view>
+					</block>
+					<view class="article-content-btn  article-list-btn">
 						<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
 						<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
 						<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
@@ -318,11 +358,25 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
 								if(isPage){
 									that.page++;
-									that.contentsList = that.contentsList.concat(list);
+									that.contentsList = that.contentsList.concat(contentsList);
 								}else{
-									that.contentsList = list;
+									that.contentsList = contentsList;
 								}
 								
 								
@@ -379,11 +433,25 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								var contentsList = [];
+								//将自定义字段获取并添加到数据
+								var curFields = API.GetFields();
+								for(var i in list){
+									var fields = list[i].fields;
+									if(fields.length>0){
+										for(var j in fields){
+											if(curFields.indexOf(fields[j].name)!=-1){
+												list[i][fields[j].name]=fields[j].strValue;
+											}
+										}
+									}
+									contentsList.push(list[i]);
+								}
 								if(isPage){
 									that.page++;
-									that.contentsList = that.contentsList.concat(list);
+									that.contentsList = that.contentsList.concat(contentsList);
 								}else{
-									that.contentsList = list;
+									that.contentsList = contentsList;
 								}
 								
 								

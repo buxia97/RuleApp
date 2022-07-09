@@ -67,12 +67,11 @@
 			"path": "pages/user/scan",
 			"style": {}
 		},
-		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/inbox",
 			"style": {}
 		},
-		
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/user/userpost",
 			"style": {
