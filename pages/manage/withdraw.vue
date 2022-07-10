@@ -39,7 +39,7 @@
 								<text class="order-type">UID：{{item.uid}}</text>
 							</view>
 							<view class="order-btn">
-								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/100}}</text>
+								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/scale}}</text>
 								<text class="text-blue order-status" @tap="toPay(item.pay)">用户收款码</text>
 							</view>
 							<view class="order-kill" v-if="item.cid==-1">
@@ -85,7 +85,7 @@
 				type:"-1",
 				
 				isLoading:0,
-				
+				scale:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -109,6 +109,7 @@
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.page=1;
+			that.getVipInfo();
 			
 		},
 		onLoad() {
@@ -308,7 +309,33 @@
 				that.type = i;
 				that.page=1;
 				that.getWithdrawList();
-			}
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
 		}
 	}
 </script>

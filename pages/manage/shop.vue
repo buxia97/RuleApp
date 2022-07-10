@@ -45,6 +45,7 @@
 							{{item.title}}
 						</view>
 						<view class="shop-info text-center">
+							<text class="shop-btn text-blue" v-if="item.status==0" @tap="getUserInfo(item.uid)">用户</text>
 							<text class="shop-btn text-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
 							<text class="shop-btn text-red" @tap="deleteShop(item.id)" v-if="group=='administrator'">删除</text>
 						</view>
@@ -404,6 +405,61 @@
 				that.moreText="加载更多";
 				that.isLoad=0;
 				that.getShopList(false);
+			},
+			getUserInfo(uid){
+				var that = this;
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.getUserInfo(),
+					data:{
+						"key":uid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						if(res.data.code==1){
+							var data = res.data.data;
+							that.toUserContents(data);
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 500);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				if(data.screenName){
+					title = data.screenName+" 的信息";
+					name = data.screenName
+				}
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
 			},
 			
 		},

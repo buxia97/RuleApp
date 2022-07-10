@@ -36,7 +36,7 @@
 				1.提现申请发起后，将会在<text class="text-red text-bold">24小时</text>内审核并打款到您设置的账户，所以在提现前，请<text class="text-blue" @tap="topay">设置</text>自己的收款信息。
 			</view>
 			<view class="userrecharge-intro-text">
-				2.提现金额与网站积分的比例为<text class="text-red text-bold"> 1:100 </text>，最低提现<text class="text-red text-bold"> 5000 </text>积分，网站将收取<text class="text-red text-bold">5%</text>手续费。
+				2.提现金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低提现<text class="text-red text-bold"> 5000 </text>积分，网站将收取<text class="text-red text-bold">5%</text>手续费。
 			</view>
 			<view class="userrecharge-intro-text">
 				3.如果未收到提现款，请先查看提现记录中的数据，并立即反馈。
@@ -71,6 +71,7 @@
 				
 				token:'',
 				assets:"",
+				scale:0,
 				
 			}
 		},
@@ -85,7 +86,7 @@
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.userStatus();
-			
+			that.getVipInfo();
 		},
 		onLoad() {
 			var that = this;
@@ -214,7 +215,33 @@
 				uni.navigateTo({
 				    url: '/pages/user/pay'
 				});
-			}
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
 		}
 	}
 </script>

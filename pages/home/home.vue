@@ -265,7 +265,7 @@
 			<view class="dataLoad" v-if="!dataLoad">
 				<image src="../../static/loading.gif"></image>
 			</view>
-			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
+			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)" v-if="dataLoad">
 				<view class="cu-item shadow">
 					<block v-if="item.images.length==0">
 						<view class="content-author content-header">
@@ -385,7 +385,7 @@
 				<text>跳过</text>
 			</view>
 			<view class="Startupmap-pic" @tap="toStartUrl">
-				<image :src="startImg.localUrl" mode="aspectFill"></image>
+				<image :src="startImg.localUrl"></image>
 			</view>
 		</view>
 		<!--#endif-->
@@ -1206,8 +1206,8 @@
 			},
 			//自定义启动图广告相关
 			toStartUrl(){
-				if(localStorage.getItem('startImg')){
-					var imgData = JSON.parse(localStorage.getItem('startImg'));
+				if(localStorage.getItem('appStart')){
+					var imgData = JSON.parse(localStorage.getItem('appStart'));
 					//如果线上的图片与本地缓存图片相同，就不再进行下载
 					if(imgData.appStartUrl){
 						var url = imgData.appStartUrl;
@@ -1226,6 +1226,10 @@
 				}else{
 					return false
 				}
+			},
+			toStart(){
+				var that = this;
+				that.isStart=true;
 			},
 			appStartImg(){
 				var that = this;
@@ -1247,9 +1251,11 @@
 					success: function(res) {
 						var data = res.data;
 						var appStartPic = res.data.appStartPic;
-						appStartPic = appStartPic.replace(/[\r\n]/g,"");
-						data.appStartPic = appStartPic;
-						that.Download(data);
+						if(appStartPic!=""){
+							appStartPic = appStartPic.replace(/[\r\n]/g,"");
+							data.appStartPic = appStartPic;
+							that.Download(data);
+						}
 					},
 					fail:function(res){
 						

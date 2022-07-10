@@ -231,6 +231,25 @@ page{
 	font-size: 24upx;
 	color: #666;
 }
+.content-author.bigImg-style{
+	margin-top: 15upx;
+	margin-bottom: 0upx;
+}
+.article-imgMain{
+	padding: 0upx 20upx;
+}
+.cu-card.article>.cu-item .article-content-btn.article-list-btn{
+	margin-top: 10upx;
+}
+.article-img{
+	padding: 0upx 10upx;;
+}
+.article-img image{
+	width: 100%;
+	height: 150upx;
+	border-radius:8upx;
+	background-color: #f3f3f3;
+}
 .content-author image{
 	width: 45upx;
 	display: block;
@@ -1130,6 +1149,9 @@ page{
 	right: 180upx;
 	top: 15upx;
 }
+.comment-audit.editorStyle{
+	right: 30upx;
+}
 .myAssets{
 	width: 100%;
 	text-align: center;
@@ -1641,4 +1663,29 @@ page{
 	/* #ifdef APP-PLUS */
 	top: 80upx;
 	/* #endif */
+}
+.article-big{
+	width: 100%;
+}
+.article-big image{
+	width: 100%;
+	height: 350upx;
+	border-radius:8upx;
+	background-color: #f3f3f3;
+}
+.topContents .title{
+	font-weight: bold;
+}
+.topContents .title text{
+	margin-right: 10upx;
+}
+.dataLoad{
+	width: 100%;
+	height: 500upx;
+	text-align: center;
+}
+.dataLoad image{
+	width: 100upx;
+	height: 100upx;
+	margin-top: 200upx;
 }

@@ -28,7 +28,7 @@
 								
 							</view>
 							<view class="order-btn">
-								<text class="text-red">{{item.num}} 积分</text>
+								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/scale}}</text>
 								<text class="text-blue order-status" v-if="item.cid==-1">审核中</text>
 								<text class="text-green order-status" v-if="item.cid==0">已成功</text>
 								<text class="text-red order-status" v-if="item.cid==-2">被拒绝</text>
@@ -69,6 +69,7 @@
 				page:1,
 				
 				isLoading:0,
+				scale:0,
 				
 			}
 		},
@@ -87,6 +88,8 @@
 			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			that.page=1;
+			that.getVipInfo();
 			
 		},
 		onLoad() {
@@ -200,6 +203,32 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
+			},
+			getVipInfo(){
+				var that = this;
+				Net.request({
+					url: API.getVipInfo(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.scale=res.data.data.scale;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
 			},
 		}
 	}
