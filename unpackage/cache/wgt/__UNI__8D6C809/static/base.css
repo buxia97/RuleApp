@@ -906,7 +906,7 @@ page{
 	-webkit-line-clamp:2;
 }
 .shop-info{
-	padding: 10upx 10upx;
+	padding: 10upx 0upx;
 	line-height: 40upx;
 }
 .shop-price{
@@ -958,9 +958,8 @@ page{
 	background-color: #fff;
 }
 .shop-btn{
-	padding: 8upx 15upx;
-	margin: 0upx 20upx;
-	border-radius: 6upx;
+	padding: 8upx 0upx;
+	margin: 0upx 10upx;
 }
 .text-tips{
 	line-height: 40upx;

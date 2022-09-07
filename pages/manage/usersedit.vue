@@ -117,6 +117,10 @@
 						name:"关注者",
 						group:"subscriber"
 					},
+					{
+						name:"游客",
+						group:"visitor"
+					},
 				],
 				
 				modalName: null,
@@ -167,13 +171,13 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						//console.log(JSON.stringify(res))
+						console.log(JSON.stringify(res))
 						if(res.data.code==1){
 							that.name = res.data.data.name;
 							that.screenName = res.data.data.screenName;
 							that.mail = res.data.data.mail;
 							that.url = res.data.data.url;
-							that.group = res.data.data.group;
+							that.group = res.data.data.groupKey;
 							that.customize = res.data.data.customize;
 							var list = that.groupList;
 							for(var i in list){
@@ -182,7 +186,7 @@
 								}
 							}
 						}
-					},
+					}, 
 					fail: function(res) {
 						uni.showToast({
 							title: "网络开小差了哦",
@@ -221,6 +225,7 @@
 					customize:that.customize,
 					group:that.group
 				}
+				console.log(data)
 				uni.showLoading({
 					title: "加载中"
 				});

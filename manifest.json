@@ -129,7 +129,8 @@
         "title" : "规则之树",
         "domain" : "demo.color-ui.com",
         "router" : {
-            "base" : "/h5/"
+            "base" : "/h5/",
+            "mode" : "hash"
         },
         "uniStatistics" : {
             "enable" : true
