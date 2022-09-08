@@ -1,5 +1,5 @@
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://127.0.0.1:8081/';
+var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -25,9 +25,6 @@ var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
-//精选作品mid,后面的数字为mid，为typecho数据库的标签和分类id
-var featured = 397;
-
 
 //使用攻略文章id，typecho文章表cid
 var raiders = 1518
@@ -41,6 +38,8 @@ var fields = "abcimg";
 // #ifdef H5
 //var API_URL = '/';
 // #endif
+
+
 
 module.exports = {
 	GetRankList(){
@@ -63,9 +62,6 @@ module.exports = {
 	},
 	GetSwiperid:function(){
 		return swiperid;
-	},
-	GetFeatured:function(){
-		return featured;
 	},
 	GetRaiders:function(){
 		return raiders;
@@ -342,7 +338,7 @@ module.exports = {
 		return API_URL + 'pay/tokenPayExcel';
 	},
 	
-	
+	//生成邀请码
 	madetoken:function(){
 		return API_URL + 'pay/madetoken';
 	},

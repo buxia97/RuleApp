@@ -1688,3 +1688,32 @@ page{
 	height: 100upx;
 	margin-top: 200upx;
 }
+.ads-list{
+	padding-top: 10upx;
+}
+.ads-box{
+	background-color: #fff;
+	padding: 10upx 30upx;
+	margin-top: 15upx;
+}
+.ads-name{
+	height: 80upx;
+	line-height: 80upx;
+	font-size: 34upx;
+	border-bottom: solid 1px #f6f6f6;
+	font-weight: bold;
+}
+.ads-text{
+	padding:20upx 10upx;
+	font-size: 26upx;
+	line-height: 50upx;
+	color: #4a4a4a;
+}
+.ads-info{
+	border-top: solid 1px #f6f6f6;
+	line-height: 80upx;
+}
+.ads-price text{
+	font-size: 34upx;
+	font-weight: bold;
+}

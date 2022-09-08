@@ -61,7 +61,7 @@
 				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toRand">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/randlist')">
 							<view class="index-sort-i">
 								<text class="cuIcon-refresh"></text>
 							</view>
@@ -73,7 +73,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toCategoryContents('#精选#',featured)">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/recommend')">
 							<view class="index-sort-i">
 								<text class="cuIcon-choicenessfill"></text>
 							</view>
@@ -97,7 +97,7 @@
 			<view class="index-sort grid col-3 tool-sort">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toImagetoday">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/imagetoday')">
 							<view class="index-sort-i" style="background-color: #039a54;">
 								<text class="cuIcon-picfill"></text>
 							</view>
@@ -110,19 +110,19 @@
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main">
+						<view class="index-sort-main" @tap="goPage('/pages/ads/home')">
 							<view class="index-sort-i" style="background-color: #7f165e;">
 								<text class="cuIcon-read"></text>
 							</view>
 							<view class="index-sort-text">
-								广告位<text class="text-sm text-gray margin-left-sm">开发中</text>
+								广告位
 							</view>
 						</view>
 					</waves>
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toShop">
+						<view class="index-sort-main"  @tap="goPage('/pages/contents/shop')">
 							<view class="index-sort-i" style="background-color: #ff3333;">
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
@@ -147,7 +147,7 @@
 			<view class="index-sort grid col-3 tool-sort">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toForeverblog">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/foreverblog')">
 							<view class="index-sort-i toClub">
 								<text class="cuIcon-upstagefill"></text>
 							</view>
@@ -167,6 +167,19 @@
 							</view>
 							<view class="index-sort-text">
 								聊天室<text class="text-sm text-gray margin-left-sm">开发中</text>
+							</view>
+						</view>
+					</waves>
+					
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #1db837;">
+								<text class="cuIcon-locationfill"></text>
+							</view>
+							<view class="index-sort-text">
+								圈子<text class="text-sm text-gray margin-left-sm">开发中</text>
 							</view>
 						</view>
 					</waves>
@@ -210,7 +223,6 @@
 				isLoading:0,
 				raiders:API.GetRaiders(),
 				toolid:0,
-				featured:API.GetFeatured()
 			}
 		},
 		onPullDownRefresh(){
@@ -226,7 +238,7 @@
 				animation: false
 			})
 			
-			//可取值： "dark"：深色前景色样式（即状态栏前景文字为黑色），此时background建议设置为浅颜色； "light"：浅色前景色样式（即状态栏前景文字为白色），此时background建设设置为深颜色；
+			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
@@ -291,33 +303,11 @@
 				    url: '/pages/contents/search'
 				});
 			},
-			toRand(){
+			goPage(url){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '/pages/contents/randlist'
-				});
-			},
-			toImagetoday(){
-				var that = this;
-				
-				uni.navigateTo({
-				    url: '/pages/contents/imagetoday'
-				});
-			},
-			toForeverblog(){
-				var that = this;
-				
-				uni.navigateTo({
-					url: '/pages/contents/foreverblog'
-				});
-				
-			},
-			toShop(){
-				var that = this;
-				
-				uni.navigateTo({
-				    url: '/pages/contents/shop'
+				    url: url
 				});
 			},
 			toCategoryContents(title,id){

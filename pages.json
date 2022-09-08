@@ -141,11 +141,15 @@
 		},
 		{
 			"path": "pages/user/addshop",
-			"style": {}
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/addshopinfo",
-			"style": {}
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/myshop",
@@ -349,6 +353,22 @@
 		},
 		{
 			"path": "pages/manage/clean"
+		},
+		
+		{
+			"path": "pages/manage/metasedit"
+		},
+		{
+			"path": "pages/ads/home"
+		},
+		{
+			"path": "pages/ads/adsPost",
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path": "pages/ads/myAds"
 		}
 		// #endif
 		
