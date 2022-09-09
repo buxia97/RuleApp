@@ -18,7 +18,7 @@
 			只显示最近30条记录，请及时处理
 		</view> -->
 		<view class="no-data" v-if="orderList.length==0">
-			暂时没有数据
+			<text class="cuIcon-text"></text>暂时没有数据
 		</view>
 		<view class="order-box"  v-for="(item,index) in orderList" :key="index">
 			<view class="order-main">

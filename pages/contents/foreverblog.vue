@@ -16,7 +16,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="no-data" v-if="contentsList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-list menu-avatar comment foreverblog" v-for="(item,index) in contentsList" @tap="toPage(item.link)" :key="index">
 				<view class="cu-item">

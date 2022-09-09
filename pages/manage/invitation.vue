@@ -25,7 +25,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="invitationList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-item tokenList-box" v-for="(item,index) in invitationList" :key="index" >
 				<view class="content">

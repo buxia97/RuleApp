@@ -30,7 +30,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="contentsList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
@@ -57,6 +57,9 @@
 						
 						<text class="text-blue radius" @tap="toEdit(item.cid)">编辑</text>
 						<text class="text-red radius"  @tap="toDelete(item.cid)" v-if="group=='administrator'">删除</text>
+						
+						<text class="text-gray radius" style="float: right;">{{item.authorInfo.name}}</text>
+						
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">

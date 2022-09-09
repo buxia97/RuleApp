@@ -410,8 +410,16 @@ page{
 
 .no-data{
 	width: 100%;
-	padding: 50upx 0upx;
+	padding: 60upx 0upx;
 	text-align: center;
+	color: #999;
+	font-size: 26upx;
+}
+.no-data .cuIcon-text{
+	display: block;
+	font-size: 80upx;
+	color: #ddd;
+	margin-bottom: 15upx;
 }
 .content image{
 	background-color: #f3f3f3;
@@ -1716,4 +1724,10 @@ page{
 .ads-price text{
 	font-size: 34upx;
 	font-weight: bold;
+}
+.form-tips{
+	padding: 10upx 30upx;
+}
+.form-tips text{
+	margin-right: 10upx;
 }

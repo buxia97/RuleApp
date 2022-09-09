@@ -17,7 +17,7 @@
 		
 		<view class="cu-list menu-avatar userList" style="margin-top: 20upx;">
 			<view class="no-data" v-if="userList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
 				<view class="cu-avatar round lg" :style="item.style"></view>

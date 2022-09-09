@@ -35,7 +35,7 @@
 				</view>
 				<!--  #endif -->
 				<view class="no-data" v-if="contentsList.length==0">
-					暂时没有数据
+					<text class="cuIcon-text"></text>暂时没有数据
 				</view>
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)" :key="index">
 					<view class="content">

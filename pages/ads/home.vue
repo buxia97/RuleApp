@@ -25,12 +25,12 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">30</text>
+							剩余：<text class="text-blue">{{pushAdsNum}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">100积分</text>/天
+							<text class="text-red">{{pushAdsPrice}}积分</text>/天
 						</view>
-						<view class="ads-btn">
+						<view class="ads-btn" @tap="goAdsBuy(pushAdsNum,0)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
@@ -46,12 +46,12 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">5</text>
+							剩余：<text class="text-blue">{{bannerAdsNum}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">100积分</text>/天
+							<text class="text-red">{{bannerAdsPrice}}积分</text>/天
 						</view>
-						<view class="ads-btn">
+						<view class="ads-btn" @tap="goAdsBuy(bannerAdsNum,1)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
@@ -67,18 +67,25 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">2</text>
+							剩余：<text class="text-blue">{{startAdsNum}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">100积分</text>/天
+							<text class="text-red">{{startAdsPrice}}积分</text>/天
 						</view>
-						<view class="ads-btn">
+						<view class="ads-btn" @tap="goAdsBuy(startAdsNum,2)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		<!--加载遮罩-->
+		<view class="loading" v-if="isLoading==0">
+			<view class="loading-main">
+				<image src="../../static/loading.gif"></image>
+			</view>
+		</view>
+		<!--加载遮罩结束-->
 	</view>
 </template>
 
@@ -92,8 +99,17 @@ export default {
 			StatusBar: this.StatusBar,
 			CustomBar: this.CustomBar,
 			NavBar:this.StatusBar +  this.CustomBar,
-
 			
+			isLoading:0,
+			
+			pushAdsNum:0,
+			pushAdsPrice:0,
+			bannerAdsNum:0,
+			bannerAdsPrice:0,
+			startAdsNum:0,
+			startAdsPrice:0,
+
+			token:"",
 		}
 	},
 	onPullDownRefresh(){
@@ -105,6 +121,7 @@ export default {
 		// #ifdef APP-PLUS
 		plus.navigator.setStatusBarStyle("dark")
 		// #endif
+		that.getAdsConfig();
 		
 	},
 	onLoad(res) {
@@ -112,11 +129,81 @@ export default {
 		// #ifdef APP-PLUS || MP
 		that.NavBar = this.CustomBar;
 		// #endif
+		if(localStorage.getItem('token')){
+			
+			that.token = localStorage.getItem('token');
+		}
 	},
 	methods: {
 		back(){
 			uni.navigateBack({
 				delta: 1
+			});
+		},
+		getAdsConfig(){
+			var that = this;
+			Net.request({
+				url: API.adsConfig(),
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					if(res.data.code==1){
+						that.pushAdsNum = res.data.data.pushAdsNum;
+						that.pushAdsPrice = res.data.data.pushAdsPrice;
+						that.bannerAdsNum = res.data.data.bannerAdsNum;
+						that.bannerAdsPrice = res.data.data.bannerAdsPrice;
+						that.startAdsNum = res.data.data.startAdsNum;
+						that.startAdsPrice = res.data.data.startAdsPrice;
+					}
+					var timer = setTimeout(function() {
+						that.isLoading=1;
+						clearTimeout('timer')
+					}, 300)
+				},
+				fail: function(res) {
+					var timer = setTimeout(function() {
+						that.isLoading=1;
+						clearTimeout('timer')
+					}, 300)
+				}
+			})
+		},
+		toLink(text){
+			var that = this;
+			
+			if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+				uni.showToast({
+					title: "请先登录哦",
+					icon: 'none'
+				})
+				return false;
+			}
+			uni.navigateTo({
+				url: text
+			});
+		},
+		goAdsBuy(num,type){
+			var that = this;
+			if(num <= 0){
+				uni.showToast({
+					title: "该广告位已售完",
+					icon: 'none'
+				})
+				return false;
+			}
+			if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+				uni.showToast({
+					title: "请先登录哦",
+					icon: 'none'
+				})
+				return false;
+			}
+			
+			uni.navigateTo({
+				url: '/pages/ads/adsPost?post=add&type='+type
 			});
 		},
 	},

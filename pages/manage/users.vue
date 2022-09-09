@@ -28,7 +28,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="userList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" >
 				<view class="cu-avatar round lg" :style="item.style"></view>

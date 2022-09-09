@@ -30,7 +30,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="metaList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
 				<view class="cu-item shadow"  v-for="(item,index) in metaList" :key="index">

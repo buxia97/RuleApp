@@ -1,5 +1,5 @@
-var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://127.0.0.1:8081/';
+//var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -265,9 +265,9 @@ module.exports = {
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){
 		//return API_URL + 'upload/ossUpload';//OSS对象存储接口
-		return API_URL + 'upload/cosUpload';//COS对象存储接口
+		//return API_URL + 'upload/cosUpload';//COS对象存储接口
 		//return API_URL + 'upload/ftpUpload'; //远程ftp上传接口
-		//return API_URL + 'upload/localUpload'; //本地上传接口
+		return API_URL + 'upload/localUpload'; //本地上传接口
 	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';
@@ -341,6 +341,26 @@ module.exports = {
 	//生成邀请码
 	madetoken:function(){
 		return API_URL + 'pay/madetoken';
+	},
+	
+	//付费广告
+	adsConfig:function(){
+		return API_URL + 'typechoAds/adsConfig';
+	},
+	addAds:function(){
+		return API_URL + 'typechoAds/addAds';
+	},
+	adsList:function(){
+		return API_URL + 'typechoAds/adsList';
+	},
+	editAds:function(){
+		return API_URL + 'typechoAds/editAds';
+	},
+	deleteAds:function(){
+		return API_URL + 'typechoAds/deleteAds';
+	},
+	renewalAds:function(){
+		return API_URL + 'typechoAds/renewalAds';
 	},
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

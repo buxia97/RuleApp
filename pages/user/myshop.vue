@@ -28,7 +28,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="shopList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="shop-list grid col-2">
 				

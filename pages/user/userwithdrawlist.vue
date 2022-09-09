@@ -19,7 +19,7 @@
 			<view class="cu-item">
 				<view class="cu-list menu-avatar comment">
 					<view class="no-data" v-if="withdrawList.length==0">
-						暂时没有数据
+						<text class="cuIcon-text"></text>暂时没有数据
 					</view>
 					<view class="order-box"  v-for="(item,index) in withdrawList" :key="index" v-if="withdrawList.length>0">
 						<view class="order-main">

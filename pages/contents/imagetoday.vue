@@ -16,7 +16,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="no-data" v-if="ImageList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="ImageList">
 				<view class="ImageList-box"  v-for="(item,index) in ImageList" :key="index">

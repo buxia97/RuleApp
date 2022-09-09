@@ -27,7 +27,7 @@
 				</view>
 			</view>
 			<view class="no-data" v-if="tagList.length==0">
-				暂时没有数据
+				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="tags">
 				
