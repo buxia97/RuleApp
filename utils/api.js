@@ -347,6 +347,10 @@ module.exports = {
 	adsConfig:function(){
 		return API_URL + 'typechoAds/adsConfig';
 	},
+	adsInfo:function(){
+		return API_URL + 'typechoAds/adsInfo';
+	},
+	
 	addAds:function(){
 		return API_URL + 'typechoAds/addAds';
 	},
@@ -358,6 +362,12 @@ module.exports = {
 	},
 	deleteAds:function(){
 		return API_URL + 'typechoAds/deleteAds';
+	},
+	auditAds:function(){
+		return API_URL + 'typechoAds/auditAds';
+	},
+	renewalAds:function(){
+		return API_URL + 'typechoAds/renewalAds';
 	},
 	renewalAds:function(){
 		return API_URL + 'typechoAds/renewalAds';

@@ -364,6 +364,9 @@
 				            			icon: 'none'
 				            		})
 				            		if(res.data.code==1){
+				            			that.page=1;
+				            			that.moreText="加载更多";
+				            			that.isLoad=0;
 				            			that.getContentsList();
 				            		}
 				            		
@@ -421,6 +424,9 @@
 				            			icon: 'none'
 				            		})
 				            		if(res.data.code==1){
+				            			that.page=1;
+				            			that.moreText="加载更多";
+				            			that.isLoad=0;
 				            			that.getContentsList();
 				            		}
 				            		

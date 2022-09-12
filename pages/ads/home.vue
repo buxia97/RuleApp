@@ -9,7 +9,7 @@
 					付费广告位
 				</view>
 				<view class="action">
-					<text class="text-blue">我的广告</text>
+					<text class="text-blue" @tap="toLink('/pages/ads/myAds')">我的广告</text>
 				</view>
 			</view>
 		</view>

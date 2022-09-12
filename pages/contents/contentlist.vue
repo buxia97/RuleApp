@@ -28,7 +28,25 @@
 				{{item.name}}
 			</view>
 		</scroll-view>
-			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
+		<block v-for="(item,index) in contentsList" :key="index">
+			<!--文章推流广告区域-->
+			<view class="cu-card article no-card" v-if="item.isAds"  @tap="goAds(item)">
+				<view class="cu-item shadow">
+					<view class="title">
+						<view class="text-cut">{{item.name}}</view>
+					</view>
+					<view class="content article-content" style="position: relative;">
+						 <image :src="item.img"
+						  mode="aspectFill"></image>
+						<view class="desc">
+							<view class="text-content">{{item.intro}}</view>
+						</view>
+						<text class="ads-ico">AD</text>
+					</view>
+				</view>
+			</view>
+			<!--文章推流广告区域结束-->
+			<view class="cu-card article no-card"  @tap="toInfo(item)" v-else>
 				<view class="cu-item shadow">
 					<block v-if="item.images.length==0">
 						<view class="content-author content-header">
@@ -103,6 +121,7 @@
 					</view>
 				</view>
 			</view>
+			</block>
 			<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
 				<text>{{moreText}}</text>
 			</view>
@@ -222,6 +241,22 @@
 				var that = this;
 				var meta = that.TabCur;
 				
+			},
+			goAds(data){
+				var that = this;
+				var url = data.url;
+				var type = data.urltype;
+				// #ifdef APP-PLUS
+				if(urltype==1){
+					plus.runtime.openURL(url) 
+				}
+				if(urltype==0){
+					plus.runtime.openWeb(url) 
+				}
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 			tabSelect(e) {
 				var that = this;
@@ -358,6 +393,20 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
+								var num = res.data.data.length;
+								var rand = Math.floor(Math.random()*num);
+								var pushAdsInfo = null;
+								// #ifdef APP-PLUS || H5
+								if(localStorage.getItem('pushAds')){
+									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
+									var adsNum = pushAds.length;
+									if(num>0){
+										var adsRand = Math.floor(Math.random()*adsNum);
+										pushAdsInfo = pushAds[adsRand];
+										pushAdsInfo.isAds = 1;
+									}
+								}
+								// #endif
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
 								var curFields = API.GetFields();
@@ -371,6 +420,15 @@
 										}
 									}
 									contentsList.push(list[i]);
+									// #ifdef APP-PLUS || H5
+									var isAds = Math.round(Math.random());
+									if(isAds==1){
+										if(i==rand&&pushAdsInfo!=null){
+											contentsList.push(pushAdsInfo);
+										}
+									}
+									
+									// #endif
 								}
 								if(isPage){
 									that.page++;

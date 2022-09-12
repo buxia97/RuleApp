@@ -210,8 +210,8 @@
 					
 				</view>
 			</view>
-			<view class="ads-box" v-if="ads!=''">
-				<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
+			<view class="ads-banner" v-if="bannerAdsInfo!=null">
+				<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 			</view>
 			<!--  #ifdef H5 || APP-PLUS -->
 			<view class="data-box">
@@ -433,6 +433,9 @@
 				isBuy:0,
 				shopValue:"",
 				
+				bannerAds:[],
+				bannerAdsInfo:null,
+				
 			}
 		},
 		components: {
@@ -447,8 +450,9 @@
 		
 		onShow(){
 			var that = this;
+			that.getAdsCache();
 			// #ifdef APP-PLUS
-			that.getAds();
+
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
@@ -525,6 +529,18 @@
 			var ctx = this.$refs.article;
 		},
 		methods:{
+			getAdsCache(){
+				var that = this;
+				if(localStorage.getItem('bannerAds')){
+					that.bannerAds = JSON.parse(localStorage.getItem('bannerAds'));
+					
+					var num = that.bannerAds.length;
+					if(num>0){
+						var rand = Math.floor(Math.random()*num);
+						that.bannerAdsInfo = that.bannerAds[rand];
+					}
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -669,27 +685,6 @@
 							that.isLoading=1;
 							clearTimeout('timer')
 						}, 300)
-					}
-				})
-			},
-			getAds(){
-				var that = this;
-				
-				Net.request({
-					url: API.GetAds(),
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						if(res.data.isAds==1){
-							that.ads= res.data.ad1.split("|");
-						}
-						
-					},
-					fail: function(res) {
-						
 					}
 				})
 			},

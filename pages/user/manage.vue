@@ -143,6 +143,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/ads')">
+							<view class="index-sort-i" style="background-color: #7a4ada;">
+								<text class="cuIcon-read"></text>
+							</view>
+							<view class="index-sort-text">
+								广告管理
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<block v-if="group=='administrator'">

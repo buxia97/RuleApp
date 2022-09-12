@@ -173,8 +173,8 @@
 				
 			</view>
 		</view>
-		<view class="ads-box" v-if="ads!=''">
-			<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
+		<view class="ads-banner" v-if="bannerAdsInfo!=null">
+			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 		</view>
 		<!--底下改成滑动形式-->
 		<view class="all-box">
@@ -265,82 +265,104 @@
 			<view class="dataLoad" v-if="!dataLoad">
 				<image src="../../static/loading.gif"></image>
 			</view>
-			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)" v-if="dataLoad">
-				<view class="cu-item shadow">
-					<block v-if="item.images.length==0">
-						<view class="content-author content-header">
-							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-							<text class="content-author-name">{{item.authorInfo.name}}</text>
-							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+			<block v-for="(item,index) in contentsList" :key="index" v-if="dataLoad">
+				<!--文章推流广告区域-->
+				<view class="cu-card article no-card" v-if="item.isAds" @tap="goAds(item)">
+					<view class="cu-item shadow">
+						<view class="title">
+							<view class="text-cut">{{item.name}}</view>
 						</view>
-					</block>
-					<view class="title">
-						<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
-					</view>
-					<block v-if="item.abcimg == 'mable'">
-						
-						<view class="article-imgMain grid col-3">
-							
-							<view class="article-img">
-								<image v-if="item.images.length > 0" :src="item.images[0]"
-								 mode="aspectFill"></image>
-							</view>
-							<view class="article-img">
-								<image v-if="item.images.length > 1" :src="item.images[1]"
-								 mode="aspectFill"></image>
-							</view>
-							<view class="article-img">
-								<image v-if="item.images.length > 2" :src="item.images[2]"
-								 mode="aspectFill"></image>
-							</view>
-						</view>
-						<view class="content-author content-header bigImg-style">
-							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-							<text class="content-author-name">{{item.authorInfo.name}}</text>
-							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
-						</view>
-					</block>
-					<block v-if="item.abcimg == 'bable'">
-						
-						<view class="content article-content">
-							<view class="article-big">
-								<image v-if="item.images.length > 0" :src="item.images[0]"
-								 mode="aspectFill"></image>
-							</view>
-							<view class="text-content"> {{subText(item.text,80)}}</view>
-						</view>
-						<view class="content-author content-header bigImg-style">
-							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-							<text class="content-author-name">{{item.authorInfo.name}}</text>
-							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
-						</view>
-					</block>
-					<block v-if="item.abcimg == 'able'||!item.abcimg">
-						<view class="content article-content">
-							
-							 <image v-if="item.images.length > 0" :src="item.images[0]"
+						<view class="content article-content" style="position: relative;">
+							 <image :src="item.img"
 							  mode="aspectFill"></image>
-							 
 							<view class="desc">
-								<view class="text-content"> {{subText(item.text,80)}}</view>
-								<view class="content-author" v-if="item.images.length>0">
-									<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-									<text class="content-author-name">{{item.authorInfo.name}}</text>
-									<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
-								</view>
+								<view class="text-content">{{item.intro}}</view>
 							</view>
+							<text class="ads-ico">AD</text>
 						</view>
-					</block>
-					
-					<view class="article-content-btn article-list-btn">
-						<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-						<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-						<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-					
-						<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 					</view>
 				</view>
-			</view>
+				<!--文章推流广告区域结束-->
+				<view class="cu-card article no-card"   @tap="toInfo(item)" v-else>
+					<view class="cu-item shadow">
+						<block v-if="item.images.length==0">
+							<view class="content-author content-header">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<view class="title">
+							<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
+						</view>
+						<block v-if="item.abcimg == 'mable'">
+							
+							<view class="article-imgMain grid col-3">
+								
+								<view class="article-img">
+									<image v-if="item.images.length > 0" :src="item.images[0]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="article-img">
+									<image v-if="item.images.length > 1" :src="item.images[1]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="article-img">
+									<image v-if="item.images.length > 2" :src="item.images[2]"
+									 mode="aspectFill"></image>
+								</view>
+							</view>
+							<view class="content-author content-header bigImg-style">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<block v-if="item.abcimg == 'bable'">
+							
+							<view class="content article-content">
+								<view class="article-big">
+									<image v-if="item.images.length > 0" :src="item.images[0]"
+									 mode="aspectFill"></image>
+								</view>
+								<view class="text-content"> {{subText(item.text,80)}}</view>
+							</view>
+							<view class="content-author content-header bigImg-style">
+								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<text class="content-author-name">{{item.authorInfo.name}}</text>
+								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+							</view>
+						</block>
+						<block v-if="item.abcimg == 'able'||!item.abcimg">
+							<view class="content article-content">
+								
+								 <image v-if="item.images.length > 0" :src="item.images[0]"
+								  mode="aspectFill"></image>
+								 
+								<view class="desc">
+									<view class="text-content"> {{subText(item.text,80)}}</view>
+									<view class="content-author" v-if="item.images.length>0">
+										<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+										<text class="content-author-name">{{item.authorInfo.name}}</text>
+										<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
+									</view>
+								</view>
+							</view>
+						</block>
+						
+						<view class="article-content-btn article-list-btn">
+							<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+							<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+						
+							<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+						</view>
+					</view>
+				</view>
+				
+			</block>
+			
+			
 			<view class="load-more" @tap="loadMore" v-if="dataLoad">
 				<text>{{moreText}}</text>
 			</view>
@@ -445,11 +467,15 @@
 				versionIntro:"",
 				
 				
-				ads:"",
 				
 				startImg:'',
 				isStart:false,
 				dataLoad:false,
+				
+				pushAds:[],
+				pushAdsInfo:null,
+				bannerAds:[],
+				bannerAdsInfo:null,
 			}
 		},
 		onPullDownRefresh(){
@@ -462,6 +488,10 @@
 		
 		onShow(){
 			var that = this;
+			// #ifdef APP-PLUS || H5
+			that.getAdsCache();
+			that.getAds();
+			// #endif
 			// #ifdef APP-PLUS
 			 uni.hideTabBar({
 				animation: false
@@ -470,8 +500,6 @@
 			if(!localStorage.getItem('appStart')){
 				that.isStart = true;
 			}
-			that.getAds();
-			
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
@@ -521,6 +549,8 @@
 			// #ifdef APP-PLUS
 			 that.appStartImg();
 			 //#endif
+			 
+			 
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -530,6 +560,95 @@
 			}
 		},
 		methods: {
+			//获取并缓存广告
+			getAds(){
+				var that = this;
+				// #ifdef APP-PLUS || H5
+				//获取推流广告
+				that.getAdsList(0);
+				//获取横幅广告
+				that.getAdsList(1);
+				//#endif
+				// #ifdef APP-PLUS
+				//获取启动图广告
+				that.getAdsList(2);
+				//#endif
+			},
+			getAdsCache(){
+				var that = this;
+				if(localStorage.getItem('pushAds')){
+					that.pushAds = JSON.parse(localStorage.getItem('pushAds'));
+				}
+				
+				if(localStorage.getItem('bannerAds')){
+					that.bannerAds = JSON.parse(localStorage.getItem('bannerAds'));
+					
+					var num = that.bannerAds.length;
+					if(num>0){
+						var rand = Math.floor(Math.random()*num);
+						that.bannerAdsInfo = that.bannerAds[rand];
+					}
+				}
+				
+			},
+			getAdsList(type){
+				var that = this;
+				var data = {
+					"type":type,
+				}
+				Net.request({
+					url: API.adsList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":100,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(type==0){
+								that.pushAds = res.data.data;
+								localStorage.setItem('pushAds',JSON.stringify(that.pushAds));
+							}
+							if(type==1){
+								that.bannerAds = res.data.data;
+								
+								localStorage.setItem('bannerAds',JSON.stringify(that.bannerAds));
+								
+							}
+							if(type==2){
+								that.startAds = res.data.data;
+								localStorage.setItem('startAds',JSON.stringify(that.startAds));
+							}
+						}
+						
+						
+					},
+					fail: function(res) {
+						
+					}
+				})
+			},
+			goAds(data){
+				var that = this;
+				var url = data.url;
+				var type = data.urltype;
+				// #ifdef APP-PLUS
+				if(urltype==1){
+					plus.runtime.openURL(url) 
+				}
+				if(urltype==0){
+					plus.runtime.openWeb(url) 
+				}
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
 			//全部请求
 			loading(){
 				var that = this;
@@ -591,28 +710,6 @@
 				if(localStorage.getItem('Topic')){
 					that.Topic = JSON.parse(localStorage.getItem('Topic'));
 				}
-			},
-			getAds(){
-				var that = this;
-				
-				Net.request({
-					url: API.GetAds(),
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						if(res.data.isAds==1){
-							that.ads= res.data.ad1.split("|");
-						}
-						
-						
-					},
-					fail: function(res) {
-						
-					}
-				})
 			},
 			getSwiper(id){
 				var that = this;
@@ -859,6 +956,20 @@
 							var list = res.data.data;
 							if(list.length>0){
 								
+								var num = res.data.data.length;
+								var rand = Math.floor(Math.random()*num);
+								var pushAdsInfo = null;
+								// #ifdef APP-PLUS || H5
+								if(localStorage.getItem('pushAds')){
+									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
+									var adsNum = pushAds.length;
+									if(num>0){
+										var adsRand = Math.floor(Math.random()*adsNum);
+										pushAdsInfo = that.pushAds[adsRand];
+										pushAdsInfo.isAds = 1;
+									}
+								}
+								// #endif
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
 								var curFields = API.GetFields();
@@ -872,7 +983,18 @@
 										}
 									}
 									contentsList.push(list[i]);
+									// #ifdef APP-PLUS || H5
+									var isAds = Math.round(Math.random());
+									if(isAds==1){
+										if(i==rand&&pushAdsInfo!=null){
+											contentsList.push(pushAdsInfo);
+										}
+									}
+									
+									// #endif
+									
 								}
+								var num = contentsList.length;
 								if(isPage){
 									that.page++;
 									that.contentsList = that.contentsList.concat(contentsList);
@@ -1162,14 +1284,6 @@
 				// 	animation: true
 				// });
 			},
-			toAds(url){
-				// #ifdef APP-PLUS
-				plus.runtime.openURL(url) 
-				// #endif
-				// #ifdef H5
-				window.open(url)
-				// #endif
-			},
 			toRand(){
 				var that = this;
 				
@@ -1227,7 +1341,9 @@
 				that.isStart=true;
 			},
 			appStartImg(){
+				
 				var that = this;
+				// #ifdef APP-PLUS || H5
 				if(localStorage.getItem('appStart')){
 					var imgData = JSON.parse(localStorage.getItem('appStart'));
 					//在请求之前，先为了性能载入上次图片
@@ -1240,25 +1356,20 @@
 						that.isStart=true;
 					});
 				}
-				Net.request({
-					url: API.GetAppStart(),
-					method: 'get',
-					success: function(res) {
-						var data = res.data;
-						var appStartPic = res.data.appStartPic;
-						if(appStartPic!=""){
-							appStartPic = appStartPic.replace(/[\r\n]/g,"");
-							data.appStartPic = appStartPic;
-							that.Download(data);
-						}
-					},
-					fail:function(res){
-						
+				if(localStorage.getItem('startAds')){
+					var data =JSON.parse(localStorage.getItem('startAds'));
+					var appStartPic = data.img;
+					if(appStartPic!=""){
+						appStartPic = appStartPic.replace(/[\r\n]/g,"");
+						data.appStartPic = appStartPic;
+						that.Download(data);
 					}
-				});
+				}
+				// #endif
 			},
 			Download(startImg) {
 				var that = this;
+				// #ifdef APP-PLUS || H5
 				var url = startImg.appStartPic;
 				if(localStorage.getItem('appStart')){
 					var imgData = JSON.parse(localStorage.getItem('appStart'));
@@ -1304,6 +1415,7 @@
 						// });
 					},
 				});
+				// #endif
 			},
 		},
 		

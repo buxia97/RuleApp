@@ -9,9 +9,16 @@
 					<block v-if="post=='add'">发布</block><block v-else>编辑</block>广告
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
+				<block v-if="post=='add'">
 				<view class="action" @tap="submit">
 					<text class="cuIcon-upload"></text>
 				</view>
+				</block>
+				<block v-else>
+				<view class="action" @tap="edit">
+					<text class="cuIcon-upload"></text>
+				</view>
+				</block>
 				<!--  #endif -->
 			</view>
 		</view>
@@ -55,16 +62,18 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
-			<view class="cu-form-group">
-				<view class="title">购买天数</view>
-				<input placeholder="输入购买天数" type="number" name="input" v-model="day" @input="day = limit(day,0)"  :adjust-position="false" :focus="false"></input>
-				<view class="action">
-					<text class="text-red">{{price}}积分/天</text>
+			<block v-if="post=='add'">
+				<view class="cu-form-group">
+					<view class="title">购买天数</view>
+					<input placeholder="输入购买天数" type="number" name="input" v-model="day" @input="day = limit(day,0)"  :adjust-position="false" :focus="false"></input>
+					<view class="action">
+						<text class="text-red">{{price}}积分/天</text>
+					</view>
 				</view>
-			</view>
-			<view class="form-tips">
-				预计金额：<text class="text-blue">{{total(day,price)}}</text> 积分
-			</view>
+				<view class="form-tips">
+					预计金额：<text class="text-blue">{{total(day,price)}}</text> 积分
+				</view>
+			</block>
 		</form>
 		<view class="cu-modal" :class="modalName=='urltypeModal'?'show':''" @tap="hideModal">
 			<view class="cu-dialog" @tap.stop="">
@@ -105,13 +114,16 @@ export default {
 			modalName:"",
 			token:"",
 			
+			aid:null,
 			name:"",
 			intro:"",
 			url:"",
 			imgurl:"",
-			day:"",
+			
 			type:0,
 			urltype:1,
+			
+			day:"",
 			
 			price:0,
 			
@@ -171,6 +183,10 @@ export default {
 		}
 		if(res.post){
 			that.post = res.post;
+			if(that.post =='edit'){
+				that.aid = res.aid;
+				that.getAdsInfo();
+			}
 		}
 		that.getAdsConfig();
 	},
@@ -319,6 +335,37 @@ export default {
 				}
 			})
 		},
+		getAdsInfo(){
+			var that = this;
+			var data = {
+				"id":that.aid,
+				"token":that.token,
+			}
+			
+			Net.request({
+				url: API.adsInfo(),
+				data:data,
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					uni.stopPullDownRefresh();
+					if(res.data.name){
+						that.name = res.data.name;
+						that.intro = res.data.intro;
+						that.url = res.data.url;
+						that.imgurl = res.data.img;
+						that.type = res.data.type;
+						that.urltype = res.data.urltype;
+					}
+				},
+				fail: function(res) {
+					uni.stopPullDownRefresh();
+				}
+			})
+		},
 		submit(){
 			var that = this;
 			if (that.name == ""||that.imgurl == ""||that.intro == ""||that.day == ""||that.url == "") {
@@ -347,6 +394,68 @@ export default {
 				data:{
 					"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 					"day":that.day,
+					"token":that.token,
+				},
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					setTimeout(function () {
+						uni.hideLoading();
+					}, 1000);
+					uni.showToast({
+						title: res.data.msg,
+						icon: 'none'
+					})
+					if(res.data.code==1){
+						var timer = setTimeout(function() {
+							that.back();
+						}, 1000)
+						
+					}
+				},
+				fail: function(res) {
+					setTimeout(function () {
+						uni.hideLoading();
+					}, 1000);
+					uni.showToast({
+						title: "网络开小差了哦",
+						icon: 'none'
+					})
+					uni.stopPullDownRefresh()
+				}
+			})
+		},
+		edit(){
+			var that = this;
+			if (that.name == ""||that.imgurl == ""||that.intro == ""||that.url == "") {
+				uni.showToast({
+					title:"请完成表单填写",
+					icon:'none',
+					duration: 1000,
+					position:'bottom',
+				});
+				return false
+			}
+			var data = {
+				'aid':that.aid,
+				'name':that.name,
+				'type':that.type,
+				'img':that.imgurl,
+				'intro':that.intro,
+				"urltype":that.urltype,
+				"url":that.url,
+			}
+			uni.showLoading({
+				title: "加载中"
+			});
+			Net.request({
+				
+				url: API.editAds(),
+				data:{
+					"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 					"token":that.token,
 				},
 				header:{

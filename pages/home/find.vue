@@ -75,8 +75,8 @@
 				
 			</view>
 		</view>
-		<view class="ads-box" v-if="ads!=''">
-			<image :src="ads[0]" mode="widthFix" @tap="toAds(ads[1])"></image>
+		<view class="ads-banner" v-if="bannerAdsInfo!=null">
+			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 		</view>
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
@@ -113,7 +113,9 @@
 				
 				isLoading:0,
 				
-				ads:""
+				ads:"",
+				bannerAds:[],
+				bannerAdsInfo:null,
 				
 			}
 		},
@@ -126,6 +128,7 @@
 		},
 		onShow(){
 			var that = this;
+			that.getAdsCache();
 			// #ifdef APP-PLUS
 			uni.hideTabBar({
 				animation: false
@@ -145,6 +148,18 @@
 			that.loading();
 		},
 		methods:{
+			getAdsCache(){
+				var that = this;
+				if(localStorage.getItem('bannerAds')){
+					that.bannerAds = JSON.parse(localStorage.getItem('bannerAds'));
+					
+					var num = that.bannerAds.length;
+					if(num>0){
+						var rand = Math.floor(Math.random()*num);
+						that.bannerAdsInfo = that.bannerAds[rand];
+					}
+				}
+			},
 			loading(){
 				var that = this;
 				that.getTopList();

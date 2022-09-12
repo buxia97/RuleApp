@@ -1482,11 +1482,11 @@ page{
 	background-color: #fbbd08 !important;
 	color: #333333 !important;
 }
-.ads-box{
+.ads-banner{
 	width: 100%;
 	overflow: hidden;
 }
-.ads-box image{
+.ads-banner image{
 	width: 100%;
 	display: block;
 }
@@ -1730,4 +1730,71 @@ page{
 }
 .form-tips text{
 	margin-right: 10upx;
+}
+.myAds-box{
+	padding: 28upx 30upx;
+	border-bottom: solid 1px #f6f6f6;
+}
+.myAds-title{
+	font-size: 32upx;
+	font-weight: bold;
+	padding-bottom: 20upx;
+}
+.myAds-concent{
+	height: auto;
+	overflow: hidden;
+	margin-top: 10upx;
+}
+.myAds-time{
+	font-size: 24upx;
+	color: #666;
+}
+.myAds-time .text-green{
+	float: right;
+}
+.myAds-pic{
+	width: 220upx;
+	height: 150upx;
+	overflow: hidden;
+	border-radius: 6upx;
+	float: left;
+	margin-right: 15upx;
+}
+.myAds-pic image{
+	width: 100%;
+	height: 150upx;
+}
+.myAds-intro{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	line-clamp: 4;
+	-webkit-box-orient: vertical;
+}
+.myAds-btn{
+	margin-top: 15upx;
+}
+.myAds-btn text{
+	margin-right:25upx;
+}
+.ads-renewal input{
+	background-color: #fff;
+	border:solid 1px #ddd;
+	height: 80upx;
+}
+.ads-ico{
+	position: absolute;
+	top: 10upx;
+	left: 40upx;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: block;
+	width: 80upx;
+	height: 40upx;
+	border-radius: 8upx;
+	font-size: 24upx;
+	color: #fff;
+	text-align: center;
+	line-height: 40upx;
 }

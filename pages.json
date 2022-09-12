@@ -359,6 +359,9 @@
 			"path": "pages/manage/metasedit"
 		},
 		{
+			"path": "pages/manage/ads"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{
