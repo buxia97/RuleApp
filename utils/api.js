@@ -20,7 +20,7 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 
 //链接规则(用于站内链接自动跳转和文章分享)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
-//{cid}对应文章id，{slug}对应独立页面名称，其实本质上就是页面拼接。
+//{cid}对应文章id，{category}对应分类缩略名，{slug}对应独立页面名称，其实本质上就是页面拼接。
 var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
@@ -322,7 +322,10 @@ module.exports = {
 	tokenPay:function(){
 		return API_URL + 'pay/tokenPay';
 	},
-	
+	//易支付
+	EPay:function(){
+		return API_URL + 'pay/EPay';
+	},
 	//充值二维码生成
 	qrCode:function(){
 		return API_URL + 'pay/qrCode';

@@ -1139,7 +1139,13 @@
 				
 				var that = this;
 				var linkRule = API.GetLinkRule();
+				
+				
 				var url = linkRule.replace("{cid}",that.cid);
+				if(linkRule.indexOf("{category}")!=-1){
+					var category = that.category[0].slug;
+					url = url.replace("{category}",category);
+				}
 				//console.log(url);
 				if(that.type!="post"){
 					var pageRule = API.GetPageRule();

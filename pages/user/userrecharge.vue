@@ -22,6 +22,7 @@
 				<text class="cu-btn text-blue radius" @tap="toPayType(1)" :class="payType=='1'?'active':''">微信支付</text>
 				<!--  #endif -->
 				<text class="cu-btn text-blue radius" @tap="toPayType(2)" :class="payType=='2'?'active':''">卡密充值</text>
+				<text class="cu-btn text-blue radius" @tap="toPayType(3)" :class="payType=='3'?'active':''">易支付</text>
 			</view>
 			<block  v-if="payType==1||payType==0">
 				<block v-if="isToPay==0">
@@ -44,6 +45,20 @@
 				<view class="userrecharge-form">
 					<input placeholder="请填入充值码" name="input" type="text" v-model="num"></input>
 					<button class="cu-btn bg-yellow radius" @tap="tokenPay">确定充值</button>
+				</view>
+			</block>
+			<block  v-if="payType==3">
+				<view class="userrecharge-form toEpay">
+					<view class="toEpayType">
+						<view class="toEpayType-cur" @tap="toEpayType=!toEpayType">{{getTypeText(ePayType)}}<text class="cuIcon-triangledownfill"></text></view>
+						<view class="toEpayType-main" v-if="toEpayType">
+							<view @tap="setEPayType('alipay')">支付宝</view>
+							<view @tap="setEPayType('wxpay')">微信</view>
+							<view @tap="setEPayType('qqpay')">QQ红包</view>
+						</view>
+					</view>
+					<input placeholder="请输入充值金额(￥),最低5元" name="input" type="text" v-model="num"></input>
+					<button class="cu-btn bg-yellow radius" @tap="toEpay()">确定充值</button>
 				</view>
 			</block>
 			<view class="userrecharge-intro" v-if="payType==1||payType==0">
@@ -74,6 +89,21 @@
 					3.充值码在进行充值操作后，将失效。
 				</view>
 			</view>
+			<view class="userrecharge-intro" v-if="payType==3">
+				<view class="userrecharge-intro-title">
+					充值注意：
+				</view>
+				<view class="userrecharge-intro-text">
+					1.易支付可选择三种交易平台，分别为支付宝，微信，QQ钱包。
+				</view>
+				
+				<view class="userrecharge-intro-text">
+					2.充值金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低充值金额<text class="text-red text-bold"> 5 </text>元。
+				</view>
+				<view class="userrecharge-intro-text">
+					3.如果充值金额未到账，请查看账户中的充值记录，并立即反馈。
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -97,6 +127,8 @@
 				payType:0,
 				isToPay:0,
 				num:"",
+				ePayType:"alipay",
+				toEpayType:false,
 				
 				codeImg:'',
 				alipayUrl:"",
@@ -432,6 +464,101 @@
 					}
 				})
 			},
+			toEpay(){
+				var that = this;
+				var type = that.ePayType;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				if(!that.isPositiveInteger(that.num)||that.num==''){
+					uni.showToast({
+						title: "充值金额只能为正整数",
+						icon: 'none'
+					});
+					return false;
+				}
+				if(that.num<1){
+					uni.showToast({
+						title: "最低充值金额5元",
+						icon: 'none'
+					});
+					return false;
+				}
+				var data = {
+					"money":that.num,
+					"device":"mobile",
+					"type":type,
+					"token":token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					url: API.EPay(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						if(res.data.code==1){
+							var payapi = res.data.payapi;
+							var payurl = res.data.data.payurl;
+							var prefix= payurl.substring(0,2);
+							if(prefix=="./"){
+								payurl = payurl.replace("./","");
+								payurl = payapi + payurl;
+							}
+							// #ifdef APP-PLUS
+							plus.runtime.openURL(payurl) 
+							// #endif
+							// #ifdef H5
+							window.open(payurl)
+							// #endif
+							
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+						
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			setEPayType(text){
+				var that = this;
+				that.ePayType = text;
+				that.toEpayType=false;
+			},
+			getTypeText(text){
+				var that = this;
+				if(text=="alipay"){
+					return "支付宝"
+				}
+				if(text=="wxpay"){
+					return "微信支付"
+				}
+				if(text=="qqpay"){
+					return "QQ钱包"
+				}
+			}
 
 		},
 		components: {

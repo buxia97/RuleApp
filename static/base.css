@@ -1222,13 +1222,50 @@ page{
 .userrecharge-form{
 	padding: 30upx 30upx;
 	text-align: center;
+	
 }
+
 .userrecharge-form input{
 	border: solid #ccc 1px;
 	height: 70upx;
 	line-height: 70upx;
 	margin-bottom: 40upx;
 	padding: 20upx;
+}
+.userrecharge-form.toEpay{
+	position: relative;
+}
+.userrecharge-form.toEpay input{
+	padding-left: 200upx;
+}
+.toEpayType{
+	position: absolute;
+	top: 30upx;
+	left: 30upx;
+	
+}
+.toEpayType-cur{
+	height: 70upx;
+	line-height: 70upx;
+	text-align: center;
+	width: 200upx;
+}
+.toEpayType-main{
+	position: relative;
+	z-index: 20;;
+	margin-top: 10upx;
+	width: 250upx;
+	padding: 10upx 20upx;
+	overflow: hidden;
+	border-radius: 10upx;
+	background-color: #fff;
+	box-shadow: 0upx 0upx 10upx rgba(0,0,0,0.2);
+}
+.toEpayType-main>view{
+	height: 60upx;
+	line-height: 60upx;
+	text-align: center;
+	padding: 0px 15upx;
 }
 .pay-status{
 	float: right;
