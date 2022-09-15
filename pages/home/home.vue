@@ -408,6 +408,7 @@
 			</view>
 			<view class="Startupmap-pic" @tap="toStartUrl">
 				<image :src="startImg.localUrl"></image>
+				<!-- <image src="_doc/uniapp_save/16631684216820.png"></image> -->
 			</view>
 		</view>
 		<!--#endif-->
@@ -468,7 +469,9 @@
 				
 				
 				
-				startImg:'',
+				startImg:{
+					localUrl:""
+				},
 				isStart:false,
 				dataLoad:false,
 				
@@ -963,7 +966,7 @@
 								if(localStorage.getItem('pushAds')){
 									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
 									var adsNum = pushAds.length;
-									if(num>0){
+									if(adsNum>0){
 										var adsRand = Math.floor(Math.random()*adsNum);
 										pushAdsInfo = that.pushAds[adsRand];
 										pushAdsInfo.isAds = 1;
@@ -1318,8 +1321,8 @@
 				if(localStorage.getItem('appStart')){
 					var imgData = JSON.parse(localStorage.getItem('appStart'));
 					//如果线上的图片与本地缓存图片相同，就不再进行下载
-					if(imgData.appStartUrl){
-						var url = imgData.appStartUrl;
+					if(imgData.url){
+						var url = imgData.url;
 						if(url.indexOf("http") != -1){
 							plus.runtime.openWeb(url);
 						}else{
@@ -1343,33 +1346,57 @@
 			appStartImg(){
 				
 				var that = this;
-				// #ifdef APP-PLUS || H5
+				// #ifdef APP-PLUS
 				if(localStorage.getItem('appStart')){
 					var imgData = JSON.parse(localStorage.getItem('appStart'));
+					
+					if(!imgData.localUrl||imgData.localUrl==""){
+						console.log("启动图文件本地不存在");
+						localStorage.removeItem('appStart');
+						that.isStart=true;
+						return false;
+					}
+					var localUrl = imgData.localUrl;
 					//在请求之前，先为了性能载入上次图片
 					plus.io.resolveLocalFileSystemURL(imgData.localUrl, function(entry) {
 						console.log("启动图文件本地存在");
+						imgData.localUrl = localUrl;
 						that.startImg = imgData;
+					
+						that.isStart=false;
 					}, function(e) {
 						console.log("启动图文件本地不存在");
 						localStorage.removeItem('appStart');
 						that.isStart=true;
 					});
+				}else{
+					console.log("启动图未缓存")
 				}
 				if(localStorage.getItem('startAds')){
 					var data =JSON.parse(localStorage.getItem('startAds'));
-					var appStartPic = data.img;
-					if(appStartPic!=""){
-						appStartPic = appStartPic.replace(/[\r\n]/g,"");
-						data.appStartPic = appStartPic;
-						that.Download(data);
+					var adsNum = data.length;
+					if(adsNum>0){
+						
+						var adsRand = Math.floor(Math.random()*adsNum);
+						var appStartPic = data[adsRand].img;
+						if(appStartPic!=""){
+							appStartPic = appStartPic.replace(/[\r\n]/g,"");
+							var imgData = data[adsRand];
+							imgData.appStartPic = appStartPic;
+							that.Download(imgData);
+						}
+					}else{
+						console.log("广告信息不存在，删除缓存");
+						localStorage.removeItem('appStart');
+						that.isStart=true;
 					}
+					
 				}
 				// #endif
 			},
 			Download(startImg) {
 				var that = this;
-				// #ifdef APP-PLUS || H5
+				// #ifdef APP-PLUS
 				var url = startImg.appStartPic;
 				if(localStorage.getItem('appStart')){
 					var imgData = JSON.parse(localStorage.getItem('appStart'));
@@ -1377,8 +1404,7 @@
 					if(url == imgData.appStartPic){
 						console.log("启动图不更新");
 						//但是链接可能变化，所以需要载入缓存
-						var oldStartImg = that.startImg;
-						oldStartImg.appStartUrl = startImg.appStartUrl;
+						var oldStartImg = imgData;
 						localStorage.setItem('appStart', JSON.stringify(oldStartImg));
 						return false;
 					}
@@ -1401,6 +1427,7 @@
 									startImg.localUrl = res.savedFilePath;
 									localStorage.setItem('appStart', JSON.stringify(startImg));
 									console.log("启动图已更新"+startImg.localUrl);
+								
 									that.startImg = startImg;
 								}
 							});

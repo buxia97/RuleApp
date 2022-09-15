@@ -125,6 +125,8 @@
 		},
 		onShow(){
 			var that = this;
+			that.page=1;
+			that.getCommentsList(false);
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")
@@ -146,7 +148,7 @@
 			that.owoList = owoList;
 			// #endif
 			
-			that.getCommentsList(false);
+			
 			
 		},
 		methods:{

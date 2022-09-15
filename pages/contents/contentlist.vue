@@ -400,7 +400,7 @@
 								if(localStorage.getItem('pushAds')){
 									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
 									var adsNum = pushAds.length;
-									if(num>0){
+									if(adsNum>0){
 										var adsRand = Math.floor(Math.random()*adsNum);
 										pushAdsInfo = pushAds[adsRand];
 										pushAdsInfo.isAds = 1;

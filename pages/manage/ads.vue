@@ -46,7 +46,7 @@
 					</view>
 					<view class="myAds-concent">
 						<view class="myAds-pic">
-							<image :src="item.img" mode="aspectFill"></image>
+							<image :src="item.img" mode="aspectFill"  @tap="previewImage(item.img)"></image>
 						</view>
 						<view class="myAds-intro">
 							{{item.intro}}
@@ -128,6 +128,7 @@ export default {
 	},
 	onShow(){
 		var that = this;
+		that.page=1;
 		// #ifdef APP-PLUS
 		plus.navigator.setStatusBarStyle("dark")
 		// #endif
@@ -224,6 +225,15 @@ export default {
 		
 		  }
 		  return value;
+		},
+		previewImage(image) {
+			var imgArr = [];
+			imgArr.push(image);
+			//预览图片
+			uni.previewImage({
+				urls: imgArr,
+				current: imgArr[0]
+			});
 		},
 		setStatus(status){
 			var that = this;
