@@ -1835,3 +1835,9 @@ page{
 	text-align: center;
 	line-height: 40upx;
 }
+.ads-more{
+	margin-top:20upx;
+	font-size:26upx;
+	color:#666;
+	text-align:right;
+}

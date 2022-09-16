@@ -247,7 +247,9 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
 
       isLoading: 0,
 
-      ads: "" };
+      ads: "",
+      bannerAds: [],
+      bannerAdsInfo: null };
 
 
   },
@@ -260,6 +262,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
   },
   onShow: function onShow() {
     var that = this;
+    that.getAdsCache();
 
 
 
@@ -279,6 +282,18 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     that.loading();
   },
   methods: {
+    getAdsCache: function getAdsCache() {
+      var that = this;
+      if (_index.localStorage.getItem('bannerAds')) {
+        that.bannerAds = JSON.parse(_index.localStorage.getItem('bannerAds'));
+
+        var num = that.bannerAds.length;
+        if (num > 0) {
+          var rand = Math.floor(Math.random() * num);
+          that.bannerAdsInfo = that.bannerAds[rand];
+        }
+      }
+    },
     loading: function loading() {
       var that = this;
       that.getTopList();

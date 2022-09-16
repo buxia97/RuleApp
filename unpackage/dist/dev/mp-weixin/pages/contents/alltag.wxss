@@ -224,6 +224,25 @@ page{
 	font-size: 24rpx;
 	color: #666;
 }
+.content-author.bigImg-style{
+	margin-top: 15rpx;
+	margin-bottom: 0rpx;
+}
+.article-imgMain{
+	padding: 0rpx 20rpx;
+}
+.cu-card.article>.cu-item .article-content-btn.article-list-btn{
+	margin-top: 10rpx;
+}
+.article-img{
+	padding: 0rpx 10rpx;
+}
+.article-img image{
+	width: 100%;
+	height: 150rpx;
+	border-radius:8rpx;
+	background-color: #f3f3f3;
+}
 .content-author image{
 	width: 45rpx;
 	display: block;
@@ -379,8 +398,16 @@ page{
 }
 .no-data{
 	width: 100%;
-	padding: 50rpx 0rpx;
+	padding: 60rpx 0rpx;
 	text-align: center;
+	color: #999;
+	font-size: 26rpx;
+}
+.no-data .cuIcon-text{
+	display: block;
+	font-size: 80rpx;
+	color: #ddd;
+	margin-bottom: 15rpx;
 }
 .content image{
 	background-color: #f3f3f3;
@@ -871,7 +898,7 @@ page{
 	-webkit-line-clamp:2;
 }
 .shop-info{
-	padding: 10rpx 10rpx;
+	padding: 10rpx 0rpx;
 	line-height: 40rpx;
 }
 .shop-price{
@@ -923,9 +950,8 @@ page{
 	background-color: #fff;
 }
 .shop-btn{
-	padding: 8rpx 15rpx;
-	margin: 0rpx 20rpx;
-	border-radius: 6rpx;
+	padding: 8rpx 0rpx;
+	margin: 0rpx 10rpx;
 }
 .text-tips{
 	line-height: 40rpx;
@@ -1114,6 +1140,9 @@ page{
 	right: 180rpx;
 	top: 15rpx;
 }
+.comment-audit.editorStyle{
+	right: 30rpx;
+}
 .myAssets{
 	width: 100%;
 	text-align: center;
@@ -1183,6 +1212,40 @@ page{
 	line-height: 70rpx;
 	margin-bottom: 40rpx;
 	padding: 20rpx;
+}
+.userrecharge-form.toEpay{
+	position: relative;
+}
+.userrecharge-form.toEpay input{
+	padding-left: 200rpx;
+}
+.toEpayType{
+	position: absolute;
+	top: 30rpx;
+	left: 30rpx;
+}
+.toEpayType-cur{
+	height: 70rpx;
+	line-height: 70rpx;
+	text-align: center;
+	width: 200rpx;
+}
+.toEpayType-main{
+	position: relative;
+	z-index: 20;
+	margin-top: 10rpx;
+	width: 250rpx;
+	padding: 10rpx 20rpx;
+	overflow: hidden;
+	border-radius: 10rpx;
+	background-color: #fff;
+	box-shadow: 0rpx 0rpx 10rpx rgba(0,0,0,0.2);
+}
+.toEpayType-main>view{
+	height: 60rpx;
+	line-height: 60rpx;
+	text-align: center;
+	padding: 0px 15rpx;
 }
 .pay-status{
 	float: right;
@@ -1434,11 +1497,11 @@ page{
 	background-color: #fbbd08 !important;
 	color: #333333 !important;
 }
-.ads-box{
+.ads-banner{
 	width: 100%;
 	overflow: hidden;
 }
-.ads-box image{
+.ads-banner image{
 	width: 100%;
 	display: block;
 }
@@ -1619,5 +1682,138 @@ page{
 	top: 30rpx;
 	right: 30rpx;
 	z-index: 2;
+}
+.article-big{
+	width: 100%;
+}
+.article-big image{
+	width: 100%;
+	height: 350rpx;
+	border-radius:8rpx;
+	background-color: #f3f3f3;
+}
+.topContents .title{
+	font-weight: bold;
+}
+.topContents .title text{
+	margin-right: 10rpx;
+}
+.dataLoad{
+	width: 100%;
+	height: 500rpx;
+	text-align: center;
+}
+.dataLoad image{
+	width: 100rpx;
+	height: 100rpx;
+	margin-top: 200rpx;
+}
+.ads-list{
+	padding-top: 10rpx;
+}
+.ads-box{
+	background-color: #fff;
+	padding: 10rpx 30rpx;
+	margin-top: 15rpx;
+}
+.ads-name{
+	height: 80rpx;
+	line-height: 80rpx;
+	font-size: 34rpx;
+	border-bottom: solid 1px #f6f6f6;
+	font-weight: bold;
+}
+.ads-text{
+	padding:20rpx 10rpx;
+	font-size: 26rpx;
+	line-height: 50rpx;
+	color: #4a4a4a;
+}
+.ads-info{
+	border-top: solid 1px #f6f6f6;
+	line-height: 80rpx;
+}
+.ads-price text{
+	font-size: 34rpx;
+	font-weight: bold;
+}
+.form-tips{
+	padding: 10rpx 30rpx;
+}
+.form-tips text{
+	margin-right: 10rpx;
+}
+.myAds-box{
+	padding: 28rpx 30rpx;
+	border-bottom: solid 1px #f6f6f6;
+}
+.myAds-title{
+	font-size: 32rpx;
+	font-weight: bold;
+	padding-bottom: 20rpx;
+}
+.myAds-concent{
+	height: auto;
+	overflow: hidden;
+	margin-top: 10rpx;
+}
+.myAds-time{
+	font-size: 24rpx;
+	color: #666;
+}
+.myAds-time .text-green{
+	float: right;
+}
+.myAds-pic{
+	width: 220rpx;
+	height: 150rpx;
+	overflow: hidden;
+	border-radius: 6rpx;
+	float: left;
+	margin-right: 15rpx;
+}
+.myAds-pic image{
+	width: 100%;
+	height: 150rpx;
+}
+.myAds-intro{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	line-clamp: 4;
+	-webkit-box-orient: vertical;
+}
+.myAds-btn{
+	margin-top: 15rpx;
+}
+.myAds-btn text{
+	margin-right:25rpx;
+}
+.ads-renewal input{
+	background-color: #fff;
+	border:solid 1px #ddd;
+	height: 80rpx;
+}
+.ads-ico{
+	position: absolute;
+	top: 10rpx;
+	left: 40rpx;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: block;
+	width: 80rpx;
+	height: 40rpx;
+	border-radius: 8rpx;
+	font-size: 24rpx;
+	color: #fff;
+	text-align: center;
+	line-height: 40rpx;
+}
+.ads-more{
+	margin-top:20rpx;
+	font-size:26rpx;
+	color:#666;
+	text-align:right;
 }
 

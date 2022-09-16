@@ -197,6 +197,7 @@
 			"path": "pages/user/userbind",
 			"style": {}
 		},
+		// #endif
 		{
 			"path": "pages/contents/comments",
 			"style": {}
@@ -205,7 +206,7 @@
 			"path": "pages/contents/commentsadd",
 			"style": {}
 		},
-		// #endif
+		
 		{
 			"path": "pages/contents/contentlist",
 			"style": {}

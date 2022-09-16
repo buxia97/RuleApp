@@ -187,20 +187,62 @@
 				    content: '确认退出账户？',
 				    success: function (res) {
 				        if (res.confirm) {
-				            localStorage.removeItem('userinfo');
-				            localStorage.removeItem('token');
-							uni.showToast({
-								title:"退出成功",
-								icon:'none',
-								duration: 1000,
-								position:'bottom',
+							
+							uni.showLoading({
+								title: "加载中"
 							});
-							var timer = setTimeout(function() {
-								uni.reLaunch({
-									url: '/pages/home/home'
-								})
-								clearTimeout('timer')
-							}, 1000)
+							var data={
+								"token":that.token
+							}
+							Net.request({
+								url: API.signOut(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									
+									if(res.data.code==1){
+										localStorage.removeItem('userinfo');
+										localStorage.removeItem('token');
+										uni.showToast({
+											title:"退出成功",
+											icon:'none',
+											duration: 1000,
+											position:'bottom',
+										});
+										var timer = setTimeout(function() {
+											uni.reLaunch({
+												url: '/pages/home/home'
+											})
+											clearTimeout('timer')
+										}, 1000)
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+							
+							
+				            
 				        } else if (res.cancel) {
 				            
 				        }

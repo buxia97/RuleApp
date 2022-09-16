@@ -213,8 +213,8 @@
 			<view class="ads-banner" v-if="bannerAdsInfo!=null">
 				<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 			</view>
-			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="data-box">
+			
+			<view class="data-box" v-if="isComment==1">
 				<view class="cu-bar bg-white">
 					<view class="action data-box-title">
 						<text class="cuIcon-titles text-rule"></text> 评论区 <text v-if="commentsNum>0"> ( {{commentsNum}} ) </text>
@@ -280,7 +280,7 @@
 				</view>
 				<view style="height: 100upx"></view>
 			</view>
-			<!--  #endif -->
+			
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
 		<!--打赏选择-->
@@ -436,6 +436,9 @@
 				bannerAds:[],
 				bannerAdsInfo:null,
 				
+				isComment:0,
+				images:[],
+				
 			}
 		},
 		components: {
@@ -447,10 +450,48 @@
 			var that = this;
 			that.loadMore();
 		},
+		// #ifdef MP
+		onShareAppMessage(res) {
+			var that = this;
+			if (res.from === 'button') {
+				// 来自页面内分享按钮
+			}
+			if (res.from === 'menu') {
+				// 来自页面内分享按钮
+			}
+			var data = {
+				title: that.title,
+				path: '/page/contents/info?cid='+that.cid
+			}
+			if(that.images.lenght>0){
+				data.imageUrl = that.images[0];
+			}
 		
+		},
+		onShareTimeline() {
+			var that = this;
+			var data = {
+				title: that.title,
+				path: '/page/contents/info?cid='+that.cid
+			}
+			if(that.images.lenght>0){
+				data.imageUrl = that.images[0];
+			}
+			
+			return data;
+		},
+		// #endif
 		onShow(){
 			var that = this;
 			that.getAdsCache();
+			// #ifdef H5 || APP-PLUS
+			that.isComment=1;
+			// #endif
+			
+			// #ifdef MP
+			that.isComment = API.GetIsComment();
+			// #endif
+			
 			// #ifdef APP-PLUS
 
 			
@@ -464,9 +505,7 @@
 				that.getIsCommnet();
 				
 				that.getInfo(that.cid);
-				// #ifdef H5 || APP-PLUS
 				that.getCommentsList(false,that.cid);
-				// #endif
 				
 			}
 			
@@ -522,8 +561,9 @@
 			
 			// #ifdef H5 || APP-PLUS
 			that.getShopList();
-			that.getCommentsList(false,that.cid);
 			// #endif
+			that.getCommentsList(false,that.cid);
+			
 			
 			
 			var ctx = this.$refs.article;
@@ -554,6 +594,7 @@
 					that.category = postInfo.category;
 					that.created = postInfo.created;
 					that.commentsNum = postInfo.commentsNum;
+					that.images = res.data.images;
 					that.html=that.markHtml(postInfo.text);
 					that.tagList=postInfo.tag;
 					that.slug = postInfo.slug;
@@ -710,6 +751,7 @@
 							that.category = res.data.category;
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;
+							that.images = res.data.images;
 							var html =that.markHtml(res.data.text);
 							
 							that.html=html;

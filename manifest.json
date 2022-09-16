@@ -137,5 +137,6 @@
         "uniStatistics" : {
             "enable" : true
         }
-    }
+    },
+    "fallbackLocale" : "zh-Hans"
 }

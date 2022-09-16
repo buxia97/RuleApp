@@ -231,9 +231,20 @@ export default {
 			var that = this;
 			var type = data.type;
 			var aid = data.aid;
-			uni.navigateTo({
-				url: '/pages/ads/adsPost?post=edit&type='+type+"&aid="+aid
+			uni.showModal({
+			    title: '提示',
+			    content: '修改广告需要重新审核，可能导致广告无法上线！',
+			    success: function (res) {
+			        if (res.confirm) {
+						uni.navigateTo({
+							url: '/pages/ads/adsPost?post=edit&type='+type+"&aid="+aid
+						});
+					} else if (res.cancel) {
+						
+					}
+				}
 			});
+			
 		}
 	},
 }

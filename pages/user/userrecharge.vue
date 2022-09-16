@@ -509,12 +509,19 @@
 						}, 1000);
 						if(res.data.code==1){
 							var payapi = res.data.payapi;
-							var payurl = res.data.data.payurl;
-							var prefix= payurl.substring(0,2);
-							if(prefix=="./"){
-								payurl = payurl.replace("./","");
-								payurl = payapi + payurl;
+							var payurl="";
+							if(res.data.data.payurl){
+								payurl = res.data.data.payurl;
+								var prefix= payurl.substring(0,2);
+								if(prefix=="./"){
+									payurl = payurl.replace("./","");
+									payurl = payapi + payurl;
+								}
 							}
+							if(res.data.data.qrcode){
+								payurl = res.data.data.qrcode;
+							}
+							
 							// #ifdef APP-PLUS
 							plus.runtime.openURL(payurl) 
 							// #endif

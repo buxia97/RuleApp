@@ -133,19 +133,57 @@ var render = function() {
     }
   })
 
-  var l2 = _vm.__map(_vm.contentsList, function(item, index) {
+  var l2 = _vm.__map(_vm.topContents, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
-    var m4 = _vm.replaceSpecialChar(item.title)
-    var m5 = _vm.subText(item.text, 80)
-    var m6 = _vm.formatNumber(item.views)
-    var m7 = _vm.formatDate(item.created)
+    var m4 =
+      _vm.TabCur == 0 && _vm.dataLoad
+        ? _vm.replaceSpecialChar(item.title)
+        : null
+    var m5 =
+      _vm.TabCur == 0 && _vm.dataLoad && item.abcimg == "bable"
+        ? _vm.subText(item.text, 80)
+        : null
+    var m6 =
+      _vm.TabCur == 0 && _vm.dataLoad && (item.abcimg == "able" || !item.abcimg)
+        ? _vm.subText(item.text, 80)
+        : null
+    var m7 =
+      _vm.TabCur == 0 && _vm.dataLoad ? _vm.formatNumber(item.views) : null
+    var m8 =
+      _vm.TabCur == 0 && _vm.dataLoad ? _vm.formatDate(item.created) : null
     return {
       $orig: $orig,
       m4: m4,
       m5: m5,
       m6: m6,
-      m7: m7
+      m7: m7,
+      m8: m8
+    }
+  })
+
+  var l3 = _vm.__map(_vm.contentsList, function(item, index) {
+    var $orig = _vm.__get_orig(item)
+
+    var m9 =
+      _vm.dataLoad && !item.isAds ? _vm.replaceSpecialChar(item.title) : null
+    var m10 =
+      _vm.dataLoad && !item.isAds && item.abcimg == "bable"
+        ? _vm.subText(item.text, 80)
+        : null
+    var m11 =
+      _vm.dataLoad && !item.isAds && (item.abcimg == "able" || !item.abcimg)
+        ? _vm.subText(item.text, 80)
+        : null
+    var m12 = _vm.dataLoad && !item.isAds ? _vm.formatNumber(item.views) : null
+    var m13 = _vm.dataLoad && !item.isAds ? _vm.formatDate(item.created) : null
+    return {
+      $orig: $orig,
+      m9: m9,
+      m10: m10,
+      m11: m11,
+      m12: m12,
+      m13: m13
     }
   })
 
@@ -155,7 +193,8 @@ var render = function() {
       $root: {
         l0: l0,
         l1: l1,
-        l2: l2
+        l2: l2,
+        l3: l3
       }
     }
   )
@@ -471,6 +510,153 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 20);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 79));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 21);
 var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
@@ -485,6 +671,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       swiperList: [],
       recommendList: [],
       contentsList: [],
+      topContents: [],
       metaList: [],
       Topic: [],
       dotStyle: false,
@@ -513,10 +700,17 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       versionIntro: "",
 
 
-      ads: "",
 
-      startImg: '',
-      isStart: false };
+      startImg: {
+        localUrl: "" },
+
+      isStart: false,
+      dataLoad: false,
+
+      pushAds: [],
+      pushAdsInfo: null,
+      bannerAds: [],
+      bannerAdsInfo: null };
 
   },
   onPullDownRefresh: function onPullDownRefresh() {
@@ -527,8 +721,39 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     }, 1000);
   },
 
+  onShareAppMessage: function onShareAppMessage(res) {
+    var that = this;
+    if (res.from === 'button') {
+      // 来自页面内分享按钮
+    }
+    if (res.from === 'menu') {
+      // 来自页面内分享按钮
+    }
+    var title = API.GetAppName();
+    var data = {
+      title: title,
+      path: '/page/home/home' };
+
+
+    return data;
+
+  },
+  onShareTimeline: function onShareTimeline() {
+    var that = this;
+    var title = API.GetAppName();
+    var data = {
+      title: title,
+      path: '/page/home/home' };
+
+
+    return data;
+  },
+
   onShow: function onShow() {
     var that = this;
+
+
+
 
 
 
@@ -588,6 +813,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
 
 
 
+
+
   },
   onReachBottom: function onReachBottom() {
     //触底后执行的方法，比如无限加载之类的
@@ -597,6 +824,95 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     }
   },
   methods: {
+    //获取并缓存广告
+    getAds: function getAds() {
+      var that = this;
+
+
+
+
+
+
+
+
+
+
+    },
+    getAdsCache: function getAdsCache() {
+      var that = this;
+      if (_index.localStorage.getItem('pushAds')) {
+        that.pushAds = JSON.parse(_index.localStorage.getItem('pushAds'));
+      }
+
+      if (_index.localStorage.getItem('bannerAds')) {
+        that.bannerAds = JSON.parse(_index.localStorage.getItem('bannerAds'));
+
+        var num = that.bannerAds.length;
+        if (num > 0) {
+          var rand = Math.floor(Math.random() * num);
+          that.bannerAdsInfo = that.bannerAds[rand];
+        }
+      }
+
+    },
+    getAdsList: function getAdsList(type) {
+      var that = this;
+      var data = {
+        "type": type };
+
+      Net.request({
+        url: API.adsList(),
+        data: {
+          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
+          "limit": 100 },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          if (res.data.code == 1) {
+            var list = res.data.data;
+            if (type == 0) {
+              that.pushAds = res.data.data;
+              _index.localStorage.setItem('pushAds', JSON.stringify(that.pushAds));
+            }
+            if (type == 1) {
+              that.bannerAds = res.data.data;
+
+              _index.localStorage.setItem('bannerAds', JSON.stringify(that.bannerAds));
+
+            }
+            if (type == 2) {
+              that.startAds = res.data.data;
+              _index.localStorage.setItem('startAds', JSON.stringify(that.startAds));
+            }
+          }
+
+
+        },
+        fail: function fail(res) {
+
+        } });
+
+    },
+    goAds: function goAds(data) {
+      var that = this;
+      var url = data.url;
+      var type = data.urltype;
+
+
+
+
+
+
+
+
+
+
+
+    },
     //全部请求
     loading: function loading() {
       var that = this;
@@ -605,6 +921,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       that.getTopPic();
       that.getRecommend();
       that.getMetaList();
+      that.getTopContents();
       that.getContentsList(false);
     },
     tabSelect: function tabSelect(e) {
@@ -612,6 +929,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       that.TabCur = e.currentTarget.dataset.id;
       that.page = 1;
       that.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+      that.contentsList = [];
+      that.dataLoad = false;
       if (that.TabCur == 0) {
         that.getContentsList(false);
       } else {
@@ -648,31 +967,13 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       if (_index.localStorage.getItem('contentsList_' + meta)) {
         that.contentsList = JSON.parse(_index.localStorage.getItem('contentsList_' + meta));
       }
+      if (_index.localStorage.getItem('topContents')) {
+        that.topContents = JSON.parse(_index.localStorage.getItem('topContents'));
+      }
+
       if (_index.localStorage.getItem('Topic')) {
         that.Topic = JSON.parse(_index.localStorage.getItem('Topic'));
       }
-    },
-    getAds: function getAds() {
-      var that = this;
-
-      Net.request({
-        url: API.GetAds(),
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded' },
-
-        method: "get",
-        dataType: 'json',
-        success: function success(res) {
-          if (res.data.isAds == 1) {
-            that.ads = res.data.ad1.split("|");
-          }
-
-
-        },
-        fail: function fail(res) {
-
-        } });
-
     },
     getSwiper: function getSwiper(id) {
       var that = this;
@@ -733,7 +1034,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
           "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
           "limit": 5,
           "page": 1,
-          "order": "created" },
+          "order": "modified" },
 
         header: {
           'Content-Type': 'application/x-www-form-urlencoded' },
@@ -837,10 +1138,60 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
         } });
 
     },
+    getTopContents: function getTopContents() {
+      var that = this;
+      var data = {
+        "type": "post",
+        "istop": 1 };
+
+      Net.request({
+        url: API.getContentsList(),
+        data: {
+          "searchParams": JSON.stringify(API.removeObjectEmptyKey(data)),
+          "limit": 5,
+          "page": 1,
+          "order": "modified" },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        method: "get",
+        dataType: 'json',
+        success: function success(res) {
+          if (res.data.code == 1) {
+            var list = res.data.data;
+            if (list.length > 0) {
+
+              var contentsList = [];
+              //将自定义字段获取并添加到数据
+              var curFields = API.GetFields();
+              for (var i in list) {
+                var fields = list[i].fields;
+                if (fields.length > 0) {
+                  for (var j in fields) {
+                    if (curFields.indexOf(fields[j].name) != -1) {
+                      list[i][fields[j].name] = fields[j].strValue;
+                    }
+                  }
+                }
+                contentsList.push(list[i]);
+              }
+
+              that.topContents = contentsList;
+
+            }
+            _index.localStorage.setItem('topContents', JSON.stringify(that.topContents));
+          }
+        },
+        fail: function fail(res) {
+        } });
+
+    },
     getContentsList: function getContentsList(isPage) {
       var that = this;
       var data = {
-        "type": "post" };
+        "type": "post",
+        "istop": 0 };
 
       var page = that.page;
       if (isPage) {
@@ -862,14 +1213,57 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
         success: function success(res) {
           that.isLoad = 0;
           that.moreText = "加载更多";
+          if (!isPage) {
+            that.dataLoad = true;
+          }
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
+
+              var num = res.data.data.length;
+              var rand = Math.floor(Math.random() * num);
+              var pushAdsInfo = null;
+
+
+
+
+
+
+
+
+
+
+
+              var contentsList = [];
+              //将自定义字段获取并添加到数据
+              var curFields = API.GetFields();
+              for (var i in list) {
+                var fields = list[i].fields;
+                if (fields.length > 0) {
+                  for (var j in fields) {
+                    if (curFields.indexOf(fields[j].name) != -1) {
+                      list[i][fields[j].name] = fields[j].strValue;
+                    }
+                  }
+                }
+                contentsList.push(list[i]);
+
+
+
+
+
+
+
+
+
+
+              }
+              var num = contentsList.length;
               if (isPage) {
                 that.page++;
-                that.contentsList = that.contentsList.concat(list);
+                that.contentsList = that.contentsList.concat(contentsList);
               } else {
-                that.contentsList = list;
+                that.contentsList = contentsList;
               }
 
 
@@ -889,7 +1283,8 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     getMetaContents: function getMetaContents(isPage, meta) {
       var that = this;
       var data = {
-        "mid": meta };
+        "mid": meta,
+        "type": "post" };
 
       var page = that.page;
       if (isPage) {
@@ -909,18 +1304,34 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
         method: "get",
         dataType: 'json',
         success: function success(res) {
-
+          if (!isPage) {
+            that.dataLoad = true;
+          }
           that.isLoad = 0;
 
           that.moreText = "加载更多";
           if (res.data.code == 1) {
             var list = res.data.data;
             if (list.length > 0) {
+              var contentsList = [];
+              //将自定义字段获取并添加到数据
+              var curFields = API.GetFields();
+              for (var i in list) {
+                var fields = list[i].fields;
+                if (fields.length > 0) {
+                  for (var j in fields) {
+                    if (curFields.indexOf(fields[j].name) != -1) {
+                      list[i][fields[j].name] = fields[j].strValue;
+                    }
+                  }
+                }
+                contentsList.push(list[i]);
+              }
               if (isPage) {
                 that.page++;
-                that.contentsList = that.contentsList.concat(list);
+                that.contentsList = that.contentsList.concat(contentsList);
               } else {
-                that.contentsList = list;
+                that.contentsList = contentsList;
               }
 
 
@@ -1033,19 +1444,14 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     },
     formatDate: function formatDate(datetime) {
       var datetime = new Date(parseInt(datetime * 1000));
-      // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
       var year = datetime.getFullYear(),
       month = ("0" + (datetime.getMonth() + 1)).slice(-2),
       date = ("0" + datetime.getDate()).slice(-2),
       hour = ("0" + datetime.getHours()).slice(-2),
       minute = ("0" + datetime.getMinutes()).slice(-2);
-      //second = ("0" + date.getSeconds()).slice(-2);
-      // 拼接
       var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-      // 返回
       return result;
     },
-
     toGroup: function toGroup() {
       var url = API.GetGroupUrl();
 
@@ -1142,14 +1548,6 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       // 	animation: true
       // });
     },
-    toAds: function toAds(url) {
-
-
-
-
-
-
-    },
     toRand: function toRand() {
       var that = this;
 
@@ -1181,11 +1579,11 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
     },
     //自定义启动图广告相关
     toStartUrl: function toStartUrl() {
-      if (_index.localStorage.getItem('startImg')) {
-        var imgData = JSON.parse(_index.localStorage.getItem('startImg'));
+      if (_index.localStorage.getItem('appStart')) {
+        var imgData = JSON.parse(_index.localStorage.getItem('appStart'));
         //如果线上的图片与本地缓存图片相同，就不再进行下载
-        if (imgData.appStartUrl) {
-          var url = imgData.appStartUrl;
+        if (imgData.url) {
+          var url = imgData.url;
           if (url.indexOf("http") != -1) {
             plus.runtime.openWeb(url);
           } else {
@@ -1202,81 +1600,109 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
         return false;
       }
     },
-    appStartImg: function appStartImg() {
+    toStart: function toStart() {
       var that = this;
-      if (_index.localStorage.getItem('appStart')) {
-        var imgData = JSON.parse(_index.localStorage.getItem('appStart'));
-        //在请求之前，先为了性能载入上次图片
-        plus.io.resolveLocalFileSystemURL(imgData.localUrl, function (entry) {
-          console.log("启动图文件本地存在");
-          that.startImg = imgData;
-        }, function (e) {
-          console.log("启动图文件本地不存在");
-          _index.localStorage.removeItem('appStart');
-          that.isStart = true;
-        });
-      }
-      Net.request({
-        url: API.GetAppStart(),
-        method: 'get',
-        success: function success(res) {
-          var data = res.data;
-          var appStartPic = res.data.appStartPic;
-          appStartPic = appStartPic.replace(/[\r\n]/g, "");
-          data.appStartPic = appStartPic;
-          that.Download(data);
-        },
-        fail: function fail(res) {
+      that.isStart = true;
+    },
+    appStartImg: function appStartImg() {
 
-        } });
+      var that = this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     },
     Download: function Download(startImg) {
       var that = this;
-      var url = startImg.appStartPic;
-      if (_index.localStorage.getItem('appStart')) {
-        var imgData = JSON.parse(_index.localStorage.getItem('appStart'));
-        //如果线上的图片与本地缓存图片相同，就不再进行下载
-        if (url == imgData.appStartPic) {
-          console.log("启动图不更新");
-          //但是链接可能变化，所以需要载入缓存
-          var oldStartImg = that.startImg;
-          oldStartImg.appStartUrl = startImg.appStartUrl;
-          _index.localStorage.setItem('appStart', JSON.stringify(oldStartImg));
-          return false;
-        }
-      }
-      uni.downloadFile({
-        url: url, //下载地址接口返回
-        success: function success(data) {
-          if (data.statusCode === 200) {
-            //文件保存到本地
-            uni.saveFile({
-              tempFilePath: data.tempFilePath, //临时路径
-              success: function success(res) {
-                // uni.showToast({
-                // 	icon: 'none',
-                // 	mask: true,
-                // 	title: '文件已保存：' + res.savedFilePath, //保存路径
-                // 	duration: 3000,
-                // });
 
-                startImg.localUrl = res.savedFilePath;
-                _index.localStorage.setItem('appStart', JSON.stringify(startImg));
-                console.log("启动图已更新" + startImg.localUrl);
-                that.startImg = startImg;
-              } });
 
-          }
-        },
-        fail: function fail(err) {
-          console.log(err);
-          // uni.showToast({
-          // 	icon: 'none',
-          // 	mask: true,
-          // 	title: '失败请重新下载',
-          // });
-        } });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     } },
 

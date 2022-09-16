@@ -247,10 +247,10 @@
 				var url = data.url;
 				var type = data.urltype;
 				// #ifdef APP-PLUS
-				if(urltype==1){
+				if(type==1){
 					plus.runtime.openURL(url) 
 				}
-				if(urltype==0){
+				if(type==0){
 					plus.runtime.openWeb(url) 
 				}
 				// #endif

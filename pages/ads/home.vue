@@ -25,12 +25,12 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">{{pushAdsNum}}</text>
+							剩余：<text class="text-blue">{{pushAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{pushAdsPrice}}积分</text>/天
+							<text class="text-red">{{pushAdsPrice || 0}}积分</text>/天
 						</view>
-						<view class="ads-btn" @tap="goAdsBuy(pushAdsNum,0)">
+						<view class="ads-btn" @tap="goAdsBuy(pushAdsPrice,pushAdsNum,0)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
@@ -46,12 +46,12 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">{{bannerAdsNum}}</text>
+							剩余：<text class="text-blue">{{bannerAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{bannerAdsPrice}}积分</text>/天
+							<text class="text-red">{{bannerAdsPrice || 0}}积分</text>/天
 						</view>
-						<view class="ads-btn" @tap="goAdsBuy(bannerAdsNum,1)">
+						<view class="ads-btn" @tap="goAdsBuy(bannerAdsPrice,bannerAdsNum,1)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
@@ -67,12 +67,12 @@
 					</view>
 					<view class="ads-info grid col-3 text-center">
 						<view class="ads-num">
-							剩余：<text class="text-blue">{{startAdsNum}}</text>
+							剩余：<text class="text-blue">{{startAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{startAdsPrice}}积分</text>/天
+							<text class="text-red">{{startAdsPrice || 0}}积分</text>/天
 						</view>
-						<view class="ads-btn" @tap="goAdsBuy(startAdsNum,2)">
+						<view class="ads-btn" @tap="goAdsBuy(startAdsPrice,startAdsNum,2)">
 							<text class="text-green">立即购买</text>
 						</view>
 					</view>
@@ -110,6 +110,9 @@ export default {
 			startAdsPrice:0,
 
 			token:"",
+			userData:{
+				assets:0,
+			},
 		}
 	},
 	onPullDownRefresh(){
@@ -118,10 +121,15 @@ export default {
 	},
 	onShow(){
 		var that = this;
+		if(localStorage.getItem('token')){
+			
+			that.token = localStorage.getItem('token');
+		}
 		// #ifdef APP-PLUS
 		plus.navigator.setStatusBarStyle("dark")
 		// #endif
 		that.getAdsConfig();
+		that.getUserData();
 		
 	},
 	onLoad(res) {
@@ -129,16 +137,40 @@ export default {
 		// #ifdef APP-PLUS || MP
 		that.NavBar = this.CustomBar;
 		// #endif
-		if(localStorage.getItem('token')){
-			
-			that.token = localStorage.getItem('token');
-		}
+		
 	},
 	methods: {
 		back(){
 			uni.navigateBack({
 				delta: 1
 			});
+		},
+		getUserData() {
+			var that = this;
+			Net.request({
+				
+				url: API.getUserData(),
+				data:{
+					"token":that.token
+				},
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					//console.log(JSON.stringify(res));
+					if(res.data.code==1){
+						that.userData = res.data.data;
+					}
+				},
+				fail: function(res) {
+					uni.showToast({
+						title: "网络开小差了哦",
+						icon: 'none'
+					})
+				}
+			})
 		},
 		getAdsConfig(){
 			var that = this;
@@ -150,6 +182,7 @@ export default {
 				method: "get",
 				dataType: 'json',
 				success: function(res) {
+					
 					if(res.data.code==1){
 						that.pushAdsNum = res.data.data.pushAdsNum;
 						that.pushAdsPrice = res.data.data.pushAdsPrice;
@@ -185,9 +218,9 @@ export default {
 				url: text
 			});
 		},
-		goAdsBuy(num,type){
+		goAdsBuy(price,num,type){
 			var that = this;
-			if(num <= 0){
+			if(num <= 0||!num){
 				uni.showToast({
 					title: "该广告位已售完",
 					icon: 'none'
@@ -201,7 +234,14 @@ export default {
 				})
 				return false;
 			}
-			
+			var assets = that.userData.assets;
+			if(price>assets){
+				uni.showToast({
+					title: "余额不足，请先充值",
+					icon: 'none'
+				})
+				return false;
+			}
 			uni.navigateTo({
 				url: '/pages/ads/adsPost?post=add&type='+type
 			});

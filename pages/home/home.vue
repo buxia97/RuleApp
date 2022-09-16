@@ -277,6 +277,7 @@
 							  mode="aspectFill"></image>
 							<view class="desc">
 								<view class="text-content">{{item.intro}}</view>
+								<view class="ads-more">了解更多<text class="cuIcon-right"></text></view>
 							</view>
 							<text class="ads-ico">AD</text>
 						</view>
@@ -488,10 +489,39 @@
 				uni.stopPullDownRefresh();
 			}, 1000)
 		},
+		// #ifdef MP
+		onShareAppMessage(res) {
+			var that = this;
+			if (res.from === 'button') {
+				// 来自页面内分享按钮
+			}
+			if (res.from === 'menu') {
+				// 来自页面内分享按钮
+			}
+			var title = API.GetAppName();
+			var data = {
+				title: title,
+				path: '/page/home/home'
+			}
+			
+			return data;
 		
+		},
+		onShareTimeline() {
+			var that = this;
+			var title = API.GetAppName();
+			var data = {
+				title: title,
+				path: '/page/home/home'
+			}
+			
+			return data;
+		},
+		// #endif
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS || H5
+			
 			that.getAdsCache();
 			that.getAds();
 			// #endif
@@ -641,11 +671,11 @@
 				var url = data.url;
 				var type = data.urltype;
 				// #ifdef APP-PLUS
-				if(urltype==1){
-					plus.runtime.openURL(url) 
+				if(type==1){
+					plus.runtime.openURL(url);
 				}
-				if(urltype==0){
-					plus.runtime.openWeb(url) 
+				if(type==0){
+					plus.runtime.openWeb(url);
 				}
 				// #endif
 				// #ifdef H5

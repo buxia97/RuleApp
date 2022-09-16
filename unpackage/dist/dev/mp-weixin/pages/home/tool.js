@@ -328,6 +328,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js */ 20);var waves = function waves() {__webpack_require__.e(/*! require.ensure | components/xxley-waves/waves */ "components/xxley-waves/waves").then((function () {return resolve(__webpack_require__(/*! @/components/xxley-waves/waves.vue */ 79));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 var API = __webpack_require__(/*! ../../utils/api */ 21);
 var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
@@ -343,8 +356,7 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
       token: "",
       isLoading: 0,
       raiders: API.GetRaiders(),
-      toolid: 0,
-      featured: API.GetFeatured() };
+      toolid: 0 };
 
   },
   onPullDownRefresh: function onPullDownRefresh() {
@@ -425,33 +437,11 @@ var Net = __webpack_require__(/*! ../../utils/net */ 22);var _default =
         url: '/pages/contents/search' });
 
     },
-    toRand: function toRand() {
+    goPage: function goPage(url) {
       var that = this;
 
       uni.navigateTo({
-        url: '/pages/contents/randlist' });
-
-    },
-    toImagetoday: function toImagetoday() {
-      var that = this;
-
-      uni.navigateTo({
-        url: '/pages/contents/imagetoday' });
-
-    },
-    toForeverblog: function toForeverblog() {
-      var that = this;
-
-      uni.navigateTo({
-        url: '/pages/contents/foreverblog' });
-
-
-    },
-    toShop: function toShop() {
-      var that = this;
-
-      uni.navigateTo({
-        url: '/pages/contents/shop' });
+        url: url });
 
     },
     toCategoryContents: function toCategoryContents(title, id) {

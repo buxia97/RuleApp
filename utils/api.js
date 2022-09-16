@@ -5,7 +5,8 @@ var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
-//对于个人小程序，不能有评论，充值，商品和发布文章，所以在小程序端是不会显示这些的，因为不可能过审，但如果是企业，可以去页面上自行去除我的判断代码。
+//对于个人小程序，不能有评论，充值，商品和发布文章，所以在小程序端默认是不会显示这些的，因为个人不可能过审，但如果是企业，可以去页面上自行去除我的判断代码，或者在下方进行配置。
+//其次，小程序端有应用程序大小限制，过多的页面会导致资源超出大小
 
 //下面主要用于用户协议
 var appName="规则之树";
@@ -23,6 +24,7 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 //{cid}对应文章id，{category}对应分类缩略名，{slug}对应独立页面名称，其实本质上就是页面拼接。
 var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
+
 //首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
 var swiperid = 394; 
 
@@ -33,6 +35,10 @@ var feedback = 2689
 //关于我们文章id，typecho文章表cid
 var aboutme = 2
 
+//小程序配置
+//小程序端是否开启评论，1位开启，0位关闭。
+var isComment = 1;
+
 //自定义字段配置（和可视化配置中心保持一致，英文逗号分割），默认的字段名称是小灯泡模板的abcimg字段，假如你的模板是用其它的字段进行判断，可以自己全局搜索abcimg进行修改，当然也可以什么都不做，这并不会导致使用出现问题。
 var fields = "abcimg";
 // #ifdef H5
@@ -40,8 +46,13 @@ var fields = "abcimg";
 // #endif
 
 
+import { localStorage } from '@/js_sdk/mp-storage/mp-storage/index.js'
+//外部接口接管实现(预留)
 
 module.exports = {
+	GetIsComment(){
+		return isComment;
+	},
 	GetRankList(){
 		return rankList;
 	},
@@ -157,6 +168,10 @@ module.exports = {
 	regConfig:function(){
 		return API_URL + 'typechoUsers/regConfig';
 	},
+	signOut:function(){
+		return API_URL + 'typechoUsers/signOut';
+	},
+	
 	//邀请码注册相关
 	madeInvitation:function(){
 		return API_URL + 'typechoUsers/madeInvitation';

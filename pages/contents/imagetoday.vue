@@ -105,6 +105,11 @@
 						if(res.data.photos){
 							that.ImageList = res.data.photos;
 							localStorage.setItem('ImageList',JSON.stringify(that.ImageList));
+						}else{
+							uni.showToast({
+								title: "图片获取异常，请检查配置",
+								icon: 'none'
+							})
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;
