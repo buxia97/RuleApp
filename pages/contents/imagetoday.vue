@@ -15,6 +15,12 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="cu-bar bg-white search imagetoday-search">
+				<view class="search-form round">
+					<input type="text" placeholder="输入搜索关键字" v-model="searchText"></input>
+					<text class="cuIcon-search" @tap="searchTag()"></text>
+				</view>
+			</view>
 			<view class="no-data" v-if="ImageList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
@@ -25,6 +31,9 @@
 						<text @tap="toUrl(item.photographer_url)">@{{item.photographer}}</text>
 					</view>
 				</view>
+			</view>
+			<view class="load-more" @tap="loadMore" v-if="ImageList.length>0">
+				<text>{{moreText}}</text>
 			</view>
 		</view>
 		<!--加载遮罩-->
@@ -50,6 +59,11 @@
 				
 				ImageList:[],
 				
+				searchText:"",
+				moreText:"加载更多",
+				isLoad:0,
+				page:1,
+				isSearch:0,
 				isLoading:0,
 			}
 		},
@@ -59,9 +73,6 @@
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			if(localStorage.getItem('ImageList')){
-				that.ImageList = JSON.parse(localStorage.getItem('ImageList'));
-			}
 			that.getImageList();
 			
 			
@@ -72,6 +83,15 @@
 			var timer = setTimeout(function() {
 				that.getImageList();
 			}, 1000)
+		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			if(that.isLoad==0){
+				that.loadMore();
+			}
+			
+			
 		},
 		onLoad() {
 			var that = this;
@@ -90,11 +110,28 @@
 				var that = this;
 				that.getImageList();
 			},
-			getImageList(){
+			loadMore(){
 				var that = this;
+				that.moreText="正在加载中...";
+				that.isLoad=1;
+				that.getImageList(true);
+				
+			},
+			getImageList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				var data={
+					page:page,
+				}
+				if(that.searchText!=""){
+					data.searchKey = that.searchText;
+				}
 				Net.request({
 					url: API.contentsImage(),
-					data:{},
+					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -102,9 +139,21 @@
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
+						that.isLoad=0;
 						if(res.data.photos){
-							that.ImageList = res.data.photos;
-							localStorage.setItem('ImageList',JSON.stringify(that.ImageList));
+							var list= res.data.photos;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.ImageList = that.ImageList.concat(list);
+								}else{
+									that.ImageList = list;
+								}
+								
+							}else{
+								that.moreText="没有更多数据了";
+							}
+							
 						}else{
 							uni.showToast({
 								title: "图片获取异常，请检查配置",
@@ -117,6 +166,8 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
 						uni.stopPullDownRefresh();
 						var timer = setTimeout(function() {
 							that.isLoading=1;
@@ -177,6 +228,13 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			searchTag(){
+				var that = this;
+				that.page=1;
+				that.isLoad=1;
+				that.ImageList=[];
+				that.getImageList(false);
 			},
 
 		}

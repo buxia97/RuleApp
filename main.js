@@ -8,7 +8,6 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
-uni.hideShareMenu();
 const app = new Vue({
     ...App
 })

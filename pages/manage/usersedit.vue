@@ -22,6 +22,13 @@
 				<view class="title">用户名</view>
 				<input name="input" disabled="disabled" :value="name"></input>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">用户积分</view>
+				<input name="input" disabled="disabled" :value="assets"></input>
+				<view class="action">
+					<text class="text-blue" @tap="recharge">充扣</text>
+				</view>
+			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">昵称</view>
 				<input placeholder="请输入昵称" name="input" v-model="screenName"></input>
@@ -159,11 +166,19 @@
 			
 			getUserInfo(){
 				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				Net.request({
 					
 					url: API.getUserInfo(),
 					data:{
-						"key":that.uid
+						"key":that.uid,
+						"token":token
+						
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -171,7 +186,6 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						console.log(JSON.stringify(res))
 						if(res.data.code==1){
 							that.name = res.data.data.name;
 							that.screenName = res.data.data.screenName;
@@ -179,6 +193,7 @@
 							that.url = res.data.data.url;
 							that.group = res.data.data.groupKey;
 							that.customize = res.data.data.customize;
+							that.assets =  res.data.data.assets;
 							var list = that.groupList;
 							for(var i in list){
 								if(list[i].group == that.group){
@@ -287,6 +302,13 @@
 					}
 				}
 				that.hideModal();
+			},
+			recharge(){
+				var that = this;
+				localStorage.setItem('getuid',that.uid);
+				uni.navigateTo({
+				    url: '/pages/manage/recharge'
+				});
 			},
 		}
 	}

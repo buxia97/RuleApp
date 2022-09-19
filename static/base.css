@@ -1841,3 +1841,12 @@ page{
 	color:#666;
 	text-align:right;
 }
+.imagetoday-search input{
+	padding-left: 30upx;
+}
+.imagetoday-search .cuIcon-search{
+	font-size: 34upx;
+	margin: 0px;
+	padding: 20px;
+	color: #333;
+}
