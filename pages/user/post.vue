@@ -73,7 +73,8 @@
 				<text @tap="showModal" data-target="RadioModal">H</text>
 				<text @tap="toBold">B</text>
 				<text @tap="toItalic">I</text>
-				<text class="cuIcon-picfill" @tap="upload"></text>
+				<!-- <text class="cuIcon-picfill" @tap="upload"></text> -->
+				<text class="cuIcon-picfill" @tap="showModal" data-target="imgModal"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
 				<text class="cuIcon-attentionforbidfill" @tap="toHideText"></text>
@@ -140,6 +141,24 @@
 		
 					</view>
 				</view>
+			</view>
+		</view>
+		<!--插入图片控件-->
+		<view class="cu-modal LinksModal" :class="modalName=='imgModal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">上传图片</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<view class="padding flex flex-direction">
+						<button class="cu-btn bg-blue lg" @tap="upload">本地上传</button>
+						<button class="cu-btn line-red margin-tb-sm lg" @tap="goImgData">图库选择</button>
+					</view>
+				</view>
+			
 			</view>
 		</view>
 		<!--插入商品控件-->
@@ -237,6 +256,8 @@
 				
 				start:-1,
 				
+				toImg:false,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -259,6 +280,17 @@
 			}
 			if(localStorage.getItem('ctag')){
 				that.tag = localStorage.getItem('ctag');
+			}
+			if(localStorage.getItem('serImage')){
+				var serImage = localStorage.getItem('serImage');
+				var h = "";
+				if(that.text!=""){
+					h="\n";
+				}
+				var text = h+"![图片名称]("+serImage+")";
+				//that.text+=text;
+				that.insetText(text);
+				localStorage.removeItem('serImage');
 			}
 			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
@@ -876,6 +908,12 @@
 				var that = this;
 				uni.navigateTo({
 				    url: '/pages/user/addshop'
+				});
+			},
+			goImgData(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/contents/imagetoday?type=post'
 				});
 			},
 			

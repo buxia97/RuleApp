@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					今日图片推荐
+					图库
 				</view>
 				<view class="action" @tap="toUrl('https://www.pexels.com/')">
 					<text class="text-blue">Pexels</text>
@@ -26,6 +26,7 @@
 			</view>
 			<view class="ImageList">
 				<view class="ImageList-box"  v-for="(item,index) in ImageList" :key="index">
+					<view class="cu-btn bg-blue setImage" @tap="goPost(item.src.large)">选择</view>
 					<image :src="item.src.large2x"  mode="widthFix" @tap="previewImage(item.src.large2x)"></image>
 					<view class="image-info">
 						<text @tap="toUrl(item.photographer_url)">@{{item.photographer}}</text>
@@ -65,6 +66,7 @@
 				page:1,
 				isSearch:0,
 				isLoading:0,
+				type:"",
 			}
 		},
 		onShow(){
@@ -93,11 +95,14 @@
 			
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(res.type){
+				that.type = res.type;
+			}
 			
 		},
 		methods: {
@@ -235,6 +240,79 @@
 				that.isLoad=1;
 				that.ImageList=[];
 				that.getImageList(false);
+			},
+			goPost(url){
+				var that = this;
+				// #ifdef H5
+				uni.showToast({
+					title: "请点击图片，在预览页长按保存",
+					icon: 'none'
+				})
+				// #endif
+				// #ifdef APP-PLUS
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token = userInfo.token;
+					
+				}else{
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				uni.downloadFile({//下载
+					url: url, //图片下载地址
+					success: res => {
+						if (res.statusCode === 200) {
+							var path = res.tempFilePath;
+							const uploadTask = uni.uploadFile({
+							  url : API.upload(),
+							  filePath: path,
+							  name: 'file',
+							  formData: {
+							   'token': token
+							  },
+							  success: function (uploadFileRes) {
+								  setTimeout(function () {
+								  	uni.hideLoading();
+								  }, 1000);
+									var data = JSON.parse(uploadFileRes.data);
+									//var data = uploadFileRes.data;
+									uni.showToast({
+										title: data.msg,
+										icon: 'none'
+									})
+									if(data.code==1){
+									   var url = data.data.url;
+									   localStorage.setItem('serImage',url);
+									   that.back();
+									}
+								},fail:function(){
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+								}
+							});
+						}else{
+							uni.showToast({
+								title: '图片保存失败',
+								icon: 'none',
+							});
+						}
+					}
+				});
+				// #endif
 			},
 
 		}

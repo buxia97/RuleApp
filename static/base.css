@@ -580,6 +580,13 @@ page{
 	border-radius: 20upx;
 	position: relative;
 }
+.setImage{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 150;
+	border-radius: 5px;
+}
 .image-info{
 	position: absolute;
 	bottom: 30upx;

@@ -594,7 +594,7 @@
 					that.category = postInfo.category;
 					that.created = postInfo.created;
 					that.commentsNum = postInfo.commentsNum;
-					that.images = res.data.images;
+					that.images = postInfo.images;
 					that.html=that.markHtml(postInfo.text);
 					that.tagList=postInfo.tag;
 					that.slug = postInfo.slug;

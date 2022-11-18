@@ -250,7 +250,8 @@
 			getMetaList(){
 				var that = this;
 				var data = {
-					"type":"category"
+					"type":"category",
+					"parent":0
 				}
 				Net.request({
 					url: API.getMetasList(),
