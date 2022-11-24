@@ -20,6 +20,7 @@
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
 					<input type="text" placeholder="搜索Key或使用者UID" v-model="searchText"  @input="searchTag"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
 			<view class="search-type grid col-2">
@@ -255,6 +256,12 @@
 			searchTag(){
 				var that = this;
 				var searchText = that.searchText;
+				that.page=1;
+				that.getTokenList()
+			},
+			searchClose(){
+				var that = this;
+				that.searchText = "";
 				that.page=1;
 				that.getTokenList()
 			},

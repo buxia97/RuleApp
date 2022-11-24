@@ -16,6 +16,7 @@
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
 					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
 			<view class="search-type grid col-2">
@@ -312,6 +313,13 @@
 			searchTag(){
 				var that = this;
 				var searchText = that.searchText;
+				that.page=1;
+				that.getShopList();
+			
+			},
+			searchClose(){
+				var that = this;
+				that.searchText = "";
 				that.page=1;
 				that.getShopList();
 			

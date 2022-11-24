@@ -33,7 +33,7 @@
 										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 										<!--  #ifdef H5 || APP-PLUS -->
-										<block v-if="item.isvip==1">
+										<block v-if="item.isvip>0">
 											<block v-if="item.vip==1">
 												<text class="isVIP bg-gradual-red">VIP</text>
 											</block>

@@ -479,7 +479,7 @@
 					});
 					return false;
 				}
-				if(that.num<1){
+				if(that.num<5){
 					uni.showToast({
 						title: "最低充值金额5元",
 						icon: 'none'

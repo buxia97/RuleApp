@@ -25,6 +25,24 @@
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
 					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
+				</view>
+			</view>
+			<view class="search-type grid col-5">
+				<view class="search-type-box " @tap="getType('all')" :class="dataType=='all'?'active':''">
+					<text>全部</text>
+				</view>
+				<view class="search-type-box" @tap="getType('contributor')" :class="dataType=='contributor'?'active':''">
+					<text>贡献者</text>
+				</view>
+				<view class="search-type-box" @tap="getType('administrator')" :class="dataType=='administrator'?'active':''">
+					<text>管理员</text>
+				</view>
+				<view class="search-type-box" @tap="getType('editor')" :class="dataType=='editor'?'active':''">
+					<text>编辑</text>
+				</view>
+				<view class="search-type-box" @tap="getType('vip')" :class="dataType=='vip'?'active':''">
+					<text>VIP</text>
 				</view>
 			</view>
 			<view class="no-data" v-if="userList.length==0">
@@ -33,15 +51,24 @@
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" >
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
-					<view class="text-grey" v-if="item.screenName">{{item.screenName}}
+					<view class="text-grey">
+						<block  v-if="item.screenName">{{item.screenName}}</block>
+						<block  v-else>{{item.name}}</block>
 						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
-					</view>
-					<view class="text-grey" v-else>{{item.name}}
-						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						<!--  #ifdef H5 || APP-PLUS -->
+						<block v-if="item.isvip>0">
+							<block v-if="item.vip==1">
+								<text class="isVIP bg-gradual-red">VIP</text>
+							</block>
+							<block v-else>
+								<text class="isVIP bg-yellow">VIP</text>
+							</block>
+						</block>
+						<!--  #endif -->
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							{{item.mail}}
+							UID:{{item.uid}}
 						</view>
 					</view>
 				</view>
@@ -97,6 +124,7 @@
 				
 				isLoading:0,
 				type:"",
+				dataType:"all",
 				group:"",
 				
 			}
@@ -179,16 +207,40 @@
 				that.getUserList(true);
 				
 			},
+			getType(type){
+				var that = this;
+				that.dataType = type;
+				that.page = 1;
+				that.userList = [];
+				that.getUserList(false);
+			},
+			searchClose(){
+				var that = this;
+				that.searchText = "";
+				that.page = 1;
+				that.getUserList(false);
+			},
 			getUserList(isPage){
 				var that = this;
 				var page = that.page;
 				if(isPage){
 					page++;
 				}
+				var data = {};
+				if(that.dataType!="all"&that.dataType!="vip"){
+					data = {
+						"groupKey":that.dataType
+					}
+				}
+				if(that.dataType=='vip'){
+					data = {
+						"vip":1
+					}
+				}
 				Net.request({
 					url: API.getUserList(),
 					data:{
-						"searchParams":"",
+						"searchParams":data,
 						"limit":10,
 						"page":page,
 						"searchKey":that.searchText,

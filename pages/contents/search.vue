@@ -18,6 +18,7 @@
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
 					<input type="text" placeholder="输入搜索关键字" v-model="searchText"  @input="searchTag"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
 			<view class="search-type grid col-3">
@@ -269,6 +270,18 @@
 					that.getUserList()
 				}
 
+			},
+			searchClose(){
+				var that = this;
+				that.searchText = "";
+				that.page=1;
+				if(that.type==0){
+					that.getContentsList();
+				}else if(that.type==1){
+					that.getCommentsList()
+				}else{
+					that.getUserList()
+				}
 			},
 			getContentsList(isPage){
 				var that = this;

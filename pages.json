@@ -338,6 +338,12 @@
 			}
 		},
 		{
+			"path": "pages/manage/finance",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/manage/tokenpay"
 		},
 		{

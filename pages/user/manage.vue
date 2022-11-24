@@ -155,6 +155,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/finance')">
+							<view class="index-sort-i" style="background-color: #e72323;">
+								<text class="cuIcon-vipcard"></text>
+							</view>
+							<view class="index-sort-text">
+								财务中心
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<block v-if="group=='administrator'">

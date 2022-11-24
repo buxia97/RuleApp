@@ -1,9 +1,12 @@
-var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'https://api.ruletree.club/';
 var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
+
+//配合nginx实现的访问key
+var key = "";
 
 //对于个人小程序，不能有评论，充值，商品和发布文章，所以在小程序端默认是不会显示这些的，因为个人不可能过审，但如果是企业，可以去页面上自行去除我的判断代码，或者在下方进行配置。
 //其次，小程序端有应用程序大小限制，过多的页面会导致资源超出大小
@@ -50,6 +53,9 @@ import { localStorage } from '@/js_sdk/mp-storage/mp-storage/index.js'
 //外部接口接管实现(预留)
 
 module.exports = {
+	getKey(){
+		return key;
+	},
 	GetIsComment(){
 		return isComment;
 	},
@@ -356,11 +362,17 @@ module.exports = {
 		return API_URL + 'pay/tokenPayExcel';
 	},
 	
-	//生成邀请码
+	//生成卡密
 	madetoken:function(){
 		return API_URL + 'pay/madetoken';
 	},
-	
+	//财务记录
+	financeList:function(){
+		return API_URL + 'pay/financeList';
+	},
+	financeTotal:function(){
+		return API_URL + 'pay/financeTotal';
+	},
 	//付费广告
 	adsConfig:function(){
 		return API_URL + 'typechoAds/adsConfig';

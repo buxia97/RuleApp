@@ -160,10 +160,19 @@
 							}
 							
 						}else{
-							uni.showToast({
-								title: "图片获取异常，请检查配置",
-								icon: 'none'
-							})
+							if(data.msg){
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
+							}else{
+								uni.showToast({
+									title: "图片获取异常，请检查配置",
+									icon: 'none'
+								})
+							}
+							
+							
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;

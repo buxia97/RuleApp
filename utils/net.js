@@ -1,3 +1,4 @@
+var API = require('../utils/api');
 var requestHandler = {
     url: '',
     data: {},
@@ -14,9 +15,13 @@ var requestHandler = {
     var data = requestHandler.data;
     var url = requestHandler.url;
     var method = requestHandler.method;
-    wx.request({
+    uni.request({
       url: url,
       data: data,
+	  header:{
+	  	"Accept": "application/json; charset=utf-8", 
+	  	"key":API.getKey()
+	  },
       method: method,
       success: function (res) {     
         requestHandler.success(res)

@@ -22,11 +22,20 @@
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
-					<view class="text-grey" v-if="item.screenName">{{item.screenName}}
+					<view class="text-grey">
+						<block  v-if="item.screenName">{{item.screenName}}</block>
+						<block  v-else>{{item.name}}</block>
 						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
-					</view>
-					<view class="text-grey" v-else>{{item.name}}
-						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						<!--  #ifdef H5 || APP-PLUS -->
+						<block v-if="item.isvip>0">
+							<block v-if="item.vip==1">
+								<text class="isVIP bg-gradual-red">VIP</text>
+							</block>
+							<block v-else>
+								<text class="isVIP bg-yellow">VIP</text>
+							</block>
+						</block>
+						<!--  #endif -->
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
