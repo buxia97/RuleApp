@@ -18,9 +18,7 @@
 				<!--  #ifdef H5 || APP-PLUS -->
 				<text class="cu-btn text-blue radius" @tap="toPayType(0)" :class="payType=='0'?'active':''">支付宝</text>
 				<!--  #endif -->
-				<!--  #ifdef MP-WEIXIN || APP-PLUS -->
 				<text class="cu-btn text-blue radius" @tap="toPayType(1)" :class="payType=='1'?'active':''">微信支付</text>
-				<!--  #endif -->
 				<text class="cu-btn text-blue radius" @tap="toPayType(2)" :class="payType=='2'?'active':''">卡密充值</text>
 				<text class="cu-btn text-blue radius" @tap="toPayType(3)" :class="payType=='3'?'active':''">易支付</text>
 			</view>
@@ -42,10 +40,21 @@
 				</block>
 			</block>
 			<block  v-if="payType==2">
-				<view class="userrecharge-form">
-					<input placeholder="请填入充值码" name="input" type="text" v-model="num"></input>
-					<button class="cu-btn bg-yellow radius" @tap="tokenPay">确定充值</button>
-				</view>
+				<block v-if="isToPay==0">
+					<view class="userrecharge-form">
+						<input placeholder="请填入充值码" name="input" type="text" v-model="num"></input>
+						<button class="cu-btn bg-yellow radius" @tap="tokenPay">确定充值</button>
+					</view>
+				</block>
+				<block v-if="isToPay==1">
+					<view class="userrecharge-code">
+						<image :src="codeImg"></image>
+					</view>
+					<view class="userrecharge-btn">
+						<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
+						<text class="cu-btn bg-yellow radius" @tap="toWxpay()">打开微信</text>
+					</view>
+				</block>
 			</block>
 			<block  v-if="payType==3">
 				<view class="userrecharge-form toEpay">
@@ -66,7 +75,7 @@
 					充值注意：
 				</view>
 				<view class="userrecharge-intro-text">
-					1.如果支付宝未成功开启，可尝试保存二维码再进行扫码支付，部分设备可能无权限打开支付宝。
+					1.如果支付软件未成功开启，可尝试保存二维码再进行扫码支付，部分设备可能无权限打开支付宝或微信。
 				</view>
 				<view class="userrecharge-intro-text">
 					2.充值金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低充值金额<text class="text-red text-bold"> 5 </text>元。
@@ -132,6 +141,7 @@
 				
 				codeImg:'',
 				alipayUrl:"",
+				wxpayUrl:"",
 				
 				vipDiscount:0,
 				vipPrice:0,
@@ -161,6 +171,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.isToPay = 0;
+			that.codeImg = "";
 			that.getVipInfo();
 		},
 		onLoad() {
@@ -300,27 +311,20 @@
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
+						if(res.data.code==1){
+							var url = res.data.data.data;
+							that.wxpayUrl = url;
+							that.codeImg = API.qrCode()+"?codeContent="+url;
+							that.isToPay = 1;
+							that.toAlipay();
+						}else{
+							uni.showToast({
+								title: "支付接口异常",
+								icon: 'none'
+							})
+						}
 						//console.log(JSON.stringify(data.data))
-						uni.requestPayment({
-							provider: 'wxpay',
-							orderInfo: JSON.stringify(data.data), //微信、支付宝订单数据
-							success: function(res) {
-								uni.showToast({
-									title: "充值成功",
-									icon: 'none'
-								})
-								that.isToPay = 0;
-								that.num = "";
-							},
-							fail: function(err) {
-								uni.showToast({
-									title:JSON.stringify(err),
-									duration:1000,
-									icon:'none'
-								})
-								
-							}
-						});
+						
 					},
 					fail: function(res) {
 						setTimeout(function () {
@@ -395,6 +399,16 @@
 			toAlipay(){
 				var that = this;
 				var url = that.alipayUrl;
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
+			toWxpay(){
+				var that = this;
+				var url = that.wxpayUrl;
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

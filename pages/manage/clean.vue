@@ -53,6 +53,13 @@
 					<text class="cu-btn bg-red  radius" @tap="dataClean(6)">确认清理</text>
 				</view>
 			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">清理未支付订单
+				</view>
+				<view class="action">
+					<text class="cu-btn bg-red  radius" @tap="dataClean(7)">确认清理</text>
+				</view>
+			</view>
 		</form>
 	</view>
 </template>

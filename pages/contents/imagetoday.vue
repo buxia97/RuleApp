@@ -17,7 +17,7 @@
 		<view class="data-box">
 			<view class="cu-bar bg-white search imagetoday-search">
 				<view class="search-form round">
-					<input type="text" placeholder="输入搜索关键字" v-model="searchText"></input>
+					<input type="text" placeholder="输入搜索关键字(暂只支持英文)" v-model="searchText"></input>
 					<text class="cuIcon-search" @tap="searchTag()"></text>
 				</view>
 			</view>

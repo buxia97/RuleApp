@@ -607,6 +607,25 @@
 			},
 			markHtml(text){
 				var that = this;
+				//下面奇怪的代码是为了解决可执行代码区域问题
+				text = that.replaceAll(text,"@!!!","@@@@");
+				
+
+				
+				// var code = /!!!(([\s\S])*?)!!!/g;
+				// var result = text.match(code);
+				// for(var i in result){
+				// 	var str = result[i];
+				// 	str = that.replaceAll(str,"&lt;","<");
+				// 	str = that.replaceAll(str,"&gt;",">");
+				// 	text = that.replaceAll(text,result[i],str);
+				// }
+
+				
+				text = that.replaceAll(text,"!!!","");
+				text = that.replaceAll(text,"@@@@","@!!!");
+				
+				//结束
 				
 				if(that.isCommnet==1){
 					text = that.replaceAll(text,"[hide]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
@@ -627,7 +646,9 @@
 					}
 				}
 				// #endif
+				
 				return text;
+				
 			},
 			markCommentHtml(text){
 				var that = this;

@@ -82,7 +82,7 @@
 				<text class="cuIcon-tag" :class="tag!=''?'text-blue':''" @tap="addTag"></text>
 				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
 				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
-				<text class="cuIcon-read" @tap="toIsShow"></text>
+				<text class="cuIcon-read" @tap="toIsShow(false)"></text>
 				
 			</view>
 			<view class="cu-form-group">
@@ -159,6 +159,27 @@
 					</view>
 				</view>
 			
+			</view>
+		</view>
+		<!--xss提示控件-->
+		<view class="cu-modal" :class="modalName=='xss'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">安全提示</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					<view>检测到该文章的内容存在可执行的代码，为了您的系统安全，请你确认文章内容不存在如：<text class="text-bold text-red">未知远程js、未知的接口请求代码、未知的网页嵌套、未知的表单提交等</text>可能触发xss漏洞的代码。</view>
+					<view>如您已经确认无误，可点击下方按钮继续。</view>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn bg-blue margin-left"  @tap="toIsShow(true)">预览</button>
+		
+					</view>
+				</view>
 			</view>
 		</view>
 		<!--插入商品控件-->
@@ -348,14 +369,20 @@
 		methods: {
 			markHtml(text){
 				var that = this;
+				text = that.replaceAll(text,"@!!!","@@@@");
+				text = that.replaceAll(text,"!!!","");
+				text = that.replaceAll(text,"@@@@","@!!!");
 				var owoList=that.owoList;
 				for(var i in owoList){
 					if(text.indexOf(owoList[i].data) != -1){
-						text = text.replace(owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
 						
 					}
 				}
 				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
 			},
 			ToisText(i){
 				var that= this;
@@ -574,10 +601,31 @@
 					}
 				})
 			},
-			toIsShow(){
+			toIsShow(isTo){
 				var that= this;
-				that.isShow = !that.isShow;
-				that.textRead = that.markHtml(that.text);
+				var group = "";
+				if(localStorage.getItem('userinfo')){
+					
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					var group = userInfo.group;
+				}
+				if(!isTo&&!that.isShow){
+					if(group=='administrator'||group=='editor'){
+						if(that.text.indexOf("<script>")!=-1||that.text.indexOf("<form>")!=-1||that.text.indexOf("<iframe>")!=-1||that.text.indexOf("<frame>")!=-1){
+							
+							that.modalName = "xss"
+							return false;
+						}
+					}else{
+						isTo = true;
+					}
+				}else{
+					that.modalName = null;
+					that.textRead = that.markHtml(that.text);
+					that.isShow = !that.isShow;
+				}
+				
+				
 			},
 
 			submit(){
