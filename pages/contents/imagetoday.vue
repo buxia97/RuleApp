@@ -280,6 +280,9 @@
 					}, 1000)
 					return false
 				}
+				uni.showLoading({
+					title: "加载中"
+				});
 				uni.downloadFile({//下载
 					url: url, //图片下载地址
 					success: res => {
@@ -314,6 +317,9 @@
 								}
 							});
 						}else{
+							setTimeout(function () {
+								uni.hideLoading();
+							}, 1000);
 							uni.showToast({
 								title: '图片保存失败',
 								icon: 'none',

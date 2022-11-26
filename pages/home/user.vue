@@ -257,6 +257,22 @@
 				
 			</view>
 		</view>
+		<view class="cu-modal userLoginstatus" :class="isLoginShow?'show':''">
+			<view class="cu-dialog">
+
+				<view class="padding-sm">
+					<view class="padding flex flex-direction">
+						<view class="userLoginstatus-i bg-red">
+							<text class="cuIcon-close"></text>
+						</view>
+						<view class="text-bold">登录状态已失效</view>
+						
+						<button class="cu-btn bg-blue margin-top" @tap="isLoginShow=false">确定</button>
+					</view>
+				</view>
+			
+			</view>
+		</view>
 		<!--  #ifdef APP-PLUS -->
 		<view style="height: 100upx;"></view>
 		<Tabbar :current="3"></Tabbar>
@@ -287,7 +303,9 @@
 				feedback:API.GetFeedback(),
 				userlvStyle:"",
 				
-				aboutme:API.GetAboutme()
+				aboutme:API.GetAboutme(),
+				
+				isLoginShow:false,
 				
 			}
 		},
@@ -545,8 +563,13 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==0){
+							
+							if(that.userInfo != null){
+								that.isLoginShow = true;
+							}
 							localStorage.removeItem('userinfo');
 							localStorage.removeItem('token');
+							
 							that.userInfo = null;
 						}else{
 							

@@ -580,6 +580,13 @@ page{
 	border-radius: 20upx;
 	position: relative;
 }
+.setImage{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 150;
+	border-radius: 5px;
+}
 .image-info{
 	position: absolute;
 	bottom: 30upx;
@@ -627,6 +634,8 @@ page{
 	text-align: center;
 	height: 80upx;
 	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+	z-index: 10;
 }
 .search-type-box{
 	color: #999;
@@ -1840,4 +1849,27 @@ page{
 	font-size:26upx;
 	color:#666;
 	text-align:right;
+}
+.imagetoday-search input{
+	padding-left: 30upx;
+}
+.imagetoday-search .cuIcon-search{
+	font-size: 34upx;
+	margin: 0px;
+	padding: 20px;
+	color: #333;
+}
+.search-close{
+	width: 34upx;
+	overflow: hidden;
+	border-radius: 50%;
+	line-height: 34upx;
+	text-align: center;
+	height: 34upx;
+	margin-right: 20upx;
+	background: #ccc;
+}
+.search-close text{
+	margin: 0 !important;
+	padding: 0;
 }

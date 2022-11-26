@@ -381,6 +381,17 @@
 				}
 				return text;
 			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
+			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
 			},
@@ -616,14 +627,12 @@
 							that.modalName = "xss"
 							return false;
 						}
-					}else{
-						isTo = true;
 					}
-				}else{
-					that.modalName = null;
-					that.textRead = that.markHtml(that.text);
-					that.isShow = !that.isShow;
 				}
+				that.modalName = null;
+				that.textRead = that.markHtml(that.text);
+				that.isShow = !that.isShow;
+				
 				
 				
 			},
