@@ -683,7 +683,6 @@
 </script>
 
 <style>
-@import "../../static/base.css";
 page{
 	overflow: hidden;
 }

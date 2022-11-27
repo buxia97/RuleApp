@@ -589,7 +589,6 @@
 </script>
 
 <style>
-@import "../../static/base.css";
 page{
 	background-color: #fff;
 }

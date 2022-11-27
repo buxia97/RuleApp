@@ -95,7 +95,9 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
+				
 				uid:0,
+				assets:0,
 				name:'',
 				screenName:'',
 				password:'',

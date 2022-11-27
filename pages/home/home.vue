@@ -1492,6 +1492,4 @@
 </script>
 
 <style>
-@import "../../static/base.css";
-
 </style>
