@@ -307,7 +307,7 @@
 					},
 					method: "get",
 					dataType: 'json',
-					success: function(data) {
+					success: function(res) {
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -316,7 +316,7 @@
 							that.wxpayUrl = url;
 							that.codeImg = API.qrCode()+"?codeContent="+url;
 							that.isToPay = 1;
-							that.toAlipay();
+							that.toWxpay();
 						}else{
 							uni.showToast({
 								title: "支付接口异常",
