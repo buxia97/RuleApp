@@ -1873,3 +1873,14 @@ page{
 	margin: 0 !important;
 	padding: 0;
 }
+.userLoginstatus .cu-dialog{
+	width: 500upx;
+}
+.userLoginstatus-i{
+	width: 80upx;
+	height: 80upx;
+	border-radius: 50%;
+	font-size: 30px;
+	line-height: 80upx;
+	margin: 0 auto 15upx auto;
+}

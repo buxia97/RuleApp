@@ -303,6 +303,7 @@
 				that.tag = localStorage.getItem('ctag');
 			}
 			if(localStorage.getItem('serImage')){
+				that.modalName = null;
 				var serImage = localStorage.getItem('serImage');
 				var h = "";
 				if(that.text!=""){

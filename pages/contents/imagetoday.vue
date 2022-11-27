@@ -26,7 +26,7 @@
 			</view>
 			<view class="ImageList">
 				<view class="ImageList-box"  v-for="(item,index) in ImageList" :key="index">
-					<view class="cu-btn bg-blue setImage" @tap="goPost(item.src.large)">选择</view>
+					<view class="cu-btn bg-blue setImage" v-if="type=='post'" @tap="goPost(item.src.large)">选择</view>
 					<image :src="item.src.large2x"  mode="widthFix" @tap="previewImage(item.src.large2x)"></image>
 					<view class="image-info">
 						<text @tap="toUrl(item.photographer_url)">@{{item.photographer}}</text>
