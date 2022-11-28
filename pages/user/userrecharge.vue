@@ -35,7 +35,8 @@
 					</view>
 					<view class="userrecharge-btn">
 						<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
-						<text class="cu-btn bg-yellow radius" @tap="toAlipay()">打开支付宝</text>
+						<text class="cu-btn bg-yellow radius" v-if="payType==1" @tap="toAlipay()">打开支付宝</text>
+						<text class="cu-btn bg-yellow radius" v-else @tap="toWxpay()">打开微信</text>
 					</view>
 				</block>
 			</block>
@@ -46,15 +47,7 @@
 						<button class="cu-btn bg-yellow radius" @tap="tokenPay">确定充值</button>
 					</view>
 				</block>
-				<block v-if="isToPay==1">
-					<view class="userrecharge-code">
-						<image :src="codeImg"></image>
-					</view>
-					<view class="userrecharge-btn">
-						<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
-						<text class="cu-btn bg-yellow radius" @tap="toWxpay()">打开微信</text>
-					</view>
-				</block>
+				
 			</block>
 			<block  v-if="payType==3">
 				<view class="userrecharge-form toEpay">
@@ -415,6 +408,15 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+				// #ifdef MP
+				uni.setClipboardData({
+				  data: url,
+				  success: () =>
+				    uni.showToast({
+				      title: '链接已复制，请在浏览器打开完成支付'
+				    })
+				})
+				// #endif
 			},
 			dtImg(){
 				var that = this;
@@ -427,10 +429,18 @@
 							uni.saveImageToPhotosAlbum({
 								filePath: res.tempFilePath,
 								success: function() {
-									uni.showToast({
-										title: "保存成功",
-										icon: "none"
-									});
+									if(that.payType==1){
+										uni.showToast({
+											title: "图片已保存，微信不支持相册识别支付，请通过正常扫码完成。",
+											icon: "none"
+										});
+									}else{
+										uni.showToast({
+											title: "保存成功",
+											icon: "none"
+										});
+									}
+									
 								},
 								fail: function() {
 									uni.showToast({
