@@ -76,6 +76,9 @@
 				<view class="userrecharge-intro-text">
 					3.如果充值金额未到账，请查看账户中的充值记录，并立即反馈。
 				</view>
+				<view class="userrecharge-intro-text"  v-if="payType==1">
+					4.微信<text class="text-red text-bold">不支持从相册识别二维码支付</text>，如选择保存二维码支付，请将二维码上传到其它设备，再进行正常扫码支付。
+				</view>
 			</view>
 			<view class="userrecharge-intro"  v-if="payType==2">
 				<view class="userrecharge-intro-title">
@@ -409,13 +412,7 @@
 				window.open(url)
 				// #endif
 				// #ifdef MP
-				uni.setClipboardData({
-				  data: url,
-				  success: () =>
-				    uni.showToast({
-				      title: '链接已复制，请在浏览器打开完成支付'
-				    })
-				})
+				that.dtImg();
 				// #endif
 			},
 			dtImg(){

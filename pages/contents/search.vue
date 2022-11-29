@@ -191,6 +191,9 @@
 		},
 		onShow(){
 			var that = this;
+			that.page=1;
+			that.moreText="加载更多";
+			that.isLoad=0;
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")

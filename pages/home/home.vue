@@ -375,6 +375,21 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<!--弹窗公告-->
+		<view class="announcement" v-if="isAnnouncement">
+			<view class="announcement-main">
+				<view class="announcement-title">
+					网站公告
+					<text class="cuIcon-close text-red" @tap="isAnnouncement=false"></text>
+				</view>
+				<view class="announcement-concent">
+					<rich-text :nodes="announcement"></rich-text>
+				</view>
+				<view class="announcement-btn">
+					<button class="cu-btn bg-gradual-blue lg" @tap="isAnnouncement=false">我知道了</button>
+				</view>
+			</view>
+		</view>
 		<!--update-->
 		<!--  #ifdef APP-PLUS -->
 		<view class="update" v-if="Update==1">
@@ -385,7 +400,7 @@
 				<view class="update-main">
 					<image src="../../static/app-plus/ic_ar.png"></image>
 					<view class="update-title">发现新版本：{{versionTitle}}</view>
-					<view class="update-intro">{{versionIntro}}</view>
+					<view class="update-intro"><rich-text :nodes="versionIntro"></rich-text></view>
 					<view class="update-btn grid col-2">
 						<view class="update-btn-box">
 							<view class="update-btn-main bg-blue"  @tap="isUpdate(true)">
@@ -418,6 +433,8 @@
 		<view style="height: 100upx;"></view>
 		<Tabbar :current="0"></Tabbar>
 		<!--  #endif -->
+		
+		
 	</view>
 </template>
 
@@ -480,6 +497,8 @@
 				pushAdsInfo:null,
 				bannerAds:[],
 				bannerAdsInfo:null,
+				announcement:"",
+				isAnnouncement:false,
 			}
 		},
 		onPullDownRefresh(){
@@ -552,6 +571,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.getAnnouncement();
 			// #ifdef APP-PLUS
 			that.isUpdate(false);
 			// #endif
@@ -1232,6 +1252,26 @@
 			},
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			},
+			getAnnouncement(){
+				var that = this;
+				Net.request({
+					url: API.GetUpdateUrl(),
+					header: {
+							'content-type': 'application/json'
+						},
+					method: 'get',
+					success: function(res) {
+						that.announcement = res.data.announcement;
+						if(that.announcement!=""){
+							that.isAnnouncement=true;
+						}
+						
+					},
+					fail:function(res){
+						
+					}
+				})
 			},
 			isUpdate(Status) {
 				var that = this;
