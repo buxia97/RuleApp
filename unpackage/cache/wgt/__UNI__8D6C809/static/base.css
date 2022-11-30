@@ -822,7 +822,7 @@ page{
 	width: 100%;
 	height: 100vh;
 	position: fixed;
-	z-index: 1100;
+	z-index: 2000;
 	top: 0;
 	left: 0;
 }
@@ -831,7 +831,7 @@ page{
 	width: 100%;
 	height: 100vh;
 	position: fixed;
-	z-index: 1101;
+	z-index: 2001;
 	top: 0;
 	left: 0;
 	opacity: 0.5;
@@ -840,7 +840,7 @@ page{
 	width: 100%;
 	position: absolute;
 	top: 30%;
-	z-index: 1102;
+	z-index: 2002;
 }
 .update-main{
 	background-color: #fff;
@@ -1883,4 +1883,40 @@ page{
 	font-size: 30px;
 	line-height: 80upx;
 	margin: 0 auto 15upx auto;
+}
+.announcement{
+	position: fixed;
+	top: 30%;
+	width: 100%;
+	z-index: 1500;
+}
+.announcement-main{
+	background-color: #fff;
+	margin: 0 auto;
+	width: 600upx;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	padding: 30upx 36upx;
+	border-radius: 20upx;
+}
+.announcement-title{
+	height: 50upx;
+	line-height: 50upx;
+	font-size: 36upx;
+	font-weight: bold;
+	text-align: center;
+	position: relative;
+}
+.announcement-title text{
+	position: absolute;
+	right: 0;
+}
+.announcement-concent{
+	height:200upx;
+	padding: 20upx;
+	background: #f9f9f9;
+	margin:20upx 0upx;
+	overflow: auto;
+}
+.announcement-btn{
+	text-align: center;
 }
