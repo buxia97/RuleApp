@@ -1890,6 +1890,15 @@ page{
 	width: 100%;
 	z-index: 1500;
 }
+.announcement-bg{
+	background-color: #000;
+	opacity: 0.3;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	height: 100vh;
+}
 .announcement-main{
 	background-color: #fff;
 	margin: 0 auto;
@@ -1897,6 +1906,8 @@ page{
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 	padding: 30upx 36upx;
 	border-radius: 20upx;
+	position: relative;
+	z-index: 10;
 }
 .announcement-title{
 	height: 50upx;

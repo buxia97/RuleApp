@@ -376,7 +376,10 @@
 		</view>
 		<!--加载遮罩结束-->
 		<!--弹窗公告-->
-		<view class="announcement" v-if="isAnnouncement">
+		<view class="announcement" v-if="isAnnouncement&&Update!=1">
+			<view class="announcement-bg" @tap="isAnnouncement=false">
+				
+			</view>
 			<view class="announcement-main">
 				<view class="announcement-title">
 					网站公告
@@ -1263,7 +1266,7 @@
 					method: 'get',
 					success: function(res) {
 						that.announcement = res.data.announcement;
-						if(that.announcement!=""){
+						if(that.announcement!=""||res.data.announcement){
 							that.isAnnouncement=true;
 						}
 						
