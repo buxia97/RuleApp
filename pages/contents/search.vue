@@ -25,9 +25,11 @@
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 					<text>评论</text>
 				</view>
+				<!--  #endif -->
 				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
 					<text>用户</text>
 				</view>

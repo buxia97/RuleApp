@@ -2,9 +2,16 @@
 	<view class="user">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="action" @tap="backHome">
+					<text class="cuIcon-home"></text>
+				</view>
+				<!--  #endif -->
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					文章详情
 				</view>
@@ -580,6 +587,11 @@
 						that.bannerAdsInfo = that.bannerAds[rand];
 					}
 				}
+			},
+			backHome(){
+				uni.switchTab({
+					url: '/pages/home/home'
+				});
 			},
 			back(){
 				uni.navigateBack({

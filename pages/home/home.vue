@@ -523,7 +523,6 @@
 			var title = API.GetAppName();
 			var data = {
 				title: title,
-				path: '/page/home/home'
 			}
 			
 			return data;
@@ -534,7 +533,6 @@
 			var title = API.GetAppName();
 			var data = {
 				title: title,
-				path: '/page/home/home'
 			}
 			
 			return data;

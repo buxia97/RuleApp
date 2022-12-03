@@ -69,7 +69,7 @@
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
-								{{userInfo.mail}}
+								{{userInfo.mail || "未设置邮箱"}}
 							</view>
 						</view>
 						
@@ -115,6 +115,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/inbox')">
@@ -127,6 +128,7 @@
 						</view>
 					</waves>
 				</view>
+				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/usermark')">
