@@ -15,13 +15,17 @@ var requestHandler = {
     var data = requestHandler.data;
     var url = requestHandler.url;
     var method = requestHandler.method;
+	var header = null;
+	if(API.getKey()!=""){
+		var header = {
+			"Accept": "application/json; charset=utf-8", 
+			"key":API.getKey()
+		}
+	}
     uni.request({
       url: url,
       data: data,
-	  header:{
-	  	"Accept": "application/json; charset=utf-8", 
-	  	"key":API.getKey()
-	  },
+	  header:header,
       method: method,
       success: function (res) {     
         requestHandler.success(res)
