@@ -130,11 +130,13 @@
 				Net.request({
 					
 					url: API.userRegister(),
-					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					data:{
+						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						setTimeout(function () {

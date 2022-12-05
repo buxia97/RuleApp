@@ -15,12 +15,15 @@ var requestHandler = {
     var data = requestHandler.data;
     var url = requestHandler.url;
     var method = requestHandler.method;
-	var header = null;
+	var header = {
+		'Content-Type':'application/x-www-form-urlencoded'
+	};
+	if(requestHandler.header){
+		header = requestHandler.header;
+	}
 	if(API.getKey()!=""){
-		var header = {
-			"Accept": "application/json; charset=utf-8", 
-			"key":API.getKey()
-		}
+		header.Accept = "application/json; charset=utf-8"
+		header.key = API.getKey();
 	}
     uni.request({
       url: url,

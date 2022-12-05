@@ -186,12 +186,12 @@
 					url: API.userEdit(),
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"token":that.token
+						"token":that.token,
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
