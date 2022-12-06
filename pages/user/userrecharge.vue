@@ -35,8 +35,8 @@
 					</view>
 					<view class="userrecharge-btn">
 						<text class="cu-btn bg-cyan radius" @tap="dtImg">保存二维码</text>
-						<text class="cu-btn bg-yellow radius" v-if="payType==1" @tap="toAlipay()">打开支付宝</text>
-						<text class="cu-btn bg-yellow radius" v-else @tap="toWxpay()">打开微信</text>
+						<text class="cu-btn bg-yellow radius" v-if="payType=='0'" @tap="toAlipay()">打开支付宝</text>
+						<text class="cu-btn bg-yellow radius" v-if="payType=='1'" @tap="toWxpay()">打开微信</text>
 					</view>
 				</block>
 			</block>

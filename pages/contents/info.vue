@@ -1210,6 +1210,22 @@
 				
 				// #endif
 			},
+			goAds(data){
+				var that = this;
+				var url = data.url;
+				var type = data.urltype;
+				// #ifdef APP-PLUS
+				if(type==1){
+					plus.runtime.openURL(url);
+				}
+				if(type==0){
+					plus.runtime.openWeb(url);
+				}
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			},
 			ToShare(){
 				
 				var that = this;
