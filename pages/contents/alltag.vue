@@ -130,7 +130,7 @@
 						"limit":50,
 						"page":page,
 						"searchKey":that.searchText,
-						"order":"count"
+						"order":"order"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

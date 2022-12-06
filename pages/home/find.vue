@@ -259,6 +259,7 @@
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":15,
 						"page":1,
+						"order":"order"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -278,6 +279,22 @@
 					fail: function(res) {
 					}
 				})
+			},
+			goAds(data){
+				var that = this;
+				var url = data.url;
+				var type = data.urltype;
+				// #ifdef APP-PLUS
+				if(type==1){
+					plus.runtime.openURL(url);
+				}
+				if(type==0){
+					plus.runtime.openWeb(url);
+				}
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 			getTagList(){
 				var that = this;

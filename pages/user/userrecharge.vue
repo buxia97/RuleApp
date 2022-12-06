@@ -166,8 +166,7 @@
 				
 				that.token = localStorage.getItem('token');
 			}
-			that.isToPay = 0;
-			that.codeImg = "";
+			
 			that.getVipInfo();
 		},
 		onLoad() {
@@ -187,6 +186,7 @@
 				that.payType = i;
 				that.num="";
 				that.isToPay=0;
+				that.codeImg = "";
 			},
 			isPositiveInteger(s){
 			     var re = /^[0-9]+$/ ;

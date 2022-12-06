@@ -112,6 +112,7 @@
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"limit":100,
 						"page":1,
+						"order":"order"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
