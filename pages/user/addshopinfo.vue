@@ -261,6 +261,7 @@
 				that.price=userShopinfo.price;
 				that.num=userShopinfo.num;
 				that.value=userShopinfo.value;
+				that.vipDiscount=userShopinfo.vipDiscount;
 			}
 		},
 		onLoad() {

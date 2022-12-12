@@ -34,6 +34,12 @@
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
+				<view class="data-select" v-if="type=='publish'">
+					<text :class="dataSelect==0?'act':''" @tap="toSelect(0)">全部</text>
+					<text :class="dataSelect==1?'act':''" @tap="toSelect(1)">推荐</text>
+					<text :class="dataSelect==2?'act':''" @tap="toSelect(2)">置顶</text>
+					<text :class="dataSelect==3?'act':''" @tap="toSelect(3)">轮播</text>
+				</view>
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
 					<view class="content">
 						<view class="desc">
@@ -53,6 +59,8 @@
 							<text class="text-grey radius" v-else  @tap="rmRecommend(item.cid)">取消推荐</text>
 							<text class="text-green radius" v-if="item.istop==0"  @tap="addTop(item.cid)">置顶</text>
 							<text class="text-grey radius" v-else  @tap="rmTop(item.cid)">取消置顶</text>
+							<text class="text-green radius" v-if="item.isswiper==0"  @tap="addSwiper(item.cid)">轮播</text>
+							<text class="text-grey radius" v-else  @tap="rmSwiper(item.cid)">取消轮播</text>
 							<text class="text-blue radius" @tap="setFields(item.cid,item.abcimg)">图文类型</text>
 						</block>
 						
@@ -137,6 +145,7 @@
 					},
 				],
 				curCid:"",
+				dataSelect:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -215,6 +224,14 @@
 				that.isLoad=0;
 				that.getContentsList(false);
 			},
+			toSelect(i){
+				var that = this;
+				that.dataSelect = i;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				that.getContentsList(false);
+			},
 			getContentsList(isPage){
 				var that = this;
 				if(that.token==""){
@@ -229,6 +246,15 @@
 				var data = {
 					"type":"post",
 					"status":that.type
+				}
+				if(that.dataSelect==1){
+					data.isrecommend = 1;
+				}
+				if(that.dataSelect==2){
+					data.istop = 1;
+				}
+				if(that.dataSelect==3){
+					data.isswiper = 1;
 				}
 				var page = that.page;
 				if(isPage){
@@ -661,6 +687,128 @@
 				            
 				            Net.request({
 				            	url: API.toTop(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page=1;
+										that.moreText="加载更多";
+										that.isLoad=0;
+				            			that.getContentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			addSwiper(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"isswiper":1,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要轮播该文章吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.toSwiper(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page=1;
+										that.moreText="加载更多";
+										that.isLoad=0;
+				            			that.getContentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			rmSwiper(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"isswiper":0,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要取消轮播该文章吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.toSwiper(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

@@ -540,6 +540,25 @@
 		// #endif
 		onShow(){
 			var that = this;
+			// #ifdef MP-BAIDU
+			//预留百度小程序TDK
+			this.requestTask.then( requestData => {
+				// 可以直接通过框架提供的 getData 方法获取到 data 字段值; 也可以通过 this.data.xxx 获取
+				let res = this.getData('data');
+				swan.setPageInfo({
+					title: res.title,
+					keywords: res.keywords,
+					description: res.description,
+					articleTitle: res.articleTitle,
+					success: res => {
+						console.log('setPageInfo success');
+					},
+					fail: err => {
+						console.log('setPageInfo fail', err);
+					}
+				})
+			})
+			// #endif
 			// #ifdef APP-PLUS || H5
 			
 			that.getAdsCache();
@@ -707,7 +726,7 @@
 			loading(){
 				var that = this;
 				that.page = 1;
-				that.getSwiper(API.GetSwiperid());
+				that.getSwiper();
 				that.getTopPic();
 				that.getRecommend();
 				that.getMetaList();
@@ -765,18 +784,19 @@
 					that.Topic = JSON.parse(localStorage.getItem('Topic'));
 				}
 			},
-			getSwiper(id){
+			getSwiper(){
 				var that = this;
 				var data = {
-					"mid":id
+					"type":"post",
+					"isswiper":1
 				}
-				
 				Net.request({
-					url: API.getMetaContents(),
+					url: API.getContentsList(),
 					data:{
 						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":4,
+						"limit":8,
 						"page":1,
+						"order":"modified"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

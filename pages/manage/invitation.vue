@@ -47,7 +47,7 @@
 		<view class="cu-modal LinksModal" :class="modalName=='tokenModal'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">生成充值码</view>
+					<view class="content">生成邀请码</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>

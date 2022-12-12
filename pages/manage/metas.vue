@@ -8,9 +8,11 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					标签及分类
 				</view>
-				<view class="action">
-					
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="action" @tap="toAdd">
+					<text class="cuIcon-add"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -30,6 +32,14 @@
 					<text>标签</text>
 				</view>
 			</view>
+			<!--  #ifdef MP -->
+			<view class="all-btn">
+				<view class="user-btn flex flex-direction">
+					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toAdd">创建分类标签</button>
+					
+				</view>
+			</view>
+			<!--  #endif -->
 			<view class="no-data" v-if="metaList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
@@ -313,7 +323,14 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '/pages/manage/metasedit?mid='+id
+					url: '/pages/manage/metasedit?type=edit&mid='+id
+				});
+			},
+			toAdd(){
+				var that = this;
+				
+				uni.navigateTo({
+					url: '/pages/manage/metasedit?type=add'
 				});
 			},
 			searchTag(){

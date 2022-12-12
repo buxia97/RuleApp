@@ -1931,3 +1931,25 @@ page{
 .announcement-btn{
 	text-align: center;
 }
+.meta-type{
+	padding: 5px 12px;
+	border: 2upx solid #0081ff;
+	color: #0081ff;
+	margin-left: 20upx;
+}
+.meta-type.act{
+	background: #0081ff;
+	color: #fff;
+}
+.data-select{
+	text-align: center;
+	margin-top: 20upx;
+}
+.data-select text{
+	color: #666;
+	margin: 0upx 15upx;
+}
+.data-select text.act{
+	color: #000;
+	font-weight: bold;
+}

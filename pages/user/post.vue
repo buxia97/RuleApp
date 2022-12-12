@@ -579,19 +579,20 @@
 							   'token': that.token
 							  },
 							  success: function (uploadFileRes) {
-								  if(i==tempFilePaths.length-1){
+								  let count = 0;
+								  count++;
+								  if(count==tempFilePaths.length){
 									  setTimeout(function () {
 									  	uni.hideLoading();
 									  }, 1000);
 								  }
-								  console.log(JSON.stringify(uploadFileRes))
-								var data = JSON.parse(uploadFileRes.data);
-								//var data = uploadFileRes.data;
-								uni.showToast({
-									title: data.msg,
-									icon: 'none'
-								})
-								if(data.code==1){
+									var data = JSON.parse(uploadFileRes.data);
+									//var data = uploadFileRes.data;
+									uni.showToast({
+										title: data.msg,
+										icon: 'none'
+									})
+									if(data.code==1){
 									   //插入文章
 										var h = "";
 										if(that.text!=""){

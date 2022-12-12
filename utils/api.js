@@ -1,5 +1,5 @@
-var API_URL = 'https://api.ruletree.club/';
-//var API_URL = 'http://127.0.0.1zh';
+//var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=XX5SFavQ';
 
@@ -28,8 +28,6 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 
-//首页图片轮播,后面的数字为mid，为typecho数据库的标签和分类id
-var swiperid = 394; 
 
 //使用攻略文章id，typecho文章表cid
 var raiders = 1518
@@ -76,9 +74,6 @@ module.exports = {
 	},
 	GetPageRule:function(){
 		return pageRule;
-	},
-	GetSwiperid:function(){
-		return swiperid;
 	},
 	GetRaiders:function(){
 		return raiders;
@@ -238,6 +233,9 @@ module.exports = {
 	editMeta:function(){
 		return API_URL + 'typechoMetas/editMeta';
 	},
+	addMeta:function(){
+		return API_URL + 'typechoMetas/addMeta';
+	},
 	
 	getContentsList:function(){
 		return API_URL + 'typechoContents/contentsList';
@@ -278,6 +276,10 @@ module.exports = {
 	//文章置顶
 	toTop:function(){
 		return API_URL + 'typechoContents/addTop';
+	},
+	//文章轮播
+	toSwiper:function(){
+		return API_URL + 'typechoContents/addSwiper';
 	},
 	//设置自定义字段
 	setFields:function(){

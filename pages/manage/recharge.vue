@@ -175,9 +175,9 @@
 						})
 						if(res.data.code==1){
 							
-							var timer = setTimeout(function() {
-								that.back();
-							}, 1000)
+							// var timer = setTimeout(function() {
+							// 	that.back();
+							// }, 1000)
 							
 						}
 					},
