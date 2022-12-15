@@ -540,6 +540,7 @@
 		// #endif
 		onShow(){
 			var that = this;
+			
 			// #ifdef MP-BAIDU
 			//预留百度小程序TDK
 			this.requestTask.then( requestData => {
@@ -587,6 +588,7 @@
 		},
 		onLoad() {
 			var that = this;
+			// that.getCID();
 			that.loading();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -633,6 +635,19 @@
 			}
 		},
 		methods: {
+			getCID() {
+				let cid = ''
+				// #ifdef APP-PLUS
+				let pinf = plus.push.getClientInfo();
+				cid = pinf.clientid;
+				// #endif
+				//return cid
+				
+				uni.showToast({
+					title: "用户CID是"+cid,
+					icon: 'none'
+				})
+			},
 			//获取并缓存广告
 			getAds(){
 				var that = this;

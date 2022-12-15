@@ -10,8 +10,10 @@
         "modules" : {
             "Share" : {},
             "OAuth" : {},
-            "Payment" : {},
-            "Statistic" : {}
+            "Statistic" : {},
+            "Push" : {},
+            "Camera" : {},
+            "Barcode" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -51,7 +53,15 @@
             },
             /* ios打包配置 */
             "sdkConfigs" : {
-                "push" : {},
+                "push" : {
+                    "unipush" : {
+                        "icons" : {
+                            "small" : {
+                                "xxhdpi" : "unpackage/res/icons/72x72.png"
+                            }
+                        }
+                    }
+                },
                 "ad" : {},
                 "share" : {},
                 "oauth" : {

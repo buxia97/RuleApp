@@ -9,7 +9,20 @@
 		// #endif
 		onLaunch: function() {
 			// #ifdef APP-PLUS
-			 uni.hideTabBar({
+			//监听Push消息
+			const _self = this;  
+			const _handlePush = function(message) {  
+				// TODO 
+				uni.showToast({
+					title: message,
+					icon: 'none'
+				})
+			};  
+			plus.push.addEventListener('click', _handlePush);  
+			plus.push.addEventListener('receive', _handlePush);
+			
+			//app禁用默认tab
+			uni.hideTabBar({
 				animation: false
 			})
 			// #endif
