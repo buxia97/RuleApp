@@ -54,8 +54,8 @@
 						</view>
 					</view>
 					<view class="myAds-btn">
-						<text class="text-red radius" @tap="toAudit(item.aid)">快捷审核</text>
-						<text class="text-green radius" @tap="toRenewal(item)">续期</text>
+						<text class="text-red radius" @tap="toAudit(item.aid)" v-if="status==0">快捷审核</text>
+						<text class="text-green radius" @tap="toRenewal(item)" v-if="status==1">续期</text>
 						<text class="text-blue radius" @tap="goEdit(item)">编辑</text>
 						<text class="text-blue radius" @tap="toDelete(item.aid)">删除</text>
 					</view>

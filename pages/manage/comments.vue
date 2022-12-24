@@ -340,7 +340,7 @@
 					"token":token
 				}
 				uni.showModal({
-				    title: '确定要删除该文章吗',
+				    title: '确定要删除该评论吗',
 				    success: function (res) {
 				        if (res.confirm) {
 				            uni.showLoading({

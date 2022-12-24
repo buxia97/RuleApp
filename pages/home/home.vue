@@ -588,7 +588,7 @@
 		},
 		onLoad() {
 			var that = this;
-			// that.getCID();
+			that.getCID();
 			that.loading();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -635,17 +635,50 @@
 			}
 		},
 		methods: {
+			//获取客户端id用于消息通知
 			getCID() {
 				let cid = ''
 				// #ifdef APP-PLUS
 				let pinf = plus.push.getClientInfo();
 				cid = pinf.clientid;
+				if(cid&&cid!=''){
+					that.setClientId(cid);
+				}
 				// #endif
-				//return cid
-				
-				uni.showToast({
-					title: "用户CID是"+cid,
-					icon: 'none'
+			},
+			setClientId(cid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('token')){
+					
+					token = localStorage.getItem('token');
+				}else{
+					return false;
+				}
+				Net.request({
+					
+					url: API.setClientId(),
+					data:{
+						"clientId":cid,
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
 				})
 			},
 			//获取并缓存广告

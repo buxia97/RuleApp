@@ -1,4 +1,4 @@
-var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://127.0.0.1:8081/';
 //var API_URL = 'http://127.0.0.1:8081/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=Br1YNqz9';
@@ -183,6 +183,9 @@ module.exports = {
 	invitationExcel:function(){
 		return API_URL + 'typechoUsers/invitationExcel';
 	},
+	setClientId:function(){
+		return API_URL + 'typechoUsers/setClientId';
+	},
 	
 	
 	getMarkList:function(){
@@ -284,6 +287,9 @@ module.exports = {
 	//设置自定义字段
 	setFields:function(){
 		return API_URL + 'typechoContents/setFields';
+	},
+	contentConfig:function(){
+		return API_URL + 'typechoContents/contentConfig';
 	},
 	//下面这个方法涉及图片上传，自己修改定义接口路径
 	upload:function(){

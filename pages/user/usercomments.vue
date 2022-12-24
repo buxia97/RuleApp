@@ -45,6 +45,7 @@
 											</view>
 										</view>
 									</view>
+									<text class="cu-btn text-red comment-delete" v-if="allowDelete==1"  @tap="toDelete(item.coid)">删除</text>
 								</view>
 					
 								
@@ -97,6 +98,7 @@
 				
 				owo:owo,
 				owoList:[],
+				allowDelete:0,
 				
 			}
 		},
@@ -130,6 +132,7 @@
 			}
 			that.owoList = owoList;
 			// #endif
+			that.contentConfig();
 			that.getCommentsList(false);
 		},
 		methods:{
@@ -166,6 +169,26 @@
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
+			},
+			contentConfig(){
+				var that = this;
+				Net.request({
+					
+					url: API.contentConfig(),
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.allowDelete = res.data.data.allowDelete;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			getCommentsList(isPage){
 				var that = this;
@@ -269,7 +292,64 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要删除该评论吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.commentsDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.getCommentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
 		}
 	}
 </script>

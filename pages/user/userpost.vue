@@ -37,8 +37,8 @@
 				<view class="no-data" v-if="contentsList.length==0">
 					<text class="cuIcon-text"></text>暂时没有数据
 				</view>
-				<view class="cu-item shadow"  v-for="(item,index) in contentsList" @tap="toEdit(item.cid)" :key="index">
-					<view class="content">
+				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
+					<view class="content"  @tap="toEdit(item.cid)">
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>
 						<view class="desc">
@@ -49,6 +49,10 @@
 								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 							</view>
 						</view>
+					</view>
+					<view class="manage-btn" style="text-align: right;">
+						<text class="text-red radius"  @tap="toDelete(item.cid)" v-if="allowDelete==1">删除</text>
+						
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
@@ -87,6 +91,8 @@
 				
 				isLoading:0,
 				type:"waiting",
+				
+				allowDelete:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -117,7 +123,7 @@
 				that.getContentsList(false);
 			}
 			
-			
+			that.contentConfig();
 		},
 		onLoad() {
 			var that = this;
@@ -211,6 +217,86 @@
 						that.isLoad=0;
 					}
 				})
+			},
+			contentConfig(){
+				var that = this;
+				Net.request({
+					
+					url: API.contentConfig(),
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.allowDelete = res.data.data.allowDelete;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要删除该文章吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.contentsDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.page=1;
+				            			that.moreText="加载更多";
+				            			that.isLoad=0;
+				            			that.getContentsList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
 			},
 			toPost(){
 				var that = this;
