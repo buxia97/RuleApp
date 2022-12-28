@@ -588,7 +588,7 @@
 		},
 		onLoad() {
 			var that = this;
-			that.getCID();
+			
 			that.loading();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -624,7 +624,7 @@
 			// #ifdef APP-PLUS
 			 that.appStartImg();
 			 //#endif
-			 
+			 that.getCID();
 			 
 		},
 		onReachBottom() {
