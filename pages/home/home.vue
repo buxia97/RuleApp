@@ -590,7 +590,7 @@
 			}
 			that.userStatus();
 			that.unreadNum();
-			
+			that.getCID();
 			
 		},
 		onLoad() {
@@ -631,7 +631,6 @@
 			// #ifdef APP-PLUS
 			 that.appStartImg();
 			 //#endif
-			 that.getCID();
 			 
 		},
 		onReachBottom() {
@@ -644,11 +643,12 @@
 		methods: {
 			//获取客户端id用于消息通知
 			getCID() {
+				var that = this;
 				let cid = ''
 				// #ifdef APP-PLUS
 				let pinf = plus.push.getClientInfo();
 				cid = pinf.clientid;
-				if(cid&&cid!=''){
+				if(cid){
 					that.setClientId(cid);
 				}
 				// #endif

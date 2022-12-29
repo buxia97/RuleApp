@@ -304,6 +304,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						console.log(JSON.stringify(res));
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);

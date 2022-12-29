@@ -1565,6 +1565,10 @@ page{
 	background-color: #ba21a8;
 	color: #fff;
 }
+.userlv.bg-red {
+    background-color: #e54d42;
+    color: #ffffff;
+}
 .userinfo-lv{
 	padding-top: 10upx;
 }
@@ -1952,4 +1956,25 @@ page{
 .data-select text.act{
 	color: #000;
 	font-weight: bold;
+}
+.cu-bar .action.header-btn>text.cuIcon-notice{
+	margin-right: 0.5em !important;
+}
+.cu-bar .action.header-btn text{
+	font-size: 40upx !important;
+	position: relative;
+}
+.cu-bar .action.header-btn text .noticeSum{
+	position: absolute;
+	opacity: 0.9;
+	font-size: 24upx !important;
+	height: 50upx;
+	width: 50upx;
+	line-height: 50upx;
+	text-align: center;
+	top: -20upx;
+	right: -20upx;
+	border-radius: 50%;
+	transform:scale(0.8);
+	-webkit-transform:scale(0.8);
 }

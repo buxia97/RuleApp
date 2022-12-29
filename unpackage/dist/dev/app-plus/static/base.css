@@ -580,6 +580,13 @@ page{
 	border-radius: 20upx;
 	position: relative;
 }
+.setImage{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 150;
+	border-radius: 5px;
+}
 .image-info{
 	position: absolute;
 	bottom: 30upx;
@@ -627,6 +634,8 @@ page{
 	text-align: center;
 	height: 80upx;
 	border-bottom: solid 1px #f3f3f3;
+	position: relative;
+	z-index: 10;
 }
 .search-type-box{
 	color: #999;
@@ -813,7 +822,7 @@ page{
 	width: 100%;
 	height: 100vh;
 	position: fixed;
-	z-index: 1100;
+	z-index: 2000;
 	top: 0;
 	left: 0;
 }
@@ -822,7 +831,7 @@ page{
 	width: 100%;
 	height: 100vh;
 	position: fixed;
-	z-index: 1101;
+	z-index: 2001;
 	top: 0;
 	left: 0;
 	opacity: 0.5;
@@ -831,7 +840,7 @@ page{
 	width: 100%;
 	position: absolute;
 	top: 30%;
-	z-index: 1102;
+	z-index: 2002;
 }
 .update-main{
 	background-color: #fff;
@@ -1556,6 +1565,10 @@ page{
 	background-color: #ba21a8;
 	color: #fff;
 }
+.userlv.bg-red {
+    background-color: #e54d42;
+    color: #ffffff;
+}
 .userinfo-lv{
 	padding-top: 10upx;
 }
@@ -1834,4 +1847,134 @@ page{
 	color: #fff;
 	text-align: center;
 	line-height: 40upx;
+}
+.ads-more{
+	margin-top:20upx;
+	font-size:26upx;
+	color:#666;
+	text-align:right;
+}
+.imagetoday-search input{
+	padding-left: 30upx;
+}
+.imagetoday-search .cuIcon-search{
+	font-size: 34upx;
+	margin: 0px;
+	padding: 20px;
+	color: #333;
+}
+.search-close{
+	width: 34upx;
+	overflow: hidden;
+	border-radius: 50%;
+	line-height: 34upx;
+	text-align: center;
+	height: 34upx;
+	margin-right: 20upx;
+	background: #ccc;
+}
+.search-close text{
+	margin: 0 !important;
+	padding: 0;
+}
+.userLoginstatus .cu-dialog{
+	width: 500upx;
+}
+.userLoginstatus-i{
+	width: 80upx;
+	height: 80upx;
+	border-radius: 50%;
+	font-size: 30px;
+	line-height: 80upx;
+	margin: 0 auto 15upx auto;
+}
+.announcement{
+	position: fixed;
+	top: 30%;
+	width: 100%;
+	z-index: 1500;
+}
+.announcement-bg{
+	background-color: #000;
+	opacity: 0.3;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	height: 100vh;
+}
+.announcement-main{
+	background-color: #fff;
+	margin: 0 auto;
+	width: 600upx;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	padding: 30upx 36upx;
+	border-radius: 20upx;
+	position: relative;
+	z-index: 10;
+}
+.announcement-title{
+	height: 50upx;
+	line-height: 50upx;
+	font-size: 36upx;
+	font-weight: bold;
+	text-align: center;
+	position: relative;
+}
+.announcement-title text{
+	position: absolute;
+	right: 0;
+}
+.announcement-concent{
+	height:200upx;
+	padding: 20upx;
+	background: #f9f9f9;
+	margin:20upx 0upx;
+	overflow: auto;
+}
+.announcement-btn{
+	text-align: center;
+}
+.meta-type{
+	padding: 5px 12px;
+	border: 2upx solid #0081ff;
+	color: #0081ff;
+	margin-left: 20upx;
+}
+.meta-type.act{
+	background: #0081ff;
+	color: #fff;
+}
+.data-select{
+	text-align: center;
+	margin-top: 20upx;
+}
+.data-select text{
+	color: #666;
+	margin: 0upx 15upx;
+}
+.data-select text.act{
+	color: #000;
+	font-weight: bold;
+}
+.cu-bar .action.header-btn>text.cuIcon-notice{
+	margin-right: 0.5em !important;
+}
+.cu-bar .action.header-btn text{
+	font-size: 40upx !important;
+	position: relative;
+}
+.cu-bar .action.header-btn text .noticeSum{
+	position: absolute;
+	opacity: 0.9;
+	font-size: 24upx !important;
+	height: 50upx;
+	width: 50upx;
+	line-height: 50upx;
+	text-align: center;
+	top: -20upx;
+	right: -20upx;
+	border-radius: 50%;
+	transform:scale(0.8);
+	-webkit-transform:scale(0.8);
 }

@@ -106,6 +106,52 @@
 					delta: 1
 				});
 			},
+			getCID() {
+				var that = this;
+				let cid = ''
+				// #ifdef APP-PLUS
+				let pinf = plus.push.getClientInfo();
+				cid = pinf.clientid;
+				if(cid){
+					that.setClientId(cid);
+				}
+				// #endif
+			},
+			setClientId(cid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('token')){
+					
+					token = localStorage.getItem('token');
+				}else{
+					return false;
+				}
+				Net.request({
+					
+					url: API.setClientId(),
+					data:{
+						"clientId":cid,
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+			
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 			login() {
 				var that = this;
 				if (this.password == ""||this.userName == "") {
@@ -148,6 +194,7 @@
 							//保存用户信息
 							localStorage.setItem('userinfo',JSON.stringify(res.data.data));
 							localStorage.setItem('token',res.data.data.token);
+							that.getCID();
 							var timer = setTimeout(function() {
 								uni.reLaunch({
 									url: '/pages/home/home'
