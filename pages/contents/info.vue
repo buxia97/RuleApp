@@ -114,7 +114,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
@@ -136,7 +136,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
@@ -155,7 +155,7 @@
 										付费阅读
 									</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>

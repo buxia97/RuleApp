@@ -16,13 +16,19 @@
 					账户
 				</view>
 				<!--  #ifdef H5 -->
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
+				<view class="action header-btn">
+					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
+					</text>
+					<text class="cuIcon-search" @tap="toSearch"></text>
 				</view>
 				<!--  #endif -->
 				<!--  #ifdef APP-PLUS -->
-				<view class="action" @tap="toScan">
-					<text class="cuIcon-scan"></text>
+				<view class="action header-btn">
+					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
+					</text>
+					<text class="cuIcon-scan" @tap="toScan"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -309,6 +315,8 @@
 				
 				isLoginShow:false,
 				
+				noticeSum:0,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -340,6 +348,7 @@
 			}
 			that.getUserData();
 			that.userStatus();
+			that.unreadNum();
 			
 		},
 		onLoad() {
@@ -819,7 +828,33 @@
 			            return false;
 			        }
 			    }
-			}
+			},
+			unreadNum() {
+				var that = this;
+				Net.request({
+					
+					url: API.unreadNum(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.noticeSum = res.data.data;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		},
 		// #ifdef APP-PLUS
 		components: {

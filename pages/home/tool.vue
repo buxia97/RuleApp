@@ -16,8 +16,12 @@
 					工具
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
+				<view class="action header-btn">
+					
+					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
+					</text>
+					<text class="cuIcon-search" @tap="toSearch"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -223,6 +227,8 @@
 				isLoading:0,
 				raiders:API.GetRaiders(),
 				toolid:0,
+				
+				noticeSum:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -251,6 +257,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.userStatus();
+			that.unreadNum();
 			that.allCache();
 			
 		},
@@ -367,6 +374,32 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			unreadNum() {
+				var that = this;
+				Net.request({
+					
+					url: API.unreadNum(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.noticeSum = res.data.data;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 		},
 		// #ifdef APP-PLUS

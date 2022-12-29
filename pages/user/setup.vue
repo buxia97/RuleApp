@@ -122,6 +122,13 @@
 			},
 			closeLocal() {
 				var that = this
+				var userinfo = "";
+				var token = "";
+				//绕过用户状态
+				if(localStorage.getItem('userinfo')){
+					userinfo = localStorage.getItem('userinfo')
+					token = localStorage.getItem('token');
+				}
 				localStorage.clear();
 				uni.showToast({
 					title: '操作成功！',
@@ -130,6 +137,8 @@
 					position: 'bottom'
 				})
 				that.localdata = '0 KB'
+				localStorage.setItem('userinfo',userinfo);
+				localStorage.setItem('token',token);
 			},
 			get_cache_size() {
 				var that = this

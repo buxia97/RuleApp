@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					收到的回复
+					消息中心
 				</view>
 				<view class="action">
 					
@@ -18,36 +18,37 @@
 		<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
 			<view class="cu-item">
 				<view class="cu-list menu-avatar comment">
-					<view class="no-data" v-if="commentsList.length==0">
-						暂时没有回复
+					<view class="no-data" v-if="inboxList.length==0">
+						暂时没有消息
 					</view>
 					<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-						<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+						<view class="cu-item" v-for="(item,index) in inboxList" :key="index" v-if="inboxList.length>0">
 							<view class="cu-list menu-avatar comment">
 								<view class="cu-item">
 									<view class="cu-avatar round" :style="item.style"></view>
 									<view class="content">
-										<view class="text-grey">{{item.author}}
-										<!--  #ifdef H5 || APP-PLUS -->
-											<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
-											<!--  #endif -->
-											<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
-											<!--  #ifdef H5 || APP-PLUS -->
-											<block v-if="item.isvip==1">
-												<block v-if="item.vip==1">
+										<view class="text-grey">{{item.userJson.name}}
+											<block  v-if="item.type=='system'">
+												<text class="userlv bg-red">系统管理员</text>
+											</block>
+											<block  v-if="item.type=='comment'">
+											<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
+											<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
+											<block v-if="item.userJson.isvip>0">
+												<block v-if="item.userJson.vip==1">
 													<text class="isVIP bg-gradual-red">VIP</text>
 												</block>
 												<block v-else>
 													<text class="isVIP bg-yellow">VIP</text>
 												</block>
 											</block>
-											<!--  #endif -->
+											</block>
 										</view>
 										<view class="text-content text-df">
 											<rich-text :nodes="markHtml(item.text)"></rich-text>
 										</view>
-										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
+										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='comment'">
+											<view class="flex" @tap="toInfo(item.contentsInfo.cid,item.contenTitle)">
 												<view>{{item.contenTitle}}</view>
 												
 											</view>
@@ -55,7 +56,6 @@
 										<view class="margin-top-sm flex justify-between">
 											<view class="text-gray text-df">{{formatDate(item.created)}}</view>
 											<view>
-												<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
 											</view>
 										</view>
 									</view>
@@ -66,7 +66,7 @@
 						</view>
 					</view>
 					
-					<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
+					<view class="load-more" @tap="loadMore" v-if="inboxList.length>0">
 						<text>{{moreText}}</text>
 					</view>
 				</view>
@@ -102,7 +102,7 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				
-				commentsList:[],
+				inboxList:[],
 				
 				moreText:"加载更多",
 				page:1,
@@ -135,8 +135,10 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
-				that.getCommentsList(false);
+				that.getInboxList(false);
+				that.setRead();
 			}
+			
 			
 		},
 		onLoad() {
@@ -164,7 +166,7 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				if(that.isLoad==0){
-					that.getCommentsList(true);
+					that.getInboxList(true);
 				}
 			},
 			markHtml(text){
@@ -206,12 +208,8 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
-			getCommentsList(isPage){
+			getInboxList(isPage){
 				var that = this;
-				var data = {
-					"type":"comment",
-					"status":"approved"
-				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -226,12 +224,11 @@
 					return false
 				}
 				Net.request({
-					url: API.getCommentsList(),
+					url: API.getInbox(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":5,
+						"token":that.token,
+						"limit":8,
 						"page":page,
-						"token":that.token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -243,17 +240,17 @@
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
-								var commentsList = [];
+								var inboxList = [];
 								for(var i in list){
 									var arr = list[i];
-									arr.style = "background-image:url("+list[i].avatar+");"
-									commentsList.push(arr);
+									arr.style = "background-image:url("+list[i].userJson.avatar+");"
+									inboxList.push(arr);
 								}
 								if(isPage){
 									that.page++;
-									that.commentsList = that.commentsList.concat(commentsList);
+									that.inboxList = that.inboxList.concat(inboxList);
 								}else{
-									that.commentsList = commentsList;
+									that.inboxList = inboxList;
 								}
 							}else{
 								that.moreText="没有更多评论了";
@@ -306,7 +303,50 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			getUserLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankList = API.GetRankList();
+				return rankList[i];
+			},
+			getUserLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
+			},
+			setRead() {
+				var that = this;
+				Net.request({
+					
+					url: API.setRead(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 		}
 	}
 </script>

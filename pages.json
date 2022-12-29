@@ -369,6 +369,9 @@
 			"path": "pages/manage/ads"
 		},
 		{
+			"path": "pages/manage/senduser"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

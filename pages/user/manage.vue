@@ -167,6 +167,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/senduser')">
+							<view class="index-sort-i" style="background-color: #2889a6;">
+								<text class="cuIcon-light"></text>
+							</view>
+							<view class="index-sort-text">
+								发送消息
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<block v-if="group=='administrator'">

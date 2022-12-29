@@ -1,5 +1,5 @@
-//var API_URL = 'http://127.0.0.1:8081/';
-var API_URL = 'https://api.ruletree.club/';
+var API_URL = 'http://127.0.0.1:8081/';
+//var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=Br1YNqz9';
 
@@ -186,6 +186,20 @@ module.exports = {
 	setClientId:function(){
 		return API_URL + 'typechoUsers/setClientId';
 	},
+	//消息相关
+	getInbox:function(){
+		return API_URL + 'typechoUsers/inbox';
+	},
+	unreadNum:function(){
+		return API_URL + 'typechoUsers/unreadNum';
+	},
+	setRead:function(){
+		return API_URL + 'typechoUsers/setRead';
+	},
+	sendUser:function(){
+		return API_URL + 'typechoUsers/sendUser';
+	},
+	
 	
 	
 	getMarkList:function(){

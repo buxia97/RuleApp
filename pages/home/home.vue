@@ -16,8 +16,12 @@
 					首页
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
+				<view class="action header-btn">
+					
+					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
+					</text>
+					<text class="cuIcon-search" @tap="toSearch"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -502,6 +506,8 @@
 				bannerAdsInfo:null,
 				announcement:"",
 				isAnnouncement:false,
+				
+				noticeSum:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -583,6 +589,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.userStatus();
+			that.unreadNum();
 			
 			
 		},
@@ -871,8 +878,11 @@
 									
 								}
 								that.swiperList = swiper;
-								localStorage.setItem('swiperList',JSON.stringify(swiper));
+								
+							}else{
+								that.swiperList = [];
 							}
+							localStorage.setItem('swiperList',JSON.stringify(that.swiperList));
 						}
 					},
 					fail: function(res) {
@@ -906,8 +916,11 @@
 							if(list.length>0){
 							
 								that.recommendList = list;
-								localStorage.setItem('recommendList',JSON.stringify(list));
+								
+							}else{
+								that.recommendList = [];
 							}
+							localStorage.setItem('recommendList',JSON.stringify(that.recommendList));
 						}
 					},
 					fail: function(res) {
@@ -942,8 +955,11 @@
 									parent:0
 								}];
 								that.metaList = meta.concat(list);
-								localStorage.setItem('metaList',JSON.stringify(that.metaList));
+								
+							}else{
+								that.metaList = [];
 							}
+							localStorage.setItem('metaList',JSON.stringify(that.metaList));
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;
@@ -980,8 +996,11 @@
 							var list = res.data.data;
 							if(list.length>0){
 								that.Topic = list;
-								localStorage.setItem('Topic',JSON.stringify(that.Topic));
+								
+							}else{
+								that.Topic = [];
 							}
+							localStorage.setItem('Topic',JSON.stringify(that.Topic));
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;
@@ -1036,7 +1055,8 @@
 								}
 
 								that.topContents = contentsList;
-
+							}else{
+								that.topContents = [];
 							}
 							localStorage.setItem('topContents',JSON.stringify(that.topContents));
 						}
@@ -1233,6 +1253,32 @@
 					}
 				})
 			},
+			unreadNum() {
+				var that = this;
+				Net.request({
+					
+					url: API.unreadNum(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.noticeSum = res.data.data;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
 			
 			toForeverblog(){
 				var that = this;
@@ -1362,12 +1408,12 @@
 							that.versionTitle = res.data.version;
 							that.versionIntro = res.data.versionIntro;
 							if(Status){
-								uni.showToast({
-									title:"检测完成",
-									icon:'none',
-									duration: 1000,
-									position:'bottom',
-								});
+								// uni.showToast({
+								// 	title:"检测完成",
+								// 	icon:'none',
+								// 	duration: 1000,
+								// 	position:'bottom',
+								// });
 								
 							}
 							if(versionCode > version){
@@ -1440,6 +1486,20 @@
 			  text = text.replace(/&gt;/g, '>');
 			  text = text.replace(/&nbsp;/g, ' ');
 			  return text;
+			},
+			toLink(text){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: text
+				});
 			},
 			scanLogin(text){
 				var that = this;
