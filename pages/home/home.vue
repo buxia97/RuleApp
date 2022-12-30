@@ -547,25 +547,6 @@
 		onShow(){
 			var that = this;
 			
-			// #ifdef MP-BAIDU
-			//预留百度小程序TDK
-			this.requestTask.then( requestData => {
-				// 可以直接通过框架提供的 getData 方法获取到 data 字段值; 也可以通过 this.data.xxx 获取
-				let res = this.getData('data');
-				swan.setPageInfo({
-					title: res.title,
-					keywords: res.keywords,
-					description: res.description,
-					articleTitle: res.articleTitle,
-					success: res => {
-						console.log('setPageInfo success');
-					},
-					fail: err => {
-						console.log('setPageInfo fail', err);
-					}
-				})
-			})
-			// #endif
 			// #ifdef APP-PLUS || H5
 			
 			that.getAdsCache();
@@ -592,19 +573,6 @@
 			that.unreadNum();
 			that.getCID();
 			
-		},
-		onLoad() {
-			var that = this;
-			
-			that.loading();
-			// #ifdef APP-PLUS || MP
-			that.NavBar = this.CustomBar;
-			// #endif
-			that.getAnnouncement();
-			// #ifdef APP-PLUS
-			that.isUpdate(false);
-			// #endif
-			
 			// #ifdef APP-PLUS
 			//外部启动APP处理
 			var args= plus.runtime.arguments;  
@@ -623,8 +591,22 @@
 					that.scanLogin(arr[1]);
 				}
 			} 
-			
 			// #endif
+			
+		},
+		onLoad() {
+			var that = this;
+			
+			that.loading();
+			// #ifdef APP-PLUS || MP
+			that.NavBar = this.CustomBar;
+			// #endif
+			that.getAnnouncement();
+			// #ifdef APP-PLUS
+			that.isUpdate(false);
+			// #endif
+			
+			
 			setTimeout(function() {
 				that.isStart=true;
 			}, 5000); 

@@ -9,17 +9,26 @@
 		// #endif
 		onLaunch: function() {
 			// #ifdef APP-PLUS
-			//监听Push消息
-			const _self = this;  
-			const _handlePush = function(message) {  
-				// TODO 
-				uni.showToast({
-					title: message,
-					icon: 'none'
-				})
-			};  
-			plus.push.addEventListener('click', _handlePush);  
-			plus.push.addEventListener('receive', _handlePush);
+			
+			//点击系统通知的推送跳转到指定的界面
+			plus.push.addEventListener("click", function(msg) {
+				var payload = msg.payload;
+				if(payload=="system"){
+					setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/user/inbox'
+						})
+					}, 1000)
+				}
+				if(payload.indexOf("comment")!=-1){
+					setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/user/inbox'
+						})
+					}, 1000)
+				}
+				plus.push.clear();
+			}, false);
 			
 			//app禁用默认tab
 			uni.hideTabBar({
