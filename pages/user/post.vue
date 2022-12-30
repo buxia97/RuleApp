@@ -1,5 +1,5 @@
 <template>
-	<view class="post"  :style="'height:'+screenHeight+'px'">
+	<view class="post">
 		<view class="header" :style="[{height:CustomBar + 'px'},{top:jpHeight + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -82,7 +82,7 @@
 				<text class="cuIcon-tag" :class="tag!=''?'text-blue':''" @tap="addTag"></text>
 				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
 				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
-				<text class="cuIcon-read" @tap="toIsShow(false)"></text>
+				<text class="cuIcon-read" :class="isShow?'text-blue':''" @tap="toIsShow(false)"></text>
 				
 			</view>
 			<view class="cu-form-group">
@@ -345,12 +345,20 @@
 			// #ifdef APP-PLUS
 			inputHeight = screenHeight - statusHeight - 250;
 			// #endif
+			// #ifdef H5
+			inputHeight = 350;
+			// #endif
 			
 			that.screenHeight = screenHeight - that.NavBar;
 			that.postheight = inputHeight;
+			//
+			//that.poststyle = "height:200upx";
 			that.poststyle = "height:"+inputHeight+"px";
 			that.readstyle = "height:"+(inputHeight+30)+"px";
-			
+			// #ifdef H5
+			that.h5Keyboard();
+			// #endif
+			// #ifdef APP-PLUS
 			uni.onKeyboardHeightChange(res => {
 				//监听软键盘的高度 
 				//当点击软键盘自带的收起按钮的时候也就是会隐藏软键盘 这时候监听到的软键盘的高度就是0 、
@@ -358,13 +366,16 @@
 				if (res.height == 0) {
 				
 					that.focalize(res.height);
+					that.poststyle = "height:"+inputHeight+"px";
 					
 				} else {
 					that.curHeight=res.height;
-					
+					var keyHeight = inputHeight - res.height;
 					that.focus(res.height);
+					that.poststyle = "height:"+keyHeight+"px";
 				}
 			});
+			// #endif
 			localStorage.removeItem('clist')
 		},
 		methods: {

@@ -1,5 +1,5 @@
 <template>
-	<view class="post"  :style="'height:'+screenHeight+'px'">
+	<view class="post">
 		<view class="header" :style="[{height:CustomBar + 'px'},{top:jpHeight + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -56,7 +56,7 @@
 				<text class="cuIcon-picfill" @tap="upload"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
-				<text class="cuIcon-read" @tap="toIsShow"></text>
+				<text class="cuIcon-read" :class="isShow?'text-blue':''" @tap="toIsShow"></text>
 			</view>
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="商品介绍" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></textarea>
@@ -236,6 +236,9 @@
 			// #ifdef APP-PLUS
 			inputHeight = screenHeight - statusHeight - 302;
 			// #endif
+			// #ifdef H5
+			inputHeight = 300;
+			// #endif
 			
 			that.screenHeight = screenHeight - that.NavBar;
 			that.postheight = inputHeight;
@@ -249,11 +252,13 @@
 				if (res.height == 0) {
 				
 					that.focalize(res.height);
+					that.poststyle = "height:"+inputHeight+"px";
 					
 				} else {
 					that.curHeight=res.height;
-					
+					var keyHeight = inputHeight - res.height;
 					that.focus(res.height);
+					that.poststyle = "height:"+keyHeight+"px";
 				}
 			});
 			

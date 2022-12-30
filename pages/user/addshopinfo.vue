@@ -1,5 +1,5 @@
 <template>
-	<view class="post"  :style="'height:'+screenHeight+'px'">
+	<view class="post">
 		<view class="header" :style="[{height:CustomBar + 'px'},{top:jpHeight + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -278,6 +278,9 @@
 			// #ifdef APP-PLUS
 			inputHeight = screenHeight - statusHeight - 302;
 			// #endif
+			// #ifdef H5
+			inputHeight = 300;
+			// #endif
 			
 			that.screenHeight = screenHeight - that.NavBar;
 			that.postheight = inputHeight;
@@ -291,11 +294,13 @@
 				if (res.height == 0) {
 				
 					that.focalize(res.height);
+					that.poststyle = "height:"+inputHeight+"px";
 					
 				} else {
 					that.curHeight=res.height;
-					
+					var keyHeight = inputHeight - res.height;
 					that.focus(res.height);
+					that.poststyle = "height:"+keyHeight+"px";
 				}
 			})
 		},
