@@ -593,6 +593,7 @@
 								  let count = 0;
 								  count++;
 								  if(count==tempFilePaths.length){
+									  that.hideModal();
 									  setTimeout(function () {
 									  	uni.hideLoading();
 									  }, 1000);

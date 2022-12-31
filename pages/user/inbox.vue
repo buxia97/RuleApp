@@ -23,13 +23,16 @@
 					</view>
 					<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
 						<view class="cu-item" v-for="(item,index) in inboxList" :key="index" v-if="inboxList.length>0">
-							<view class="cu-list menu-avatar comment">
+							<view class="cu-list menu-avatar comment" @tap="goInbox(item)">
 								<view class="cu-item">
 									<view class="cu-avatar round" :style="item.style"></view>
 									<view class="content">
 										<view class="text-grey">{{item.userJson.name}}
 											<block  v-if="item.type=='system'">
-												<text class="userlv bg-red">系统管理员</text>
+												<text class="userlv bg-red">系统通知</text>
+											</block>
+											<block  v-if="item.type=='finance'">
+												<text class="userlv bg-gradual-orange">财务通知</text>
 											</block>
 											<block  v-if="item.type=='comment'">
 											<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
@@ -48,7 +51,7 @@
 											<rich-text :nodes="markHtml(item.text)"></rich-text>
 										</view>
 										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='comment'">
-											<view class="flex" @tap="toInfo(item.contentsInfo.cid,item.contenTitle)">
+											<view class="flex">
 												<view>{{item.contenTitle}}</view>
 												
 											</view>
@@ -190,6 +193,21 @@
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
+			},
+			goInbox(data){
+				var that = this;
+				if(data.type=="comment"){
+					that.toInfo(data.contentsInfo.cid,data.contenTitle);
+				}
+				if(data.type=="finance"){
+					uni.navigateTo({
+					    url: '/pages/user/assets'
+					});
+				}
+				if(data.type=="system"){
+					return false;
+				}
+				
 			},
 			getUserLv(i){
 				var that = this;

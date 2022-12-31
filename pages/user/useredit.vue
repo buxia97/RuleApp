@@ -156,7 +156,6 @@
 			
 			if(localStorage.getItem('toAvatar')){
 				var toAvatar = JSON.parse(localStorage.getItem('toAvatar'));
-				console.log(JSON.stringify(toAvatar));
 				that.avatarUpload(toAvatar.dataUrl);
 			}else{
 				console.log("没有头像缓存")

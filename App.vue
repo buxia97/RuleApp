@@ -13,6 +13,13 @@
 			//点击系统通知的推送跳转到指定的界面
 			plus.push.addEventListener("click", function(msg) {
 				var payload = msg.payload;
+				if(payload=="finance"){
+					setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/user/inbox'
+						})
+					}, 1000)
+				}
 				if(payload=="system"){
 					setTimeout(function() {
 						uni.navigateTo({
