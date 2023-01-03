@@ -1,5 +1,5 @@
-var API_URL = 'http://192.168.100.5:8081/';
-//var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://192.168.100.5:8081/';
+var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 

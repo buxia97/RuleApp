@@ -35,7 +35,9 @@
 												<text class="userlv bg-gradual-orange">财务通知</text>
 											</block>
 											<block  v-if="item.type=='comment'">
+											<!--  #ifdef H5 || APP-PLUS -->
 											<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
+											<!--  #endif -->
 											<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 											<block v-if="item.userJson.isvip>0">
 												<block v-if="item.userJson.vip==1">

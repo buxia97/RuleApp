@@ -14,7 +14,7 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 基于Typoche程序数据库开发，后端接口采用springboot框架，已经集成了COS和OSS对象存储，token登录验证，邮箱验证，redis数据缓存，微信支付宝充值，社会化登陆接口等，当然也可以自行对接其它的接口。后端也是开源免费的，欢迎star：[Github项目地址（未编译）](https://github.com/buxia97/RuleApi)
 
 
-后端接口下载地址（首先需要安装Typecho程序，数据库SQL为Typecho提供）：
+后端接口下载地址：
 
 [接口下载及安装](https://www.ruletree.club/archives/2786/)
 
@@ -27,17 +27,8 @@ UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
 
 ## 安装步骤
 
-1.编辑utils/api.js，设置接口地址，网站地址，群地址。同时设置各种数据调用的id和mid。
-
-2.编辑manifest.json设置社会化登录，微信支付，外部启动等。
-
-3.对象存储上传，远程FTP上传及本地上传的切换，请修改utils/api.js中的upload方法
-
-更多配置教程参考：[RuleAPP详细设置教程，手把手教你学会这款Typecho客户端](https://www.ruletree.club/archives/2955/)
-
-打包教程可参考：[uniapp从基本配置到打包发布，详细流程](https://www.ruletree.club/archives/2894/)
-
-IOS免签约打包可参考：[RuleApp苹果端ios免签约打包教程，详细说明](https://www.ruletree.club/archives/2845/)
+RuleApp依赖后端接口RuleApi运行，不过不用担心，我已经提供了完整的安装文档，可以认真阅读所有的步骤完成安装。
+[RuleProject全项目安装教程](https://www.yuque.com/buxia97/ruleproject)
 
 
 ## 基础功能
