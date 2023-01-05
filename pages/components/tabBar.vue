@@ -12,7 +12,7 @@
 			<view class="tabbar-item addPost" v-if="index==1"   @tap="toLink('../user/post?type=add')">
 				<view class="addPost-main">
 					<view class="addPost-i">
-						 +
+						 <text class="cuIcon-add"></text>
 					</view>
 				</view>
 			</view>

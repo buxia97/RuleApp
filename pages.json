@@ -125,6 +125,10 @@
 			"path": "pages/user/buyvip",
 			"style": {}
 		},
+		{
+			"path": "pages/user/clothes",
+			"style": {}
+		},
 		// #endif
 		{
 			"path": "pages/user/usermark",

@@ -5,15 +5,26 @@
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
+				<!--  #ifdef MP -->
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					全站搜索
 				</view>
-				<view class="action">
+				<!--  #endif -->
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="search-form radius" :style="[{top:StatusBar + 'px'}]">
+					<text class="cuIcon-search"></text>
+					<input v-model="searchText" :adjust-position="false" type="text" placeholder="搜索文章、评论、用户" confirm-type="search"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
+				<view class="action">
+					<text class="text-blue" @tap="searchTag()">搜索</text>
+				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="all-box">
+			<!--  #ifdef MP -->
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
@@ -21,6 +32,7 @@
 					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
+			<!--  #endif -->
 			<view class="search-type grid col-3">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
@@ -153,7 +165,7 @@
 		</view>
 		
 		<!--加载遮罩-->
-		<view class="loading" v-if="isLoading==0">
+		<view class="loading" v-if="isLoading==0||changeLoading==0">
 			<view class="loading-main">
 				<image src="../../static/loading.gif"></image>
 			</view>
@@ -189,6 +201,8 @@
 				isLoad:0,
 				
 				isLoading:0,
+				
+				changeLoading:1,
 			}
 		},
 		onShow(){
@@ -265,6 +279,7 @@
 			},
 			searchTag(){
 				var that = this;
+				that.changeLoading = 0;
 				var searchText = that.searchText;
 				that.page=1;
 				if(that.type==0){
@@ -312,6 +327,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.changeLoading = 1;
 						that.isLoad=0;
 						that.moreText="加载更多";
 						if(res.data.code==1){
@@ -336,6 +352,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.changeLoading = 1;
 						that.moreText="加载更多";
 						that.isLoad=0;
 						var timer = setTimeout(function() {
@@ -369,7 +386,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
-						
+						that.changeLoading = 1;
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -397,6 +414,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.changeLoading = 1;
 						that.isLoad=0;
 						that.moreText="加载更多";
 						var timer = setTimeout(function() {
@@ -427,6 +445,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.changeLoading = 1;
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -454,6 +473,7 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.changeLoading = 1;
 						that.isLoad=0;
 						that.moreText="加载更多";
 						var timer = setTimeout(function() {

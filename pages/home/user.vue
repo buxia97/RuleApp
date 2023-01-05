@@ -2,33 +2,29 @@
 	<view class="user">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toGroup">
-					<text class="toGroup">社交</text>
-				</view>
-				<!--  #endif -->
-				<!--  #ifdef MP -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
-				<!--  #endif -->
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					账户
 				</view>
 				<!--  #ifdef H5 -->
 				<view class="action header-btn">
-					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<text class="cuIcon-search" @tap="toSearch"></text>
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
 				<!--  #ifdef APP-PLUS -->
 				<view class="action header-btn">
-					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					
 				</view>
 				<!--  #endif -->
 			</view>
@@ -811,6 +807,13 @@
 				
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
+				});
+			},
+			goStyle(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/clothes'
 				});
 			},
 			isJSON(str) {

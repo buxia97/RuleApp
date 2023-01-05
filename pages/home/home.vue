@@ -3,25 +3,34 @@
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toGroup">
+				<!-- <view class="action" @tap="toGroup">
 					<text class="toGroup">社交</text>
-				</view>
+				</view> -->
 				<!--  #endif -->
 				<!--  #ifdef MP -->
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
-				<!--  #endif -->
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					首页
 				</view>
+				<!--  #endif -->
+				
 				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="cu-avatar round" @tap="goUserInfo()" :style="userInfo.style" v-if="token!=''"></view>
+				<view class="cu-avatar round" @tap="goUserInfo()" v-else>
+					<text class="home-noLogin">登录</text>
+				</view>
+				<view class="search-form radius">
+					<text class="cuIcon-search"></text>
+					<input type="text" placeholder="搜索图片、文章、视频" confirm-type="search" disabled="disabled"  @tap="toSearch"></input>
+				</view>
 				<view class="action header-btn">
 					
-					<text class="cuIcon-mail" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<text class="cuIcon-search" @tap="toSearch"></text>
+					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
 			</view>
@@ -50,8 +59,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap='toTopContents("排行榜","commentsNum")'>
-						<view class="index-sort-i" style="background-color: #ff007f;">
-							<text class="cuIcon-crownfill"></text>
+						<view class="index-sort-i" style="background: rgba(255, 0, 127, 0.2);">
+							<text class="cuIcon-crownfill" style="color:  #ff007f;"></text>
 						</view>
 						<view class="index-sort-text">
 							排行榜
@@ -63,8 +72,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toComments">
-						<view class="index-sort-i">
-							<text class="cuIcon-commentfill"></text>
+						<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
+							<text class="cuIcon-commentfill" style="color:  #039a54;"></text>
 						</view>
 						<view class="index-sort-text">
 							评论区
@@ -77,8 +86,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toImagetoday">
-						<view class="index-sort-i" style="background-color: #039a54;">
-							<text class="cuIcon-picfill"></text>
+						<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
+							<text class="cuIcon-picfill" style="color:  #039a54;"></text>
 						</view>
 						<view class="index-sort-text">
 							图库
@@ -91,8 +100,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toShop">
-						<view class="index-sort-i" style="background-color: #ff3333;">
-							<text class="cuIcon-taoxiaopu"></text>
+						<view class="index-sort-i" style="background: rgba(255,51,51, 0.2);">
+							<text class="cuIcon-shopfill" style="color:  #ff3333;"></text>
 						</view>
 						<view class="index-sort-text">
 							积分商城
@@ -105,8 +114,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toRand">
-						<view class="index-sort-i" style="background-color: #2eabbf;">
-							<text class="cuIcon-refresh"></text>
+						<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
+							<text class="cuIcon-refresh" style="color:  #aa55ff;"></text>
 						</view>
 						<view class="index-sort-text">
 							随机阅读
@@ -118,8 +127,8 @@
 			<view class="index-sort-box">
 				<waves itemClass="butclass">
 					<view class="index-sort-main" @tap="toUsers">
-						<view class="index-sort-i" style="background-color: #aa55ff;">
-							<text class="cuIcon-peoplefill"></text>
+						<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
+							<text class="cuIcon-peoplefill" style="color:  #aa55ff;"></text>
 						</view>
 						<view class="index-sort-text">
 							用户列表
@@ -393,7 +402,7 @@
 					<rich-text :nodes="announcement"></rich-text>
 				</view>
 				<view class="announcement-btn">
-					<button class="cu-btn bg-gradual-blue lg" @tap="isAnnouncement=false">我知道了</button>
+					<button class="cu-btn bg-gradual-blue lg" @tap="readAnnouncement">我知道了</button>
 				</view>
 			</view>
 		</view>
@@ -508,6 +517,9 @@
 				isAnnouncement:false,
 				
 				noticeSum:0,
+				
+				userInfo:null,
+				token:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -546,7 +558,20 @@
 		// #endif
 		onShow(){
 			var that = this;
-			
+			if(localStorage.getItem('userinfo')){
+				
+				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.group = that.userInfo.group;
+			}else{
+				that.userInfo =null;
+			}
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}else{
+				that.token = "";
+			}
 			// #ifdef APP-PLUS || H5
 			
 			that.getAdsCache();
@@ -592,6 +617,7 @@
 				}
 			} 
 			// #endif
+			
 			
 		},
 		onLoad() {
@@ -1298,6 +1324,13 @@
 				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
 				});
 			},
+			readAnnouncement(){
+				var that = this;
+				that.isAnnouncement = false;
+				var timestamp=new Date().getTime();
+				localStorage.setItem('isAnnouncement',timestamp);
+				
+			},
 			toAllContents(){
 				var that = this;
 				var type="all";
@@ -1361,7 +1394,17 @@
 					success: function(res) {
 						that.announcement = res.data.announcement;
 						if(that.announcement!=""||res.data.announcement){
-							that.isAnnouncement=true;
+							if(localStorage.getItem('isAnnouncement')){
+								var oldTime = Number(localStorage.getItem('isAnnouncement'));
+								var curTime=new Date().getTime();
+								var difference = curTime - oldTime;
+								if(difference > 86400000){
+									that.isAnnouncement=true;
+								}
+							}else{
+								that.isAnnouncement=true;
+							}
+							
 						}
 						
 					},
@@ -1431,6 +1474,19 @@
 				var type="meta";
 				uni.navigateTo({
 				    url: '/pages/contents/contentlist?title='+title+"&type=top&id="+id
+				});
+			},
+			goUserInfo(){
+				 
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
+				uni.switchTab({
+					url: '/pages/home/user'
 				});
 			},
 			toMetas(){
