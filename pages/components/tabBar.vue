@@ -1,6 +1,6 @@
 <template>
 	
-    <view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
+    <view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}" >
 		<block  v-for="(item, index) in list" 
 			    :key="index">
 			

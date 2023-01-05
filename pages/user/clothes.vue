@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="appStyle?appStyle:''">
+	<view class="user"  :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -23,7 +23,7 @@
 						(ง •̀_•́)ง
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='simple-blue'"></text>默认蓝
+						<text class="cuIcon-check" v-if="AppStyle=='simple-blue'"></text>默认蓝
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('simple-pink')">
@@ -31,7 +31,7 @@
 						(๑• . •๑)
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='simple-pink'"></text>简约粉
+						<text class="cuIcon-check" v-if="AppStyle=='simple-pink'"></text>简约粉
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('simple-orange')">
@@ -39,15 +39,15 @@
 						(ಡωಡ)
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='simple-orange'"></text>简约橙
+						<text class="cuIcon-check" v-if="AppStyle=='simple-orange'"></text>简约橙
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('simple-green')">
 					<view class="style-i" style="color: #8ebe58;">
-						( ｰ̀εｰ́ )
+						( ｰ̀εｰ́ )
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='simple-green'"></text>简约绿
+						<text class="cuIcon-check" v-if="AppStyle=='simple-green'"></text>简约绿
 					</view>
 				</view>
 			</view>
@@ -62,7 +62,7 @@
 						
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='full-blue'"></text>单色蓝
+						<text class="cuIcon-check" v-if="AppStyle=='full-blue'"></text>单色蓝
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('full-pink')">
@@ -70,7 +70,7 @@
 						
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='full-pink'"></text>单色粉
+						<text class="cuIcon-check" v-if="AppStyle=='full-pink'"></text>单色粉
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('full-orange')">
@@ -78,7 +78,7 @@
 						
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='full-orange'"></text>单色橙
+						<text class="cuIcon-check" v-if="AppStyle=='full-orange'"></text>单色橙
 					</view>
 				</view>
 				<view class="style-box" @tap="setAppStyle('full-green')">
@@ -86,7 +86,7 @@
 						
 					</view>
 					<view class="style-text">
-						<text class="cuIcon-check" v-if="appStyle=='full-green'"></text>单色绿
+						<text class="cuIcon-check" v-if="AppStyle=='full-green'"></text>单色绿
 					</view>
 				</view>
 			</view>
@@ -106,15 +106,18 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-				appStyle:"simple-blue",
+				AppStyle:this.$store.state.AppStyle,
 				
 			}
 		},
 		onShow(){
 			var that = this;
 			if(localStorage.getItem('appStyle')){
-				
 				that.appStyle = localStorage.getItem('appStyle');
+				// that.$store.state.AppStyle = that.appStyle;
+				that.$store.commit('setStyle', that.appStyle);
+				
+				
 			}
 			// #ifdef APP-PLUS
 			plus.navigator.setStatusBarStyle("dark")
@@ -139,8 +142,11 @@
 			},
 			setAppStyle(style){
 				var that = this;
-				that.appStyle = style;
+				that.AppStyle = style;
+				// that.$store.state.AppStyle = style;
 				localStorage.setItem('appStyle',style);
+				that.$store.commit('setStyle', style);
+				console.log(that.$store.state.AppStyle);
 			}
 
 		},

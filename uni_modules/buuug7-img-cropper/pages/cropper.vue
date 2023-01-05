@@ -28,6 +28,7 @@ export default {
 	StatusBar: this.StatusBar,
 	CustomBar: this.CustomBar,
 	NavBar:this.StatusBar +  this.CustomBar,
+			AppStyle:this.$store.state.AppStyle,
       webviewStyles: {},
       platform: "",
       webviewSrc:

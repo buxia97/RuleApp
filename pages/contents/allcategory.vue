@@ -1,5 +1,5 @@
 <template>
-	<view class="user">
+	<view class="user" :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -25,10 +25,12 @@
 			<view class="no-data" v-if="metaList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
-			<view class="category grid col-3">
-				<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid,index)" :class="item.active==1?'active':''" :key="index">
-					<view class="category-main">
-						{{item.name}}
+			<view class="category">
+				<view class="category-content grid col-2">
+					<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid,index)" :class="item.active==1?'active':''" :key="index">
+						<view class="category-main">
+							{{item.name}}
+						</view>
 					</view>
 				</view>
 			</view>
@@ -61,6 +63,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
+			AppStyle:this.$store.state.AppStyle,
 				
 				metaList:[],
 				searchText:"",

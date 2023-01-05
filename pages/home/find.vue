@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="toSearch">
@@ -36,8 +36,111 @@
 				</view>
 			</view>
 		</view>
-		
 		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text> 工具库
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="index-sort grid col-4 tool-sort">
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/imagetoday')">
+							<view class="index-sort-i" style="background-color: #039a54;">
+								<text class="cuIcon-picfill"></text>
+							</view>
+							<view class="index-sort-text">
+								图库
+							</view>
+						</view>
+					</waves>
+				</view>
+				
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/ads/home')">
+							<view class="index-sort-i" style="background-color: #7f165e;">
+								<text class="cuIcon-read"></text>
+							</view>
+							<view class="index-sort-text">
+								广告位
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/foreverblog')">
+							<view class="index-sort-i toClub">
+								<text class="cuIcon-upstagefill"></text>
+							</view>
+							<view class="index-sort-text">
+								十年之约
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #ifdef MP -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/randlist')">
+							<view class="index-sort-i">
+								<text class="cuIcon-refresh"></text>
+							</view>
+							<view class="index-sort-text">
+								随机阅读
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/home/tool')">
+							<view class="index-sort-i" style="background-color: #7d7c7c;">
+								<text class="cuIcon-similar"></text>
+							</view>
+							<view class="index-sort-text">
+								更多
+							</view>
+						</view>
+					</waves>
+				</view>
+			</view>
+		</view>
+		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text> 推荐文章
+				</view>
+				<view class="action more" @tap="toRecommend">
+					<text>阅读更多</text><text class="cuIcon-right"></text>
+				</view>
+			</view>
+			<view class="cu-card article no-card">
+				
+				<view class="cu-item shadow"  v-for="(item,index) in recommendList" :key="index" @tap="toInfo(item)">
+					<view class="content">
+						<image v-if="item.images.length>0" :src="item.images[0]"
+						 mode="aspectFill"></image>
+						<view class="desc">
+							<view class="text-content">{{replaceSpecialChar(item.title)}}</view>
+							<view class="text-i">
+								<view class="cu-tag bg-blue light sm round" v-if="item.category.length>0">{{item.category[0].name}}</view>
+								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		
+		<view class="data-box" style="display: none;">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 内容分类
@@ -102,11 +205,12 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
+				AppStyle:this.$store.state.AppStyle,
 				
 				topList:[],
 				metaList:[],
 				tagList:[],
-				
+				recommendList:[],
 				isLoading:0,
 				
 				ads:"",
@@ -166,9 +270,28 @@
 			},
 			loading(){
 				var that = this;
+				that.getRecommend();
 				that.getTopList();
 				that.getMetaList();
 				that.getTagList();
+			},
+			replaceSpecialChar(text) {
+			  text = text.replace(/&quot;/g, '"');
+			  text = text.replace(/&amp;/g, '&');
+			  text = text.replace(/&lt;/g, '<');
+			  text = text.replace(/&gt;/g, '>');
+			  text = text.replace(/&nbsp;/g, ' ');
+			  return text;
+			},
+			formatDate(datetime) {
+				var datetime = new Date(parseInt(datetime * 1000));
+				var year = datetime.getFullYear(),
+					month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+					date = ("0" + datetime.getDate()).slice(-2),
+					hour = ("0" + datetime.getHours()).slice(-2),
+					minute = ("0" + datetime.getMinutes()).slice(-2);
+				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+				return result;
 			},
 			allCache(){
 				var that = this;
@@ -178,6 +301,9 @@
 						that.isLoading=1;
 						clearTimeout('timer')
 					}, 300)
+				}
+				if(localStorage.getItem('recommendList')){
+					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
 				}
 				if(localStorage.getItem('find_metaList')){
 					that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
@@ -201,6 +327,44 @@
 							that.ads= res.data.ad1.split("|");
 						}
 						
+					},
+					fail: function(res) {
+						
+					}
+				})
+			},
+			getRecommend(){
+				var that = this;
+				var data = {
+					"type":"post",
+					"isrecommend":1
+				}
+				Net.request({
+					url: API.getContentsList(),
+					data:{
+						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"limit":5,
+						"page":1,
+						"order":"modified"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+							
+								that.recommendList = list;
+								
+							}else{
+								that.recommendList = [];
+							}
+							localStorage.setItem('recommendList',JSON.stringify(that.recommendList));
+						}
 					},
 					fail: function(res) {
 						
@@ -373,6 +537,20 @@
 				var that = this;
 				uni.navigateTo({
 				    url: '/pages/contents/allcategory'
+				});
+			},
+			goPage(url){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: url
+				});
+			},
+			toRecommend(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/contents/recommend'
 				});
 			},
 			toGroup(){

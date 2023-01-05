@@ -1,5 +1,5 @@
 <template>
-	<view class="user">
+	<view class="user" :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -99,6 +99,7 @@ export default {
 			StatusBar: this.StatusBar,
 			CustomBar: this.CustomBar,
 			NavBar:this.StatusBar +  this.CustomBar,
+			AppStyle:this.$store.state.AppStyle,
 			
 			isLoading:0,
 			

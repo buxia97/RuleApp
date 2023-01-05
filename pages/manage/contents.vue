@@ -1,5 +1,5 @@
 <template>
-	<view class="userpost">
+	<view class="userpost" :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -112,6 +112,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
+			AppStyle:this.$store.state.AppStyle,
 				
 				page:1,
 				moreText:"加载更多",

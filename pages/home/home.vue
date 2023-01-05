@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view class="header" :style="[{height:CustomBar + 'px'}]">
+	<view :class="AppStyle">
+		<view class="header" :style="[{height:CustomBar + 'px'}]" >
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<!--  #ifdef H5 || APP-PLUS -->
 				<!-- <view class="action" @tap="toGroup">
@@ -35,167 +35,153 @@
 				<!--  #endif -->
 			</view>
 		</view>
-		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-		 :autoplay="true" interval="5000" duration="500">
-			<swiper-item v-for="(item,index) in swiperList" :key="index"  @tap="toInfo(item)">
-				<view class="swiper-box">
-					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
-					<view class="swiper-text">
-						<view class="swiper-title">
-							{{item.title}}
-						</view>
-						<view class="swiper-intro">
-							{{item.intro}}
-						</view>
-					</view>
-				</view>
-				
-			</swiper-item>
-		</swiper>
-		<view class="index-sort grid col-4">
-			
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap='toTopContents("排行榜","commentsNum")'>
-						<view class="index-sort-i" style="background: rgba(255, 0, 127, 0.2);">
-							<text class="cuIcon-crownfill" style="color:  #ff007f;"></text>
-						</view>
-						<view class="index-sort-text">
-							排行榜
-						</view>
-					</view>
-				</waves>
-			</view>
-			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toComments">
-						<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
-							<text class="cuIcon-commentfill" style="color:  #039a54;"></text>
-						</view>
-						<view class="index-sort-text">
-							评论区
-						</view>
-					</view>
-				</waves>
-			</view>
-			<!--  #endif -->
-			<!--  #ifdef MP -->
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toImagetoday">
-						<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
-							<text class="cuIcon-picfill" style="color:  #039a54;"></text>
-						</view>
-						<view class="index-sort-text">
-							图库
-						</view>
-					</view>
-				</waves>
-			</view>
-			<!--  #endif -->
-			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toShop">
-						<view class="index-sort-i" style="background: rgba(255,51,51, 0.2);">
-							<text class="cuIcon-shopfill" style="color:  #ff3333;"></text>
-						</view>
-						<view class="index-sort-text">
-							积分商城
-						</view>
-					</view>
-				</waves>
-			</view>
-			<!--  #endif -->
-			<!--  #ifdef MP -->
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toRand">
-						<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
-							<text class="cuIcon-refresh" style="color:  #aa55ff;"></text>
-						</view>
-						<view class="index-sort-text">
-							随机阅读
-						</view>
-					</view>
-				</waves>
-			</view>
-			<!--  #endif -->
-			<view class="index-sort-box">
-				<waves itemClass="butclass">
-					<view class="index-sort-main" @tap="toUsers">
-						<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
-							<text class="cuIcon-peoplefill" style="color:  #aa55ff;"></text>
-						</view>
-						<view class="index-sort-text">
-							用户列表
-						</view>
-					</view>
-				</waves>
-			</view>
-		</view>
-		
-		<view class="data-box">
-			<view class="cu-bar bg-white">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> 热门专题
-				</view>
-				<view class="action more" @tap="toMetas">
-					<text>查看全部</text><text class="cuIcon-right"></text>
-				</view>
-			</view>
-			<view class="topic grid col-2">
-				<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
-					<view class="topic-main">
-						<image :src="item.imgurl" mode="aspectFill"></image>
-						<view class="topic-text" v-if="item.type=='tag'">#{{replaceSpecialChar(item.name)}}#</view>
-						<view class="topic-text" v-else>{{replaceSpecialChar(item.name)}}</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="data-box">
-			<view class="cu-bar bg-white">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> 推荐文章
-				</view>
-				<view class="action more" @tap="toRecommend">
-					<text>阅读更多</text><text class="cuIcon-right"></text>
-				</view>
-			</view>
-			<view class="cu-card article no-card">
-				
-				<view class="cu-item shadow"  v-for="(item,index) in recommendList" :key="index" @tap="toInfo(item)">
-					<view class="content">
-						<image v-if="item.images.length>0" :src="item.images[0]"
-						 mode="aspectFill"></image>
-						<view class="desc">
-							<view class="text-content">{{replaceSpecialChar(item.title)}}</view>
-							<view class="text-i">
-								<view class="cu-tag bg-blue light sm round" v-if="item.category.length>0">{{item.category[0].name}}</view>
-								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
-							</view>
-						</view>
-					</view>
-				</view>
-				
-				
-				
-			</view>
-		</view>
-		<view class="ads-banner" v-if="bannerAdsInfo!=null">
-			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
-		</view>
-		<!--底下改成滑动形式-->
-		<view class="all-box">
-			<scroll-view scroll-x class="bg-white nav metaList" scroll-with-animation :scroll-left="scrollLeft">
+		<view class="home-nav metaList" :style="'top:'+CustomBar+'px'">
+			<scroll-view scroll-x class="bg-white nav " scroll-with-animation :scroll-left="scrollLeft" >
 				<view class="cu-item" :class="item.mid==TabCur?'text-blue cur':''" v-for="(item,index) in metaList" :key="index" @tap="tabSelect" :data-id="item.mid" v-if="item.parent==0">
 					{{item.name}}
 				</view>
 			</scroll-view>
+			<view class="goCategory" @tap="goCategory">
+				<text class="cuIcon-more"></text>
+			</view>
+		</view>
+		<view :style="[{padding:NavBar+40 + 'px 10px 0px 10px'}]"></view>
+		<block v-if="TabCur==0">
+			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
+			 :autoplay="true" interval="5000" duration="500">
+				<swiper-item v-for="(item,index) in swiperList" :key="index"  @tap="toInfo(item)">
+					<view class="swiper-box">
+						<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+						<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
+						<view class="swiper-text">
+							<view class="swiper-title">
+								{{item.title}}
+							</view>
+							<view class="swiper-intro">
+								{{item.intro}}
+							</view>
+						</view>
+					</view>
+					
+				</swiper-item>
+			</swiper>
+			<view class="index-sort grid col-4">
+				
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap='toTopContents("排行榜","commentsNum")'>
+							<view class="index-sort-i" style="background: rgba(255, 0, 127, 0.2);">
+								<text class="cuIcon-crownfill" style="color:  #ff007f;"></text>
+							</view>
+							<view class="index-sort-text">
+								排行榜
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toComments">
+							<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
+								<text class="cuIcon-commentfill" style="color:  #039a54;"></text>
+							</view>
+							<view class="index-sort-text">
+								评论区
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toImagetoday">
+							<view class="index-sort-i" style="background: rgba(3, 154, 84, 0.2);">
+								<text class="cuIcon-picfill" style="color:  #039a54;"></text>
+							</view>
+							<view class="index-sort-text">
+								图库
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toShop">
+							<view class="index-sort-i" style="background: rgba(255,51,51, 0.2);">
+								<text class="cuIcon-shopfill" style="color:  #ff3333;"></text>
+							</view>
+							<view class="index-sort-text">
+								积分商城
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toRand">
+							<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
+								<text class="cuIcon-refresh" style="color:  #aa55ff;"></text>
+							</view>
+							<view class="index-sort-text">
+								随机阅读
+							</view>
+						</view>
+					</waves>
+				</view>
+				<!--  #endif -->
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toUsers">
+							<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
+								<text class="cuIcon-peoplefill" style="color:  #aa55ff;"></text>
+							</view>
+							<view class="index-sort-text">
+								用户列表
+							</view>
+						</view>
+					</waves>
+				</view>
+			</view>
+			
+			<view class="data-box">
+				<view class="cu-bar bg-white">
+					<view class="action data-box-title">
+						<text class="cuIcon-titles text-rule"></text> 热门专题
+					</view>
+					<view class="action more" @tap="toMetas">
+						<text>查看全部</text><text class="cuIcon-right"></text>
+					</view>
+				</view>
+				<view class="topic grid col-2">
+					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
+						<view class="topic-main">
+							<image :src="item.imgurl" mode="aspectFill"></image>
+							<view class="topic-text" v-if="item.type=='tag'">#{{replaceSpecialChar(item.name)}}#</view>
+							<view class="topic-text" v-else>{{replaceSpecialChar(item.name)}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
+		<view class="ads-banner" v-if="bannerAdsInfo!=null">
+			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
+		</view>
+		<!--底下改成滑动形式-->
+		<view class="all-box" :style="TabCur!=0?'margin-top:0;':''">
+			<view class="cu-bar bg-white" v-if="TabCur==0">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>最新文章
+				</view>
+				<view class="action more" @tap='toTopContents("排行榜","commentsNum")'>
+					<text>阅读更多</text><text class="cuIcon-right"></text>
+				</view>
+			</view>
 			<view class="cu-card article no-card topContents" v-for="(item,index) in topContents" :key="item.cid"  @tap="toInfo(item)" v-if="TabCur==0&&dataLoad">
 				<view class="cu-item shadow">
 					<view class="cu-item shadow">
@@ -468,10 +454,11 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
+				AppStyle:this.$store.state.AppStyle,
 				
 				cardCur: 0,
 				swiperList: [],
-				recommendList:[],
+				
 				contentsList:[],
 				topContents:[],
 				metaList:[],
@@ -520,6 +507,7 @@
 				
 				userInfo:null,
 				token:"",
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -558,6 +546,12 @@
 		// #endif
 		onShow(){
 			var that = this;
+			if(localStorage.getItem('appStyle')){
+				// that.appStyle = localStorage.getItem('appStyle');
+				// that.$store.state.AppStyle = that.appStyle;
+				that.$store.commit('setStyle', that.appStyle);
+				
+			}
 			if(localStorage.getItem('userinfo')){
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -791,7 +785,7 @@
 				that.page = 1;
 				that.getSwiper();
 				that.getTopPic();
-				that.getRecommend();
+				
 				that.getMetaList();
 				that.getTopContents();
 				that.getContentsList(false);
@@ -830,9 +824,7 @@
 						clearTimeout('timer')
 					}, 300)
 				}
-				if(localStorage.getItem('recommendList')){
-					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
-				}
+				
 				if(localStorage.getItem('metaList')){
 					that.metaList = JSON.parse(localStorage.getItem('metaList'));
 				}
@@ -898,44 +890,7 @@
 					}
 				})
 			},
-			getRecommend(){
-				var that = this;
-				var data = {
-					"type":"post",
-					"isrecommend":1
-				}
-				Net.request({
-					url: API.getContentsList(),
-					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"limit":5,
-						"page":1,
-						"order":"modified"
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-							
-								that.recommendList = list;
-								
-							}else{
-								that.recommendList = [];
-							}
-							localStorage.setItem('recommendList',JSON.stringify(that.recommendList));
-						}
-					},
-					fail: function(res) {
-						
-					}
-				})
-			},
+			
 			getMetaList(){
 				var that = this;
 				var data = {
@@ -959,7 +914,7 @@
 							if(list.length>0){
 								var meta = [{
 									mid:0,
-									name:"全部",
+									name:"推荐",
 									parent:0
 								}];
 								that.metaList = meta.concat(list);
@@ -1496,11 +1451,11 @@
 				    url: '/pages/contents/metas'
 				});
 			},
-			toRecommend(){
+			
+			goCategory(){
 				var that = this;
-				
 				uni.navigateTo({
-				    url: '/pages/contents/recommend'
+				    url: '/pages/contents/allcategory'
 				});
 			},
 			closeUpdate(){
