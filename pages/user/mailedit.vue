@@ -235,8 +235,9 @@
 			  this.timer = setInterval(()=>{
 				this.times--
 				if(this.times<=0){
-				  this.show = true
-				  clearInterval(this.timer)
+				  this.show = true;
+				  clearInterval(this.timer);
+				  this.times = 60;
 				}
 			  },1000)
 			},

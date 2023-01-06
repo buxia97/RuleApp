@@ -68,7 +68,7 @@
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							UID:{{item.uid}}
+							UID：{{item.uid}}&nbsp;
 						</view>
 					</view>
 				</view>
