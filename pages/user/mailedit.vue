@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					个人设置
+					邮箱设置
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="userEdit">

@@ -298,6 +298,12 @@
 			"style": {
 				"enablePullDownRefresh":true
 			}
+		},
+		{
+			"path": "pages/contents/blackhouse",
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		}
 		// #ifdef APP-PLUS || H5
 		,{
@@ -376,6 +382,9 @@
 			"path": "pages/manage/senduser"
 		},
 		{
+			"path": "pages/manage/banuser"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{
@@ -387,6 +396,7 @@
 		{
 			"path": "pages/ads/myAds"
 		}
+		
 		// #endif
 		
 	],

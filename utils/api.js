@@ -199,6 +199,29 @@ module.exports = {
 	sendUser:function(){
 		return API_URL + 'typechoUsers/sendUser';
 	},
+	//关注
+	follow:function(){
+		return API_URL + 'typechoUsers/follow';
+	},
+	isFollow:function(){
+		return API_URL + 'typechoUsers/isFollow';
+	},
+	followList:function(){
+		return API_URL + 'typechoUsers/followList';
+	},
+	fanList:function(){
+		return API_URL + 'typechoUsers/fanList';
+	},
+	//封禁
+	banUser:function(){
+		return API_URL + 'typechoUsers/banUser';
+	},
+	unblockUser:function(){
+		return API_URL + 'typechoUsers/unblockUser';
+	},
+	violationList:function(){
+		return API_URL + 'typechoUsers/violationList';
+	},
 	
 	
 	

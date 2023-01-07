@@ -37,7 +37,7 @@
 			<view class="info-author">
 				<view class="cu-list menu-avatar">
 					<view class="cu-item">
-						<view class="cu-avatar round lg" :style="userInfo.style"  @tap="toUserContents(userInfo)"></view>
+						<view class="cu-avatar round lg" :style="userInfo.style"  @tap="toUserInfo(userInfo)"></view>
 						<view class="content">
 							<view class="text-grey">
 								<block v-if="userInfo.screenName">
@@ -64,7 +64,8 @@
 							<view class="text-gray text-sm flex">
 								<view class="text-cut">
 									{{subText(userInfo.introduce,60)}}
-								</view> </view>
+								</view>
+							</view>
 						</view>
 						<view class="action" @tap="toUserContents(userInfo)">
 							<view class="text-blue">信息</view>
@@ -240,7 +241,7 @@
 								复制
 							</text>
 							<view class="cu-item">
-								<view class="cu-avatar round" :style="item.style"></view>
+								<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
 								<view class="content">
 									<view class="text-grey">
 										{{item.author}}
@@ -273,6 +274,10 @@
 										<view>
 											<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
 										</view>
+									</view>
+									<view class="comment-operation"  v-if="group=='administrator'||group=='editor'">
+										<text class="text-black" @tap="toBan(item.authorId)">封禁</text>
+										<text class="text-red" @tap="toDelete(item.coid)">删除</text>
 									</view>
 								</view>
 							</view>
@@ -447,6 +452,8 @@
 				isComment:0,
 				images:[],
 				
+				group:"",
+				
 			}
 		},
 		components: {
@@ -491,30 +498,14 @@
 		// #endif
 		onShow(){
 			var that = this;
-			
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+			}
 			// #ifdef MP-BAIDU
 			//预留百度小程序TDK
-			this.requestTask.then( requestData => {
-				// 可以直接通过框架提供的 getData 方法获取到 data 字段值; 也可以通过 this.data.xxx 获取
-				let res = this.getData('data');
-				swan.setPageInfo({
-					title: res.title,
-					keywords: res.keywords,
-					description: res.description,
-					articleTitle: res.articleTitle,
-					releaseDate: res.releaseDate,
-					image: res.image,
-					visit: res.visit,
-					likes: '75',
-					comments: '13',
-					success: res => {
-						console.log('setPageInfo success');
-					},
-					fail: err => {
-						console.log('setPageInfo fail', err);
-					}
-				})
-			})
+
 			// #endif
 			
 			that.getAdsCache();
@@ -723,7 +714,7 @@
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
 			},
-			toUserContents(data){
+			toUserInfo(data){
 				var that = this;
 				var name = data.name;
 				var title = data.name+"的信息";
@@ -1610,7 +1601,87 @@
 				}else{
 					return "Ta还没有个人介绍哦"
 				}
-			}
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.author;
+				var title = data.author+"的信息";
+				var id= data.authorId;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
+			toBan(uid){
+				if(!uid){
+					uni.showToast({
+						title: "该用户不存在",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/manage/banuser?uid='+uid
+				});
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要删除该评论吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.commentsDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page = 1;
+				            			that.getCommentsList(false,that.cid);
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
 		}
 	}
 </script>

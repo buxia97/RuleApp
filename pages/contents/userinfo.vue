@@ -1,48 +1,81 @@
 <template>
-	<view class="userpost" :class="AppStyle">
+	<view class="userpost userIndex" :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
-			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+			<view class="cu-bar" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					{{title}}
+					<!-- {{name}}的主页 -->
 				</view>
-				<view class="action">
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="action" @tap="toSearch">
+					<text class="cuIcon-search"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
-		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="all-box" style="margin-top: -10upx;">
+		<!-- <view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view> -->
+		<view class="all-box" style="margin-top:-10upx">
 			
-			<view class="user-info">
+			<view class="user-info" :style="'padding-top:'+NavBar+'px;'">
 				<view class="user-info-bg">
 					<image :src="avatar" mode="aspectFill"></image>
 				</view>
 				<view class="user-info-main">
-					<view class="user-header">
-						<image :src="avatar"></image>
-					</view>
-					<view class="user-text">
-						{{name}}
-						<view class="userinfo-lv">
-							<!--  #ifdef H5 || APP-PLUS -->
-							<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
-							<!--  #endif -->
-							<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
-							<!--  #ifdef H5 || APP-PLUS -->
-							<block v-if="isvip==1">
-								<block v-if="vip==1">
-									<text class="isVIP bg-gradual-red">VIP</text>
+					<view class="user-info-content">
+						<view class="user-info-col">
+							<view class="user-header">
+								<image :src="avatar"></image>
+							</view>
+							<view class="user-text">
+							
+								<text class="user-info-name">{{name}}</text>
+								<!-- <view class="userinfo-lv"> -->
+									<!--  #ifdef H5 || APP-PLUS -->
+								<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
+								<!--  #endif -->
+								<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
+								<!--  #ifdef H5 || APP-PLUS -->
+								<block v-if="isvip==1">
+									<block v-if="vip==1">
+										<text class="isVIP bg-gradual-red">VIP</text>
+									</block>
+									<block v-else>
+										<text class="isVIP bg-yellow">VIP</text>
+									</block>
 								</block>
-								<block v-else>
-									<text class="isVIP bg-yellow">VIP</text>
-								</block>
+									<!--  #endif -->
+								<!-- </view> -->
+								<view class="user-info-data">
+									<text class="user-info-data-box">
+										<text class="user-data-num">{{fanNum}}</text>
+										<text class="user-data-label">粉丝</text>
+									</text>
+									<text class="user-info-data-box">
+										<text class="user-data-num">{{contentsNum}}</text>
+										<text class="user-data-label">文章</text>
+									</text>
+									<text class="user-info-data-box">
+										<text class="user-data-num">{{commentsNum}}</text>
+										<text class="user-data-label">评论</text>
+									</text>
+								</view>
+							</view>
+							
+						</view>
+						<view class="user-introduce">
+							<text class="cuIcon-text"></text>
+							<block v-if="introduce!=''&&introduce">
+								{{subText(introduce,60)}}
 							</block>
-							<!--  #endif -->
+							<block v-else>
+								Ta还没有个人介绍哦
+							</block>
 						</view>
 						
 					</view>
+					
 				</view>
 			</view>
 			<!--  #ifdef H5 || APP-PLUS -->
@@ -187,6 +220,10 @@
 				lv:"",
 				vip:"",
 				isvip:"",
+				introduce:"",
+				fanNum:0,
+				contentsNum:0,
+				commentsNum:0,
 				
 				
 			}
@@ -232,6 +269,7 @@
 			that.avatar =  res.avatar;
 			that.name =  res.name;
 			that.getUserInfo();
+			that.getUserData();
 			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
@@ -312,6 +350,7 @@
 							that.isvip = res.data.data.isvip;
 							that.lv = res.data.data.lv;
 							that.customize = res.data.data.customize;
+							that.introduce = res.data.data.introduce;
 						}
 					},
 					fail: function(res) {
@@ -341,6 +380,35 @@
 					that.getCommentsList()
 				}
 				
+			},
+			getUserData() {
+				var that = this;
+				Net.request({
+					
+					url: API.getUserData(),
+					data:{
+						"uid":that.uid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							that.fanNum = res.data.data.fanNum;
+							that.contentsNum = res.data.data.contentsNum;
+							that.commentsNum = res.data.data.commentsNum;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			getContentsList(isPage){
 				var that = this;
@@ -571,7 +639,19 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			subText(text,num){
+				if(text){
+					if(text.length>num){
+						text = text.substring(0,num);
+						return text+"……";
+					}else{
+						return text;
+					}
+				}else{
+					return "Ta还没有个人介绍哦"
+				}
+			},
 		}
 	}
 </script>

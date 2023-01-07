@@ -1461,10 +1461,12 @@ page{
 	margin: 0upx 20upx;
 }
 .user-list-btn{
-	width: 240upx !important;
+	width: 340upx !important;
 }
 .user-list-btn .cu-btn{
-	margin-left: 20upx;
+	margin-right: 20upx;
+	margin-top: 0upx !important;
+	float: right;
 }
 .agreement{
 	padding: 0upx 30upx 30upx 30upx;
@@ -1514,14 +1516,19 @@ page{
 	word-break: break-all;
 }
 .user-info{
-	height: 350upx;
+	height: 450upx;
 	width: 100%;
 	overflow: hidden;
 	position: relative;
 }
 .user-info-bg{
 	position: absolute;
-	height: 350upx;
+	height: 450upx;
+	/* #ifdef APP-PLUS || MP */
+	height: 450upx;
+	/* #endif */
+	top:0;
+	left: 0;
 	filter: blur(20upx);
 	width: 100%;
 	z-index: 0;
@@ -1533,27 +1540,63 @@ page{
 }
 .user-info-main{
 	position: absolute;
-	height: 370upx;
+	top: 0;
+	left: 0;
+	height: 450upx;
+	/* #ifdef APP-PLUS || MP */
+	height: 450upx;
+	/* #endif */
+	
 	width: 100%;
 	z-index: 5;
 	background-color: rgba(0,0,0,0.2);
 }
-.user-header{
+.user-info-content{
 	width: 100%;
+	padding: 0upx 60upx 30upx 60upx;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	
+	background: linear-gradient(to bottom, rgba(6, 6, 8, 0), rgba(6, 6, 8, 0.7));
+}
+.user-info-col{
+	width: 100%;
+	overflow: hidden;
+}
+.user-info-content .user-header{
+	width: 120upx;
 	text-align: center;
-	padding-top: 80upx;
+	float: left;
 }
 .user-header image{
 	width: 120upx;
 	height: 120upx;
 	border-radius: 50%;
 }
-.user-text{
-	text-align: center;
+.user-info-content .user-text{
+	width: calc(100% - 120upx);
+	padding-left: 20upx;
+	padding-top: 10upx;
 	font-size: 28upx;
 	color: #fff;
-	margin-top: 20upx;
+	float: left;
 	font-weight: bold;
+}
+.user-introduce{
+	font-size: 24upx;
+	color: #fff;
+	margin-top: 20upx;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	word-break: break-all;
+}
+.user-introduce text{
+	margin-right: 10upx;
+	
 }
 .user-edit-header{
 	width: 100%;
@@ -1562,6 +1605,23 @@ page{
 	padding-top: 40upx;
 	border-bottom:0.5px solid #eee;
 	padding-bottom: 30upx;
+}
+.user-info-data{
+	margin-top: 8upx;
+	font-weight: normal;
+}
+.user-data-num{
+	font-weight: bold;
+	margin-right: 10upx;
+}
+.user-data-label{
+	opacity: 0.8;
+}
+.user-info-data-box{
+	margin-right: 20upx;
+}
+.user-info-name{
+	font-size: 36upx;
 }
 .user-edit-header image{
 	width: 150upx;
@@ -2072,4 +2132,25 @@ page{
 	border:solid 1px #f3f3f3;
 	background: none;
 	font-weight: bold;
+}
+.userIndex .header{
+	background:none;
+}
+.userIndex .header .action{
+	color: #fff;
+}
+.comment-operation{
+	font-size: 24upx;
+	line-height: 20upx;
+	margin-top: 10upx;
+}
+.comment-operation text{
+	margin-right: 20upx;
+}
+.grid.col-6>view {
+    width: 16.666%;
+}
+.user-bantime{
+	font-size: 24upx;
+	margin-left: 10upx;
 }

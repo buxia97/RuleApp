@@ -34,11 +34,19 @@
 			</view>
 		</view>
 		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>用户模块
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
 			<view class="index-sort grid col-4">
-				<view class="index-sort-box" v-if="group=='administrator'">
+				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/users')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #fa5c00;">
 								<text class="cuIcon-friend"></text>
 							</view>
 							<view class="index-sort-text">
@@ -47,10 +55,70 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/senduser')">
+							<view class="index-sort-i" style="background-color: #2889a6;">
+								<text class="cuIcon-light"></text>
+							</view>
+							<view class="index-sort-text">
+								发送消息
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/invitation')">
+							<view class="index-sort-i" style="background-color: #0bb335;">
+								<text class="cuIcon-friendadd"></text>
+							</view>
+							<view class="index-sort-text">
+								邀请码管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/clean')">
+							<view class="index-sort-i">
+								<text class="cuIcon-file"></text>
+							</view>
+							<view class="index-sort-text">
+								数据清理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/banuser')">
+							<view class="index-sort-i" style="background-color: #333333;">
+								<text class="cuIcon-warnfill"></text>
+							</view>
+							<view class="index-sort-text">
+								封禁用户
+							</view>
+						</view>
+					</waves>
+				</view>
+			</view>
+		</view>
+		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>内容模块
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="index-sort grid col-4">
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/contents')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #009595;">
 								<text class="cuIcon-text"></text>
 							</view>
 							<view class="index-sort-text">
@@ -82,11 +150,49 @@
 							</view>
 						</view>
 					</waves>
+				</view>				
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/ads')">
+							<view class="index-sort-i" style="background-color: #7a4ada;">
+								<text class="cuIcon-read"></text>
+							</view>
+							<view class="index-sort-text">
+								广告管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				
+				
+			</view>
+		</view>
+		<view class="data-box" v-if="group=='administrator'">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>财务模块
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="index-sort grid col-4">
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/finance')">
+							<view class="index-sort-i" style="background-color: #e72323;">
+								<text class="cuIcon-vipcard"></text>
+							</view>
+							<view class="index-sort-text">
+								财务中心
+							</view>
+						</view>
+					</waves>
 				</view>
 				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/recharge')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #1747e6;">
 								<text class="cuIcon-pay"></text>
 							</view>
 							<view class="index-sort-text">
@@ -98,7 +204,7 @@
 				<view class="index-sort-box" v-if="group=='administrator'">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/withdraw')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #f1a100;">
 								<text class="cuIcon-vipcard"></text>
 							</view>
 							<view class="index-sort-text">
@@ -115,66 +221,6 @@
 							</view>
 							<view class="index-sort-text">
 								卡密管理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/clean')">
-							<view class="index-sort-i">
-								<text class="cuIcon-file"></text>
-							</view>
-							<view class="index-sort-text">
-								数据清理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/invitation')">
-							<view class="index-sort-i" style="background-color: #0bb335;">
-								<text class="cuIcon-friendadd"></text>
-							</view>
-							<view class="index-sort-text">
-								邀请码管理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/ads')">
-							<view class="index-sort-i" style="background-color: #7a4ada;">
-								<text class="cuIcon-read"></text>
-							</view>
-							<view class="index-sort-text">
-								广告管理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/finance')">
-							<view class="index-sort-i" style="background-color: #e72323;">
-								<text class="cuIcon-vipcard"></text>
-							</view>
-							<view class="index-sort-text">
-								财务中心
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/senduser')">
-							<view class="index-sort-i" style="background-color: #2889a6;">
-								<text class="cuIcon-light"></text>
-							</view>
-							<view class="index-sort-text">
-								发送消息
 							</view>
 						</view>
 					</waves>

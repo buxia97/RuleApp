@@ -25,7 +25,7 @@
 						<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
 							<view class="cu-list menu-avatar comment">
 								<view class="cu-item">
-									<view class="cu-avatar round" :style="item.style"></view>
+									<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
 									<view class="content">
 										<view class="text-grey">{{item.author}}
 										<!--  #ifdef H5 || APP-PLUS -->
@@ -289,7 +289,17 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.author;
+				var title = data.author+"的信息";
+				var id= data.authorId;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
 		}
 	}
 </script>

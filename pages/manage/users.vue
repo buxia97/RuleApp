@@ -28,7 +28,7 @@
 					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
-			<view class="search-type grid col-5">
+			<view class="search-type grid col-6">
 				<view class="search-type-box " @tap="getType('all')" :class="dataType=='all'?'active':''">
 					<text>全部</text>
 				</view>
@@ -44,12 +44,15 @@
 				<view class="search-type-box" @tap="getType('vip')" :class="dataType=='vip'?'active':''">
 					<text>VIP</text>
 				</view>
+				<view class="search-type-box" @tap="getType('ban')" :class="dataType=='ban'?'active':''">
+					<text>封禁</text>
+				</view>
 			</view>
 			<view class="no-data" v-if="userList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" >
-				<view class="cu-avatar round lg" :style="item.style"></view>
+				<view class="cu-avatar round lg" @tap="toUserContents(item)" :style="item.style"></view>
 				<view class="content">
 					<view class="text-grey">
 						<block  v-if="item.screenName">{{item.screenName}}</block>
@@ -68,19 +71,31 @@
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							UID：{{item.uid}}&nbsp;
+							UID:{{item.uid}}&nbsp;&nbsp;积分:<text class="text-blue">{{item.assets}}</text>
 						</view>
 					</view>
 				</view>
 				<view class="action user-list-btn">
 					<block v-if="type==''">
-						<view class="cu-btn text-blue radius" @tap="toEdit(item.uid)">
-							<text class="cuIcon-post"></text>
-						</view>
+						<block v-if="dataType=='ban'">
+							<view class="cu-btn text-black radius" @tap="unblockUser(item.uid)">
+								解封
+							</view>
+						</block>
+						<block v-else>
+							<view class="cu-btn text-red radius" @tap="deleteUser(item.uid)"  v-if="group=='administrator'">
+								<text class="cuIcon-deletefill"></text>
+							</view>
+							<view class="cu-btn text-blue radius" @tap="toEdit(item.uid)"  v-if="group=='administrator'">
+								<text class="cuIcon-post"></text>
+							</view>
+							
+							<view class="cu-btn text-black radius" @tap="toBan(item.uid)">
+								<text class="cuIcon-warnfill"></text>
+							</view>
+						</block>
 						
-						<view class="cu-btn text-red radius" @tap="deleteUser(item.uid)">
-							<text class="cuIcon-deletefill"></text>
-						</view>
+						
 					</block>
 					<block v-if="type=='get'">
 						<view class="cu-btn text-blue radius" @tap="getUser(item)">
@@ -127,6 +142,7 @@
 				type:"",
 				dataType:"all",
 				group:"",
+				token:"",
 				
 			}
 		},
@@ -149,6 +165,15 @@
 		onShow(){
 			
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+			}
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
 			that.page=1;
 			// #ifdef APP-PLUS
 			
@@ -223,6 +248,10 @@
 			},
 			getUserList(isPage){
 				var that = this;
+				if(localStorage.getItem('token')){
+					
+					that.token = localStorage.getItem('token');
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -238,6 +267,11 @@
 						"vip":1
 					}
 				}
+				if(that.dataType=='ban'){
+					data = {
+						"bantime":1
+					}
+				}
 				Net.request({
 					url: API.getUserList(),
 					data:{
@@ -245,7 +279,8 @@
 						"limit":10,
 						"page":page,
 						"searchKey":that.searchText,
-						"order":"created"
+						"order":"created",
+						"token":that.token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -334,6 +369,66 @@
 				            			icon: 'none'
 				            		})
 				            		if(res.data.code==1){
+										that.page=1;
+				            			that.getUserList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+				
+			},
+			unblockUser(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"uid":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要解封该用户吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.unblockUser(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.page=1;
 				            			that.getUserList();
 				            		}
 				            		
@@ -359,6 +454,25 @@
 				var that = this;
 				localStorage.setItem('getuid',data.uid);
 				that.back();
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				if(data.screenName){
+					title = data.screenName+" 的信息";
+					name = data.screenName
+				}
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
+			toBan(uid){
+				uni.navigateTo({
+				    url: '/pages/manage/banuser?uid='+uid
+				});
 			}
 		}
 	}

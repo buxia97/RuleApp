@@ -79,6 +79,19 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="goPage('/pages/contents/blackhouse')">
+							<view class="index-sort-i" style="background-color: #333;">
+								<text class="cuIcon-warnfill"></text>
+							</view>
+							<view class="index-sort-text">
+								小黑屋
+							</view>
+						</view>
+					</waves>
+				</view>
+				
 			</view>
 		</view>
 		<view class="data-box">
