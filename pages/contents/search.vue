@@ -151,8 +151,8 @@
 								{{subText(item.introduce,100)}}
 							</view> </view>
 					</view>
-					<view class="action">
-						<view class="text-blue text-xs">详情</view>
+					<view class="action goUserIndex">
+						<view class="cu-btn bg-gradual-red">主页</view>
 						
 					</view>
 				</view>

@@ -83,17 +83,21 @@
 					<text class="clock-btn" @tap="toClock" v-if="isClock==0">签到</text>
 					<text class="clock-btn istap" v-else>已签到</text>
 					<!--  #ifdef H5 || APP-PLUS -->
-					<view class="user-data grid col-3" v-if="userInfo!=null">
+					<view class="user-data grid col-4" v-if="userInfo!=null">
 						<view class="user-data-box" @tap="toLink('/pages/user/userpost')">
 							<view class="user-data-value">{{userData.contentsNum}}</view>
 							<view class="user-data-title">文章</view>
+						</view>
+						<view class="user-data-box"  @tap="toLink('/pages/user/fanList?uid='+uid)">
+							<view class="user-data-value">{{formatNumber(userData.fanNum)}}</view>
+							<view class="user-data-title">粉丝</view>
 						</view>
 						<view class="user-data-box" @tap="toLink('/pages/user/usercomments')">
 							<view class="user-data-value">{{userData.commentsNum}}</view>
 							<view class="user-data-title">评论</view>
 						</view>
 						<view class="user-data-box" @tap="toLink('/pages/user/assets')">
-							<view class="user-data-value">{{userData.assets}}</view>
+							<view class="user-data-value">{{formatNumber(userData.assets)}}</view>
 							<view class="user-data-title">积分</view>
 						</view>
 					</view>
@@ -120,12 +124,12 @@
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/user/inbox')">
+						<view class="index-sort-main" @tap="toLink('/pages/user/followList?uid='+uid)">
 							<view class="index-sort-i" style="background-color: #ff7a06;">
-								<text class="cuIcon-message"></text>
+								<text class="cuIcon-attentionfill"></text>
 							</view>
 							<view class="index-sort-text">
-								我的消息
+								我的关注
 							</view>
 						</view>
 					</waves>
@@ -300,6 +304,7 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				userInfo:null,
+				uid:0,
 				token:"",
 				userData:{},
 				isClock:0,
@@ -334,6 +339,7 @@
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.uid = that.userInfo.uid;
 				that.group = that.userInfo.group;
 			}else{
 				that.userInfo =null;
@@ -650,6 +656,9 @@
 					}
 				})
 			},
+			formatNumber(num) {
+			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			},
 			toClock(){
 				
 				var that = this;
@@ -859,6 +868,13 @@
 						})
 					}
 				})
+			},
+			goFanList(uid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/fanList?uid='+uid
+				});
 			},
 		},
 		// #ifdef APP-PLUS

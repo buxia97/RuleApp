@@ -1311,7 +1311,6 @@
 			},
 			toShop(){
 				var that = this;
-				
 				uni.navigateTo({
 				    url: '/pages/contents/shop'
 				});
@@ -1515,8 +1514,20 @@
 					//如果线上的图片与本地缓存图片相同，就不再进行下载
 					if(imgData.url){
 						var url = imgData.url;
+						var type = imgData.urltype;
 						if(url.indexOf("http") != -1){
-							plus.runtime.openWeb(url);
+							// #ifdef APP-PLUS
+							if(type==1){
+								plus.runtime.openURL(url);
+							}
+							if(type==0){
+								plus.runtime.openWeb(url);
+							}
+							// #endif
+							// #ifdef H5
+							window.open(url)
+							// #endif
+							
 						}else{
 							uni.navigateTo({
 							    url: url

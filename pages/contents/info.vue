@@ -67,8 +67,9 @@
 								</view>
 							</view>
 						</view>
-						<view class="action" @tap="toUserContents(userInfo)">
-							<view class="text-blue">信息</view>
+						<view class="action goUserIndex">
+							<button class="cu-btn isFollow" @tap="follow(0)" v-if="isFollow==1">已关注</button>
+							<button class="cu-btn unFollow" @tap="follow(1)" v-else><text class="cuIcon-add"></text>关注</button>
 							
 						</view>
 					</view>
@@ -361,7 +362,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				cid:0,
 				title:"",
@@ -453,6 +454,9 @@
 				images:[],
 				
 				group:"",
+				
+				authorId:0,
+				isFollow:0,
 				
 			}
 		},
@@ -628,7 +632,9 @@
 					that.html=that.markHtml(postInfo.text);
 					that.tagList=postInfo.tag;
 					that.slug = postInfo.slug;
+					that.authorId = postInfo.authorId
 					that.getUserInfo(postInfo.authorId);
+					that.getIsFollow(postInfo.authorId);
 				}
 				if(localStorage.getItem('commentsList_'+cid)){
 					that.commentsList = JSON.parse(localStorage.getItem('commentsList_'+cid));
@@ -810,8 +816,9 @@
 							that.slug = res.data.slug;
 							that.type = res.data.type;
 							that.likes =  res.data.likes;
-							
+							that.authorId =  res.data.authorId
 							that.getUserInfo(res.data.authorId);
+							that.getIsFollow(res.data.authorId);
 							localStorage.removeItem('postInfo_'+that.cid);
 							localStorage.setItem('postInfo_'+that.cid,JSON.stringify(res.data));
 							var timer = setTimeout(function() {
@@ -1681,6 +1688,95 @@
 				        }
 				    }
 				});
+			},
+			getIsFollow(uid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					token:token,
+					touid:uid,
+				}
+				Net.request({
+					
+					url: API.isFollow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isFollow = res.data.code;
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			follow(type){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				var data = {
+					token:token,
+					touid:that.authorId,
+					type:type,
+				}
+				that.isFollow = type;
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.follow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						that.getIsFollow(that.authorId);
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh();
+						that.getIsFollow(that.authorId);
+					}
+				})
 			},
 		}
 	}

@@ -49,7 +49,21 @@
 		},
 		{
 			"path": "pages/user/userlist",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/user/fanList",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/user/followList",
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/user/useredit",

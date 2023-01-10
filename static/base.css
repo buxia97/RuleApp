@@ -2136,8 +2136,15 @@ page{
 .userIndex .header{
 	background:none;
 }
+
 .userIndex .header .action{
 	color: #fff;
+}
+.userIndex .header.goScroll{
+	background: #fff
+}
+.userIndex .header.goScroll .action{
+	color: #333;
 }
 .comment-operation{
 	font-size: 24upx;
@@ -2153,4 +2160,52 @@ page{
 .user-bantime{
 	font-size: 24upx;
 	margin-left: 10upx;
+}
+.userInfo-bottom-btn{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100upx;
+	background: #fff;
+	box-shadow: 0px -4upx 8upx rgba(0,0,0,0.2);
+	text-align: center;
+}
+.userInfo-bottom-box{
+	padding: 0upx 30upx;
+}
+.userInfo-bottom-box button{
+	height:70upx;
+	width: 100%;
+	margin-top: 15upx;
+}
+.userInfo-tochat{
+	height: 100upx;
+	line-height: 100upx;
+	font-size: 30upx;
+}
+.userInfo-tochat text{
+	margin-right: 10upx;
+}
+.userInfo-bottom-box button text{
+	margin-right: 10upx;
+}
+
+.cu-list.menu-avatar>.cu-item .action.goUserIndex{
+	width:180upx;
+}
+.goUserIndex .cu-btn{
+	border-radius: 15upx;
+}
+.goUserIndex .isFollow{
+	background: #0060ba !important;
+	color: #fff !important;
+}
+.goUserIndex .unFollow{
+	background: #0081ff !important;
+	color: #fff !important;
+}
+.goUserIndex .unFollow text{
+	font-weight: bold;
+	margin-right: 5upx;
 }

@@ -1,12 +1,14 @@
 <template>
 	<view class="userpost userIndex" :class="AppStyle">
-		<view class="header" :style="[{height:CustomBar + 'px'}]">
+		<view class="header" :style="[{height:CustomBar + 'px'}]"  :class="scrollTop>40?'goScroll':''">
 			<view class="cu-bar" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					<!-- {{name}}的主页 -->
+					<block v-if="scrollTop>40">
+					{{name}}的主页
+					</block>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toSearch">
@@ -48,7 +50,7 @@
 									<!--  #endif -->
 								<!-- </view> -->
 								<view class="user-info-data">
-									<text class="user-info-data-box">
+									<text class="user-info-data-box" @tap="goFanList(uid)">
 										<text class="user-data-num">{{fanNum}}</text>
 										<text class="user-data-label">粉丝</text>
 									</text>
@@ -162,8 +164,25 @@
 				</view>
 			</view>
 			<!--评论结束-->
+			<!--占位区域-->
+			<view style="width: 100%;height: 100upx;"></view>
 		</view>
-		
+		<!--底部操作-->
+		<view class="userInfo-bottom-btn" v-if="vid!=uid">
+			<view class="userInfo-bottom-main grid col-2">
+				<view class="userInfo-bottom-box">
+					<view class="userInfo-tochat">
+						<text class="cuIcon-mark"></text>私聊
+					</view>
+					
+				</view>
+				<view class="userInfo-bottom-box">
+					<button class="cu-btn bg-gradual-red" @tap="follow(0)" v-if="isFollow==1"><text class="cuIcon-add"></text>已关注</button>
+					<button class="cu-btn bg-gradual-red" @tap="follow(1)" v-else><text class="cuIcon-add"></text>关注</button>
+					
+				</view>
+			</view>
+		</view>
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -225,11 +244,25 @@
 				contentsNum:0,
 				commentsNum:0,
 				
+				scrollTop:0,
+				isFollow:0,
+				
+				vid:"",
+				
 				
 			}
 		},
+		onPageScroll(res){
+			var that = this;
+			that.scrollTop = res.scrollTop;
+		},
 		onShow(){
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.vid = userInfo.uid;
+			}
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")
@@ -268,6 +301,7 @@
 			that.uid =  res.uid;
 			that.avatar =  res.avatar;
 			that.name =  res.name;
+			that.getIsFollow();
 			that.getUserInfo();
 			that.getUserData();
 			// #ifdef APP-PLUS || H5
@@ -293,6 +327,13 @@
 				}else{
 					that.getCommentsList(false)
 				}
+			},
+			goFanList(uid){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/fanList?uid='+uid
+				});
 			},
 			back(){
 				uni.navigateBack({
@@ -528,6 +569,95 @@
 							that.isLoading=1;
 							clearTimeout('timer')
 						}, 300)
+					}
+				})
+			},
+			getIsFollow(){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					token:token,
+					touid:that.uid,
+				}
+				Net.request({
+					
+					url: API.isFollow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isFollow = res.data.code;
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			follow(type){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				var data = {
+					token:token,
+					touid:that.uid,
+					type:type,
+				}
+				that.isFollow = type;
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.follow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						that.getIsFollow();
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh();
+						that.getIsFollow();
 					}
 				})
 			},

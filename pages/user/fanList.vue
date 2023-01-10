@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					全站用户
+					粉丝列表
 				</view>
 				<view class="action">
 					
@@ -19,16 +19,15 @@
 			<view class="no-data" v-if="userList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
-			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
+			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item.userJson)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
 					<view class="text-grey">
-						<block  v-if="item.screenName">{{item.screenName}}</block>
-						<block  v-else>{{item.name}}</block>
-						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						<block>{{item.userJson.name}}</block>
+						<text v-if="item.userJson.groupKey=='contributor'||item.userJson.groupKey=='administrator'" class="cuIcon-lightfill"></text>
 						<!--  #ifdef H5 || APP-PLUS -->
-						<block v-if="item.isvip>0">
-							<block v-if="item.vip==1">
+						<block v-if="item.userJson.isvip>0">
+							<block v-if="item.userJson.vip==1">
 								<text class="isVIP bg-gradual-red">VIP</text>
 							</block>
 							<block v-else>
@@ -39,7 +38,7 @@
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							{{subText(item.introduce,100)}}
+							{{subText(item.userJson.introduce,100)}}
 						</view> </view>
 				</view>
 				<view class="action goUserIndex">
@@ -72,7 +71,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				userList:[],
 				
@@ -80,6 +79,7 @@
 				moreText:"加载更多",
 				isLoad:0,
 				isLoading:0,
+				uid:0,
 				
 			}
 		},
@@ -107,20 +107,17 @@
 			// #endif
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(res.uid){
+				that.uid = res.uid;
+			}
 			that.getUserList(false);
 		},
 		methods:{
-			allCache(){
-				var that = this;
-				if(localStorage.getItem('userList')){
-					that.userList = JSON.parse(localStorage.getItem('userList'));
-				}
-			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -154,12 +151,11 @@
 					page++;
 				}
 				Net.request({
-					url: API.getUserList(),
+					url: API.fanList(),
 					data:{
-						"searchParams":"",
+						"touid":that.uid,
 						"limit":10,
 						"page":page,
-						"order":"created"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -175,7 +171,7 @@
 								var userList = [];
 								for(var i in list){
 									var arr = list[i];
-									arr.style = "background-image:url("+list[i].avatar+");"
+									arr.style = "background-image:url("+list[i].userJson.avatar+");"
 									userList.push(arr);
 								}
 								if(isPage){
@@ -184,7 +180,6 @@
 								}else{
 									that.userList = userList;
 								}
-								localStorage.setItem('userList',JSON.stringify(that.userList));
 							}else{
 								that.moreText="没有更多数据了";
 							}
