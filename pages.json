@@ -412,6 +412,10 @@
 		}
 		
 		// #endif
+		,{
+			"path": "pages/chat/chat",
+			"style": {}
+		}
 		
 	],
 	"globalStyle": {

@@ -447,6 +447,31 @@ module.exports = {
 	renewalAds:function(){
 		return API_URL + 'typechoAds/renewalAds';
 	},
+	//聊天
+	getPrivateChat:function(){
+		return API_URL + 'typechoChat/getPrivateChat';
+	},
+	sendMsg:function(){
+		return API_URL + 'typechoChat/sendMsg';
+	},
+	myChat:function(){
+		return API_URL + 'typechoChat/myChat';
+	},
+	msgList:function(){
+		return API_URL + 'typechoChat/msgList';
+	},
+	deleteChat:function(){
+		return API_URL + 'typechoChat/deleteChat';
+	},
+	deleteMsg:function(){
+		return API_URL + 'typechoChat/deleteMsg';
+	},
+	createGroup:function(){
+		return API_URL + 'typechoChat/createGroup';
+	},
+	allGroup:function(){
+		return API_URL + 'typechoChat/allGroup';
+	},
 	IsNull(obj) {
 		return (obj != null && obj != undefined);
 	},

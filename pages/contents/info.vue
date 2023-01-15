@@ -854,6 +854,8 @@
 						if(res.data.code==1){
 							that.userInfo = res.data.data;
 							that.userInfo.style = "background-image:url("+res.data.data.avatar+");"
+						}else{
+							that.userInfo.name="用户已注销"
 						}
 					},
 					fail: function(res) {

@@ -357,7 +357,7 @@
 			that.poststyle = "height:"+inputHeight+"px";
 			that.readstyle = "height:"+(inputHeight+30)+"px";
 			// #ifdef H5
-			that.h5Keyboard();
+			//that.h5Keyboard();
 			// #endif
 			// #ifdef APP-PLUS
 			uni.onKeyboardHeightChange(res => {

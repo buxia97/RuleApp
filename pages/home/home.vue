@@ -1046,9 +1046,6 @@
 						"page":page,
 						"order":"created"
 					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {

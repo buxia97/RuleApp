@@ -170,7 +170,7 @@
 		<!--底部操作-->
 		<view class="userInfo-bottom-btn" v-if="vid!=uid">
 			<view class="userInfo-bottom-main grid col-2">
-				<view class="userInfo-bottom-box">
+				<view class="userInfo-bottom-box" @tap="getPrivateChat()">
 					<view class="userInfo-tochat">
 						<text class="cuIcon-mark"></text>私聊
 					</view>
@@ -421,6 +421,71 @@
 					that.getCommentsList()
 				}
 				
+			},
+			getPrivateChat(){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				var touid = that.uid;
+				var data={
+					"touid":touid,
+					"token":token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.getPrivateChat(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						
+						if(res.data.code==1){
+							var name = that.name;
+							var uid = that.uid;
+							var avatar = that.avatar;
+							var chatid = res.data.data
+							uni.redirectTo({
+							    url: '/pages/chat/chat?uid='+uid+"&avatar="+avatar+"&name="+name+"&chatid="+chatid
+							});
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			getUserData() {
 				var that = this;
@@ -727,6 +792,13 @@
 				
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
+				});
+			},
+			toSearch(){
+				var that = this;
+				
+				uni.redirectTo({
+				    url: '/pages/contents/search'
 				});
 			},
 			ToCopy(text) {
