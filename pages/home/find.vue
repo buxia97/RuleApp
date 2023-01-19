@@ -75,12 +75,12 @@
 				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="goPage('/pages/contents/foreverblog')">
-							<view class="index-sort-i toClub">
-								<text class="cuIcon-upstagefill"></text>
+						<view class="index-sort-main"  @tap="goPage('/pages/contents/shop')">
+							<view class="index-sort-i" style="background-color: #ff3333;">
+								<text class="cuIcon-taoxiaopu"></text>
 							</view>
 							<view class="index-sort-text">
-								十年之约
+								积分商城
 							</view>
 						</view>
 					</waves>

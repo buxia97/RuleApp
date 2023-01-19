@@ -54,10 +54,10 @@
 						</view>
 						<view class="shop-info">
 							<block v-if="isvip==1">
-								<text class="shop-price text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}}</text><text class="text-sm margin-left-sm text-yellow">积分</text>
+								<text class="shop-price text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}}</text><text class="text-sm margin-left-sm text-yellow">{{currencyName}}</text>
 							</block>
 							<block v-else>
-								<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">积分</text>
+								<text class="shop-price text-red text-bold">{{item.price}}</text><text class="text-sm margin-left-sm text-red">{{currencyName}}</text>
 							</block>
 							<text class="cuIcon-cart"></text>
 						</view>
@@ -111,13 +111,14 @@
 				scale:0,
 				isvip:0,
 				vip:0,
+				currencyName:"",
 				
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
 			that.page=1;
-			that.getShopList();
+			that.getShopList(false);
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)
@@ -131,6 +132,7 @@
 		},
 		onShow(){
 			var that = this;
+			that.currencyName = API.getCurrencyName();
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")
@@ -157,7 +159,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
-			that.getShopList();
+			that.getShopList(false);
 		},
 		methods: {
 			back(){

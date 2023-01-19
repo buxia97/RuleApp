@@ -30,6 +30,20 @@
 			}
 		},
 		{
+			"path": "pages/home/square",
+			"style": {
+				"enablePullDownRefresh":true
+			},
+			
+			"app-plus":{
+				"pullToRefresh":{
+					"color":"#54b5db",
+					"style":"circle"
+				}
+				
+			}
+		},
+		{
 			"path": "pages/home/tool",
 			"style": {
 				"enablePullDownRefresh":true
@@ -463,10 +477,10 @@
 				"selectedIconPath": "static/tabbar/find_cur.png"
 			},
 			{
-				"text": "工具",
-				"pagePath": "pages/home/tool",
-				"iconPath": "static/tabbar/tool.png",
-				"selectedIconPath": "static/tabbar/tool_cur.png"
+				"text": "广场",
+				"pagePath": "pages/home/square",
+				"iconPath": "static/tabbar/square.png",
+				"selectedIconPath": "static/tabbar/square_cur.png"
 			},
 			{
 				"text": "我的",

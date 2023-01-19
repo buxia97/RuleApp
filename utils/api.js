@@ -8,17 +8,19 @@ var GithubUrl = 'https://github.com/buxia97/RuleApp';
 //配合nginx实现的访问key
 var key = "";
 
-//对于个人小程序，不能有评论，充值，商品和发布文章，所以在小程序端默认是不会显示这些的，因为个人不可能过审，但如果是企业，可以去页面上自行去除我的判断代码，或者在下方进行配置。
-//其次，小程序端有应用程序大小限制，过多的页面会导致资源超出大小
+var currencyName = "规则豆";
+
+//对于个人小程序，将不会出现积分商城，交易，评论等页面，因为会导致无法过审。如果是企业，可以自行注释条件编译判断，开启那些功能。
 
 //下面主要用于用户协议
 var appName="规则之树";
 var appEmail = "buxia97@126.com";
 //全局数据调用部分【重要】
 
-//用户头衔，自己修改名词
-var rankList = ["小白","萌新","入门","熟手","大佬","巨佬","传说","古神"];
-
+//评论等级头衔
+var rankList = ["小水友","资深水友","灌水大师","小龙王","大龙王","深海巨妖","水神","至尊水神"];
+//经验等级头衔
+var leverList = ["Lv0","Lv1","Lv2","Lv3","Lv4","Lv5","Lv6","Lv7"];
 //头衔对应的背景颜色
 var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#660033","#000000"];
 
@@ -54,11 +56,18 @@ module.exports = {
 	getKey(){
 		return key;
 	},
+	getCurrencyName(){
+		return currencyName;
+	},
+	
 	GetIsComment(){
 		return isComment;
 	},
 	GetRankList(){
 		return rankList;
+	},
+	GetLeverList(){
+		return leverList;
 	},
 	GetRankStyle(){
 		return rankStyle;
@@ -509,6 +518,28 @@ module.exports = {
 	        }
 	    }
 	    return json;
-	}
+	},
+	//获取用户当前等级
+	getLever(num){
+		var lv = 0;
+		if (num < 10) {
+			lv = 0;
+		} else if (num >= 10 && num < 50) {
+			lv = 1;
+		} else if (num >= 50 && num < 200) {
+			lv = 2;
+		} else if (num >= 200 && num < 500) {
+			lv = 3;
+		} else if (num >= 500 && num < 1000) {
+			lv = 4;
+		} else if (num >= 1000 && num < 2000) {
+			lv = 5;
+		} else if (num >= 2000 && num < 5000) {
+			lv = 6;
+		} else if (num >= 5000) {
+			lv = 7;
+		}
+		return lv;
+	},
 
 }

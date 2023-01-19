@@ -788,7 +788,11 @@
 				
 				that.getMetaList();
 				that.getTopContents();
-				that.getContentsList(false);
+				if(that.TabCur==0){
+					that.getContentsList(false);
+				}else{
+					that.getMetaContents(false,that.TabCur);
+				}
 			},
 			tabSelect(e) {
 				var that = this;
@@ -1203,6 +1207,8 @@
 						if(res.data.code==0){
 							localStorage.removeItem('userinfo');
 							localStorage.removeItem('token');
+							that.token = "";
+							that.userinfo = null;
 						}
 					},
 					fail: function(res) {

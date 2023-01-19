@@ -98,7 +98,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price">
 										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">立即下单</text>
@@ -116,7 +116,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
@@ -138,7 +138,7 @@
 									 mode="aspectFill"></image>
 									<view class="text-content">{{item.title}}</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
@@ -157,7 +157,7 @@
 										付费阅读
 									</view>
 									<view class="tool-price" v-if="isBuy==0">
-										<text class="text-red text-bold">{{item.price}} 积分</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} 积分</text>
+										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price" v-if="isBuy==1">
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
@@ -305,7 +305,7 @@
 				</view>
 				<view class="grid col-3 padding-sm">
 					<view v-for="(item,index) in checkbox" class="padding-xs" :key="index">
-						<button class="cu-btn orange lg block" :class="item.checked?'bg-orange':'line-orange'" @tap="ChooseCheckbox(index)"> {{item.name}}
+						<button class="cu-btn orange lg block" :class="item.checked?'bg-orange':'line-orange'" @tap="ChooseCheckbox(index)"> {{item.num}}{{currencyName}}
 							<view class="cu-tag sm round" :class="item.checked?'bg-white text-orange':'bg-orange'" v-if="item.hot">HOT</view>
 						</button>
 					</view>
@@ -458,6 +458,8 @@
 				authorId:0,
 				isFollow:0,
 				
+				currencyName:"",
+				
 			}
 		},
 		components: {
@@ -502,6 +504,7 @@
 		// #endif
 		onShow(){
 			var that = this;
+			that.currencyName = API.getCurrencyName();
 			if(localStorage.getItem('userinfo')){
 				
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -992,7 +995,7 @@
 						})
 						if(res.data.code==1){
 							uni.showToast({
-								title: "成功打赏 "+num+" 积分",
+								title: "成功打赏 "+num+" "+that.currencyName,
 								icon: 'none'
 							})
 						}

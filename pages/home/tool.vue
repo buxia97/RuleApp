@@ -2,18 +2,15 @@
 	<view :class="AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
+				<view class="action" @tap="back">
+					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					工具
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action header-btn">
-					
-					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
-						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
-					</text>
+				<view class="action" @tap="toSearch">
+					<text class="cuIcon-search"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -226,7 +223,6 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				
-				toolList:[],
 				userInfo:null,
 				token:"",
 				isLoading:0,
@@ -263,7 +259,6 @@
 			}
 			that.userStatus();
 			that.unreadNum();
-			that.allCache();
 			
 		},
 		onLoad() {
@@ -273,13 +268,11 @@
 			// #endif
 		},
 		methods:{
-			allCache(){
-				var that = this;
-				if(localStorage.getItem('toolList')){
-					that.toolList = JSON.parse(localStorage.getItem('toolList'));
-				}
+			back(){
+				uni.navigateBack({
+					delta: 1
+				});
 			},
-
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
 				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
@@ -347,6 +340,8 @@
 						if(res.data.code==0){
 							localStorage.removeItem('userinfo');
 							localStorage.removeItem('token');
+							that.token = "";
+							that.userinfo = null;
 						}
 					},
 					fail: function(res) {

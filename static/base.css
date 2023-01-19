@@ -132,7 +132,7 @@ page{
 }
 .data-box-title{
 	color: #333;
-	font-size: 32upx !important;
+	font-size: 30upx !important;
 	font-weight: bold;
 	text-overflow: -o-ellipsis-lastline;
 	overflow: hidden;
@@ -151,7 +151,8 @@ page{
 	color: #999;
 }
 .data-box .cu-bar{
-	border-bottom: solid 1px #f9f9f9;
+	border:none;
+	min-height: 80upx;
 }
 .data-time{
 	background: none !important;
@@ -2208,4 +2209,74 @@ page{
 .goUserIndex .unFollow text{
 	font-weight: bold;
 	margin-right: 5upx;
+}
+.square-box{
+	font-weight: bold;
+	color: #666;
+	margin-right: 15px;
+	font-size: 32upx;
+}
+.square-box.cur{
+	font-size: 38upx;
+	color: #000;
+}
+.square-post{
+	padding: 0 30upx;
+}
+.square-post-header{
+	padding-top: 30upx;
+	overflow: hidden;
+}
+.square-user{
+	width: 80upx;
+	float: left;
+}
+.square-text{
+	width: calc(100% - 80upx);
+	padding: 0px 20upx;
+	float: left;
+	line-height:70upx;
+	box-sizing: border-box;
+	color: #999;
+	border: solid 1px #f3f3f3;
+}
+.square-post-btn{
+	padding: 20upx 0upx;
+}
+.square-post-btn-box{
+	height: 60upx;
+	line-height: 60upx;
+	text-align: center;
+	box-sizing: border-box;
+	border-left: solid 1px #f6f6f6;
+}
+.square-post-btn-box:nth-child(1){
+	border: none;
+}
+.square-post-btn-box text{
+	margin-right: 10upx;
+}
+.cu-list.menu-avatar>.cu-item:after{
+	border: none !important;
+}
+.square-list .cu-item{
+	margin-top: 10upx !important;
+}
+.square-list .cu-avatar.lg{
+	width: 80upx;
+	height: 80upx;
+}
+.square-list .cu-list.menu-avatar>.cu-item .content{
+	left: 130upx;
+}
+.square-post-btn text{
+	margin-right: 10upx;
+	font-size: 35upx;
+}
+.user-post-info{
+	height: 150upx;
+	width: 100%;
+	background-color: #f3f3f3;
+	overflow: hidden;
+	border-radius: 10upx;
 }

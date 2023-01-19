@@ -685,13 +685,21 @@
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 500);
-						uni.showToast({
-							title: res.data.msg,
-							icon: 'none'
-						})
+						
 						if(res.data.code==1){
 							that.isClock=1;
+							var clockData = res.data.clockData;
+							uni.showToast({
+								title: "签到成功！获得"+clockData.award+API.getCurrencyName()+"，"+clockData.addExp+"经验",
+								icon: 'none'
+							})
 							that.getUserData();
+							
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
 						}
 						
 					},
