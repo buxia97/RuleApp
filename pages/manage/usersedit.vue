@@ -35,7 +35,7 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">邮箱</view>
-				<input placeholder="未设置" name="input" :value="mail"></input>
+				<input placeholder="请输入邮箱" name="input" v-model="mail"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">网址</view>
@@ -243,7 +243,6 @@
 					customize:that.customize,
 					group:that.group
 				}
-				console.log(data)
 				uni.showLoading({
 					title: "加载中"
 				});

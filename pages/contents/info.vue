@@ -619,9 +619,17 @@
 				});
 			},
 			back(){
-				uni.navigateBack({
-					delta: 1
-				});
+				
+				const pages = getCurrentPages()
+				if (pages.length === 1) {
+				  uni.switchTab({
+				  	url: '/pages/home/home'
+				  })
+				} else {
+				  uni.navigateBack({
+				  	delta: 1
+				  });
+				}
 			},
 			allCache(){
 				var that = this;

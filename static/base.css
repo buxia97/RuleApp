@@ -2280,3 +2280,9 @@ page{
 	overflow: hidden;
 	border-radius: 10upx;
 }
+.admin-btn{
+	display: none;
+}
+.cu-item:hover .admin-btn{
+	display: inline;
+}

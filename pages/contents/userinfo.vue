@@ -464,10 +464,9 @@
 						if(res.data.code==1){
 							var name = that.name;
 							var uid = that.uid;
-							var avatar = that.avatar;
 							var chatid = res.data.data
 							uni.redirectTo({
-							    url: '/pages/chat/chat?uid='+uid+"&avatar="+avatar+"&name="+name+"&chatid="+chatid
+							    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
 							});
 						}else{
 							uni.showToast({
@@ -721,7 +720,6 @@
 							title: "网络开小差了哦",
 							icon: 'none'
 						})
-						uni.stopPullDownRefresh();
 						that.getIsFollow();
 					}
 				})

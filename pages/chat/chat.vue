@@ -20,15 +20,15 @@
 			<view class="cu-item"></view>
 			<view class="cu-info" v-if="isFollow==0">
 				你还不是Ta的粉丝，关注Ta后可以获得更多动态。
-				<text class="text-blue">关注Ta</text>
+				<text class="text-blue" @tap="follow(1)">关注Ta</text>
 			</view>
 			<block v-for="(item,index) in msgList">
 				<view class="cu-item " :class="item.uid==uid?'self':''">
 					<view class="cu-avatar radius"  v-if="item.uid!=uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 					<view class="main">
 						<block v-if="item.type==0">
-							<view class="content shadow" :class="item.uid==uid?'bg-green':''">
-								<text>{{item.text}}</text>
+							<view class="content shadow" :class="item.uid==uid?'bg-green':''" @longtap="ToCopy(item.text)">
+								<rich-text :nodes="item.text"></rich-text>
 							</view>
 						</block>
 						<block v-if="item.type==1">
@@ -36,14 +36,22 @@
 						</block>
 					</view>
 					<view class="cu-avatar radius"  v-if="item.uid==uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
-					<view class="date">{{formatDate(item.created)}}</view>
+					<view class="date">
+					{{formatDate(item.created)}}
+					<block  v-if="group=='administrator'||group=='editor'"></block>
+					<text class="admin-btn margin-left-sm">
+						<text class="text-red" @tap="toDelete(item.id)">删除</text>
+						<text class="text-black margin-left-sm" @tap="toBan(item.uid)">禁言</text>
+					</text>
+					
+					</view>
 				</view>
 			</block>
 		</view>
 
 		<view class="cu-bar foot input" :style="[{bottom:InputBottom+'px'}]">
 			<view class="action">
-				<text class="cuIcon-pic text-grey"></text>
+				<text class="cuIcon-pic text-grey" @tap="upload"></text>
 			</view>
 			<input class="solid-bottom" :adjust-position="false" :focus="false" maxlength="300" cursor-spacing="10"
 			 @focus="InputFocus" @blur="InputBlur" v-model="msg"></input>
@@ -87,7 +95,10 @@
 				msgList:[],
 				uid:"",
 				
-				msgLoading:null
+				msgLoading:null,
+				lastTime:0,
+				
+				group:"",
 			};
 		},
 		onShow() {
@@ -96,6 +107,7 @@
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.uid = that.userInfo.uid;
+				that.group = that.userInfo.group;
 			}
 		},
 		onReachBottom() {
@@ -113,20 +125,17 @@
 			if(res.name){
 				that.name = res.name
 			}
-			if(res.toid){
+			if(res.uid){
 				that.toid = res.uid;
 				that.getIsFollow();
 			}
-			if(res.avatar){
-				that.avatar = res.avatar;
-				that.avatarstyle = "background-image:url("+that.avatar+");"
-			}
+			that.getUserInfo(that.toid);
 			if(res.chatid){
 				that.chatid = res.chatid;
 				that.getMsgList();
 				that.msgLoading = setInterval(() => {
-				 that.getMsgList();
-				}, 2000);
+				 that.getMsgList(false);
+				}, 3000);
 			}
 		},
 		methods: {
@@ -154,6 +163,75 @@
 			},
 			InputBlur(e) {
 				this.InputBottom = 0
+			},
+			toBan(uid){
+				if(!uid){
+					uni.showToast({
+						title: "该用户不存在",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/manage/banuser?uid='+uid
+				});
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"msgid":id,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要删除该消息吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.deleteMsg(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.getMsgList();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
 			},
 			getMsgList(isPage){
 				var that = this;
@@ -195,11 +273,22 @@
 								}else{
 									that.msgList = list.reverse();
 								}
+								var lastTime = that.msgList[that.msgList.length-1].created;
+								if(lastTime > that.lastTime){
+									setTimeout(() => {
+										uni.pageScrollTo({
+											duration: 0,
+											scrollTop: 99999999
+										})
+									},100)
+									that.lastTime = that.msgList[that.msgList.length-1].created;
+								}
 								
 								
 							}else{
 								that.moreText="没有更多数据了";
 							}
+							
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;
@@ -248,6 +337,31 @@
 					}
 				})
 			},
+			getUserInfo(id){
+				var that = this;
+				var data = {
+					"key":id,
+				}
+				
+				Net.request({
+					url: API.getUserInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var userInfo = res.data.data;
+							that.avatarstyle = "background-image:url("+res.data.data.avatar+");"
+							that.avatar = res.avatar;
+						}
+					},
+					fail: function(res) {
+					}
+				});
+			},
 			sendMsg(){
 				var that = this;
 				var token = "";
@@ -286,6 +400,7 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
+							that.getMsgList();
 							that.msg = "";
 						}else{
 							uni.showToast({
@@ -311,6 +426,195 @@
 				uni.redirectTo({
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
 				});
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+				// #endif
+			},
+			follow(type){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				var data = {
+					token:token,
+					touid:that.toid,
+					type:type,
+				}
+				that.isFollow = type;
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.follow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						that.getIsFollow();
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						that.getIsFollow();
+					}
+				})
+			},
+			upload(){
+				let that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				uni.chooseImage({
+					count: 6, 
+					sourceType: ['album', 'camera'], 
+				    success: function (res) {						
+						const tempFilePaths = res.tempFilePaths;
+						for(let i = 0;i < tempFilePaths.length; i++) {
+							const uploadTask = uni.uploadFile({
+							  url : API.upload(),
+							  filePath: tempFilePaths[i],
+							  name: 'file',
+							  formData: {
+							   'token': token
+							  },
+							  success: function (uploadFileRes) {
+								  let count = 0;
+								  count++;
+									var data = JSON.parse(uploadFileRes.data);
+									//var data = uploadFileRes.data;
+									// uni.showToast({
+									// 	title: data.msg,
+									// 	icon: 'none'
+									// })
+									if(data.code==1){
+										that.sendURL(1,data.data.url);
+									}
+								},fail:function(){
+								}
+								
+							   
+							});
+						}
+					}
+				})
+			},
+			sendURL(type,url){
+				var that = this;
+				var token = "";
+				if(that.url==""){
+					return false;
+				}
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				
+				var data={
+					"chatid":that.chatid,
+					"token":token,
+					"url":url,
+					"type":type,
+					
+				}
+				Net.request({
+					
+					url: API.sendMsg(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.getMsgList();
+							that.msg = "";
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 		}
 	}
