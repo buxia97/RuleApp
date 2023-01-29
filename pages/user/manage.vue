@@ -163,7 +163,18 @@
 						</view>
 					</waves>
 				</view>
-				
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/chat')">
+							<view class="index-sort-i" style="background-color: #e70073;">
+								<text class="cuIcon-weixin"></text>
+							</view>
+							<view class="index-sort-text">
+								聊天室管理
+							</view>
+						</view>
+					</waves>
+				</view>
 				
 			</view>
 		</view>
@@ -392,10 +403,10 @@
 						
 					},
 					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
+						// uni.showToast({
+						// 	title: "网络开小差了哦",
+						// 	icon: 'none'
+						// })
 					}
 				})
 			},

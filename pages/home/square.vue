@@ -126,7 +126,7 @@
 				<view class="cu-item ">
 					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
 					<view class="content">
-						<view class="text-pink"><view class="text-cut">吃瓜交流群</view></view>
+						<view><view class="text-cut">吃瓜交流群</view></view>
 						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
 					</view>
 					<view class="action">
@@ -137,7 +137,7 @@
 				<view class="cu-item ">
 					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
 					<view class="content">
-						<view class="text-pink"><view class="text-cut">吃瓜交流群</view></view>
+						<view><view class="text-cut">吃瓜交流群</view></view>
 						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
 					</view>
 					<view class="action">
@@ -148,7 +148,7 @@
 				<view class="cu-item ">
 					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
 					<view class="content">
-						<view class="text-pink"><view class="text-cut">吃瓜交流群</view></view>
+						<view><view class="text-cut">吃瓜交流群</view></view>
 						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
 					</view>
 					<view class="action">

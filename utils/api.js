@@ -478,8 +478,8 @@ module.exports = {
 	createGroup:function(){
 		return API_URL + 'typechoChat/createGroup';
 	},
-	allGroup:function(){
-		return API_URL + 'typechoChat/allGroup';
+	allChat:function(){
+		return API_URL + 'typechoChat/allChat';
 	},
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

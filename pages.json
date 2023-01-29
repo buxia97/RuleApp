@@ -413,6 +413,9 @@
 			"path": "pages/manage/banuser"
 		},
 		{
+			"path": "pages/manage/chat"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

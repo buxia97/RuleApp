@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					消息中心
+					聊天室管理
 				</view>
 				<view class="action">
 					
@@ -16,78 +16,17 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box data-inbox">
 			<view class="search-type grid col-2">
-				<view class="search-type-box" @tap="toType('inbox')" :class="type=='inbox'?'active':''">
-					<text>平台消息</text>
+				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
+					<text>全站群聊</text>
 				</view>
-				<view class="search-type-box" @tap="toType('chat')" :class="type=='chat'?'active':''">
-					<text>用户消息</text>
+				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
+					<text>全站私聊</text>
 				</view>
 			</view>
-			<block v-if="type=='inbox'">
-				<view class="cu-card dynamic no-card">
-					<view class="cu-item">
-						<view class="cu-list menu-avatar comment">
-							<view class="no-data" v-if="inboxList.length==0">
-								暂时没有消息
-							</view>
-							<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-								<view class="cu-item" v-for="(item,index) in inboxList" :key="index" v-if="inboxList.length>0">
-									<view class="cu-list menu-avatar comment" @tap="goInbox(item)">
-										<view class="cu-item">
-											<view class="cu-avatar round" :style="item.style"></view>
-											<view class="content">
-												<view class="text-grey">{{item.userJson.name}}
-													<block  v-if="item.type=='system'">
-														<text class="userlv bg-red">系统通知</text>
-													</block>
-													<block  v-if="item.type=='finance'">
-														<text class="userlv bg-gradual-orange">财务通知</text>
-													</block>
-													<block  v-if="item.type=='comment'">
-													<!--  #ifdef H5 || APP-PLUS -->
-													<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
-													<!--  #endif -->
-													<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
-													<block v-if="item.userJson.isvip>0">
-														<block v-if="item.userJson.vip==1">
-															<text class="isVIP bg-gradual-red">VIP</text>
-														</block>
-														<block v-else>
-															<text class="isVIP bg-yellow">VIP</text>
-														</block>
-													</block>
-													</block>
-												</view>
-												<view class="text-content text-df">
-													<rich-text :nodes="markHtml(item.text)"></rich-text>
-												</view>
-												<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='comment'">
-													<view class="flex">
-														<view>{{item.contenTitle}}</view>
-														
-													</view>
-												</view>
-												<view class="margin-top-sm flex justify-between">
-													<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-													<view>
-													</view>
-												</view>
-											</view>
-										</view>
-							
-										
-									</view>
-								</view>
-							</view>
-							
-							<view class="load-more" @tap="loadMore" v-if="inboxList.length>0">
-								<text>{{moreText}}</text>
-							</view>
-						</view>
-					</view>
+			<block v-if="type==1">
+				<view class="no-data" v-if="chatList.length==0">
+					暂时没有数据
 				</view>
-			</block>
-			<block v-if="type=='chat'">
 				<view class="cu-list menu-avatar"  v-if="chatList.length>0">
 					<block v-for="(item,index) in chatList" :key="index">
 					<view class="cu-item" @tap="goChat(item)">
@@ -105,6 +44,42 @@
 					</block>
 				</view>
 			</block>
+			<block v-if="type==0">
+				<view class="no-data" v-if="chatList.length==0">
+					暂时没有数据
+				</view>
+				<view class="cu-list menu-avatar"  v-if="chatList.length>0">
+					<block v-for="(item,index) in chatList" :key="index">
+					<view class="cu-item" @tap="goChat(item)">
+						<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+						<view class="content">
+							<view><view class="text-cut">{{item.userJson.name}}
+							<block v-if="type==0">
+								和{{item.userJson.toName}}
+							</block>
+							</view></view>
+							<view class="text-gray text-sm flex"> <view class="text-cut">
+							<block v-if="item.lastMsg.uid==item.uid">
+								{{item.userJson.name}}: 
+							</block>
+							<block v-if="item.lastMsg.uid==item.toid">
+								{{item.userJson.toName}}: 
+							</block>
+							{{item.lastMsg.text}}
+							</view></view>
+						</view>
+						<view class="action">
+							<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
+							<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
+							<view class="cu-tag round bg-red sm" v-else>new</view>
+						</view>
+					</view>
+					</block>
+				</view>
+			</block>
+			<view class="load-more" @tap="loadMore" v-if="chatList.length>0">
+				<text>{{moreText}}</text>
+			</view>
 		</view>
 		
 		<!--加载遮罩-->
@@ -138,9 +113,8 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				
-				inboxList:[],
 				chatList:[],
-				type:"inbox",
+				type:1,
 				
 				moreText:"加载更多",
 				page:1,
@@ -180,8 +154,7 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
-				that.getInboxList(false);
-				that.setRead();
+				that.getMyChat(false);
 			}
 			
 			
@@ -211,10 +184,8 @@
 				var that = this;
 				
 				if(that.isLoad==0){
-					if(that.type=="inbox"){
-						that.moreText="正在加载中...";
-						that.getInboxList(true);
-					}
+					that.moreText="正在加载中...";
+					that.getMyChat(true);
 				}
 			},
 			markHtml(text){
@@ -273,87 +244,14 @@
 			},
 			toType(i){
 				var that = this;
+				that.chatList = [];
 				that.type=i;
 				that.page=1;
 				that.moreText="加载更多";
 				that.isLoad=0;
-				if(i=="inbox"){
-					clearInterval(that.chatLoading);
-					that.chatLoading = null
-					that.getInboxList(false);
-				}else{
-					that.getMyChat(false);
-					that.msgLoading = setInterval(() => {
-					 that.getMyChat(false);
-					}, 3000);
-				}
-				
-				
+				that.getMyChat(false);
 			},
-			getInboxList(isPage){
-				var that = this;
-				var page = that.page;
-				if(isPage){
-					page++;
-				}
-				if(that.token==""){
-					uni.showToast({
-					    title:"请先登录",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					return false
-				}
-				Net.request({
-					url: API.getInbox(),
-					data:{
-						"token":that.token,
-						"limit":8,
-						"page":page,
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						that.isLoad=0;
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-								var inboxList = [];
-								for(var i in list){
-									var arr = list[i];
-									arr.style = "background-image:url("+list[i].avatar+");"
-									inboxList.push(arr);
-								}
-								if(isPage){
-									that.page++;
-									that.inboxList = that.inboxList.concat(inboxList);
-								}else{
-									that.inboxList = inboxList;
-								}
-							}else{
-								that.moreText="没有更多消息了";
-							}
-							
-						}
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					},
-					fail: function(res) {
-						that.isLoad=0;
-						that.moreText="加载更多";
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					}
-				})
-			},
+
 			getMyChat(isPage){
 				var that = this;
 				var page = that.page;
@@ -370,11 +268,12 @@
 					return false
 				}
 				Net.request({
-					url: API.myChat(),
+					url: API.allChat(),
 					data:{
 						"token":that.token,
 						"limit":30,
 						"page":page,
+						"type":that.type,
 						"order":"lastTime"
 					},
 					header:{

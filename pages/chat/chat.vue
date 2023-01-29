@@ -113,7 +113,6 @@
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
 			var that = this;
-			console.log("现在是底部");
 		},
 		onHide() {
 			var that = this

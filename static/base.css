@@ -2286,3 +2286,6 @@ page{
 .cu-item:hover .admin-btn{
 	display: inline;
 }
+.data-box.data-inbox .cu-item{
+	padding-top: 0upx;
+}
