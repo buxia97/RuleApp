@@ -416,6 +416,9 @@
 			"path": "pages/manage/chat"
 		},
 		{
+			"path": "pages/manage/addGroup"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

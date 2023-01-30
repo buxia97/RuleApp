@@ -177,8 +177,8 @@
 					
 				</view>
 				<view class="userInfo-bottom-box">
-					<button class="cu-btn bg-gradual-red" @tap="follow(0)" v-if="isFollow==1"><text class="cuIcon-add"></text>已关注</button>
-					<button class="cu-btn bg-gradual-red" @tap="follow(1)" v-else><text class="cuIcon-add"></text>关注</button>
+					<button class="cu-btn bg-gradual-red" @tap="follow(0)" v-if="isFollow==1"><text class="cuIcon-check"></text>已关注</button>
+					<button class="cu-btn bg-gradual-red" @tap="follow(1)" v-else><text class="cuIcon-add"></text>关注Ta</button>
 					
 				</view>
 			</view>

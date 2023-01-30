@@ -2289,3 +2289,13 @@ page{
 .data-box.data-inbox .cu-item{
 	padding-top: 0upx;
 }
+.chat-owo.owo{
+	width: 100%;
+	left: 0px;
+	border-radius: 0upx;
+	bottom:100upx;
+	top: auto;
+}
+.cu-chat .main image{
+	background: #f3f3f3;
+}

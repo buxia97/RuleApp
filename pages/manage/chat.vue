@@ -9,7 +9,7 @@
 					聊天室管理
 				</view>
 				<view class="action">
-					
+					<text class="text-blue" @tap="addGroup">创建群聊</text>
 				</view>
 			</view>
 		</view>
@@ -65,7 +65,12 @@
 							<block v-if="item.lastMsg.uid==item.toid">
 								{{item.userJson.toName}}: 
 							</block>
-							{{item.lastMsg.text}}
+							<block v-if="item.lastMsg.type==0">
+								{{item.lastMsg.text}}
+							</block>
+							<block v-if="item.lastMsg.type==1">
+								[图片]
+							</block>
 							</view></view>
 						</view>
 						<view class="action">
@@ -432,7 +437,13 @@
 				uni.navigateTo({
 				    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
 				});
-			}
+			},
+			addGroup(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/manage/addGroup'
+				});
+			},
 
 		}
 	}

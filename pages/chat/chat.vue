@@ -28,21 +28,23 @@
 					<view class="main">
 						<block v-if="item.type==0">
 							<view class="content shadow" :class="item.uid==uid?'bg-green':''" @longtap="ToCopy(item.text)">
-								<rich-text :nodes="item.text"></rich-text>
+								<rich-text :nodes="markHtml(item.text)"></rich-text>
 							</view>
 						</block>
 						<block v-if="item.type==1">
-							<image :src="item.url"></image>
+							<image :src="item.url" @tap="previewImage(item.url)" mode="widthFix"></image>
 						</block>
 					</view>
 					<view class="cu-avatar radius"  v-if="item.uid==uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 					<view class="date">
 					{{formatDate(item.created)}}
-					<block  v-if="group=='administrator'||group=='editor'"></block>
-					<text class="admin-btn margin-left-sm">
-						<text class="text-red" @tap="toDelete(item.id)">删除</text>
-						<text class="text-black margin-left-sm" @tap="toBan(item.uid)">禁言</text>
-					</text>
+					<block  v-if="group=='administrator'||group=='editor'">
+						<text class="admin-btn margin-left-sm" v-if="item.uid!=uid">
+							<text class="text-red" @tap="toDelete(item.id)">删除</text>
+							<text class="text-black margin-left-sm" @tap="toBan(item.uid)">禁言</text>
+						</text>
+					</block>
+					
 					
 					</view>
 				</view>
@@ -56,9 +58,34 @@
 			<input class="solid-bottom" :adjust-position="false" :focus="false" maxlength="300" cursor-spacing="10"
 			 @focus="InputFocus" @blur="InputBlur" v-model="msg"></input>
 			<view class="action">
-				<text class="cuIcon-emojifill text-grey"></text>
+				<text class="cuIcon-emojifill text-grey"  @tap="OwO"></text>
 			</view>
 			<button class="cu-btn bg-green shadow" @tap="sendMsg()">发送</button>
+			
+		</view>
+		<view class="chat-owo owo" v-if="isOwO">
+			<scroll-view class="owo-list" scroll-y>
+				<view class="owo-main">
+					<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)" :key="index">
+						<image :src="'/'+item.icon" mode="aspectFill"></image>
+					</view>
+				</view>
+				
+			</scroll-view>
+			<view class="owo-type">
+				<view class="owo-box" @tap="toOwO('paopao')" :class="OwOtype=='paopao'?'cur':''">
+					泡泡
+				</view>
+				<view class="owo-box" @tap="toOwO('adai')" :class="OwOtype=='adai'?'cur':''">
+					阿呆
+				</view>
+				<view class="owo-box" @tap="toOwO('alu')" :class="OwOtype=='alu'?'cur':''">
+					阿鲁
+				</view>
+				<view class="owo-box" @tap="toOwO('quyinniang')" :class="OwOtype=='quyinniang'?'cur':''">
+					蛆音娘
+				</view>
+			</view>
 		</view>
 
 	</view>
@@ -99,6 +126,11 @@
 				lastTime:0,
 				
 				group:"",
+				
+				isOwO:false,
+				owo:owo,
+				owoList:[],
+				OwOtype:"paopao",
 			};
 		},
 		onShow() {
@@ -136,6 +168,9 @@
 				 that.getMsgList(false);
 				}, 3000);
 			}
+			// #ifdef APP-PLUS || H5
+			that.owoList = that.owo.data.paopao.container;
+			// #endif
 		},
 		methods: {
 			back(){
@@ -158,10 +193,20 @@
 				return result;
 			},
 			InputFocus(e) {
-				this.InputBottom = e.detail.height
+				this.isOwO = false;
+				this.InputBottom = e.detail.height;
 			},
 			InputBlur(e) {
-				this.InputBottom = 0
+				this.InputBottom = 0;
+			},
+			previewImage(image) {
+				var imgArr = [];
+				imgArr.push(image);
+				//预览图片
+				uni.previewImage({
+					urls: imgArr,
+					current: imgArr[0]
+				});
 			},
 			toBan(uid){
 				if(!uid){
@@ -529,7 +574,10 @@
 				uni.chooseImage({
 					count: 6, 
 					sourceType: ['album', 'camera'], 
-				    success: function (res) {						
+				    success: function (res) {
+						uni.showLoading({
+							title: "上传中"
+						});
 						const tempFilePaths = res.tempFilePaths;
 						for(let i = 0;i < tempFilePaths.length; i++) {
 							const uploadTask = uni.uploadFile({
@@ -542,6 +590,11 @@
 							  success: function (uploadFileRes) {
 								  let count = 0;
 								  count++;
+								  if(count==tempFilePaths.length){
+									  setTimeout(function () {
+										uni.hideLoading();
+									  }, 1000);
+								  }
 									var data = JSON.parse(uploadFileRes.data);
 									//var data = uploadFileRes.data;
 									// uni.showToast({
@@ -615,6 +668,63 @@
 					}
 				})
 			},
+			toOwO(text){
+				var that = this;
+				that.OwOtype = text;
+				if(text=="paopao"){
+					that.owoList = that.owo.data.paopao.container;
+				}
+				if(text=="adai"){
+					that.owoList = that.owo.data.adai.container;
+				}
+				if(text=="alu"){
+					that.owoList = that.owo.data.alu.container;
+				}
+				if(text=="quyinniang"){
+					that.owoList = that.owo.data.quyinniang.container;
+				}
+			},
+			setOwO(data){
+				var that = this;
+				var text = data.data;
+				that.msg+=text;
+				that.isOwO = false;
+			},
+			OwO(){
+				var that = this;
+				that.isOwO = !that.isOwO;
+			},
+			markHtml(text){
+				var that = this;
+				// #ifdef APP-PLUS || H5
+				var owoList=that.owoList;
+				for(var i in owoList){
+				
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				// #endif
+				
+				return text;
+				
+				
+			},
+			replaceSpecialChar(text) {
+				if(!text){
+					return false;
+				}
+				text = text.replace(/&quot;/g, '"');
+				text = text.replace(/&amp;/g, '&');
+				text = text.replace(/&lt;/g, '<');
+				text = text.replace(/&gt;/g, '>');
+				text = text.replace(/&nbsp;/g, ' ');
+				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
+			},
 		}
 	}
 </script>
@@ -622,5 +732,8 @@
 <style>
 page{
   padding-bottom: 100upx;
+}
+.cu-bar.foot{
+	z-index: 998;
 }
 </style>
