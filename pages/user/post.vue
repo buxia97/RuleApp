@@ -680,7 +680,6 @@
 					'title':that.title,
 					'category':that.category,
 					'tag':that.tag,
-					'text':that.text,
 					'sid':that.shopID
 				}
 				uni.showLoading({
@@ -692,6 +691,7 @@
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,
+						'text':that.text,
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -743,7 +743,6 @@
 					'title':that.title,
 					'category':that.category,
 					'tag':that.tag,
-					'text':that.text,
 					'sid':that.shopID
 				}
 				uni.showLoading({
@@ -755,6 +754,7 @@
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,
+						'text':that.text
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

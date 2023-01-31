@@ -30,10 +30,44 @@
 				<view class="cu-list menu-avatar"  v-if="chatList.length>0">
 					<block v-for="(item,index) in chatList" :key="index">
 					<view class="cu-item" @tap="goChat(item)">
-						<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+						<block v-if="item.type==1">
+							<view class="cu-avatar round lg" :style="'background-image:url('+item.pic+');'"></view>
+						</block>
+						<block v-else>
+							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+						</block>
 						<view class="content">
-							<view><view class="text-cut">{{item.userJson.name}}</view></view>
-							<view class="text-gray text-sm flex"> <view class="text-cut">{{item.lastMsg.text}}</view></view>
+							<view><view class="text-cut">{{item.name}}</view></view>
+							<view class="text-gray text-sm flex">
+								<view class="text-cut">
+									<block v-if="item.lastMsg">
+										
+										<block v-if="item.lastMsg.type!=4">
+											<block v-if="item.lastMsg.uid==item.uid">
+												{{item.userJson.name}}: 
+											</block>
+											<block v-if="item.lastMsg.uid==item.toid">
+												{{item.userJson.toName}}: 
+											</block>
+											<block v-if="item.lastMsg.type==0">
+												{{item.lastMsg.text}}
+											</block>
+											<block v-if="item.lastMsg.type==1">
+												[图片]
+											</block>
+										</block>
+										<block v-else>
+											<block v-if="item.lastMsg.text=='ban'">
+												<text class="text-red">[已开启全体禁言]</text>
+											</block>
+											<block v-else>
+												<text class="text-blue">[已解除全体禁言]</text>
+											</block>
+										</block>
+									</block>
+									<block v-else>暂无消息</block>
+								</view>
+							</view>
 						</view>
 						<view class="action">
 							<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
@@ -58,20 +92,27 @@
 								和{{item.userJson.toName}}
 							</block>
 							</view></view>
-							<view class="text-gray text-sm flex"> <view class="text-cut">
-							<block v-if="item.lastMsg.uid==item.uid">
-								{{item.userJson.name}}: 
-							</block>
-							<block v-if="item.lastMsg.uid==item.toid">
-								{{item.userJson.toName}}: 
-							</block>
-							<block v-if="item.lastMsg.type==0">
-								{{item.lastMsg.text}}
-							</block>
-							<block v-if="item.lastMsg.type==1">
-								[图片]
-							</block>
-							</view></view>
+							<view class="text-gray text-sm flex">
+								<view class="text-cut">
+									<block v-if="item.lastMsg.type!=4">
+										<block v-if="item.lastMsg.uid==item.uid">
+											{{item.userJson.name}}: 
+										</block>
+										<block v-if="item.lastMsg.uid==item.toid">
+											{{item.userJson.toName}}: 
+										</block>
+										<block v-if="item.lastMsg.type==0">
+											{{item.lastMsg.text}}
+										</block>
+										<block v-if="item.lastMsg.type==1">
+											[图片]
+										</block>
+									</block>
+									<block v-else>
+										<text class="text-blue">[聊天者已开启屏蔽]</text>
+									</block>
+								</view>
+							</view>
 						</view>
 						<view class="action">
 							<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
@@ -137,7 +178,11 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+				that.getMyChat(false);
+			}
 		},
 		onHide() {
 			var that = this
@@ -431,12 +476,22 @@
 			},
 			goChat(data){
 				var that = this;
-				var name = data.userJson.name;
-				var uid = data.userJson.uid;
-				var chatid = data.id;
-				uni.navigateTo({
-				    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
-				});
+				if(data.type==0){
+					var name = data.userJson.name;
+					var uid = data.userJson.uid;
+					var chatid = data.id;
+					uni.navigateTo({
+					    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid+"&type=0"
+					});
+				}
+				if(data.type==1){
+					var name = data.name;
+					var chatid = data.id;
+					uni.navigateTo({
+					    url: '/pages/chat/chat?&name='+name+'&chatid='+chatid+'&type=1'
+					});
+				}
+				
 			},
 			addGroup(){
 				var that = this;

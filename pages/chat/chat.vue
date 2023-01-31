@@ -5,11 +5,14 @@
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
-				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					{{name}}
+				<view class="content" :style="[{top:StatusBar + 'px'}]">
+					<text class="text-bold">{{name}}</text>
+					<block v-if="type==1">
+						<text class="margin-left-xs cuIcon-group"></text>
+					</block>
 				</view>
 				<view class="action">
-					<view class="cu-avatar round" @tap="goUserInfo()" :style="avatarstyle" v-if="avatarstyle!=''"></view>
+					<view class="cu-avatar round"  @tap="showModal" data-target="chatInfo" :style="avatarstyle" v-if="avatarstyle!=''"></view>
 					<view class="cu-avatar round" v-else>
 						<text class="home-noLogin"></text>
 					</view>
@@ -23,7 +26,7 @@
 				<text class="text-blue" @tap="follow(1)">关注Ta</text>
 			</view>
 			<block v-for="(item,index) in msgList">
-				<view class="cu-item " :class="item.uid==uid?'self':''">
+				<view class="cu-item " :class="item.uid==uid?'self':''" v-if="item.type!=4">
 					<view class="cu-avatar radius"  v-if="item.uid!=uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 					<view class="main">
 						<block v-if="item.type==0">
@@ -47,6 +50,24 @@
 					
 					
 					</view>
+				</view>
+				<view class="cu-info round"  v-if="item.type==4">
+					<block v-if="type==1">
+						<block v-if="item.text=='ban'">
+							管理员开启全体禁言
+						</block>
+						<block v-else>
+							管理员关闭全体禁言
+						</block>
+					</block>
+					<block v-else>
+						<block v-if="item.uid==uid">
+							你屏蔽了对方
+						</block>
+						<block v-else>
+							对方屏蔽了你
+						</block>
+					</block>
 				</view>
 			</block>
 		</view>
@@ -87,6 +108,57 @@
 				</view>
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='chatInfo'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content"><text class="text-bold">{{name}}</text>
+					<block v-if="type==1">
+						<text class="margin-left-xs cuIcon-group"></text>
+					</block></view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				
+					<view class="user-edit-header">
+						<image :src="avatar"></image>
+					</view>
+				<view class="cu-bar bg-white justify-center">
+					<view class="action">
+						<block v-if="type==0">
+							<button class="cu-btn bg-green" @tap="goUserInfo(name,toid,0)">查看信息</button>
+							<block v-if="ban==0">
+								<button class="cu-btn bg-red margin-left" @tap="toBan(1)">屏蔽对方</button>
+							</block>
+							<block v-if="ban==uid">
+								<button class="cu-btn bg-red margin-left" @tap="toBan(0)">解除屏蔽</button>
+							</block>
+						</block>
+						
+						<block v-if="type==1">
+							<block  v-if="group=='administrator'||group=='editor'">
+								<button class="cu-btn bg-green">修改信息</button>
+								<block v-if="ban==0">
+									<button class="cu-btn bg-red margin-left" @tap="toBan(1)">全体禁言</button>
+								</block>
+								<block v-else>
+									<button class="cu-btn bg-red margin-left" @tap="toBan(0)">解除禁言</button>
+								</block>
+								
+								<button v-if="uid==groupUser"  class="cu-btn bg-red margin-left" @tap="toDelete()"><text class="cuIcon-delete"></text></button>
+							</block>
+							<block v-else>
+								创建人：<text class="text-blue margin-left-sm" @tap="goUserInfo(groupUserName,groupUser,1)">{{groupUserName}}</text>
+							</block>
+						</block>
+						
+						
+						
+						
+					</view>
+				</view>
+			</view>
+		</view>
 
 	</view>
 </template>
@@ -115,9 +187,9 @@
 				userInfo:null,
 				token:"",
 				avatarstyle:"",
-				chatid:"",
 				msg:"",
 				isFollow:1,
+				type:0,
 				
 				msgList:[],
 				uid:"",
@@ -131,6 +203,11 @@
 				owo:owo,
 				owoList:[],
 				OwOtype:"paopao",
+				
+				groupUserName:"",
+				groupUser:0,
+				
+				modalName:"",
 			};
 		},
 		onShow() {
@@ -152,15 +229,7 @@
 			that.msgLoading = null
 		},
 		onLoad(res) {
-			var that = this
-			if(res.name){
-				that.name = res.name
-			}
-			if(res.uid){
-				that.toid = res.uid;
-				that.getIsFollow();
-			}
-			that.getUserInfo(that.toid);
+			var that = this;
 			if(res.chatid){
 				that.chatid = res.chatid;
 				that.getMsgList();
@@ -168,6 +237,24 @@
 				 that.getMsgList(false);
 				}, 3000);
 			}
+			if(res.type){
+				that.type = res.type
+			}
+			if(res.name){
+				that.name = res.name
+			}
+			if(res.uid){
+				that.toid = res.uid;
+				that.getIsFollow();
+			}
+			if(that.type==0){
+				that.getUserInfo(that.toid);
+				that.getGroupInfo(that.chatid);
+			}
+			if(that.type==1){
+				that.getGroupInfo(that.chatid);
+			}
+			
 			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
@@ -398,8 +485,49 @@
 					success: function(res) {
 						if(res.data.code==1){
 							var userInfo = res.data.data;
-							that.avatarstyle = "background-image:url("+res.data.data.avatar+");"
-							that.avatar = res.avatar;
+							if(that.type==0){
+								that.avatarstyle = "background-image:url("+res.data.data.avatar+");"
+								that.avatar = res.data.data.avatar;
+							}
+							if(that.type==1){
+								if(res.data.data.screenName){
+									that.groupUserName = res.data.data.screenName;
+								}else{
+									that.groupUserName = res.data.data.name;
+								}
+								
+							}
+						}
+					},
+					fail: function(res) {
+					}
+				});
+			},
+			getGroupInfo(id){
+				var that = this;
+				var data = {
+					"id":id,
+				}
+				
+				Net.request({
+					url: API.groupInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var userInfo = res.data.data;
+							if(that.type==1){
+								that.avatarstyle = "background-image:url("+res.data.data.pic+");"
+								that.avatar = res.data.data.pic;
+								that.groupUser =  res.data.data.uid;
+								
+								that.getUserInfo(that.groupUser);
+							}
+							that.ban =  res.data.data.ban;
 						}
 					},
 					fail: function(res) {
@@ -461,15 +589,22 @@
 					}
 				})
 			},
-			goUserInfo(){
+			goUserInfo(name,toid,type){
 				var that = this;
-				var name = that.name;
 				var title = name+"的信息";
-				var id= that.toid
 				var type="user";
-				uni.redirectTo({
-				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
-				});
+				if(type==0){
+					uni.redirectTo({
+					    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+toid+"&avatar="+encodeURIComponent(that.avatar)
+					});
+				}else{
+					uni.navigateTo({
+					    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+toid+"&avatar="+encodeURIComponent(that.avatar)
+					});
+				}
+				
+				
+				
 			},
 			ToCopy(text) {
 				var that = this;
@@ -711,6 +846,9 @@
 				
 				
 			},
+			goChatInfo(){
+				var that = this;
+			},
 			replaceSpecialChar(text) {
 				if(!text){
 					return false;
@@ -724,6 +862,133 @@
 			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal() {
+				this.modalName = null
+			},
+			toBan(type){
+				var that = this;
+				var token = "";
+				that.hideModal();
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"id":that.chatid,
+					"token":token,
+					"type":type
+				}
+				var tips = "确定要屏蔽对方吗？";
+				if(that.type==1){
+					tips = "确定要全体禁言吗？";
+				}
+				uni.showModal({
+				    title: tips,
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.banChat(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.getMsgList(false);
+										// that.getGroupInfo(that.chatid);
+										that.ban = that.uid;
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
+			toDelete(){
+				var that = this;
+				var token = "";
+				that.hideModal();
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"chatid":that.chatid,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要删除该聊天室吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            Net.request({
+				            	url: API.deleteChat(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+				            			that.back();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
 			},
 		}
 	}

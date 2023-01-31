@@ -47,27 +47,26 @@
 					<view class="cu-avatar round lg" :style="userInfo.style"></view>
 					<view class="content">
 						<view class="text-grey">
-							<block v-if="userInfo.screenName">
-								{{userInfo.screenName}}
-							</block>
-							<block v-else>
-								{{userInfo.name}}
-							</block>
-							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
-							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
-							<!--  #ifdef H5 || APP-PLUS -->
+							
 							<block v-if="userInfo.isvip==1">
 								<block v-if="userInfo.vip==1">
-									<text class="isVIP bg-gradual-red">VIP</text>
+									<text class="text-red">
+										{{name}}
+									</text>
 								</block>
 								<block v-else>
-									<text class="isVIP bg-yellow">VIP</text>
+									<text class="text-yellow">
+										{{name}}
+									</text>
 								</block>
 							</block>
 							<block v-else>
-								<text class="userlv bg-gray isVIP">VIP</text>
+								{{name}}
 							</block>
-							<!--  #endif -->
+							
+							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
+							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
+
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
@@ -304,6 +303,7 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				userInfo:null,
+				name:"",
 				uid:0,
 				token:"",
 				userData:{},
@@ -341,6 +341,11 @@
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 				that.uid = that.userInfo.uid;
 				that.group = that.userInfo.group;
+				if(that.userInfo.screenName){
+					that.name = that.userInfo.screenName;
+				}else{
+					that.name = that.userInfo.name;
+				}
 			}else{
 				that.userInfo =null;
 			}
@@ -591,6 +596,11 @@
 							if(localStorage.getItem('userinfo')){
 								
 								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+								if(userInfo.screenName){
+									that.name = userInfo.screenName;
+								}else{
+									that.name = userInfo.name;
+								}
 								if(res.data.data.customize){
 									userInfo.customize = res.data.data.customize;
 								}
@@ -693,7 +703,7 @@
 								title: "签到成功！获得"+clockData.award+API.getCurrencyName()+"，"+clockData.addExp+"经验",
 								icon: 'none'
 							})
-							that.getUserData();
+							that.isClock == 1;
 							
 						}else{
 							uni.showToast({

@@ -478,9 +478,19 @@ module.exports = {
 	createGroup:function(){
 		return API_URL + 'typechoChat/createGroup';
 	},
+	editGroup:function(){
+		return API_URL + 'typechoChat/editGroup';
+	},
 	allChat:function(){
 		return API_URL + 'typechoChat/allChat';
 	},
+	banChat:function(){
+		return API_URL + 'typechoChat/banChat';
+	},
+	groupInfo:function(){
+		return API_URL + 'typechoChat/groupInfo';
+	},
+	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);
 	},

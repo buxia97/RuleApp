@@ -48,6 +48,9 @@
 
 <script>
 import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+// #ifdef H5 || APP-PLUS 
+import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
+// #endif
 var API = require('../../utils/api')
 var Net = require('../../utils/net')
 export default {
@@ -273,7 +276,7 @@ export default {
 		},
 		edit(){
 			var that = this;
-			if (that.name == ""||that.imgurl == ""||that.intro == ""||that.url == "") {
+			if (that.name == ""||that.avatar == "") {
 				uni.showToast({
 					title:"请完成表单填写",
 					icon:'none',
@@ -283,24 +286,18 @@ export default {
 				return false
 			}
 			var data = {
-				'aid':that.aid,
+				'id':that.id,
 				'name':that.name,
-				'type':that.type,
-				'img':that.imgurl,
-				'intro':that.intro,
-				"urltype":that.urltype,
-				"url":that.url,
+				'pic':that.avatar,
+				"token":that.token,
 			}
 			uni.showLoading({
 				title: "加载中"
 			});
 			Net.request({
 				
-				url: API.editAds(),
-				data:{
-					"params":JSON.stringify(API.removeObjectEmptyKey(data)),
-					"token":that.token,
-				},
+				url: API.editGroup(),
+				data:API.removeObjectEmptyKey(data),
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
 				},
@@ -387,7 +384,20 @@ export default {
 			  .catch(error => {
 				console.error("失败"+error)
 			  })
-		}
+		},
+		toAvatar(){
+			// #ifdef APP-PLUS || H5
+			const that = this;
+			  uni.navigateTo({
+				url: "../../uni_modules/buuug7-img-cropper/pages/cropper",
+				events: {
+				  imgCropped(event) {
+					console.log(event);
+				  },
+				},
+			  });
+			// #endif
+		},
 	},
 }
 </script>

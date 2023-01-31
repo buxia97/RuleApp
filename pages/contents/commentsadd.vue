@@ -187,7 +187,7 @@
 					"cid":that.cid,
 					//"ownerId":that.userinfo.uid,
 					"parent":coid,
-					"text":that.text,
+					
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -197,7 +197,8 @@
 					url: API.setComments(),
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
-						"token":that.token
+						"token":that.token,
+						"text":that.text
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

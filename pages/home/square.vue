@@ -115,7 +115,8 @@
 		</block>
 		<block v-if="squareid==1">
 			
-			<view class="cu-list menu-avatar">
+			
+			<view class="cu-list menu-avatar"  v-if="chatList.length>0">
 				<view class="cu-bar bg-white search">
 					<view class="search-form round">
 						<text class="cuIcon-search"></text>
@@ -123,39 +124,57 @@
 						<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 					</view>
 				</view>
-				<view class="cu-item ">
-					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+				<view class="no-data" v-if="chatList.length==0">
+					暂时没有数据
+				</view>
+				<block v-for="(item,index) in chatList" :key="index">
+				<view class="cu-item" @tap="goChat(item)">
+					<block v-if="item.type==1">
+						<view class="cu-avatar round lg" :style="'background-image:url('+item.pic+');'"></view>
+					</block>
+					<block v-else>
+						<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+					</block>
 					<view class="content">
-						<view><view class="text-cut">吃瓜交流群</view></view>
-						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
+						<view><view class="text-cut">{{item.name}}</view></view>
+						<view class="text-gray text-sm flex">
+							<view class="text-cut">
+								<block v-if="item.lastMsg!=null">
+									
+									<block v-if="item.lastMsg.type!=4">
+										<block v-if="item.lastMsg.uid==item.uid">
+											{{item.userJson.name}}: 
+										</block>
+										<block v-if="item.lastMsg.uid==item.toid">
+											{{item.userJson.toName}}: 
+										</block>
+										<block v-if="item.lastMsg.type==0">
+											{{item.lastMsg.text}}
+										</block>
+										<block v-if="item.lastMsg.type==1">
+											[图片]
+										</block>
+									</block>
+									<block v-else>
+										<block v-if="item.lastMsg.text=='ban'">
+											<text class="text-red">[已开启全体禁言]</text>
+										</block>
+										<block v-else>
+											<text class="text-blue">[已解除全体禁言]</text>
+										</block>
+									</block>
+								</block>
+								<block v-else>暂无消息</block>
+							</view>
+						</view>
 					</view>
 					<view class="action">
-						<view class="text-grey text-xs">22:20</view>
-						<view class="cu-tag round bg-red sm">new</view>
+						<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
+						<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
+						<view class="cu-tag round bg-red sm" v-else>new</view>
 					</view>
 				</view>
-				<view class="cu-item ">
-					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
-					<view class="content">
-						<view><view class="text-cut">吃瓜交流群</view></view>
-						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
-					</view>
-					<view class="action">
-						<view class="text-grey text-xs">22:20</view>
-						<view class="cu-tag round bg-red sm">new</view>
-					</view>
-				</view>
-				<view class="cu-item ">
-					<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
-					<view class="content">
-						<view><view class="text-cut">吃瓜交流群</view></view>
-						<view class="text-gray text-sm flex"> <view class="text-cut">凯尔，你被自己的光芒变的盲目！</view></view>
-					</view>
-					<view class="action">
-						<view class="text-grey text-xs">22:20</view>
-						<view class="cu-tag round bg-red sm">new</view>
-					</view>
-				</view>
+				</block>
 			</view>
 		</block>
 		
@@ -191,6 +210,10 @@
 				
 				squareid: 0,
 				searchText:"",
+				
+				chatList:[],
+				
+				isGetChat:null
 			}
 		},
 		onPullDownRefresh(){
@@ -198,6 +221,11 @@
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)
+		},
+		onHide() {
+			var that = this
+			clearInterval(that.isGetChat);
+			that.isGetChat = null
 		},
 		onShow(){
 			var that = this;
@@ -232,6 +260,16 @@
 			setSquare(type){
 				var that = this;
 				that.squareid = type;
+				if(type==0){
+					clearInterval(that.isGetChat);
+					that.isGetChat = null
+				}
+				if(type==1){
+					that.getMyChat(false);
+					that.isGetChat = setInterval(() => {
+					 that.getMyChat(false);
+					}, 4000);
+				}
 			},
 			searchClose(){
 				var that = this;
@@ -366,6 +404,116 @@
 						})
 					}
 				})
+			},
+			
+			//群聊(性能考虑，只加载前30条)
+			getMyChat(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				if(that.token==""){
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				Net.request({
+					url: API.allChat(),
+					data:{
+						"token":that.token,
+						"limit":30,
+						"page":page,
+						"type":that.type,
+						"order":"lastTime"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								var chatList = [];
+								for(var i in list){
+									var arr = list[i];
+									arr.isNew =0;
+									chatList.push(arr);
+								}
+								if(isPage){
+									that.page++;
+									that.chatList = that.chatList.concat(chatList);
+								}else{
+									that.chatList = chatList;
+								}
+							}else{
+								// that.moreText="没有更多消息了";
+							}
+							
+						}
+					},
+					fail: function(res) {
+						that.isLoad=0;
+						// that.moreText="加载更多";
+					}
+				})
+			},
+			chatFormatDate(datetime) {
+				var datetime = new Date(parseInt(datetime * 1000));
+				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+				var year = datetime.getFullYear();
+				var month = ("0" + (datetime.getMonth() + 1)).slice(-2);
+				var date = ("0" + datetime.getDate()).slice(-2);
+				var hour = ("0" + datetime.getHours()).slice(-2);
+				var minute = ("0" + datetime.getMinutes()).slice(-2);
+				var time = year+""+month+""+date;
+				
+				var result = hour + ":" + minute;
+				var curDate = new Date();
+				var curYear = curDate.getFullYear(); //获取完整的年份(4位)
+				var curMonth = ("0" + (curDate.getMonth() + 1)).slice(-2);
+				var curDay = ("0" + curDate.getDate()).slice(-2); //获取当前日(1-31)
+				var curTime = curYear+""+curMonth+""+curDay;
+				if(year==curYear){
+					if(year==curYear){
+						if(date==curDay){
+							result = hour + ":" + minute;
+						}else{
+							result = month + "-" + date;
+						}
+					}else{
+						result = month + "-" + date;
+					}
+				}else{
+					result = month + "-" + date;
+				}
+				return result;
+			},
+			goChat(data){
+				var that = this;
+				if(data.type==0){
+					var name = data.userJson.name;
+					var uid = data.userJson.uid;
+					var chatid = data.id;
+					uni.navigateTo({
+					    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid+"&type=0"
+					});
+				}
+				if(data.type==1){
+					var name = data.name;
+					var chatid = data.id;
+					uni.navigateTo({
+					    url: '/pages/chat/chat?&name='+name+'&chatid='+chatid+'&type=1'
+					});
+				}
+				
 			},
 		},
 		components: {
