@@ -2299,3 +2299,8 @@ page{
 .cu-chat .main image{
 	background: #f3f3f3;
 }
+.more-msg{
+	height: 90upx;
+	text-align: center;
+	line-height: 90upx;
+}

@@ -94,7 +94,51 @@
 						<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 						<view class="content">
 							<view><view class="text-cut">{{item.userJson.name}}</view></view>
-							<view class="text-gray text-sm flex"> <view class="text-cut">{{item.lastMsg.text}}</view></view>
+							<view class="text-gray text-sm flex">
+								<view class="text-cut">
+									<block v-if="item.lastMsg!=null">
+										
+										<block v-if="item.lastMsg.type!=4">
+											<block v-if="item.lastMsg.uid==item.uid">
+												{{item.userJson.name}}: 
+											</block>
+											<block v-if="item.lastMsg.uid==item.toid">
+												{{item.userJson.toName}}: 
+											</block>
+											<block v-if="item.lastMsg.type==0">
+												{{item.lastMsg.text}}
+											</block>
+											<block v-if="item.lastMsg.type==1">
+												[图片]
+											</block>
+										</block>
+										<block v-else>
+											<block v-if="item.lastMsg.text=='ban'">
+												<block v-if="item.lastMsg.uid==uid">
+													
+													<text class="text-blue">[你屏蔽了对方]</text>
+												</block>
+												<block v-else>
+													<text class="text-blue">[对方屏蔽了你]</text>
+													
+												</block>
+											</block>
+											<block v-else>
+												<block v-if="item.lastMsg.uid==uid">
+													
+													<text class="text-blue">[你解除了屏蔽]</text>
+												</block>
+												<block v-else>
+													<text class="text-blue">[对方解除了屏蔽]</text>
+													
+												</block>
+											</block>
+											
+										</block>
+									</block>
+									<block v-else>暂无消息</block>
+								</view>
+							</view>
 						</view>
 						<view class="action">
 							<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
@@ -140,6 +184,7 @@
 				
 				inboxList:[],
 				chatList:[],
+				uid:0,
 				type:"inbox",
 				
 				moreText:"加载更多",
@@ -177,6 +222,11 @@
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
+			if(localStorage.getItem('userinfo')){
+				
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.uid = userInfo.uid;
+			}
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
@@ -354,6 +404,7 @@
 					}
 				})
 			},
+			//为了性能考虑，只显示最近30条聊天
 			getMyChat(isPage){
 				var that = this;
 				var page = that.page;

@@ -6,16 +6,16 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					<block v-if="post=='add'">新建</block><block v-else>编辑</block>群聊
+					<block v-if="postType=='edit'">编辑</block><block v-else>新建</block>群聊
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<block v-if="post=='add'">
-				<view class="action" @tap="submit">
+				<block v-if="postType=='edit'">
+				<view class="action" @tap="edit">
 					<text class="cuIcon-upload"></text>
 				</view>
 				</block>
 				<block v-else>
-				<view class="action" @tap="edit">
+				<view class="action" @tap="submit">
 					<text class="cuIcon-upload"></text>
 				</view>
 				</block>
@@ -83,7 +83,7 @@ export default {
 			var toAvatar = JSON.parse(localStorage.getItem('toAvatar'));
 			that.avatarUpload(toAvatar.dataUrl);
 		}else{
-			console.log("没有头像缓存")
+			console.log("没有图片缓存")
 		}
 		// #ifdef APP-PLUS
 		plus.navigator.setStatusBarStyle("dark")
@@ -99,12 +99,20 @@ export default {
 			
 			that.token = localStorage.getItem('token');
 		}
-		if(res.type){
-			that.type = res.type;
-		}
-		if(res.post){
-			that.post = res.post;
-			if(that.post =='edit'){
+		
+		if(res.postType){
+			that.postType = res.postType;
+			if(that.postType=="edit"){
+				if(res.chatid){
+					that.chatid = res.chatid;
+					that.getGroupInfo(that.chatid)
+				}else{
+					uni.showToast({
+						title: "无参数访问",
+						icon: 'none'
+					})
+				}
+				
 			}
 		}
 	},
@@ -286,7 +294,7 @@ export default {
 				return false
 			}
 			var data = {
-				'id':that.id,
+				'id':that.chatid,
 				'name':that.name,
 				'pic':that.avatar,
 				"token":that.token,
@@ -384,6 +392,32 @@ export default {
 			  .catch(error => {
 				console.error("失败"+error)
 			  })
+		},
+		getGroupInfo(id){
+			var that = this;
+			var data = {
+				"id":id,
+			}
+			
+			Net.request({
+				url: API.groupInfo(),
+				data:data,
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					if(res.data.code==1){
+						var groupInfo = res.data.data;
+						that.avatar = groupInfo.pic;
+						that.avatarNew = groupInfo.pic;
+						that.name= groupInfo.name;
+					}
+				},
+				fail: function(res) {
+				}
+			});
 		},
 		toAvatar(){
 			// #ifdef APP-PLUS || H5

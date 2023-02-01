@@ -21,6 +21,9 @@
 		</view>
 		<view class="cu-chat" >
 			<view class="cu-item"></view>
+			<view class="more-msg">
+				<text class="text-blue" @tap="loadMore">{{moreText}}</text>
+			</view>
 			<view class="cu-info" v-if="isFollow==0">
 				你还不是Ta的粉丝，关注Ta后可以获得更多动态。
 				<text class="text-blue" @tap="follow(1)">关注Ta</text>
@@ -61,12 +64,23 @@
 						</block>
 					</block>
 					<block v-else>
-						<block v-if="item.uid==uid">
-							你屏蔽了对方
+						<block v-if="item.text=='ban'">
+							<block v-if="item.uid==uid">
+								你屏蔽了对方
+							</block>
+							<block v-else>
+								对方屏蔽了你
+							</block>
 						</block>
 						<block v-else>
-							对方屏蔽了你
+							<block v-if="item.uid==uid">
+								你解除了屏蔽
+							</block>
+							<block v-else>
+								对方解除了屏蔽
+							</block>
 						</block>
+						
 					</block>
 				</view>
 			</block>
@@ -137,7 +151,7 @@
 						
 						<block v-if="type==1">
 							<block  v-if="group=='administrator'||group=='editor'">
-								<button class="cu-btn bg-green">修改信息</button>
+								<button class="cu-btn bg-green" @tap="addGroup">修改信息</button>
 								<block v-if="ban==0">
 									<button class="cu-btn bg-red margin-left" @tap="toBan(1)">全体禁言</button>
 								</block>
@@ -182,6 +196,7 @@
 				InputBottom: 0,
 				chatid:0,
 				name:"未知用户",
+				moreText:"获取更多",
 				toid:0,
 				avatar:"",
 				userInfo:null,
@@ -190,6 +205,7 @@
 				msg:"",
 				isFollow:1,
 				type:0,
+				page:1,
 				
 				msgList:[],
 				uid:"",
@@ -222,6 +238,8 @@
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
 			var that = this;
+			//到底部后，重新变成第一页，开始加载数据
+			that.page = 1;
 		},
 		onHide() {
 			var that = this
@@ -260,6 +278,15 @@
 			// #endif
 		},
 		methods: {
+			loadMore(){
+				var that = this;
+				
+				if(that.isLoad==0){
+					that.moreText="正在加载中...";
+					that.getMsgList(true);
+					
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -371,16 +398,21 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				var page = that.page;
+				var page = that.page;rog
 				if(isPage){
 					page++;
+				}else{
+					//用户加载更多数据时，不再加载数据
+					if(page > 1){
+						return false;
+					}
 				}
 				Net.request({
 					url: API.msgList(),
 					data:{
 						"token":token,
 						"chatid":that.chatid,
-						"limit":30,
+						"limit":50,
 						"page":page,
 					},
 					header:{
@@ -391,7 +423,7 @@
 					success: function(res) {
 						uni.stopPullDownRefresh();
 						that.isLoad=0;
-						that.moreText="加载更多";
+						that.moreText="获取更多";
 						if(res.data.code==1){
 							var list = res.data.data;
 							if(list.length>0){
@@ -402,7 +434,10 @@
 									list = list.concat(that.msgList);
 									that.msgList = list;
 								}else{
+									
 									that.msgList = list.reverse();
+									
+									
 								}
 								var lastTime = that.msgList[that.msgList.length-1].created;
 								if(lastTime > that.lastTime){
@@ -428,7 +463,7 @@
 					},
 					fail: function(res) {
 						uni.stopPullDownRefresh();
-						that.moreText="加载更多";
+						that.moreText="获取更多";
 						that.isLoad=0;
 						var timer = setTimeout(function() {
 							that.isLoading=1;
@@ -988,6 +1023,13 @@
 				            console.log('用户点击取消');
 				        }
 				    }
+				});
+			},
+			addGroup(){
+				var that = this;
+				var chatid = that.chatid;
+				uni.navigateTo({
+				    url: '/pages/manage/addGroup?chatid='+chatid+"&postType=edit"
 				});
 			},
 		}
