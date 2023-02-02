@@ -42,10 +42,10 @@ export default {
                     path: "/pages/home/find",
                 }
                 ,{
-                    text: '工具',
-                    icon: '/static/tabbar/tool.png',
-                    icon_a: '/static/tabbar/tool_cur.png',
-                    path: '/pages/home/tool',
+                    text: '广场',
+                    icon: '/static/tabbar/square.png',
+                    icon_a: '/static/tabbar/square_cur.png',
+                    path: '/pages/home/square',
                 },{
                     text: '我的',
                     icon: '/static/tabbar/user.png',

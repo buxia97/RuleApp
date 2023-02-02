@@ -99,11 +99,11 @@
 									<block v-if="item.lastMsg!=null">
 										
 										<block v-if="item.lastMsg.type!=4">
-											<block v-if="item.lastMsg.uid==item.uid">
-												{{item.userJson.name}}: 
+											<block v-if="item.lastMsg.uid==uid">
+												我: 
 											</block>
-											<block v-if="item.lastMsg.uid==item.toid">
-												{{item.userJson.toName}}: 
+											<block v-else>
+												{{item.userJson.name}}: 
 											</block>
 											<block v-if="item.lastMsg.type==0">
 												{{item.lastMsg.text}}
@@ -142,8 +142,18 @@
 						</view>
 						<view class="action">
 							<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
-							<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
-							<view class="cu-tag round bg-red sm" v-else>new</view>
+							<block v-if="item.lastMsg!=null">
+								<block v-if="item.lastMsg.uid==uid">
+									<view class="cu-tag sm" style="background: none;">&nbsp</view>
+								</block>
+								<block v-else>
+									<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
+									<view class="cu-tag round bg-red sm" v-else>new</view>
+								</block>
+							</block>
+							<block v-else>
+								<view class="cu-tag sm" style="background: none;">&nbsp</view>
+							</block>
 						</view>
 					</view>
 					</block>
@@ -184,6 +194,7 @@
 				
 				inboxList:[],
 				chatList:[],
+				oldChatList:[],
 				uid:0,
 				type:"inbox",
 				
@@ -232,6 +243,10 @@
 				that.token = localStorage.getItem('token');
 				that.getInboxList(false);
 				that.setRead();
+			}
+			if(localStorage.getItem('chatList')){
+				that.oldChatList = JSON.parse(localStorage.getItem('oldChatList'));
+				that.chatList = JSON.parse(localStorage.getItem('chatList'));
 			}
 			
 			
@@ -448,7 +463,41 @@
 									that.page++;
 									that.chatList = that.chatList.concat(chatList);
 								}else{
-									that.chatList = chatList;
+									var oldChatList = [];
+									if(that.oldChatList!=null){
+										oldChatList = that.oldChatList;
+									}
+									if(oldChatList.length>0){
+										var lastOld = that.oldChatList[0].lastTime;
+										var lastNew = chatList[0].lastTime;
+										console.log(lastOld + "||"+lastNew);
+										if(lastOld!=lastNew){
+											console.log("开始对比")
+											for(var c in chatList){
+												for(var d in oldChatList){
+													if(oldChatList[d].id == chatList[c].id){
+														if(oldChatList[d].lastTime < chatList[c].lastTime){
+															console.log("赋值完成")
+															chatList[c].isNew = 1;
+														}
+													}
+													
+												}
+											}
+											that.oldChatList = chatList;
+											that.chatList = chatList;
+											localStorage.setItem('chatList',JSON.stringify(chatList));
+										}
+										
+										
+									}else{
+										that.oldChatList = chatList;
+										that.chatList = chatList;
+										localStorage.setItem('chatList',JSON.stringify(chatList));
+									}
+									// 
+									
+									
 								}
 							}else{
 								that.moreText="没有更多消息了";

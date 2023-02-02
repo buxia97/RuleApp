@@ -20,10 +20,10 @@
 			</view>
 		</view>
 		<view class="cu-chat" >
-			<view class="cu-item"></view>
-			<view class="more-msg">
+			<view class="cu-item"  :style="[{padding:NavBar + 'px 0px 0px 0px'}]"></view>
+			<!-- <view class="more-msg">
 				<text class="text-blue" @tap="loadMore">{{moreText}}</text>
-			</view>
+			</view> -->
 			<view class="cu-info" v-if="isFollow==0">
 				你还不是Ta的粉丝，关注Ta后可以获得更多动态。
 				<text class="text-blue" @tap="follow(1)">关注Ta</text>
@@ -98,7 +98,7 @@
 			<button class="cu-btn bg-green shadow" @tap="sendMsg()">发送</button>
 			
 		</view>
-		<view class="chat-owo owo" v-if="isOwO">
+		<view class="chat-owo owo" v-if="isOwO" :style="[{bottom:InputBottom+52+'px'}]">
 			<scroll-view class="owo-list" scroll-y>
 				<view class="owo-main">
 					<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)" :key="index">
@@ -193,6 +193,10 @@
 	export default {
 		data() {
 			return {
+				StatusBar: this.StatusBar,
+				CustomBar: this.CustomBar,
+				NavBar:this.StatusBar +  this.CustomBar,
+				AppStyle:this.$store.state.AppStyle,
 				InputBottom: 0,
 				chatid:0,
 				name:"未知用户",
@@ -224,6 +228,8 @@
 				groupUser:0,
 				
 				modalName:"",
+				ban:0,
+				
 			};
 		},
 		onShow() {
@@ -248,6 +254,9 @@
 		},
 		onLoad(res) {
 			var that = this;
+			// #ifdef APP-PLUS || MP
+			that.NavBar = this.CustomBar;
+			// #endif
 			if(res.chatid){
 				that.chatid = res.chatid;
 				that.getMsgList();
@@ -272,7 +281,18 @@
 			if(that.type==1){
 				that.getGroupInfo(that.chatid);
 			}
-			
+			// #ifdef APP-PLUS
+			uni.onKeyboardHeightChange(res => {
+				//监听软键盘的高度 
+				//当点击软键盘自带的收起按钮的时候也就是会隐藏软键盘 这时候监听到的软键盘的高度就是0 、
+				//让输入框取消焦点 这时候再去输入内容的时候 输入框就会弹起
+				if (res.height == 0) {
+				
+					that.InputBottom = 0;
+					
+				}
+			});
+			// #endif
 			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
@@ -398,21 +418,22 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				var page = that.page;rog
+				var page = that.page;
 				if(isPage){
 					page++;
-				}else{
-					//用户加载更多数据时，不再加载数据
-					if(page > 1){
-						return false;
-					}
 				}
+				// else{
+				// 	用户加载更多数据时，不再加载数据
+				// 	if(page > 1){
+				// 		return false;
+				// 	}
+				// }
 				Net.request({
 					url: API.msgList(),
 					data:{
 						"token":token,
 						"chatid":that.chatid,
-						"limit":50,
+						"limit":300,
 						"page":page,
 					},
 					header:{
