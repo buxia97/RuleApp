@@ -7,6 +7,12 @@ Vue.prototype.$store = store
 // import cuCustom from './colorui/components/cu-custom.vue'
 // Vue.component('cu-custom',cuCustom)
 
+import articleItem from './pages/components/articleItem.vue'
+Vue.component('articleItem',articleItem)
+
+import commentItem from './pages/components/commentItem.vue'
+Vue.component('commentItem',commentItem)
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

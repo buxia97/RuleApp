@@ -15,41 +15,9 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="all-box">
 			<view class="cu-card article no-card">
-				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
-					<view class="cu-item shadow">
-						<block v-if="item.images.length==0">
-							<view class="content-author content-header">
-								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-								<text class="content-author-name">{{item.authorInfo.name}}</text>
-								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
-							</view>
-						</block>
-						<view class="title">
-							<view class="text-cut">{{replaceSpecialChar(item.title)}}</view>
-						</view>
-						<view class="content article-content">
-							
-							 <image v-if="item.images.length > 0" :src="item.images[0]"
-							  mode="aspectFill"></image>
-							 
-							<view class="desc">
-								<view class="text-content"> {{subText(item.text,80)}}</view>
-								<view class="content-author" v-if="item.images.length>0">
-									<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
-									<text class="content-author-name">{{item.authorInfo.name}}</text>
-									<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
-								</view>
-							</view>
-						</view>
-						<view class="article-content-btn">
-							<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-							<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-							<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-						
-							<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
-						</view>
-					</view>
-				</view>
+				<block v-for="(item,index) in contentsList" :key="index" v-if="type==0">
+					<articleItem :item="item"></articleItem>
+				</block>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
 					<text>{{moreText}}</text>
 				</view>

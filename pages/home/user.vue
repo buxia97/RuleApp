@@ -43,7 +43,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="cu-item userinfo" v-else  @tap="toLink('/pages/user/useredit')">
+				<view class="cu-item userinfo" v-else  @tap="toUserContents()">
 					<view class="cu-avatar round lg" :style="userInfo.style"></view>
 					<view class="content">
 						<view class="text-grey">
@@ -309,6 +309,7 @@
 				userData:{},
 				isClock:0,
 				group:"",
+				avatar:"",
 				
 				feedback:API.GetFeedback(),
 				userlvStyle:"",
@@ -339,6 +340,7 @@
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.avatar = that.userInfo.avatar;
 				that.uid = that.userInfo.uid;
 				that.group = that.userInfo.group;
 				if(that.userInfo.screenName){
@@ -892,6 +894,16 @@
 				
 				uni.navigateTo({
 				    url: '/pages/user/fanList?uid='+uid
+				});
+			},
+			toUserContents(){
+				var that = this;
+				var name = that.name;
+				var title = that.name+"的信息";
+				var id= that.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
 				});
 			},
 		},

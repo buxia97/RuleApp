@@ -32,22 +32,30 @@
 							</view>
 							<view class="user-text">
 							
-								<text class="user-info-name">{{name}}</text>
+								<text class="user-info-name">
+									
+									<block v-if="isvip>0">
+										<block v-if="vip==1">
+											<text class="text-red">
+												{{name}}
+											</text>
+										</block>
+										<block v-else>
+											<text class="text-yellow">
+												{{name}}
+											</text>
+										</block>
+									</block>
+									<block v-else>
+										{{name}}
+									</block>
+								</text>
 								<!-- <view class="userinfo-lv"> -->
 									<!--  #ifdef H5 || APP-PLUS -->
 								<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
 								<!--  #endif -->
 								<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
-								<!--  #ifdef H5 || APP-PLUS -->
-								<block v-if="isvip==1">
-									<block v-if="vip==1">
-										<text class="isVIP bg-gradual-red">VIP</text>
-									</block>
-									<block v-else>
-										<text class="isVIP bg-yellow">VIP</text>
-									</block>
-								</block>
-									<!--  #endif -->
+								
 								<!-- </view> -->
 								<view class="user-info-data">
 									<text class="user-info-data-box" @tap="goFanList(uid)">
@@ -90,27 +98,11 @@
 				</view>
 			</view>
 			<!--  #endif -->
+			
 			<view class="cu-card article no-card" v-if="type==0">
-				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
-					<view class="cu-item shadow">
-						<view class="title">
-							<view class="text-cut">{{item.title}}</view>
-						</view>
-						<view class="content">
-							<image v-if="item.images.length>0" :src="item.images[0]"
-							 mode="aspectFill"></image>
-							<view class="desc">
-								<view class="text-content"> {{subText(item.text,80)}}</view>
-								<view>
-									<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-									<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-									<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-									<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
+				<block v-for="(item,index) in contentsList" :key="index" v-if="type==0">
+					<articleItem :item="item"></articleItem>
+				</block>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
 					<text>{{moreText}}</text>
 				</view>
@@ -126,37 +118,10 @@
 					暂时没有评论
 				</view>
 				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-					<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-						<view class="cu-list menu-avatar comment">
-							<text class="copy-comment" @tap="ToCopy(item.text)">
-								复制
-							</text>
-							<view class="cu-item">
-								<view class="cu-avatar round" :style="item.style"></view>
-								<view class="content">
-									<view class="text-grey">{{item.author}}
-									</view>
-									<view class="text-content text-df break-all">
-										<rich-text :nodes="markHtml(item.text)"></rich-text>
-									</view>
-									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-										<view class="flex" @tap="toInfoComment(item.cid,item.contenTitle)">
-											<view>{{item.contenTitle}}</view>
-											
-										</view>
-									</view>
-									<view class="margin-top-sm flex justify-between">
-										<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-										<view>
-											<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
-										</view>
-									</view>
-								</view>
-							</view>
-				
-							
-						</view>
-					</view>
+					<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+						<commentItem :item="item" :isHead="false"></commentItem>
+					</block>
+					
 				</view>
 				
 				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
@@ -357,21 +322,7 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
-			markHtml(text){
-				var that = this;
-				var owoList=that.owoList;
-				for(var i in owoList){
-				
-					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
-						
-					}
-				}
-				return text;
-			},
-			replaceAll(string, search, replace) {
-			  return string.split(search).join(replace);
-			},
+
 			getUserInfo(){
 				var that = this;
 				Net.request({
@@ -745,14 +696,6 @@
 					url: '/pages/user/post?type=edit'+'&cid='+cid
 				});
 			},
-			subText(text,num){
-				if(text.length < null){
-					return text.substring(0,num)+"……"
-				}else{
-					return text;
-				}
-				
-			},
 			getUserLv(i){
 				var that = this;
 				var rankList = API.GetRankList();
@@ -763,20 +706,6 @@
 				var rankStyle = API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
-			},
-			formatDate(datetime) {
-				var datetime = new Date(parseInt(datetime * 1000));
-				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
-				var year = datetime.getFullYear(),
-					month = ("0" + (datetime.getMonth() + 1)).slice(-2),
-					date = ("0" + datetime.getDate()).slice(-2),
-					hour = ("0" + datetime.getHours()).slice(-2),
-					minute = ("0" + datetime.getMinutes()).slice(-2);
-				//second = ("0" + date.getSeconds()).slice(-2);
-				// 拼接
-				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-				// 返回
-				return result;
 			},
 			toInfo(data){
 				var that = this;

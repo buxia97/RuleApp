@@ -61,7 +61,7 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-if="!isShow" class="text" @input="textareaAInput" v-model="text" placeholder="商品介绍" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)" :adjust-position="false" :focus="false"></textarea>
 				<scroll-view scroll-y class="text" v-if="isShow"  :style="readstyle">
-					<mp-html :content="text" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
+					<mp-html :content="text" :selectable="true" :show-img-menu="true" :lazy-load="true" :markdown="true" :scroll-table="true"/>
 				</scroll-view>
 			</view>
 			<!--  #ifdef MP -->

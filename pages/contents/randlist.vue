@@ -19,24 +19,9 @@
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-card article no-card">
-				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
-					<view class="cu-item shadow">
-						<view class="title">
-							<view class="text-cut">{{item.title}}</view>
-						</view>
-						<view class="content">
-							<image v-if="item.images.length>0" :src="item.images[0]"
-							 mode="aspectFill"></image>
-							<view class="desc">
-								<view class="text-content"> {{subText(item.text,80)}}</view>
-								<view>
-									<view class="cu-tag data-author"><text class="cuIcon-message"></text>{{item.commentsNum}}</view>
-									<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
+				<block v-for="(item,index) in contentsList" :key="index">
+					<articleItem :item="item"></articleItem>
+				</block>
 
 			</view>
 		</view>
@@ -60,7 +45,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				contentsList:[],
 				
@@ -174,13 +159,6 @@
 				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
 				// 返回
 				return result;
-			},
-			toInfo(data){
-				var that = this;
-				
-				uni.navigateTo({
-				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
-				});
 			},
 		}
 	}

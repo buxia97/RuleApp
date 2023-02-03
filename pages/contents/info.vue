@@ -79,13 +79,13 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true" markdown="true"/>
+				<mp-html :content="html" :selectable="true" :show-img-menu="true" :ImgCache="true" :scroll-table="true" :markdown="true"/>
 				
 				<view class="shop-value" v-if="shopValue!=''">
 					<view class="shop-value-title">
 						付费内容
 					</view>
-					<mp-html :content="shopValue" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true" markdown="true"/>
+					<mp-html :content="shopValue" :selectable="true" :show-img-menu="true" :ImgCache="true" scroll-table="true" :markdown="true"/>
 				</view>
 				<view class="content-shop" v-if="shopValue==''">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">
@@ -236,56 +236,9 @@
 					暂时没有评论
 				</view>
 				<view class="cu-card dynamic no-card info-comment" style="margin-top: 20upx;">
-					<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-						<view class="cu-list menu-avatar comment">
-							<text class="copy-comment" @tap="ToCopy(item.text)">
-								复制
-							</text>
-							<view class="cu-item">
-								<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
-								<view class="content">
-									<view class="text-grey">
-										{{item.author}}
-										<!--  #ifdef H5 || APP-PLUS -->
-										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
-										<!--  #endif -->
-										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
-										<!--  #ifdef H5 || APP-PLUS -->
-										<block v-if="item.isvip>1">
-											<block v-if="item.vip==1">
-												<text class="isVIP bg-gradual-red">VIP</text>
-											</block>
-											<block v-else>
-												<text class="isVIP bg-yellow">VIP</text>
-											</block>
-										</block>
-										<!--  #endif -->
-									</view>
-									<view class="text-content text-df break-all">
-										<rich-text :nodes="markCommentHtml(item.text)"></rich-text>
-									</view>
-									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.parent>0">
-										<view class="flex">
-											<view>{{item.parentComments.author}}：</view>
-											<view class="flex-sub break-all">{{item.parentComments.text}}</view>
-										</view>
-									</view>
-									<view class="margin-top-sm flex justify-between">
-										<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-										<view>
-											<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
-										</view>
-									</view>
-									<view class="comment-operation"  v-if="group=='administrator'||group=='editor'">
-										<text class="text-black" @tap="toBan(item.authorId)">封禁</text>
-										<text class="text-red" @tap="toDelete(item.coid)">删除</text>
-									</view>
-								</view>
-							</view>
-				
-							
-						</view>
-					</view>
+					<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+						<commentItem :item="item"></commentItem>
+					</block>
 				</view>
 				
 				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">

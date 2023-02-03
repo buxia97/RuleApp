@@ -23,34 +23,9 @@
 						暂时没有评论
 					</view>
 					<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-						<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-							<view class="cu-list menu-avatar comment">
-								<view class="cu-item">
-									<view class="cu-avatar round" :style="item.style"></view>
-									<view class="content">
-										<view class="text-grey">{{item.author}}</view>
-										<view class="text-content text-df break-all">
-											<rich-text :nodes="markHtml(item.text)"></rich-text>
-										</view>
-										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
-												<view class="break-all">{{item.contenTitle}}</view>
-												
-											</view>
-										</view>
-										<view class="margin-top-sm flex justify-between">
-											<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-											<view>
-												<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
-											</view>
-										</view>
-									</view>
-									<text class="cu-btn text-red comment-delete" v-if="allowDelete==1"  @tap="toDelete(item.coid)">删除</text>
-								</view>
-					
-								
-							</view>
-						</view>
+						<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+							<commentItem :item="item"></commentItem>
+						</block>
 					</view>
 					
 					<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
@@ -149,21 +124,7 @@
 					that.getCommentsList(true);
 				}
 			},
-			markHtml(text){
-				var that = this;
-				var owoList=that.owoList;
-				for(var i in owoList){
-				
-					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
-						
-					}
-				}
-				return text;
-			},
-			replaceAll(string, search, replace) {
-			  return string.split(search).join(replace);
-			},
+
 			toInfo(cid,title){
 				var that = this;
 				
@@ -261,39 +222,7 @@
 					}
 				})
 			},
-			commentsAdd(title,coid,reply){
-				var that = this;
-				var cid = that.cid;
-				uni.navigateTo({
-				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
-				});
-			},
-			
-			formatDate(datetime) {
-				var datetime = new Date(parseInt(datetime * 1000));
-				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
-				var year = datetime.getFullYear(),
-					month = ("0" + (datetime.getMonth() + 1)).slice(-2),
-					date = ("0" + datetime.getDate()).slice(-2),
-					hour = ("0" + datetime.getHours()).slice(-2),
-					minute = ("0" + datetime.getMinutes()).slice(-2);
-				//second = ("0" + date.getSeconds()).slice(-2);
-				// 拼接
-				var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-				// 返回
-				return result;
-			},
-			replaceSpecialChar(text) {
-				if(!text){
-					return false;
-				}
-				text = text.replace(/&quot;/g, '"');
-				text = text.replace(/&amp;/g, '&');
-				text = text.replace(/&lt;/g, '<');
-				text = text.replace(/&gt;/g, '>');
-				text = text.replace(/&nbsp;/g, ' ');
-				return text;
-			},
+
 			toDelete(id){
 				var that = this;
 				var token = "";

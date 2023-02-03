@@ -22,49 +22,10 @@
 						暂时没有评论
 					</view>
 					<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-						<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-							<view class="cu-list menu-avatar comment">
-								<view class="cu-item">
-									<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
-									<view class="content">
-										<view class="text-grey">{{item.author}}
-										<!--  #ifdef H5 || APP-PLUS -->
-										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
-										<!--  #endif -->
-										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
-										<!--  #ifdef H5 || APP-PLUS -->
-										<block v-if="item.isvip>0">
-											<block v-if="item.vip==1">
-												<text class="isVIP bg-gradual-red">VIP</text>
-											</block>
-											<block v-else>
-												<text class="isVIP bg-yellow">VIP</text>
-											</block>
-										</block>
-										<!--  #endif -->
-										</view>
-										<view class="text-content text-df break-all">
-											<rich-text :nodes="markHtml(item.text)"></rich-text>
-											
-										</view>
-										<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-											<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
-												<view class="break-all">{{item.contenTitle}}</view>
-												
-											</view>
-										</view>
-										<view class="margin-top-sm flex justify-between">
-											<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-											<view>
-												<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
-											</view>
-										</view>
-									</view>
-								</view>
-					
-								
-							</view>
-						</view>
+						<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+							<commentItem :item="item"></commentItem>
+						</block>
+						
 					</view>
 					
 					<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
@@ -157,21 +118,6 @@
 				uni.navigateBack({
 					delta: 1
 				});
-			},
-			markHtml(text){
-				var that = this;
-				var owoList=that.owoList;
-				for(var i in owoList){
-				
-					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
-						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='/"+owoList[i].icon+"' class='tImg' />")
-						
-					}
-				}
-				return text;
-			},
-			replaceAll(string, search, replace) {
-			  return string.split(search).join(replace);
 			},
 			loadMore(){
 				var that = this;

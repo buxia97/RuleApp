@@ -88,7 +88,7 @@
 			<view class="cu-form-group">
 				<textarea maxlength="-1" v-if="!isShow" class="text" :adjust-position="false" :focus="false" @input="textareaAInput" v-model="text" placeholder="文章内容" :style="poststyle" @focus="ToisText(1)" @blur="ToisText(0)"></textarea>
 				<scroll-view scroll-y class="text" v-if="isShow"  :style="readstyle">
-					<mp-html :content="textRead" scroll-table="true" selectable="true" show-img-menu="true" lazy-load="true" markdown="true"/>
+					<mp-html :content="textRead" :scroll-table="true" :selectable="true" :show-img-menu="true" :lazy-load="true" :markdown="true"/>
 				</scroll-view>
 			</view>
 			<!--  #ifdef MP -->
