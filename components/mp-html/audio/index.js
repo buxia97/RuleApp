@@ -1,7 +1,7 @@
 /**
  * @fileoverview audio 插件
  */
-const context = require('./context')
+import context from './context'
 let index = 0
 
 function Audio (vm) {
@@ -28,7 +28,7 @@ Audio.prototype.onLoad = function () {
       ctx.id = this.audios[i]
       this.vm._videos.push(ctx)
     }
-  }, 50)
+  }, 500)
 }
 
-module.exports = Audio
+export default Audio

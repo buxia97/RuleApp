@@ -2,9 +2,9 @@
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
  */
-const prism = require('./prism.min')
-const config = require('./config')
-const Parser = require('../parser')
+import prism from './prism.min'
+import config from './config'
+import Parser from '../parser'
 
 function Highlight (vm) {
   this.vm = vm
@@ -12,32 +12,40 @@ function Highlight (vm) {
 
 Highlight.prototype.onParse = function (node, vm) {
   if (node.name === 'pre') {
+    if (vm.options.editable) {
+      node.attrs.class = (node.attrs.class || '') + ' hl-pre'
+      return
+    }
     let i
     for (i = node.children.length; i--;) {
       if (node.children[i].name === 'code') break
     }
     if (i === -1) return
     const code = node.children[i]
-    let className = code.attrs.class || ''
+    let className = code.attrs.class + ' ' + node.attrs.class
     i = className.indexOf('language-')
     if (i === -1) {
-      className = node.attrs.class || ''
-      i = className.indexOf('language-')
+      i = className.indexOf('lang-')
+      if (i === -1) {
+        className = 'language-javascript'
+        i = 9
+      } else {
+        i += 5
+      }
+    } else {
+      i += 9
     }
-    if (i === -1) {
-		//类型为text的自动变成html
-      className = 'language-javascript'
-      i = className.indexOf('language-')
-    }
-    i += 9
     let j
     for (j = i; j < className.length; j++) {
       if (className[j] === ' ') break
     }
     const lang = className.substring(i, j)
-	
-    if (code.children.length && code.children[0].type === 'text') {
-      const text = code.children[0].text.replace(/&amp;/g, '&')
+    if (code.children.length) {
+      const text = this.vm.getText(code.children).replace(/&amp;/g, '&')
+      if (!text) return
+      if (node.c) {
+        node.c = undefined
+      }
       if (prism.languages[lang]) {
         code.children = (new Parser(this.vm).parse(
           // 加一层 pre 保留空白符
@@ -85,4 +93,4 @@ Highlight.prototype.onParse = function (node, vm) {
   }
 }
 
-module.exports = Highlight
+export default Highlight

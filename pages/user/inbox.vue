@@ -468,10 +468,8 @@
 										oldChatList = that.oldChatList;
 									}
 									if(oldChatList.length>0){
-										var lastOld = that.oldChatList[0].lastTime;
-										var lastNew = chatList[0].lastTime;
-										console.log(lastOld + "||"+lastNew);
-										if(lastOld!=lastNew){
+										
+										if(!arraysEqual(oldChatList,chatList)){
 											console.log("开始对比")
 											for(var c in chatList){
 												for(var d in oldChatList){
@@ -518,6 +516,21 @@
 						}, 300)
 					}
 				})
+			},
+			arraysEqual(a, b) {
+				if (a === b) return true;
+				if (a == null || b == null) return false;
+				if (a.length != b.length) return false;
+				for(var c in a){
+					for(var d in b){
+						if(b[d].id == a[c].id){
+							if(b[d].lastTime != a[c].lastTime){
+								return false;
+							}
+						}
+						
+					}
+				}
 			},
 			commentsAdd(title,coid,reply,cid){
 				var that = this;

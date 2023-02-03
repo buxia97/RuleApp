@@ -172,4 +172,4 @@ Lexer.prototype.val = function (c) {
   this.style += c
 }
 
-module.exports = Parser
+export default Parser

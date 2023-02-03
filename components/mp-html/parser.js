@@ -10,6 +10,11 @@ const config = {
   // 块级标签（转为 div，其他的非信任标签转为 span）
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section'),
 
+  // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+  // 行内标签
+  inlineTags: makeMap('abbr,b,big,code,del,em,i,ins,label,q,small,span,strong,sub,sup'),
+  // #endif
+
   // 要移除的标签
   ignoreTags: makeMap('area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr'),
 
@@ -34,7 +39,11 @@ const config = {
     ldquo: '“',
     rdquo: '”',
     bull: '•',
-    hellip: '…'
+    hellip: '…',
+    larr: '←',
+    uarr: '↑',
+    rarr: '→',
+    darr: '↓'
   },
 
   // 默认的标签样式
@@ -130,6 +139,26 @@ function decodeEntity (str, amp) {
 }
 
 /**
+ * @description 合并多个块级标签，加快长内容渲染
+ * @param {Array} nodes 要合并的标签数组
+ */
+function mergeNodes (nodes) {
+  let i = nodes.length - 1
+  for (let j = i; j >= -1; j--) {
+    if (j === -1 || nodes[j].c || !nodes[j].name || (nodes[j].name !== 'div' && nodes[j].name !== 'p' && nodes[j].name[0] !== 'h') || (nodes[j].attrs.style || '').includes('inline')) {
+      if (i - j >= 5) {
+        nodes.splice(j + 1, i - j, {
+          name: 'div',
+          attrs: {},
+          children: nodes.slice(j + 1, i + 1)
+        })
+      }
+      i = j - 1
+    }
+  }
+}
+
+/**
  * @description html 解析器
  * @param {Object} vm 组件实例
  */
@@ -137,6 +166,7 @@ function Parser (vm) {
   this.options = vm || {}
   this.tagStyle = Object.assign({}, config.tagStyle, this.options.tagStyle)
   this.imgList = vm.imgList || []
+  this.imgList._unloadimgs = 0
   this.plugins = vm.plugins || []
   this.attrs = Object.create(null)
   this.stack = []
@@ -160,6 +190,9 @@ Parser.prototype.parse = function (content) {
   // 出栈未闭合的标签
   while (this.stack.length) {
     this.popNode()
+  }
+  if (this.nodes.length > 50) {
+    mergeNodes(this.nodes)
   }
   return this.nodes
 }
@@ -205,9 +238,15 @@ Parser.prototype.getUrl = function (url) {
     } else if (domain) {
       // 否则补充整个域名
       url = domain + url
-    }
-  } else if (domain && !url.includes('data:') && !url.includes('://')) {
-    url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
+  } else if (!url.includes('data:') && !url.includes('://')) {
+    if (domain) {
+      url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
   }
   return url
 }
@@ -426,11 +465,18 @@ Parser.prototype.onOpenTag = function (selfClose) {
             const item = this.stack[i]
             if (item.name === 'a') {
               node.a = item.attrs
-              break
+            }
+            if (item.name === 'table' && !node.webp && !attrs.src.includes('cloud://')) {
+              if (!styleObj.display || styleObj.display.includes('inline')) {
+                node.t = 'inline-block'
+              } else {
+                node.t = styleObj.display
+              }
+              styleObj.display = undefined
             }
             // #ifndef H5 || APP-PLUS
             const style = item.attrs.style || ''
-            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
+            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || parseInt(styleObj.width) > 100)) {
               styleObj.width = '100% !important'
               styleObj.height = ''
               for (let j = i + 1; j < this.stack.length; j++) {
@@ -474,6 +520,9 @@ Parser.prototype.onOpenTag = function (selfClose) {
           }
           // #endif
           this.imgList.push(src)
+          if (!node.t) {
+            this.imgList._unloadimgs += 1
+          }
           // #ifdef H5 || APP-PLUS
           if (this.options.lazyLoad) {
             attrs['data-src'] = attrs.src
@@ -496,15 +545,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
         styleObj.height = undefined
       }
       // 记录是否设置了宽高
-      if (styleObj.width) {
-        if (styleObj.width.includes('auto')) {
-          styleObj.width = ''
-        } else {
-          node.w = 'T'
-          if (styleObj.height && !styleObj.height.includes('auto')) {
-            node.h = 'T'
-          }
-        }
+      if (!isNaN(parseInt(styleObj.width))) {
+        node.w = 'T'
+      }
+      if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
+        node.h = 'T'
       }
     } else if (node.name === 'svg') {
       siblings.push(node)
@@ -518,6 +563,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
       }
     }
     attrs.style = attrs.style.substr(1) || undefined
+    // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+    if (!attrs.style) {
+      delete attrs.style
+    }
+    // #endif
   } else {
     if ((node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) && this.pre !== 2) {
       this.pre = node.pre = 1
@@ -551,8 +601,8 @@ Parser.prototype.onCloseTag = function (name) {
     siblings.push({
       name,
       attrs: {
-        class: tagSelector[name],
-        style: this.tagStyle[name]
+        class: tagSelector[name] || '',
+        style: this.tagStyle[name] || ''
       }
     })
   }
@@ -563,6 +613,7 @@ Parser.prototype.onCloseTag = function (name) {
  * @private
  */
 Parser.prototype.popNode = function () {
+  const editable = this.options.editable
   const node = this.stack.pop()
   let attrs = node.attrs
   const children = node.children
@@ -695,7 +746,7 @@ Parser.prototype.popNode = function () {
         } else if (size > 7) {
           size = 7
         }
-        styleObj['font-size'] = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'][size - 1]
+        styleObj['font-size'] = ['x-small', 'small', 'medium', 'large', 'x-large', 'xx-large', 'xxx-large'][size - 1]
       }
       attrs.size = undefined
     }
@@ -716,7 +767,9 @@ Parser.prototype.popNode = function () {
 
   // #ifndef APP-PLUS-NVUE
   if (config.blockTags[node.name]) {
-    node.name = 'div'
+    if (!editable) {
+      node.name = 'div'
+    }
   } else if (!config.trustTags[node.name] && !this.xml) {
     // 未知标签转为 span，避免无法显示
     node.name = 'span'
@@ -728,15 +781,22 @@ Parser.prototype.popNode = function () {
     // #endif
   ) {
     this.expose()
-  } /* #ifdef APP-PLUS */ else if (node.name === 'video') {
+  } else if (node.name === 'video') {
+    if ((styleObj.height || '').includes('auto')) {
+      styleObj.height = undefined
+    }
+    /* #ifdef APP-PLUS */
     let str = '<video style="width:100%;height:100%"'
+    if (editable) {
+      attrs.controls = ''
+    }
     for (const item in attrs) {
       if (attrs[item]) {
         str += ' ' + item + '="' + attrs[item] + '"'
       }
     }
     if (this.options.pauseVideo) {
-      str += ' onplay="for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
+      str += ' onplay="this.dispatchEvent(new CustomEvent(\'vplay\',{bubbles:!0}));for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
     }
     str += '>'
     for (let i = 0; i < node.src.length; i++) {
@@ -744,7 +804,8 @@ Parser.prototype.popNode = function () {
     }
     str += '</video>'
     node.html = str
-  } /* #endif */ else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
+    /* #endif */
+  } else if ((node.name === 'ul' || node.name === 'ol') && (node.c || editable)) {
     // 列表处理
     const types = {
       a: 'lower-alpha',
@@ -767,7 +828,9 @@ Parser.prototype.popNode = function () {
     let padding = parseFloat(attrs.cellpadding)
     let spacing = parseFloat(attrs.cellspacing)
     const border = parseFloat(attrs.border)
-    if (node.c) {
+    const bordercolor = styleObj['border-color']
+    const borderstyle = styleObj['border-style']
+    if ((node.c || editable)) {
       // padding 和 spacing 默认 2
       if (isNaN(padding)) {
         padding = 2
@@ -777,9 +840,9 @@ Parser.prototype.popNode = function () {
       }
     }
     if (border) {
-      attrs.style += ';border:' + border + 'px solid gray'
+      attrs.style += `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}`
     }
-    if (node.flag && node.c) {
+    if (node.flag && (node.c || editable)) {
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
       styleObj.display = 'grid'
       if (spacing) {
@@ -807,15 +870,18 @@ Parser.prototype.popNode = function () {
 
       for (let row = 1; row <= trList.length; row++) {
         let col = 1
-        for (let j = 0; j < trList[row - 1].children.length; j++, col++) {
+        for (let j = 0; j < trList[row - 1].children.length; j++) {
           const td = trList[row - 1].children[j]
           if (td.name === 'td' || td.name === 'th') {
             // 这个格子被上面的单元格占用，则列号++
             while (map[row + '.' + col]) {
-              col++
-            }
+            col++
+          }
+          if (editable) {
+            td.r = row
+          }
             let style = td.attrs.style || ''
-            const start = style.indexOf('width') ? style.indexOf(';width') : 0
+            let start = style.indexOf('width') ? style.indexOf(';width') : 0
             // 提取出 td 的宽度
             if (start !== -1) {
               let end = style.indexOf(';', start + 6)
@@ -827,7 +893,30 @@ Parser.prototype.popNode = function () {
               }
               style = style.substr(0, start) + style.substr(end)
             }
-            style += (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
+            // 设置竖直对齐
+            style += ';display:flex'
+            start = style.indexOf('vertical-align')
+            if (start !== -1) {
+              const val = style.substr(start + 15, 10)
+              if (val.includes('middle')) {
+                style += ';align-items:center'
+              } else if (val.includes('bottom')) {
+                style += ';align-items:flex-end'
+              }
+            } else {
+              style += ';align-items:center'
+            }
+            // 设置水平对齐
+            start = style.indexOf('text-align')
+            if (start !== -1) {
+              const val = style.substr(start + 11, 10)
+              if (val.includes('center')) {
+                style += ';justify-content: center'
+              } else if (val.includes('right')) {
+                style += ';justify-content: right'
+              }
+            }
+            style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并
             if (td.attrs.colspan) {
               style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`
@@ -853,6 +942,7 @@ Parser.prototype.popNode = function () {
               td.attrs.style = style
             }
             cells.push(td)
+            col++
           }
         }
         if (row === 1) {
@@ -866,7 +956,7 @@ Parser.prototype.popNode = function () {
       node.children = cells
     } else {
       // 没有使用合并单元格的表格通过 table 布局实现
-      if (node.c) {
+      if ((node.c || editable)) {
         styleObj.display = 'table'
       }
       if (!isNaN(spacing)) {
@@ -879,7 +969,7 @@ Parser.prototype.popNode = function () {
             const td = nodes[i]
             if (td.name === 'th' || td.name === 'td') {
               if (border) {
-                td.attrs.style = `border:${border}px solid gray;${td.attrs.style || ''}`
+                td.attrs.style = `border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'};${td.attrs.style || ''}`
               }
               if (padding) {
                 td.attrs.style = `padding:${padding}px;${td.attrs.style || ''}`
@@ -929,16 +1019,24 @@ Parser.prototype.popNode = function () {
         children.splice(i + 1, 1)
       }
     }
-  } else if (node.c) {
-    node.c = 2
-    for (let i = node.children.length; i--;) {
-      if (!node.children[i].c || node.children[i].name === 'table') {
-        node.c = 1
+  } else if (!editable && node.c ) {
+    (function traversal (node) {
+      node.c = 2
+      for (let i = node.children.length; i--;) {
+        const child = node.children[i]
+        // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+        if (child.name && (config.inlineTags[child.name] || ((child.attrs.style || '').includes('inline') && child.children)) && !child.c) {
+          traversal(child)
+        }
+        // #endif
+        if (!child.c || child.name === 'table') {
+          node.c = 1
+        }
       }
-    }
+    })(node)
   }
 
-  if ((styleObj.display || '').includes('flex') && !node.c) {
+  if ((styleObj.display || '').includes('flex') && !(node.c || editable)) {
     for (let i = children.length; i--;) {
       const item = children[i]
       if (item.f) {
@@ -948,10 +1046,10 @@ Parser.prototype.popNode = function () {
     }
   }
   // flex 布局时部分样式需要提取到 rich-text 外层
-  const flex = parent && (parent.attrs.style || '').includes('flex')
+  const flex = parent && ((parent.attrs.style || '').includes('flex') || (parent.attrs.style || '').includes('grid'))
     // #ifdef MP-WEIXIN
     // 检查基础库版本 virtualHost 是否可用
-    && !(node.c && wx.getNFCAdapter) // eslint-disable-line
+    && !((node.c || editable) && wx.getNFCAdapter) // eslint-disable-line
     // #endif
     // #ifndef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
     && !node.c // eslint-disable-line
@@ -959,13 +1057,17 @@ Parser.prototype.popNode = function () {
   if (flex) {
     node.f = ';max-width:100%'
   }
+
+  if (children.length >= 50 && (node.c || editable) && !(styleObj.display || '').includes('flex')) {
+    mergeNodes(children)
+  }
   // #endif
 
   for (const key in styleObj) {
     if (styleObj[key]) {
       const val = `;${key}:${styleObj[key].replace(' !important', '')}`
       /* #ifndef APP-PLUS-NVUE */
-      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || styleObj[key][0] === '-' || (key === 'width' && val.includes('%')))) {
+      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || key.includes('grid') || styleObj[key][0] === '-' || (key.includes('width') && val.includes('%')))) {
         node.f += val
         if (key === 'width') {
           attrs.style += ';width:100%'
@@ -976,6 +1078,13 @@ Parser.prototype.popNode = function () {
     }
   }
   attrs.style = attrs.style.substr(1) || undefined
+  // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+  for (const key in attrs) {
+    if (!attrs[key]) {
+      delete attrs[key]
+    }
+  }
+  // #endif
 }
 
 /**
@@ -1000,17 +1109,27 @@ Parser.prototype.onText = function (text) {
       }
     }
     // 去除含有换行符的空串
-    if (trim === ' ' && flag) return
+    if (trim === ' ') {
+      if (flag) return
+      // #ifdef VUE3
+      else {
+        const parent = this.stack[this.stack.length - 1]
+        if (parent && parent.name[0] === 't') return
+      }
+      // #endif
+    }
     text = trim
   }
   const node = Object.create(null)
   node.type = 'text'
+  // #ifdef (MP-BAIDU || MP-ALIPAY || MP-TOUTIAO) && VUE3
+  node.attrs = {}
+  // #endif
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN
-    if (this.options.selectable === 'force' && system.includes('iOS')) {
+    if (this.options.selectable === 'force' && system.includes('iOS') && !uni.canIUse('rich-text.user-select')) {
       this.expose()
-      node.us = 'T'
     }
     // #endif
     const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes
@@ -1220,4 +1339,4 @@ Lexer.prototype.endTag = function () {
   }
 }
 
-module.exports = Parser
+export default Parser

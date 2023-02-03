@@ -79,13 +79,13 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
+				<mp-html :content="html" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true" markdown="true"/>
 				
 				<view class="shop-value" v-if="shopValue!=''">
 					<view class="shop-value-title">
 						付费内容
 					</view>
-					<mp-html :content="shopValue" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true"/>
+					<mp-html :content="shopValue" selectable="true" show-img-menu="true" ImgCache="true" scroll-table="true" markdown="true"/>
 				</view>
 				<view class="content-shop" v-if="shopValue==''">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">

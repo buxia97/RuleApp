@@ -1,13 +1,15 @@
 /**
  * @fileoverview style 插件
  */
+// #ifndef APP-PLUS-NVUE
+import Parser from './parser'
+// #endif
+
 function Style () {
   this.styles = []
 }
 
 // #ifndef APP-PLUS-NVUE
-const Parser = require('./parser')
-
 Style.prototype.onParse = function (node, vm) {
   // 获取样式
   if (node.name === 'style' && node.children.length && node.children[0].type === 'text') {
@@ -124,4 +126,4 @@ function match (node, keys) {
 }
 // #endif
 
-module.exports = Style
+export default Style

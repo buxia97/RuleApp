@@ -3,7 +3,7 @@
  * Include marked (https://github.com/markedjs/marked)
  * Include github-markdown-css (https://github.com/sindresorhus/github-markdown-css)
  */
-const {marked} = require('./marked.min')
+import marked from './marked.min'
 let index = 0
 
 function Markdown (vm) {
@@ -31,4 +31,4 @@ Markdown.prototype.onParse = function (node, vm) {
   }
 }
 
-module.exports = Markdown
+export default Markdown

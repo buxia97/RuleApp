@@ -135,4 +135,4 @@ function makeid (length) {
 }
 // #endif
 
-module.exports = ImgCache
+export default ImgCache
