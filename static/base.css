@@ -2270,11 +2270,62 @@ page{
 	font-size: 35upx;
 }
 .user-post-info{
-	height: 150upx;
+	height: 180upx;
 	width: 100%;
-	background-color: #f3f3f3;
+	padding: 20upx;
+	background-color: #f9f9f9;
 	overflow: hidden;
 	border-radius: 10upx;
+}
+.user-post-pic{
+	width: 200upx;
+	padding-right: 20upx;
+	float: left;
+}
+.user-post-pic image{
+	border-radius: 8upx;
+}
+.user-post-title{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	font-size: 30upx;
+	font-weight: bold;
+	margin-top: 8upx;
+	margin-bottom: 18upx;
+	line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+.user-post-intro{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	font-size: 26upx;
+	line-height: 36upx;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+	color: #666666;
+}
+.user-space-info{
+	width: 100%;
+	padding: 20upx;
+	background-color: #f9f9f9;
+	overflow: hidden;
+	border-radius: 10upx;
+	color: #666;
+}
+.user-space-info .user-space-text{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+	-webkit-box-orient: vertical;
 }
 .admin-btn{
 	display: none;
@@ -2299,4 +2350,59 @@ page{
 	height: 90upx;
 	text-align: center;
 	line-height: 90upx;
+}
+.space-info .cu-item{
+	padding-bottom: 30upx;
+}
+.space-reply{
+	background: #fff;
+	margin-top: 20upx;
+}
+.space-reply-head{
+	height: 90upx;
+	line-height: 70upx;
+	padding: 10upx 30upx;
+	font-size: 30upx;
+	border-bottom: solid 2upx #f6f6f6;
+}
+.space-reply-head text{
+	color: #999;
+	font-weight: bold;
+}
+.space-reply-head text.cur{
+	color: #333;
+	border-bottom: solid 4upx #2196f6;
+	padding-bottom: 16upx;
+}
+.space-reply-likes{
+	float: right;
+}
+.space-reply-list .no-data .cu-btn{
+	border-radius: 8upx;
+}
+.space-reply-num{
+	background: #f3f3f3;
+}
+.space-reply-list .comment .cu-item{
+	border-bottom: solid 2upx #f6f6f6;
+}
+.space-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100upx;
+	padding: 20upx 0upx;
+	line-height: 60upx;
+    background: #fff;
+	font-size: 30upx;
+    border-top: solid 2upx #f6f6f6;
+    text-align: center;
+}
+.space-footer-box text{
+	margin-right: 10upx;
+}
+.space-footer .space-footer-box:nth-child(2){
+	border-left: solid 2upx #f6f6f6;
+	border-right: solid 2upx #f6f6f6;
 }

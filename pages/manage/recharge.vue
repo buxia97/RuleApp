@@ -9,7 +9,7 @@
 					快捷充扣
 				</view>
 				<view class="action" @tap="userRecharge">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">确认</button>
 				</view>
 			</view>
 		</view>

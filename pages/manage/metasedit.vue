@@ -16,10 +16,10 @@
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="metaEdit" v-if="type=='edit'">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">保存</button>
 				</view>
 				<view class="action" @tap="metaAdd" v-if="type=='add'">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">提交</button>
 				</view>
 				<!--  #endif -->
 			</view>

@@ -438,6 +438,18 @@
 		,{
 			"path": "pages/chat/chat",
 			"style": {}
+		},
+		{
+			"path": "pages/space/info",
+			"style": {}
+		},
+		{
+			"path": "pages/space/post",
+			"style": {}
+		},
+		{
+			"path": "pages/space/reply",
+			"style": {}
 		}
 		
 	],

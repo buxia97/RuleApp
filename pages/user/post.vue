@@ -15,7 +15,8 @@
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="submit">
-					<text class="cuIcon-upload"></text>
+					<!-- <text class="cuIcon-upload"></text> -->
+					<button class="cu-btn round bg-blue">发布</button>
 				</view>
 				<!--  #endif -->
 				

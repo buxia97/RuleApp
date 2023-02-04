@@ -9,7 +9,7 @@
 					快捷提现
 				</view>
 				<view class="action" @tap="userwithdraw">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-gradual-blue">提交</button>
 				</view>
 			</view>
 		</view>

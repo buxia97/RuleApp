@@ -96,7 +96,58 @@
 					</view>
 					<view class="grid flex-sub padding-lr">
 						<view class="user-post-info">
+							<view class="user-post-pic">
+								<image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg" mode="aspectFill"></image>
+							</view>
+							<view class="user-post-text">
+								<view class="user-post-title">
+									文章的标题，无法换行，超出长度则自动变为省略号
+								</view>
+								<view class="user-post-intro">
+									文章的简略说明，只允许换两行，超出长度则自动变为省略号。文章的简略说明，只允许换两行，超出长度则自动变为省略号。
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="text-center grid col-3 padding-xs">
+						<view class="square-post-btn">
+							<text class="cuIcon-forward"></text>100
+						</view>
+						<view class="square-post-btn">
+							<text class="cuIcon-community"></text>200
+						</view>
+						<view class="square-post-btn">
+							<text class="cuIcon-appreciate"></text>100
+						</view>
+					</view>
+				</view>
+				<view class="cu-item">
+					<view class="cu-list menu-avatar">
+						<view class="cu-item">
+							<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+							<view class="content flex-sub">
+								<view>凯尔</view>
+								<view class="text-gray text-sm flex justify-between">
+									2019年12月3日
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="text-content">
+						我转发了动态！
+					</view>
+					<view class="grid flex-sub padding-lr">
+						
+						<view class="user-space-info">
+							<view class="user-space-text">
+								<text class="text-blue">@老实人：</text>动态的简略说明，只允许换四行，超出长度则自动变为省略号。动态的简略说明，只允许换四行，超出长度则自动变为省略号。
+							</view>
 							
+							<view class="grid flex-sub col-3 grid-square margin-top-xs">
+								<view class="bg-img" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"
+								 v-for="(item,index) in 3" :key="index">
+								</view>
+							</view>
 						</view>
 					</view>
 					<view class="text-center grid col-3 padding-xs">
@@ -170,8 +221,18 @@
 					</view>
 					<view class="action">
 						<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
-						<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
-						<view class="cu-tag round bg-red sm" v-else>new</view>
+						<block v-if="item.lastMsg!=null">
+							<block v-if="item.lastMsg.uid==uid">
+								<view class="cu-tag sm" style="background: none;">&nbsp</view>
+							</block>
+							<block v-else>
+								<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
+								<view class="cu-tag round bg-red sm" v-else>{{item.unRead}}</view>
+							</block>
+						</block>
+						<block v-else>
+							<view class="cu-tag sm" style="background: none;">&nbsp</view>
+						</block>
 					</view>
 				</view>
 				</block>
@@ -212,6 +273,7 @@
 				searchText:"",
 				
 				chatList:[],
+				oldChatList:[],
 				
 				isGetChat:null
 			}
@@ -245,6 +307,10 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
+			}
+			if(localStorage.getItem('chatList')){
+				that.oldChatList = JSON.parse(localStorage.getItem('oldChatList'));
+				// that.chatList = JSON.parse(localStorage.getItem('chatList'));
 			}
 			that.userStatus();
 			that.unreadNum();
@@ -293,34 +359,40 @@
 			},
 			toInfo(data){
 				var that = this;
-				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			toPage(title,cid){
 				var that = this;
-				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
 			},
 			toSearch(){
 				var that = this;
-				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/search'
 				});
 			},
 			goPage(url){
 				var that = this;
-				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: url
 				});
 			},
 			toCategoryContents(title,id){
 				var that = this;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				var type="meta";
 				uni.navigateTo({
 				    url: '/pages/contents/contentlist?title='+title+"&type="+type+"&id="+id
@@ -445,13 +517,49 @@
 								for(var i in list){
 									var arr = list[i];
 									arr.isNew =0;
+									arr.unRead =0;
 									chatList.push(arr);
 								}
 								if(isPage){
 									that.page++;
 									that.chatList = that.chatList.concat(chatList);
 								}else{
-									that.chatList = chatList;
+									var oldChatList = [];
+									if(that.oldChatList!=null){
+										oldChatList = that.oldChatList;
+									}
+									if(oldChatList.length>0){
+										
+										if(!arraysEqual(oldChatList,chatList)){
+											console.log("开始对比")
+											for(var c in chatList){
+												for(var d in oldChatList){
+													if(oldChatList[d].id == chatList[c].id){
+														if(oldChatList[d].lastTime < chatList[c].lastTime){
+															console.log("赋值完成")
+															chatList[c].isNew = 1;
+															
+															var unRead = chatList[c].msgNum - oldChatList[d].msgNum;
+															if(unRead <= 0){
+																unRead = 0;
+															}
+															chatList[c].unRead = unRead;
+														}
+													}
+													
+												}
+											}
+											that.oldChatList = chatList;
+											that.chatList = chatList;
+											localStorage.setItem('AllchatList',JSON.stringify(chatList));
+										}
+										
+										
+									}else{
+										that.oldChatList = chatList;
+										that.chatList = chatList;
+										localStorage.setItem('AllchatList',JSON.stringify(chatList));
+									}
 								}
 							}else{
 								// that.moreText="没有更多消息了";
@@ -464,6 +572,21 @@
 						// that.moreText="加载更多";
 					}
 				})
+			},
+			arraysEqual(a, b) {
+				if (a === b) return true;
+				if (a == null || b == null) return false;
+				if (a.length != b.length) return false;
+				for(var c in a){
+					for(var d in b){
+						if(b[d].id == a[c].id){
+							if(b[d].lastTime != a[c].lastTime){
+								return false;
+							}
+						}
+						
+					}
+				}
 			},
 			chatFormatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
@@ -498,17 +621,32 @@
 			},
 			goChat(data){
 				var that = this;
+				var chatid = data.id;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
+				//去除未读标志
+				var chatlist = that.chatList;
+				for(var i in chatlist){
+					if(chatlist[i].id==chatid){
+						chatlist[i].isNew =0;
+						chatlist[i].unRead =0;
+					}
+				}
+				that.chatList = chatlist;
+				that.oldChatList = chatlist;
+				localStorage.setItem('AllchatList',JSON.stringify(chatList));
+				//结束
 				if(data.type==0){
 					var name = data.userJson.name;
 					var uid = data.userJson.uid;
-					var chatid = data.id;
+					
 					uni.navigateTo({
 					    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid+"&type=0"
 					});
 				}
 				if(data.type==1){
 					var name = data.name;
-					var chatid = data.id;
+					
 					uni.navigateTo({
 					    url: '/pages/chat/chat?&name='+name+'&chatid='+chatid+'&type=1'
 					});

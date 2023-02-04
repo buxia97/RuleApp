@@ -9,7 +9,7 @@
 					发送消息
 				</view>
 				<view class="action" @tap="userRecharge">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">发送</button>
 				</view>
 			</view>
 		</view>

@@ -148,7 +148,7 @@
 								</block>
 								<block v-else>
 									<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
-									<view class="cu-tag round bg-red sm" v-else>new</view>
+									<view class="cu-tag round bg-red sm" v-else>{{item.unRead}}</view>
 								</block>
 							</block>
 							<block v-else>
@@ -246,7 +246,7 @@
 			}
 			if(localStorage.getItem('chatList')){
 				that.oldChatList = JSON.parse(localStorage.getItem('oldChatList'));
-				that.chatList = JSON.parse(localStorage.getItem('chatList'));
+				// that.chatList = JSON.parse(localStorage.getItem('chatList'));
 			}
 			
 			
@@ -268,6 +268,9 @@
 		},
 		methods:{
 			back(){
+				var that = this;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateBack({
 					delta: 1
 				});
@@ -299,7 +302,8 @@
 			},
 			toInfo(cid,title){
 				var that = this;
-				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
 				});
@@ -310,6 +314,8 @@
 					that.toInfo(data.contentsInfo.cid,data.contenTitle);
 				}
 				if(data.type=="finance"){
+					clearInterval(that.chatLoading);
+					that.chatLoading = null
 					uni.navigateTo({
 					    url: '/pages/user/assets'
 					});
@@ -457,6 +463,7 @@
 								for(var i in list){
 									var arr = list[i];
 									arr.isNew =0;
+									arr.unRead =0;
 									chatList.push(arr);
 								}
 								if(isPage){
@@ -477,6 +484,12 @@
 														if(oldChatList[d].lastTime < chatList[c].lastTime){
 															console.log("赋值完成")
 															chatList[c].isNew = 1;
+															
+															var unRead = chatList[c].msgNum - oldChatList[d].msgNum;
+															if(unRead <= 0){
+																unRead = 0;
+															}
+															chatList[c].unRead = unRead;
 														}
 													}
 													
@@ -534,6 +547,8 @@
 			},
 			commentsAdd(title,coid,reply,cid){
 				var that = this;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
 				});
@@ -640,9 +655,26 @@
 			},
 			goChat(data){
 				var that = this;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
+				var chatid = data.id;
+				//去除未读标志
+				var chatlist = that.chatList;
+				for(var i in chatlist){
+					if(chatlist[i].id==chatid){
+						chatlist[i].isNew =0;
+						chatlist[i].unRead =0;
+					}
+				}
+				that.chatList = chatlist;
+				that.oldChatList = chatlist;
+				localStorage.setItem('chatList',JSON.stringify(chatList));
+				//结束
 				var name = data.userJson.name;
 				var uid = data.userJson.uid;
-				var chatid = data.id;
+				
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
 				uni.navigateTo({
 				    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
 				});

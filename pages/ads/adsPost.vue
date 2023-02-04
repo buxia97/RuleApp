@@ -11,12 +11,12 @@
 				<!--  #ifdef H5 || APP-PLUS -->
 				<block v-if="post=='add'">
 				<view class="action" @tap="submit">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">提交</button>
 				</view>
 				</block>
 				<block v-else>
 				<view class="action" @tap="edit">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">保存</button>
 				</view>
 				</block>
 				<!--  #endif -->

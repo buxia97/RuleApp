@@ -10,7 +10,7 @@
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="userEdit">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">保存</button>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -22,7 +22,7 @@
 				<image :src="avatar"></image>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<!-- <text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text> -->
-				<text class="cu-btn bg-blue radius" @tap="toAvatar" >设置头像</text>
+				<text class="cu-btn bg-gradual-blue radius" @tap="toAvatar" >设置头像</text>
 				<!--  #endif -->
 			</view>
 			<view class="cu-form-group">
