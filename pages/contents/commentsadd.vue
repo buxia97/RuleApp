@@ -89,7 +89,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				
 				title:"",
@@ -157,9 +157,6 @@
 						icon:'none',
 						duration: 1000,
 						position:'bottom',
-					});
-					uni.navigateTo({
-					    url: '/pages/user/login'
 					});
 					var timer = setTimeout(function() {
 						uni.navigateTo({

@@ -21,7 +21,7 @@
 		<block v-if="squareid==0">
 			<view class="data-box">
 				<view class="square-post">
-					<view class="square-post-header">
+					<view class="square-post-header" @tap="postSpace()">
 						<view class="square-user">
 							<view class="cu-avatar round" :style="userInfo.style" v-if="token!=''"></view>
 							<view class="cu-avatar round" v-else></view>
@@ -46,123 +46,14 @@
 					</view>
 				</view>
 			</view>
-			<view class="cu-card dynamic no-card square-list">
-				<view class="cu-item">
-					<view class="cu-list menu-avatar">
-						<view class="cu-item">
-							<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-							<view class="content flex-sub">
-								<view>凯尔</view>
-								<view class="text-gray text-sm flex justify-between">
-									2019年12月3日
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="text-content">
-						测试图片类型动态，单图，3,6,9
-					</view>
-					<view class="grid flex-sub padding-lr col-3 grid-square">
-						<view class="bg-img" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"
-						 v-for="(item,index) in 6" :key="index">
-						</view>
-					</view>
-					<view class="text-center grid col-3 padding-xs">
-						<view class="square-post-btn">
-							<text class="cuIcon-forward"></text>100
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-community"></text>200
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-appreciate"></text>100
-						</view>
-					</view>
-				</view>
-				<view class="cu-item">
-					<view class="cu-list menu-avatar">
-						<view class="cu-item">
-							<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-							<view class="content flex-sub">
-								<view>凯尔</view>
-								<view class="text-gray text-sm flex justify-between">
-									2019年12月3日
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="text-content">
-						我发布了新文章！
-					</view>
-					<view class="grid flex-sub padding-lr">
-						<view class="user-post-info">
-							<view class="user-post-pic">
-								<image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg" mode="aspectFill"></image>
-							</view>
-							<view class="user-post-text">
-								<view class="user-post-title">
-									文章的标题，无法换行，超出长度则自动变为省略号
-								</view>
-								<view class="user-post-intro">
-									文章的简略说明，只允许换两行，超出长度则自动变为省略号。文章的简略说明，只允许换两行，超出长度则自动变为省略号。
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="text-center grid col-3 padding-xs">
-						<view class="square-post-btn">
-							<text class="cuIcon-forward"></text>100
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-community"></text>200
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-appreciate"></text>100
-						</view>
-					</view>
-				</view>
-				<view class="cu-item">
-					<view class="cu-list menu-avatar">
-						<view class="cu-item">
-							<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-							<view class="content flex-sub">
-								<view>凯尔</view>
-								<view class="text-gray text-sm flex justify-between">
-									2019年12月3日
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="text-content">
-						我转发了动态！
-					</view>
-					<view class="grid flex-sub padding-lr">
-						
-						<view class="user-space-info">
-							<view class="user-space-text">
-								<text class="text-blue">@老实人：</text>动态的简略说明，只允许换四行，超出长度则自动变为省略号。动态的简略说明，只允许换四行，超出长度则自动变为省略号。
-							</view>
-							
-							<view class="grid flex-sub col-3 grid-square margin-top-xs">
-								<view class="bg-img" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"
-								 v-for="(item,index) in 3" :key="index">
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="text-center grid col-3 padding-xs">
-						<view class="square-post-btn">
-							<text class="cuIcon-forward"></text>100
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-community"></text>200
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-appreciate"></text>100
-						</view>
-					</view>
-				</view>
+			
+				
+			<spaceItem :spaceList="spaceList"></spaceItem>
+			<view class="load-more" @tap="loadMore" v-if="dataLoad">
+				<text>{{moreText}}</text>
 			</view>
+			
+			
 		</block>
 		<block v-if="squareid==1">
 			
@@ -193,11 +84,11 @@
 								<block v-if="item.lastMsg!=null">
 									
 									<block v-if="item.lastMsg.type!=4">
-										<block v-if="item.lastMsg.uid==item.uid">
-											{{item.userJson.name}}: 
+										<block v-if="item.lastMsg.uid==uid">
+											我: 
 										</block>
-										<block v-if="item.lastMsg.uid==item.toid">
-											{{item.userJson.toName}}: 
+										<block v-if="item.lastMsg.uid!=uid">
+											{{item.name}}: 
 										</block>
 										<block v-if="item.lastMsg.type==0">
 											{{item.lastMsg.text}}
@@ -275,14 +166,33 @@
 				chatList:[],
 				oldChatList:[],
 				
-				isGetChat:null
+				spaceList:[],
+				
+				isGetChat:null,
+				
+				uid:0,
+				dataLoad:false,
+				
+				page:1,
+				moreText:"加载更多",
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
+			if(that.squareid==0){
+				that.getSpaceList(false);
+			}
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)
+		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			if(that.isLoad==0){
+				
+				that.loadMore();
+			}
 		},
 		onHide() {
 			var that = this
@@ -302,7 +212,8 @@
 			if(localStorage.getItem('userinfo')){
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
+				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");";
+				that.uid = that.userInfo.uid;
 			}
 			if(localStorage.getItem('token')){
 				
@@ -314,6 +225,9 @@
 			}
 			that.userStatus();
 			that.unreadNum();
+			if(that.squareid==0){
+				that.getSpaceList(false);
+			}
 			
 		},
 		onLoad() {
@@ -321,20 +235,31 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			
 		},
 		methods:{
 			setSquare(type){
 				var that = this;
+				that.page = 1;
 				that.squareid = type;
+				clearInterval(that.isGetChat);
+				that.isGetChat = null
 				if(type==0){
-					clearInterval(that.isGetChat);
-					that.isGetChat = null
+					that.getSpaceList(false);
 				}
 				if(type==1){
 					that.getMyChat(false);
 					that.isGetChat = setInterval(() => {
 					 that.getMyChat(false);
 					}, 4000);
+				}
+			},
+			loadMore(){
+				var that = this;
+				that.moreText="正在加载中...";
+				that.isLoad=1;
+				if(that.squareid==0){
+					that.getSpaceList(true);
 				}
 			},
 			searchClose(){
@@ -530,7 +455,7 @@
 									}
 									if(oldChatList.length>0){
 										
-										if(!arraysEqual(oldChatList,chatList)){
+										if(!that.arraysEqual(oldChatList,chatList)){
 											console.log("开始对比")
 											for(var c in chatList){
 												for(var d in oldChatList){
@@ -633,8 +558,8 @@
 					}
 				}
 				that.chatList = chatlist;
-				that.oldChatList = chatlist;
-				localStorage.setItem('AllchatList',JSON.stringify(chatList));
+				that.oldChatList = that.chatList;
+				localStorage.setItem('AllchatList',JSON.stringify(that.chatList));
 				//结束
 				if(data.type==0){
 					var name = data.userJson.name;
@@ -652,6 +577,69 @@
 					});
 				}
 				
+			},
+			postSpace(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post'
+				});
+			},
+			getSpaceList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				Net.request({
+					url: API.spaceList(),
+					data:{
+						"limit":10,
+						"page":page,
+						"order":"created",
+						"token":that.token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							var list = res.data.data;
+							var spaceList = [];
+							for(var i in list){
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+							}
+							spaceList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.spaceList = that.spaceList.concat(spaceList);
+								}else{
+									that.spaceList = spaceList;
+								}
+								
+							}else{
+								that.moreText="没有更多文章了";
+							}
+						}
+					},
+					fail: function(res) {
+						
+						that.moreText="加载更多";
+						that.isLoad=0;
+					}
+				})
 			},
 		},
 		components: {

@@ -13,6 +13,9 @@ Vue.component('articleItem',articleItem)
 import commentItem from './pages/components/commentItem.vue'
 Vue.component('commentItem',commentItem)
 
+import spaceItem from './pages/components/spaceItem.vue'
+Vue.component('spaceItem',spaceItem)
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

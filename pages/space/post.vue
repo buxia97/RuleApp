@@ -6,19 +6,108 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					发布动态
+					<block v-if="type==0">
+						发布新动态
+					</block>
+					<block v-if="type==1">
+						转发文章
+					</block>
+					<block v-if="type==2">
+						转发动态
+					</block>
+					<block v-if="type==4">
+						发布视频动态
+					</block>
+					<block v-if="type==5">
+						转发商品
+					</block>
 				</view>
 				<view class="action">
-					<button class="cu-btn round bg-blue">发布</button>
+					<button class="cu-btn round bg-gradual-orange" @tap="addSpace()">发布</button>
 				</view>
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
+		<form>
+			<view class="cu-form-group">
+				<textarea maxlength="-1" v-model="text" placeholder="输入您现在的想法"></textarea>
+			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
+			<view class="comments-owo space-owo">
+				<text class="cuIcon-emoji" @tap="OwO"></text>
+				<!--表情-->
+				<view class="owo" v-if="isOwO">
+					<scroll-view class="owo-list" scroll-y>
+						<view class="owo-main">
+							<view class="owo-lit-box" v-for="(item,index)  in owoList" @tap="setOwO(item)" :key="index">
+								<image :src="'/'+item.icon" mode="aspectFill"></image>
+							</view>
+						</view>
+						
+					</scroll-view>
+					<view class="owo-type">
+						<view class="owo-box" @tap="toOwO('paopao')" :class="OwOtype=='paopao'?'cur':''">
+							泡泡
+						</view>
+						<view class="owo-box" @tap="toOwO('adai')" :class="OwOtype=='adai'?'cur':''">
+							阿呆
+						</view>
+						<view class="owo-box" @tap="toOwO('alu')" :class="OwOtype=='alu'?'cur':''">
+							阿鲁
+						</view>
+						<view class="owo-box" @tap="toOwO('quyinniang')" :class="OwOtype=='quyinniang'?'cur':''">
+							蛆音娘
+						</view>
+					</view>
+				</view>
+			</view>
+			
+			<!--  #endif -->
+			<block v-if="type==0">
+				<view class="grid flex-sub col-3 grid-square space-pic">
+					<view class="bg-img" :style="'background-image:url('+item+');'"
+					 v-for="(item,index) in picList" :key="index">
+					 <text class="cuIcon-close" @tap="picClose(item)"></text>
+					</view>
+					<view class="space-upload" v-if="picList.length < 9" @tap="upload">
+						<text class="cuIcon-add"></text>
+					</view>
+				</view>
+			</block>
+			<block v-if="type==4">
+				<view class="grid flex-sub col-3 grid-square space-pic">
+					<view class="space-upload" v-if="pic == ''" @tap="uploadVideo">
+						<text class="cuIcon-add"></text>
+					</view>
+					<view class="space-upload bg-black" v-if="pic != ''">
+						<text class="cuIcon-close" @tap="pic=''"></text>
+					</view>
+				</view>
+			</block>
+			<!--  #ifdef MP -->
+			<view class="all-btn">
+				<view class="user-btn flex flex-direction">
+					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="commentsadd">发布</button>
+					
+				</view>
+			</view>
+			<!--  #endif -->
+			
+		</form>
 	</view>
 </template>
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
+	// #ifdef APP-PLUS
+	import owo from '../../static/app-plus/owo/OwO.js'
+	// #endif
+	// #ifdef H5
+	import owo from '../../static/h5/owo/OwO.js'
+	// #endif
+	// #ifdef MP
+	var owo = [];
+	// #endif
 	var API = require('../../utils/api')
 	var Net = require('../../utils/net')
 	export default {
@@ -29,9 +118,19 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				
+				type:0,
+				text:"",
+				toid:0,
+				pic:"",
+				picList:[],
+				token:"",
+				
+				isOwO:false,
+				owo:owo,
+				owoList:[],
+				OwOtype:"paopao",
 				
 				
-				token:'',
 				
 			}
 		},
@@ -48,17 +147,22 @@
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
-			if(localStorage.getItem('getuid')){
-				that.toid = localStorage.getItem('getuid');
+			if(localStorage.getItem('token')){
+				that.token = localStorage.getItem('token');
 			}
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			// #ifdef APP-PLUS || H5
+			that.owoList = that.owo.data.paopao.container;
+			// #endif
+			if(res.type){
+				that.type = res.type;
+			}
 		},
 		methods: {
 			back(){
@@ -66,6 +170,214 @@
 					delta: 1
 				});
 			},
+			toOwO(text){
+				var that = this;
+				that.OwOtype = text;
+				if(text=="paopao"){
+					that.owoList = that.owo.data.paopao.container;
+				}
+				if(text=="adai"){
+					that.owoList = that.owo.data.adai.container;
+				}
+				if(text=="alu"){
+					that.owoList = that.owo.data.alu.container;
+				}
+				if(text=="quyinniang"){
+					that.owoList = that.owo.data.quyinniang.container;
+				}
+			},
+			setOwO(data){
+				var that = this;
+				var text = data.data;
+				that.text+=text;
+				that.isOwO = false;
+			},
+			OwO(){
+				var that = this;
+				that.isOwO = !that.isOwO;
+			},
+			addSpace(){
+				var that = this;
+				if(that.token==""){
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+						    url: '/pages/user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				if (that.text == "") {
+					uni.showToast({
+					    title:"请输入动态内容",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				if(that.type==0){
+					var picList = that.picList;
+					var pic = "";
+					for(var i in picList){
+						if(i==0){
+							pic += picList[i];
+						}else{
+							pic += "||"+picList[i];
+						}
+					}
+					that.pic = pic;
+				}
+				var data = {
+					type:that.type,
+					text:that.text,
+					toid:that.toid,
+					pic:that.pic,
+					token:that.token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				Net.request({
+					
+					url: API.addSpace(),
+					data:API.removeObjectEmptyKey(data),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							var timer = setTimeout(function() {
+								that.back();
+							}, 1000)
+							
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			upload(){
+				let that = this				
+				uni.chooseImage({
+					count: 9,  // 最多可以选择的图片张数，默认9
+					sourceType: ['album', 'camera'], 
+				    success: function (res) {						
+						uni.showLoading({
+							title: "加载中"
+						});
+						const tempFilePaths = res.tempFilePaths;
+						for(let i = 0;i < tempFilePaths.length; i++) {
+							const uploadTask = uni.uploadFile({
+							  url : API.upload(),
+							  filePath: tempFilePaths[i],
+							  name: 'file',
+							  formData: {
+							   'token': that.token
+							  },
+							  success: function (uploadFileRes) {
+								  let count = 0;
+								  count++;
+								  if(count==tempFilePaths.length){
+									  setTimeout(function () {
+									  	uni.hideLoading();
+									  }, 1000);
+								  }
+									var data = JSON.parse(uploadFileRes.data);
+									//var data = uploadFileRes.data;
+									uni.showToast({
+										title: data.msg,
+										icon: 'none'
+									})
+									if(data.code==1){
+									   var url = data.data.url;
+									   that.picList.push(url);
+									}
+								},fail:function(){
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+								}
+								
+							   
+							});
+						}
+					}
+				})
+			},
+			uploadVideo(){
+				var that = this;
+				uni.chooseVideo({
+					sourceType: ['camera', 'album'],
+					success: (responent) => {
+						let videoFile = responent.tempFilePath;
+						const uploadTask = uni.uploadFile({
+						  url : API.upload(),
+						  filePath:videoFile,
+						  name: 'file',
+						  formData: {
+						   'token': that.token
+						  },
+						  success: function (uploadFileRes) {
+							  setTimeout(function () {
+							  	uni.hideLoading();
+							  }, 1000);
+								var data = JSON.parse(uploadFileRes.data);
+								//var data = uploadFileRes.data;
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
+								if(data.code==1){
+								   var url = data.data.url;
+								   that.pic = url;
+								}
+							},fail:function(){
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+							}
+							
+						   
+						});
+					}
+				})
+			},
+			picClose(item){
+				var that = this;
+				var picList = that.picList;
+				var list = [];
+				for(var i in picList){
+					if(picList[i]!=item){
+						list.push(picList[i]);
+					}
+				}
+				that.picList = list;
+			}
 		}
 	}
 </script>

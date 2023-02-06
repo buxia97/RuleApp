@@ -491,6 +491,26 @@ module.exports = {
 		return API_URL + 'typechoChat/groupInfo';
 	},
 	
+	
+	addSpace:function(){
+		return API_URL + 'typechoSpace/addSpace';
+	},
+	editSpace:function(){
+		return API_URL + 'typechoSpace/editSpace';
+	},
+	spaceInfo:function(){
+		return API_URL + 'typechoSpace/spaceInfo';
+	},
+	spaceList:function(){
+		return API_URL + 'typechoSpace/spaceList';
+	},
+	myFollowSpace:function(){
+		return API_URL + 'typechoSpace/myFollowSpace';
+	},
+	spaceDelete:function(){
+		return API_URL + 'typechoSpace/spaceDelete';
+	},
+	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);
 	},

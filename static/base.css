@@ -2406,3 +2406,35 @@ page{
 	border-left: solid 2upx #f6f6f6;
 	border-right: solid 2upx #f6f6f6;
 }
+.space-owo{
+	height: 80upx;
+	background-color: #fff;
+}
+.space-owo .cuIcon-emoji{
+	float: right;
+}
+.space-owo .owo{
+	left: auto;
+	right: 30upx;
+}
+.space-pic{
+	padding: 20upx;
+}
+.space-upload{
+	background-color: #e0e0e0;
+}
+.space-upload text{
+	font-size:80upx !important;
+}
+.space-pic .bg-img{
+	position: relative;
+}
+.space-pic .bg-img .cuIcon-close{
+	width:60upx;
+	opacity: 0.8;
+	height:60upx;
+	border-radius: 50%;
+	background: #CE292C;
+	color: #fff !important;
+	font-size: 30upx !important;
+}

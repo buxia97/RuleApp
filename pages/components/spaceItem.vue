@@ -1,54 +1,76 @@
 <template>
 	<view>
-		<view class="cu-item">
-			<view class="cu-list menu-avatar comment">
+		<view class="cu-card dynamic no-card square-list">
+			<block  v-for="(item,index) in spaceList" :key="index" v-if="spaceList.length>0">
 				<view class="cu-item">
-					<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
-					<view class="content">
-						<view class="text-grey">
-						<block v-if="item.isvip>0">
-							<block v-if="item.vip==1">
-								<text class="text-red">
-									{{item.author}}
-								</text>
-							</block>
-							<block v-else>
-								<text class="text-yellow">
-									{{item.author}}
-								</text>
-							</block>
-						</block>
-						<block v-else>
-							{{item.author}}
-						</block>
-						<block v-if="isHead">
-							<!--  #ifdef H5 || APP-PLUS -->
-							<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
-							<!--  #endif -->
-							<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
-						</block>
-						</view>
-						<view class="text-content text-df break-all">
-							<rich-text :nodes="markHtml(item.text)"></rich-text>
-							
-						</view>
-						<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-							<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
-								<view class="break-all">{{replaceSpecialChar(item.contenTitle)}}</view>
-								
-							</view>
-						</view>
-						<view class="margin-top-sm flex justify-between">
-							<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-							<view>
-								<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
+					<view class="cu-list menu-avatar">
+						<view class="cu-item">
+							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+							<view class="content flex-sub">
+								<view>{{item.userJson.name}}</view>
+								<view class="text-gray text-sm flex justify-between">
+									{{formatDate(item.created)}}
+								</view>
 							</view>
 						</view>
 					</view>
-				</view>
+					<view class="text-content">
+						<rich-text :nodes="markHtml(item.text)"></rich-text>
+					</view>
+					<block  v-if="item.type==0">
+						
+						<view class="grid flex-sub padding-lr col-3 grid-square" v-if="item.picList.length>0">
+							<view class="bg-img" :style="'background-image:url('+data+');'"
+							 v-for="(data,i) in item.picList" :key="i">
+							</view>
+						</view>
+					</block>
+					<block  v-if="item.type==1">
+						<view class="grid flex-sub padding-lr">
+							<view class="user-post-info">
+								<view class="user-post-pic">
+									<image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg" mode="aspectFill"></image>
+								</view>
+								<view class="user-post-text">
+									<view class="user-post-title">
+										文章的标题，无法换行，超出长度则自动变为省略号
+									</view>
+									<view class="user-post-intro">
+										文章的简略说明，只允许换两行，超出长度则自动变为省略号。文章的简略说明，只允许换两行，超出长度则自动变为省略号。
+									</view>
+								</view>
+							</view>
+						</view>
+					</block>
+					<block  v-if="item.type==2">
+						<view class="grid flex-sub padding-lr">
 							
-				
-			</view>
+							<view class="user-space-info">
+								<view class="user-space-text">
+									<text class="text-blue">@老实人：</text>动态的简略说明，只允许换四行，超出长度则自动变为省略号。动态的简略说明，只允许换四行，超出长度则自动变为省略号。
+								</view>
+								
+								<view class="grid flex-sub col-3 grid-square margin-top-xs">
+									<view class="bg-img" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"
+									 v-for="(item,index) in 3" :key="index">
+									</view>
+								</view>
+							</view>
+						</view>
+					</block>
+					<view class="text-center grid col-3 padding-xs">
+						<view class="square-post-btn">
+							<text class="cuIcon-forward"></text>{{formatNumber(item.forward)}}
+						</view>
+						<view class="square-post-btn">
+							<text class="cuIcon-community"></text>{{formatNumber(item.reply)}}
+						</view>
+						<view class="square-post-btn">
+							<text class="cuIcon-appreciate"></text>{{formatNumber(item.likes)}}
+						</view>
+					</view>
+				</view>
+			</block>
 		</view>
 	</view>
 </template>
@@ -66,23 +88,22 @@
 	// #endif
 	export default {
 	    props: {
-	        item: {
-			  type: Object,
-			  default: () => ({})
+	        spaceList: {
+			  type: Array,
+			  default: () => []
 			},
 			isHead: {
 			  type: Boolean,
 			  default: true
 			}
 	    },
-		name: "commentItem",
+		name: "spaceItem",
 		data() {
 			return {
 				owo:owo,
 				owoList:[],
 			};
 		},
-		
 		created(){
 			var that = this;
 			// #ifdef APP-PLUS || H5
@@ -147,6 +168,9 @@
 				window.open(url)
 				// #endif
 			},
+			formatNumber(num) {
+			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
+			},
 			toUserContents(data){
 				var that = this;
 				var name = data.author;
@@ -174,17 +198,9 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
-			commentsAdd(title,coid,reply,cid){
-				var that = this;
-				uni.navigateTo({
-				    url: '/pages/contents/commentsadd?cid='+cid+"&coid="+coid+"&title="+title+"&isreply="+reply
-				});
-			},
 			markHtml(text){
 				var that = this;
-				
 				var owoList=that.owoList;
-				// console.log(JSON.stringify(owoList));
 				for(var i in owoList){
 				
 					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
