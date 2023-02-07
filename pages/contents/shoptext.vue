@@ -18,7 +18,7 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
+				<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
 			</view>
 		</view>
 		<!--加载遮罩-->

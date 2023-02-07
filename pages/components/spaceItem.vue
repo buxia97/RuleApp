@@ -5,38 +5,56 @@
 				<view class="cu-item">
 					<view class="cu-list menu-avatar">
 						<view class="cu-item">
-							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'">
+								<view class="curLv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</view>
+							</view>
 							<view class="content flex-sub">
-								<view>{{item.userJson.name}}</view>
+								<view>{{item.userJson.name}}
+								
+								<!--  #ifdef H5 || APP-PLUS -->
+								<!-- <text class="userlv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</text> -->
+								<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
+								
+								<!--  #endif -->
+								<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
+								</view>
 								<view class="text-gray text-sm flex justify-between">
 									{{formatDate(item.created)}}
 								</view>
 							</view>
+							<view class="action space-follow">
+								<view class="cu-btn bg-red" v-if="item.isFollow==0">
+									<text class="cuIcon-add"></text>关注
+								</view>
+								<view class="cu-btn text-red isFollow" v-if="item.isFollow==1">
+									已关注
+								</view>
+							</view>
 						</view>
 					</view>
-					<view class="text-content">
+					<view class="text-content" @tap="toInfo(item.id)">
 						<rich-text :nodes="markHtml(item.text)"></rich-text>
 					</view>
 					<block  v-if="item.type==0">
 						
 						<view class="grid flex-sub padding-lr col-3 grid-square" v-if="item.picList.length>0">
 							<view class="bg-img" :style="'background-image:url('+data+');'"
-							 v-for="(data,i) in item.picList" :key="i">
+							 v-for="(data,i) in item.picList" :key="i" @tap="previewImage(item.picList,data)">
 							</view>
 						</view>
 					</block>
 					<block  v-if="item.type==1">
 						<view class="grid flex-sub padding-lr">
-							<view class="user-post-info">
-								<view class="user-post-pic">
-									<image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg" mode="aspectFill"></image>
+							<view class="user-post-info" @tap="goContentInfo(item)">
+								<view class="user-post-pic" v-if="item.contentJson.images.length>0">
+									<image :src="item.contentJson.images[0]" mode="widthFix"></image>
 								</view>
 								<view class="user-post-text">
 									<view class="user-post-title">
-										文章的标题，无法换行，超出长度则自动变为省略号
+										{{item.contentJson.title}}
 									</view>
 									<view class="user-post-intro">
-										文章的简略说明，只允许换两行，超出长度则自动变为省略号。文章的简略说明，只允许换两行，超出长度则自动变为省略号。
+										{{item.contentJson.text}}
 									</view>
 								</view>
 							</view>
@@ -45,28 +63,73 @@
 					<block  v-if="item.type==2">
 						<view class="grid flex-sub padding-lr">
 							
-							<view class="user-space-info">
+							<view class="user-space-info" @tap="toInfo(item.forwardJson.id)">
 								<view class="user-space-text">
-									<text class="text-blue">@老实人：</text>动态的简略说明，只允许换四行，超出长度则自动变为省略号。动态的简略说明，只允许换四行，超出长度则自动变为省略号。
+									<text class="text-blue">@{{item.forwardJson.username}}：</text>{{item.forwardJson.text}}
 								</view>
 								
-								<view class="grid flex-sub col-3 grid-square margin-top-xs">
-									<view class="bg-img" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"
-									 v-for="(item,index) in 3" :key="index">
+								<view class="grid flex-sub col-3 grid-square margin-top-xs" v-if="item.forwardJson.picList.length>0">
+									<view class="bg-img" :style="'background-image:url('+data+');'"
+									 v-for="(data,i) in item.forwardJson.picList" :key="i">
+									</view>
+								</view>
+							</view>
+						</view>
+					</block>
+					<block  v-if="item.type==4">
+						<view class="padding-lr spaceVideo">
+							<video :src="item.pic"></video>
+						</view>
+					</block>
+					<block  v-if="item.type==5">
+						<view class="grid flex-sub padding-lr">
+							<view class="user-post-info" @tap="goShopInfo(item)">
+								<view class="user-post-pic">
+									<image :src="item.shopJson.imgurl" mode="widthFix"></image>
+								</view>
+								<view class="user-post-text">
+									<view class="user-post-title">
+										{{item.shopJson.title}}
+									</view>
+									<view class="user-post-intro">
+										<text class="text-red text-lg text-bold">{{parseInt(item.shopJson.price)}} {{currencyName}}</text>
+										
+									</view>
+									<view class="user-post-intro">
+										<text class="text-gray text-sm">剩余数量：{{item.shopJson.num}}</text>
+										
 									</view>
 								</view>
 							</view>
 						</view>
 					</block>
 					<view class="text-center grid col-3 padding-xs">
-						<view class="square-post-btn">
-							<text class="cuIcon-forward"></text>{{formatNumber(item.forward)}}
+						<view class="square-post-btn" @tap="forward(item.id)">
+							<text class="cuIcon-forward"></text>
+							<block v-if="item.forward>0">
+								{{formatNumber(item.forward)}}
+							</block>
+							<block v-else>
+								转发
+							</block>
+						</view>
+						<view class="square-post-btn"  @tap="toInfo(item.id)">
+							<text class="cuIcon-community"></text>
+							<block v-if="item.reply>0">
+								{{formatNumber(item.reply)}}
+							</block>
+							<block v-else>
+								评论
+							</block>
 						</view>
 						<view class="square-post-btn">
-							<text class="cuIcon-community"></text>{{formatNumber(item.reply)}}
-						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-appreciate"></text>{{formatNumber(item.likes)}}
+							<text class="cuIcon-appreciate"></text>
+							<block v-if="item.likes>0">
+								{{formatNumber(item.likes)}}
+							</block>
+							<block v-else>
+								点赞
+							</block>
 						</view>
 					</view>
 				</view>
@@ -102,10 +165,13 @@
 			return {
 				owo:owo,
 				owoList:[],
+				vipDiscount:0,
+				currencyName:"",
 			};
 		},
 		created(){
 			var that = this;
+			that.currencyName = API.getCurrencyName();
 			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
@@ -116,6 +182,13 @@
 			// #endif
 		},
 		methods: {
+			previewImage(imageList,image) {
+				//预览图片
+				uni.previewImage({
+					urls: imageList,
+					current: image
+				});
+			},
 			subText(text,num){
 				if(text.length < null){
 					return text.substring(0,num)+"……"
@@ -145,11 +218,26 @@
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
-			toInfo(cid,title){
+			toInfo(id){
 				var that = this;
 				
 				uni.navigateTo({
-				    url: '/pages/contents/info?cid='+cid+"&title="+title
+				    url: '/pages/space/info?id='+id
+				});
+			},
+			goContentInfo(data){
+				var that = this;
+				if(data.status!="publish"){
+					uni.showToast({
+						title:"文章正在审核中，请稍后再试！",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
 				});
 			},
 			goAds(data){
@@ -213,6 +301,49 @@
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
 			},
+			getUserLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankList = API.GetRankList();
+				return rankList[i];
+			},
+			
+			getUserLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = API.getLever(i);
+				var leverList = API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = API.getLever(i);
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return userlvStyle;
+			},
+			forward(id){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post?type=2&id='+id
+				});
+			}
 		}
 	}
 </script>

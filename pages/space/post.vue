@@ -84,6 +84,16 @@
 					</view>
 				</view>
 			</block>
+			<block v-if="type==2">
+				<view class="grid flex-sub padding-sm bg-white" v-if="forwardInfo!=null">
+					
+					<view class="user-space-info">
+						<view class="user-space-text">
+							<text class="text-blue">@老实人：</text>{{forwardInfo.text}}
+						</view>
+					</view>
+				</view>
+			</block>
 			<!--  #ifdef MP -->
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
@@ -125,6 +135,8 @@
 				picList:[],
 				token:"",
 				
+				forwardInfo:null,
+				
 				isOwO:false,
 				owo:owo,
 				owoList:[],
@@ -163,6 +175,10 @@
 			if(res.type){
 				that.type = res.type;
 			}
+			if(res.id){
+				that.id = res.id;
+				that.getSpaceInfo();
+			}
 		},
 		methods: {
 			back(){
@@ -196,6 +212,33 @@
 				var that = this;
 				that.isOwO = !that.isOwO;
 			},
+			getSpaceInfo(){
+				var that = this;
+				var data = {
+					"id":that.id
+				}
+				Net.request({
+					url: API.spaceInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoading=1;
+						if(res.data.code==1){
+							that.forwardInfo = res.data.data;
+							that.toid = res.data.data.id;
+							
+						}
+					},
+					fail: function(res) {
+						that.isLoading=1;
+					}
+				});
+				
+			},
 			addSpace(){
 				var that = this;
 				if(that.token==""){
@@ -214,6 +257,11 @@
 					}, 1000)
 					return false
 				}
+				if(that.type==2){
+					if (that.text == "") {
+						text = "转发了动态"
+					}
+				}
 				if (that.text == "") {
 					uni.showToast({
 					    title:"请输入动态内容",
@@ -223,6 +271,7 @@
 					});
 					return false
 				}
+				var text  = that.text;
 				if(that.type==0){
 					var picList = that.picList;
 					var pic = "";
@@ -235,9 +284,20 @@
 					}
 					that.pic = pic;
 				}
+				if(that.type==4){
+					if(that.pic==""){
+						uni.showToast({
+						    title:"请上传视频文件",
+							icon:'none',
+							duration: 1000,
+							position:'bottom',
+						});
+						return false;
+					}
+				}
 				var data = {
 					type:that.type,
-					text:that.text,
+					text:text,
 					toid:that.toid,
 					pic:that.pic,
 					token:that.token
@@ -331,9 +391,13 @@
 			},
 			uploadVideo(){
 				var that = this;
+				
 				uni.chooseVideo({
 					sourceType: ['camera', 'album'],
 					success: (responent) => {
+						uni.showLoading({
+							title: "加载中"
+						});
 						let videoFile = responent.tempFilePath;
 						const uploadTask = uni.uploadFile({
 						  url : API.upload(),
@@ -357,6 +421,10 @@
 								   that.pic = url;
 								}
 							},fail:function(){
+								uni.showToast({
+									title: "网络异常，上传失败！",
+									icon: 'none'
+								})
 								setTimeout(function () {
 									uni.hideLoading();
 								}, 1000);

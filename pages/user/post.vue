@@ -40,6 +40,10 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">转发到动态</view>
+				<switch @change="toSpace" :class="isSpace?'checked':''" :checked="isSpace?true:false"></switch>
+			</view>
 			<view class="edit-tool">
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="OwO-box">
@@ -280,6 +284,7 @@
 				start:-1,
 				
 				toImg:false,
+				isSpace:false,
 				
 			}
 		},
@@ -338,17 +343,22 @@
 					
 				}
 			}
+			if(res.isSpace){
+				if(res.isSpace==1){
+					that.isSpace = true;
+				}
+			}
 			that.getShopList();
 			
 			//键盘弹出相关
 			let screenHeight = uni.getSystemInfoSync().screenHeight;
 			let statusHeight= uni.getSystemInfoSync().statusBarHeight;
-			let inputHeight = screenHeight - statusHeight - 240;
+			let inputHeight = screenHeight - statusHeight - 290;
 			// #ifdef APP-PLUS
-			inputHeight = screenHeight - statusHeight - 250;
+			inputHeight = screenHeight - statusHeight - 300;
 			// #endif
 			// #ifdef H5
-			inputHeight = 350;
+			inputHeight = 400;
 			// #endif
 			
 			that.screenHeight = screenHeight - that.NavBar;
@@ -381,6 +391,9 @@
 			localStorage.removeItem('clist')
 		},
 		methods: {
+			toSpace(e) {
+				this.isSpace = e.detail.value
+			},
 			markHtml(text){
 				var that = this;
 				text = that.replaceAll(text,"@!!!","@@@@");
@@ -677,6 +690,10 @@
 					});
 					return false
 				}
+				var isSpace = 0;
+				if(that.isSpace){
+					isSpace = 1;
+				}
 				var data = {
 					'title':that.title,
 					'category':that.category,
@@ -693,6 +710,7 @@
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,
 						'text':that.text,
+						"isSpace":isSpace,
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

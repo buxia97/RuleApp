@@ -1,4 +1,4 @@
-var API_URL = 'http://127.0.0.1:8081/';
+var API_URL = 'http://127.0.0.4/';
 //var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';

@@ -23,7 +23,9 @@
 						</block>
 						<block v-if="isHead">
 							<!--  #ifdef H5 || APP-PLUS -->
+							<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
 							<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+							
 							<!--  #endif -->
 							<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 						</block>
@@ -165,6 +167,7 @@
 				var rankList = API.GetRankList();
 				return rankList[i];
 			},
+			
 			getUserLvStyle(i){
 				var that = this;
 				if(!i){
@@ -172,6 +175,25 @@
 				}
 				var rankStyle = API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
+				return userlvStyle;
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = API.getLever(i);
+				var leverList = API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = API.getLever(i);
+				var rankStyle = API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
 			},
 			commentsAdd(title,coid,reply,cid){

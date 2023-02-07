@@ -1658,13 +1658,30 @@ page{
 	font-size: 30upx;
 }
 .userlv{
-	font-size: 24upx;
+	font-size: 22upx;
 	background-color: #cecece;
 	line-height: 25upx;
-	padding: 4upx 15upx;
+	padding: 4upx 10upx;
 	border-radius: 8upx;
 	margin-left: 10upx;
 	margin-top: -4upx;
+}
+.cu-avatar{
+	position: relative;
+	overflow: hidden;
+}
+.curLv{
+	padding: 0upx;
+	font-size: 22upx;
+	font-weight: bold;
+	font-style: italic;
+	opacity: 0.7;
+	display: block;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	line-height: 30upx;
+	height: 30upx;
 }
 .userlv.customize{
 	background-color: #ba21a8;
@@ -2278,12 +2295,15 @@ page{
 	border-radius: 10upx;
 }
 .user-post-pic{
-	width: 200upx;
-	padding-right: 20upx;
+	width: 180upx;
+	height: 140upx;
+	overflow: hidden;
+	border-radius: 8upx;
+	margin-right: 20upx;
 	float: left;
 }
 .user-post-pic image{
-	border-radius: 8upx;
+	background-color: #f3f3f3;
 }
 .user-post-title{
 	text-overflow: -o-ellipsis-lastline;
@@ -2437,4 +2457,21 @@ page{
 	background: #CE292C;
 	color: #fff !important;
 	font-size: 30upx !important;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow{
+	width: 180upx;
+	margin-top: -28upx;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn{
+	border-radius: 10upx;
+	height: 58upx;
+	line-height: 58upx;
+	padding: 0upx 24upx;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn text{
+	margin-right: 4upx;
+}
+.spaceVideo video{
+	width: 100%;
+	border-radius: 8upx;
 }

@@ -31,17 +31,17 @@
 			<view class="info-content shop-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" selectable="true" show-img-menu="true" lazy-load="true" ImgCache="true"/>
+				<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
 			</view>
 		</view>
 		<view class="shopinfo-bar grid col-2" v-if="isBuy==0||type==1">
 			<view class="shopinfo-price">
 				<block v-if="isvip==1">
-					{{parseInt(price * vipDiscount)}} 积分
+					{{parseInt(price * vipDiscount)}} {{currencyName}}
 					<text class="text-yellow margin-left text-sm">VIP优惠</text>
 				</block>
 				<block v-else>
-					{{price}} 积分
+					{{price}} {{currencyName}}
 				</block>
 			</view>
 			<view class="shopinfo-btn">
@@ -99,7 +99,7 @@
 				scale:0,
 				isvip:0,
 				vip:0,
-				
+				currencyName:""
 				
 			}
 		},
@@ -128,7 +128,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			
+			that.currencyName = API.getCurrencyName();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif

@@ -44,7 +44,9 @@
 					</view>
 				</view>
 				<view class="cu-item userinfo" v-else  @tap="toUserContents()">
-					<view class="cu-avatar round lg" :style="userInfo.style"></view>
+					<view class="cu-avatar round lg" :style="userInfo.style">
+						<view class="curLv" :style="lvStyle">{{getLv(userInfo.experience)}}</view>
+					</view>
 					<view class="content">
 						<view class="text-grey">
 							
@@ -313,6 +315,7 @@
 				
 				feedback:API.GetFeedback(),
 				userlvStyle:"",
+				lvStyle:"",
 				
 				aboutme:API.GetAboutme(),
 				
@@ -548,6 +551,14 @@
 				var rankStyle = API.GetRankStyle();
 				that.userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return rankList[i];
+			},
+			getLv(i){
+				var that = this;
+				var lv  = API.getLever(i);
+				var leverList = API.GetLeverList();
+				var rankStyle = API.GetRankStyle();
+				that.lvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return leverList[lv];
 			},
 			toLink(text){
 				var that = this;

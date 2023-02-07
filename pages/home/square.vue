@@ -21,26 +21,28 @@
 		<block v-if="squareid==0">
 			<view class="data-box">
 				<view class="square-post">
-					<view class="square-post-header" @tap="postSpace()">
-						<view class="square-user">
+					<view class="square-post-header">
+						<view class="square-user" @tap="goUserInfo()">
 							<view class="cu-avatar round" :style="userInfo.style" v-if="token!=''"></view>
-							<view class="cu-avatar round" v-else></view>
+							<view class="cu-avatar round" v-else>
+								<text class="text-blue text-sm">登录</text>
+							</view>
 						</view>
-						<view class="square-text">
+						<view class="square-text" @tap="postSpace(0)">
 							分享你的想法吧！
 						</view>
 					</view>
 					<view class="square-post-btn grid col-4">
-						<view class="square-post-btn-box">
+						<view class="square-post-btn-box" @tap="postSpace(0)">
 							<text class="cuIcon-pic text-green"></text>图片
 						</view>
-						<view class="square-post-btn-box">
+						<view class="square-post-btn-box" @tap="postSpace(4)">
 							<text class="cuIcon-record text-purple"></text>视频
 						</view>
-						<view class="square-post-btn-box">
+						<view class="square-post-btn-box" @tap="postSpace(1)">
 							<text class="cuIcon-read text-blue"></text>文章
 						</view>
-						<view class="square-post-btn-box">
+						<view class="square-post-btn-box" @tap="postSpace(5)">
 							<text class="cuIcon-cart text-red"></text>商品
 						</view>
 					</view>
@@ -62,7 +64,7 @@
 				<view class="cu-bar bg-white search">
 					<view class="search-form round">
 						<text class="cuIcon-search"></text>
-						<input type="text" placeholder="搜索群聊" v-model="searchText"  @input="searchTag"></input>
+						<input type="text" placeholder="搜索群聊" v-model="searchText"></input>
 						<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 					</view>
 				</view>
@@ -70,7 +72,7 @@
 					暂时没有数据
 				</view>
 				<block v-for="(item,index) in chatList" :key="index">
-				<view class="cu-item" @tap="goChat(item)">
+				<view class="cu-item" @tap="goChat(item)" v-if="item.name.indexOf(searchText)!=-1">
 					<block v-if="item.type==1">
 						<view class="cu-avatar round lg" :style="'background-image:url('+item.pic+');'"></view>
 					</block>
@@ -248,10 +250,13 @@
 					that.getSpaceList(false);
 				}
 				if(type==1){
-					that.getMyChat(false);
-					that.isGetChat = setInterval(() => {
-					 that.getMyChat(false);
-					}, 4000);
+					if(that.token!=""){
+						that.getMyChat(false);
+						that.isGetChat = setInterval(() => {
+						 that.getMyChat(false);
+						}, 4000);
+					}
+					
 				}
 			},
 			loadMore(){
@@ -578,11 +583,23 @@
 				}
 				
 			},
-			postSpace(){
+			postSpace(type){
 				var that = this;
-				uni.navigateTo({
-				    url: '/pages/space/post'
-				});
+				if(type==1){
+					uni.navigateTo({
+					    url: '/pages/user/post?isSpace=1'
+					});
+				}else if(type==5){
+					uni.navigateTo({
+					    url: '/pages/user/addshop?isSpace=1'
+					});
+				}else{
+					uni.navigateTo({
+					    url: '/pages/space/post?type='+type
+					});
+				}
+				
+				
 			},
 			getSpaceList(isPage){
 				var that = this;
@@ -619,6 +636,15 @@
 									}
 									
 								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
 							}
 							spaceList = list;
 							if(list.length>0){
@@ -630,7 +656,7 @@
 								}
 								
 							}else{
-								that.moreText="没有更多文章了";
+								that.moreText="没有更多动态了";
 							}
 						}
 					},
@@ -640,6 +666,19 @@
 						that.isLoad=0;
 					}
 				})
+			},
+			goUserInfo(){
+				 
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
+				uni.switchTab({
+					url: '/pages/home/user'
+				});
 			},
 		},
 		components: {

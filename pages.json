@@ -441,7 +441,9 @@
 		},
 		{
 			"path": "pages/space/info",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/space/post",

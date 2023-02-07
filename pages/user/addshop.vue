@@ -49,6 +49,10 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">转发到动态</view>
+				<switch @change="toSpace" :class="isSpace?'checked':''" :checked="isSpace?true:false"></switch>
+			</view>
 			<view class="edit-tool">
 				<text @tap="showModal" data-target="RadioModal">H</text>
 				<text @tap="toBold">B</text>
@@ -188,6 +192,7 @@
 				sid:0,
 				
 				start:-1,
+				isSpace:false,
 				
 			}
 		},
@@ -229,6 +234,11 @@
 					that.isInfo=0;
 				}
 			}
+			if(res.isSpace){
+				if(res.isSpace==1){
+					that.isSpace = true;
+				}
+			}
 			
 			//键盘弹出相关
 			let screenHeight = uni.getSystemInfoSync().screenHeight;
@@ -266,6 +276,9 @@
 			
 		},
 		methods: {
+			toSpace(e) {
+				this.isSpace = e.detail.value
+			},
 			ToisText(i){
 				var that= this;
 				that.isText = i;
@@ -496,10 +509,13 @@
 					})
 					return false;
 				}
+				var isSpace = 0;
+				if(that.isSpace){
+					isSpace = 1;
+				}
 				var data = {
 					'title':that.title,
 					'type':that.category,
-					'text':that.text,
 					'imgurl':userShopinfo.imgurl,
 					'price':userShopinfo.price,
 					'num':userShopinfo.num,
@@ -516,6 +532,8 @@
 					data:{
 						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
 						"token":that.token,
+						'text':that.text,
+						'isSpace':isSpace
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
