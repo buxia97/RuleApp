@@ -243,7 +243,7 @@
 				that.setRead();
 			}
 			if(localStorage.getItem('chatList')){
-				that.oldChatList = JSON.parse(localStorage.getItem('oldChatList'));
+				that.oldChatList = JSON.parse(localStorage.getItem('chatList'));
 				// that.chatList = JSON.parse(localStorage.getItem('chatList'));
 			}
 			
@@ -474,7 +474,7 @@
 									}
 									if(oldChatList.length>0){
 										
-										if(!arraysEqual(oldChatList,chatList)){
+										if(!that.arraysEqual(oldChatList,chatList)){
 											console.log("开始对比")
 											for(var c in chatList){
 												for(var d in oldChatList){
@@ -657,15 +657,15 @@
 				that.chatLoading = null
 				var chatid = data.id;
 				//去除未读标志
-				var chatlist = that.chatList;
-				for(var i in chatlist){
-					if(chatlist[i].id==chatid){
-						chatlist[i].isNew =0;
-						chatlist[i].unRead =0;
+				var chatList = that.chatList;
+				for(var i in chatList){
+					if(chatList[i].id==chatid){
+						chatList[i].isNew =0;
+						chatList[i].unRead =0;
 					}
 				}
-				that.chatList = chatlist;
-				that.oldChatList = chatlist;
+				that.chatList = chatList;
+				that.oldChatList = chatList;
 				localStorage.setItem('chatList',JSON.stringify(chatList));
 				//结束
 				var name = data.userJson.name;

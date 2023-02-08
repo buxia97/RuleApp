@@ -87,7 +87,7 @@
 					暂时没有动态
 				</view>
 				<spaceItem :spaceList="spaceList"></spaceItem>
-				<view class="load-more" @tap="loadMore">
+				<view class="load-more" @tap="loadMore" v-if="spaceList.length>0">
 					<text>{{moreText}}</text>
 				</view>
 			</view>

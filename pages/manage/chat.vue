@@ -99,29 +99,32 @@
 							</view></view>
 							<view class="text-gray text-sm flex">
 								<view class="text-cut">
-									<block v-if="item.lastMsg.type!=4">
-										<block v-if="item.lastMsg.uid==item.uid">
-											{{item.userJson.name}}: 
-										</block>
-										<block v-if="item.lastMsg.uid==item.toid">
-											{{item.userJson.toName}}: 
-										</block>
-										<block v-if="item.lastMsg.type==0">
-											{{item.lastMsg.text}}
-										</block>
-										<block v-if="item.lastMsg.type==1">
-											[图片]
-										</block>
-									</block>
-									<block v-else>
-										<block v-if="item.lastMsg.text=='ban'">
-											<text class="text-blue">[聊天者已开启屏蔽]</text>
+									<block v-if="item.lastMsg">
+										<block v-if="item.lastMsg.type!=4">
+											<block v-if="item.lastMsg.uid==item.uid">
+												{{item.userJson.name}}: 
+											</block>
+											<block v-if="item.lastMsg.uid==item.toid">
+												{{item.userJson.toName}}: 
+											</block>
+											<block v-if="item.lastMsg.type==0">
+												{{item.lastMsg.text}}
+											</block>
+											<block v-if="item.lastMsg.type==1">
+												[图片]
+											</block>
 										</block>
 										<block v-else>
-											<text class="text-blue">[聊天者已关闭屏蔽]</text>
+											<block v-if="item.lastMsg.text=='ban'">
+												<text class="text-blue">[聊天者已开启屏蔽]</text>
+											</block>
+											<block v-else>
+												<text class="text-blue">[聊天者已关闭屏蔽]</text>
+											</block>
+											
 										</block>
-										
 									</block>
+									<block v-else>暂无消息</block>
 								</view>
 							</view>
 						</view>
@@ -500,9 +503,10 @@
 					var name = data.name;
 					var chatid = data.id;
 					uni.navigateTo({
-					    url: '/pages/chat/chat?&name='+name+'&chatid='+chatid+'&type=1'
+					    url: '/pages/chat/chat?name='+name+'&chatid='+chatid+'&type=1'
 					});
 				}
+				
 				
 			},
 			addGroup(){

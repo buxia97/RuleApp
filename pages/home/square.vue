@@ -247,7 +247,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			if(localStorage.getItem('chatList')){
-				that.oldChatList = JSON.parse(localStorage.getItem('oldChatList'));
+				that.oldChatList = JSON.parse(localStorage.getItem('chatList'));
 				// that.chatList = JSON.parse(localStorage.getItem('chatList'));
 			}
 			that.userStatus();

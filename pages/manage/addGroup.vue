@@ -65,7 +65,7 @@ export default {
 			avatar:"",
 			avatarNew:"",
 			
-			post:'add',
+			postType:'add',
 			
 			isLoading:1,
 			
