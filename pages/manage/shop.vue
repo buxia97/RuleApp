@@ -72,15 +72,13 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				
 				userInfo:null,
@@ -187,10 +185,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.shopList(),
+				that.$Net.request({
+					url: that.$API.shopList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":6,
 						"searchKey":that.searchText,
 						"page":page,
@@ -273,9 +271,9 @@
 							uni.showLoading({
 								title: "加载中"
 							});
-							Net.request({
+							that.$Net.request({
 								
-								url: API.deleteShop(),
+								url: that.$API.deleteShop(),
 								data:data,
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'
@@ -370,9 +368,9 @@
 							uni.showLoading({
 								title: "加载中"
 							});
-							Net.request({
+							that.$Net.request({
 								
-								url: API.auditShop(),
+								url: that.$API.auditShop(),
 								data:data,
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'
@@ -420,9 +418,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getUserInfo(),
+					url: that.$API.getUserInfo(),
 					data:{
 						"key":uid
 					},

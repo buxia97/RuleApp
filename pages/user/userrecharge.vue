@@ -116,8 +116,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -243,8 +241,8 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
-					url: API.scancodePay(),
+				that.$Net.request({
+					url: that.$API.scancodePay(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -258,7 +256,7 @@
 						if(res.data.code==1){
 							var url = res.data.data;
 							that.alipayUrl = "alipays://platformapi/startapp?appId=20000067&url="+encodeURI(url);
-							that.codeImg = API.qrCode()+"?codeContent="+url;
+							that.codeImg = that.$API.qrCode()+"?codeContent="+url;
 							that.isToPay = 1;
 							that.toAlipay();
 						}else{
@@ -296,8 +294,8 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
-					url: API.wxPay(),
+				that.$Net.request({
+					url: that.$API.wxPay(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -312,7 +310,7 @@
 						if(res.data.code==1){
 							var url = res.data.data.data;
 							that.wxpayUrl = url;
-							that.codeImg = API.qrCode()+"?codeContent="+url;
+							that.codeImg = that.$API.qrCode()+"?codeContent="+url;
 							that.isToPay = 1;
 							that.toWxpay();
 						}else{
@@ -357,8 +355,8 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
-					url: API.tokenPay(),
+				that.$Net.request({
+					url: that.$API.tokenPay(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -461,8 +459,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -518,8 +516,8 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
-					url: API.EPay(),
+				that.$Net.request({
+					url: that.$API.EPay(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

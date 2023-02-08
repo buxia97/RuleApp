@@ -45,15 +45,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				uid:0,
 				
@@ -121,11 +119,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userEdit(),
+					url: that.$API.userEdit(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -168,9 +166,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},

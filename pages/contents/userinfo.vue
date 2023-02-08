@@ -160,8 +160,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -310,7 +308,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -318,16 +316,16 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
 
 			getUserInfo(){
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getUserInfo(),
+					url: that.$API.getUserInfo(),
 					data:{
 						"key":that.uid
 					},
@@ -397,9 +395,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getPrivateChat(),
+					url: that.$API.getPrivateChat(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -439,9 +437,9 @@
 			},
 			getUserData() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getUserData(),
+					url: that.$API.getUserData(),
 					data:{
 						"uid":that.uid
 					},
@@ -476,10 +474,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
 						"order":"created"
@@ -535,10 +533,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"order":"created"
@@ -598,9 +596,9 @@
 					token:token,
 					touid:that.uid,
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.isFollow(),
+					url: that.$API.isFollow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -643,9 +641,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.follow(),
+					url: that.$API.follow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -698,12 +696,12 @@
 			},
 			getUserLv(i){
 				var that = this;
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
 				var that = this;
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},

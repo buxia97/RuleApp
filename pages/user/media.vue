@@ -48,8 +48,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -82,7 +80,7 @@
 				});
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -91,7 +89,7 @@
 				// #endif
 			},
 			toWeb(){
-				var url = API.GetWebUrl();
+				var url = that.$API.GetWebUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -100,7 +98,7 @@
 				// #endif
 			},
 			toGithub(){
-				var url = API.GetGithubUrl();
+				var url = that.$API.GetGithubUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

@@ -73,8 +73,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -176,8 +174,8 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				Net.request({
-					url: API.financeTotal(),
+				that.$Net.request({
+					url: that.$API.financeTotal(),
 					data:{
 						'token':token
 					},
@@ -214,10 +212,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.financeList(),
+				that.$Net.request({
+					url: that.$API.financeList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":20,
 						"page":page,
 						"order":"created",

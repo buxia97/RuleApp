@@ -116,8 +116,6 @@
 	// #ifdef H5 || APP-PLUS 
 	import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
 	// #endif
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -225,11 +223,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userEdit(),
+					url: that.$API.userEdit(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -343,7 +341,7 @@
 				  .then(path => {
 					var file = path;
 					const uploadTask = uni.uploadFile({
-					  url : API.upload(),
+					  url : that.$API.upload(),
 					  filePath:file,
 					 //  header: {
 						// "Content-Type": "multipart/form-data",

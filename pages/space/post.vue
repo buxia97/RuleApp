@@ -118,8 +118,6 @@
 	// #ifdef MP
 	var owo = [];
 	// #endif
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -217,8 +215,8 @@
 				var data = {
 					"id":that.id
 				}
-				Net.request({
-					url: API.spaceInfo(),
+				that.$Net.request({
+					url: that.$API.spaceInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -305,10 +303,10 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addSpace(),
-					data:API.removeObjectEmptyKey(data),
+					url: that.$API.addSpace(),
+					data:that.$API.removeObjectEmptyKey(data),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -353,7 +351,7 @@
 						const tempFilePaths = res.tempFilePaths;
 						for(let i = 0;i < tempFilePaths.length; i++) {
 							const uploadTask = uni.uploadFile({
-							  url : API.upload(),
+							  url : that.$API.upload(),
 							  filePath: tempFilePaths[i],
 							  name: 'file',
 							  formData: {
@@ -400,7 +398,7 @@
 						});
 						let videoFile = responent.tempFilePath;
 						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
+						  url : that.$API.upload(),
 						  filePath:videoFile,
 						  name: 'file',
 						  formData: {

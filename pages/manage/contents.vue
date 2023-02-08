@@ -104,8 +104,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -261,10 +259,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
 						"searchKey":that.searchText,
@@ -285,7 +283,7 @@
 							if(list.length>0){
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){
@@ -382,8 +380,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.contentsAudit(),
+				            that.$Net.request({
+				            	url: that.$API.contentsAudit(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -442,8 +440,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.contentsDelete(),
+				            that.$Net.request({
+				            	url: that.$API.contentsDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -503,8 +501,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toRecommend(),
+				            that.$Net.request({
+				            	url: that.$API.toRecommend(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -564,8 +562,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toRecommend(),
+				            that.$Net.request({
+				            	url: that.$API.toRecommend(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -625,8 +623,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toTop(),
+				            that.$Net.request({
+				            	url: that.$API.toTop(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -686,8 +684,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toTop(),
+				            that.$Net.request({
+				            	url: that.$API.toTop(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -747,8 +745,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toSwiper(),
+				            that.$Net.request({
+				            	url: that.$API.toSwiper(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -808,8 +806,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.toSwiper(),
+				            that.$Net.request({
+				            	url: that.$API.toSwiper(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -895,8 +893,8 @@
 					title: "加载中"
 				});
 				
-				Net.request({
-					url: API.setFields(),
+				that.$Net.request({
+					url: that.$API.setFields(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

@@ -4,6 +4,12 @@ import App from './App'
 import store from './store/index.js'
 // 把vuex定义成全局组件
 Vue.prototype.$store = store
+
+//接口和网络
+import API from './utils/api.js'
+import Net from './utils/net.js'
+Vue.prototype.$API = API
+Vue.prototype.$Net = Net
 // import cuCustom from './colorui/components/cu-custom.vue'
 // Vue.component('cu-custom',cuCustom)
 

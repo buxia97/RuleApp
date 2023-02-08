@@ -46,8 +46,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -134,9 +132,9 @@
 			},
 			contentConfig(){
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.contentConfig(),
+					url: that.$API.contentConfig(),
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
@@ -173,10 +171,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 					},
@@ -243,8 +241,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.commentsDelete(),
+				            that.$Net.request({
+				            	url: that.$API.commentsDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

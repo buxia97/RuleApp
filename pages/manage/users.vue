@@ -121,15 +121,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				userList:[],
 				
@@ -272,8 +270,8 @@
 						"bantime":1
 					}
 				}
-				Net.request({
-					url: API.getUserList(),
+				that.$Net.request({
+					url: that.$API.getUserList(),
 					data:{
 						"searchParams":data,
 						"limit":10,
@@ -352,8 +350,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.userDelete(),
+				            that.$Net.request({
+				            	url: that.$API.userDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -411,8 +409,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.unblockUser(),
+				            that.$Net.request({
+				            	url: that.$API.unblockUser(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

@@ -295,8 +295,6 @@
 	import Tabbar from '@/pages/components/tabBar.vue'
 	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -313,11 +311,11 @@
 				group:"",
 				avatar:"",
 				
-				feedback:API.GetFeedback(),
+				feedback:this.$API.GetFeedback(),
 				userlvStyle:"",
 				lvStyle:"",
 				
-				aboutme:API.GetAboutme(),
+				aboutme:this.$API.GetAboutme(),
 				
 				isLoginShow:false,
 				
@@ -410,10 +408,10 @@
 									openId: infoRes.userInfo.openId,
 									accessToken: infoRes.userInfo.unionId
 								};
-								Net.request({
+								that.$Net.request({
 									
-									url: API.userApi(),
-									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									url: that.$API.userApi(),
+									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},
@@ -489,10 +487,10 @@
 									accessToken: access_token
 								};
 								
-								Net.request({
+								that.$Net.request({
 									
-									url: API.userApi(),
-									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									url: that.$API.userApi(),
+									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},
@@ -547,16 +545,16 @@
 			},
 			getUserLv(i){
 				var that = this;
-				var rankList = API.GetRankList();
-				var rankStyle = API.GetRankStyle();
+				var rankList = that.$API.GetRankList();
+				var rankStyle = that.$API.GetRankStyle();
 				that.userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return rankList[i];
 			},
 			getLv(i){
 				var that = this;
-				var lv  = API.getLever(i);
-				var leverList = API.GetLeverList();
-				var rankStyle = API.GetRankStyle();
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
+				var rankStyle = that.$API.GetRankStyle();
 				that.lvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return leverList[lv];
 			},
@@ -583,9 +581,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},
@@ -643,7 +641,7 @@
 				})
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -653,9 +651,9 @@
 			},
 			getUserData() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getUserData(),
+					url: that.$API.getUserData(),
 					data:{
 						"token":that.token
 					},
@@ -691,11 +689,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addLog(),
+					url: that.$API.addLog(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -713,7 +711,7 @@
 							that.isClock=1;
 							var clockData = res.data.clockData;
 							uni.showToast({
-								title: "签到成功！获得"+clockData.award+API.getCurrencyName()+"，"+clockData.addExp+"经验",
+								title: "签到成功！获得"+clockData.award+that.$API.getCurrencyName()+"，"+clockData.addExp+"经验",
 								icon: 'none'
 							})
 							that.isClock == 1;
@@ -781,7 +779,7 @@
 					   "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
 						var urlDemo = new RegExp(strUrl); 
 						if(urlDemo.test(text)) {
-							var linkRule = API.GetLinkRule();
+							var linkRule = that.$API.GetLinkRule();
 							var linkRuleArr = linkRule.split("{cid}");
 							if(text.indexOf(linkRuleArr[0])!=-1){
 								//是本站链接
@@ -876,9 +874,9 @@
 			},
 			unreadNum() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.unreadNum(),
+					url: that.$API.unreadNum(),
 					data:{
 						"token":that.token
 					},

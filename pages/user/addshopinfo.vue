@@ -133,15 +133,13 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				modalName:"",
 				
@@ -465,7 +463,7 @@
 						});
 						const tempFilePaths = res.tempFilePaths;
 						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
+						  url : that.$API.upload(),
 						  filePath: tempFilePaths[0],
 						  name: 'file',
 						  formData: {
@@ -567,7 +565,7 @@
 						});
 						const tempFilePaths = res.tempFilePaths;
 						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
+						  url : that.$API.upload(),
 						  filePath: tempFilePaths[0],
 						  name: 'file',
 						  formData: {

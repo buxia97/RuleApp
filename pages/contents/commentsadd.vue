@@ -81,8 +81,6 @@
 	// #ifdef MP
 	var owo = [];
 	// #endif
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -189,11 +187,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.setComments(),
+					url: that.$API.setComments(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 						"text":that.text
 					},

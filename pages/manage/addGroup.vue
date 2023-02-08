@@ -51,8 +51,6 @@ import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 // #ifdef H5 || APP-PLUS 
 import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
 // #endif
-var API = require('../../utils/api')
-var Net = require('../../utils/net')
 export default {
 	data() {
 		return {
@@ -190,7 +188,7 @@ export default {
 					});
 					const tempFilePaths = res.tempFilePaths;
 					const uploadTask = uni.uploadFile({
-					  url : API.upload(),
+					  url : that.$API.upload(),
 					  filePath: tempFilePaths[0],
 					  name: 'file',
 					  formData: {
@@ -246,10 +244,10 @@ export default {
 			uni.showLoading({
 				title: "加载中"
 			});
-			Net.request({
+			that.$Net.request({
 				
-				url: API.createGroup(),
-				data:API.removeObjectEmptyKey(data),
+				url: that.$API.createGroup(),
+				data:that.$API.removeObjectEmptyKey(data),
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
 				},
@@ -302,10 +300,10 @@ export default {
 			uni.showLoading({
 				title: "加载中"
 			});
-			Net.request({
+			that.$Net.request({
 				
-				url: API.editGroup(),
-				data:API.removeObjectEmptyKey(data),
+				url: that.$API.editGroup(),
+				data:that.$API.removeObjectEmptyKey(data),
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
 				},
@@ -345,7 +343,7 @@ export default {
 			  .then(path => {
 				var file = path;
 				const uploadTask = uni.uploadFile({
-				  url : API.upload(),
+				  url : that.$API.upload(),
 				  filePath:file,
 				 //  header: {
 					// "Content-Type": "multipart/form-data",
@@ -399,8 +397,8 @@ export default {
 				"id":id,
 			}
 			
-			Net.request({
-				url: API.groupInfo(),
+			that.$Net.request({
+				url: that.$API.groupInfo(),
 				data:data,
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'

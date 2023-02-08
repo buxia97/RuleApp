@@ -108,8 +108,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -213,9 +211,9 @@
 					title: "加载中"
 				});
 				
-				Net.request({
+				that.$Net.request({
 					
-					url: API.madetoken(),
+					url: that.$API.madetoken(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -281,10 +279,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.tokenPayList(),
+				that.$Net.request({
+					url: that.$API.tokenPayList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":20,
 						"page":page,
 						"searchKey":that.searchText,
@@ -395,7 +393,7 @@
 					});
 					return false
 				}
-				var url = API.tokenPayExcel()+"?limit="+that.tokenNum+"&token="+token;
+				var url = that.$API.tokenPayExcel()+"?limit="+that.tokenNum+"&token="+token;
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

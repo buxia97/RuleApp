@@ -139,7 +139,6 @@
 </template>
 
 <script>
-	var API = require('../../utils/api');
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -171,7 +170,7 @@
 		},
 		created(){
 			var that = this;
-			that.currencyName = API.getCurrencyName();
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
@@ -274,7 +273,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -282,7 +281,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -306,7 +305,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			
@@ -315,7 +314,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -324,8 +323,8 @@
 				if(!i){
 					var i = 0;
 				}
-				var lv  = API.getLever(i);
-				var leverList = API.GetLeverList();
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
 				return leverList[lv];
 			},
 			getLvStyle(i){
@@ -333,8 +332,8 @@
 				if(!i){
 					var i = 0;
 				}
-				var lv  = API.getLever(i);
-				var rankStyle = API.GetRankStyle();
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
 			},

@@ -69,8 +69,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -127,9 +125,9 @@
 				}else{
 					return false;
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.setClientId(),
+					url: that.$API.setClientId(),
 					data:{
 						"clientId":cid,
 						"token":token
@@ -172,11 +170,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userLogin(),
+					url: that.$API.userLogin(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -265,10 +263,10 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.userApi(),
-									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									url: that.$API.userApi(),
+									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},
@@ -354,10 +352,10 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.userApi(),
-									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									url: that.$API.userApi(),
+									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},
@@ -434,10 +432,10 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.userApi(),
-									data:{"params":JSON.stringify(API.removeObjectEmptyKey(formdata))},
+									url: that.$API.userApi(),
+									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},

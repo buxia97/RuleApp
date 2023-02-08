@@ -121,10 +121,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 					},
@@ -170,7 +170,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -178,7 +178,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},

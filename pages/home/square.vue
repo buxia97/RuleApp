@@ -144,8 +144,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -157,7 +155,6 @@
 				userInfo:null,
 				token:"",
 				isLoading:0,
-				raiders:API.GetRaiders(),
 				toolid:0,
 				
 				noticeSum:0,
@@ -177,6 +174,8 @@
 				
 				page:1,
 				moreText:"加载更多",
+				
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -330,9 +329,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},
@@ -373,7 +372,7 @@
 				});
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -383,9 +382,9 @@
 			},
 			unreadNum() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.unreadNum(),
+					url: that.$API.unreadNum(),
 					data:{
 						"token":that.token
 					},
@@ -424,8 +423,8 @@
 					});
 					return false
 				}
-				Net.request({
-					url: API.allChat(),
+				that.$Net.request({
+					url: that.$API.allChat(),
 					data:{
 						"token":that.token,
 						"limit":30,
@@ -607,8 +606,8 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.spaceList(),
+				that.$Net.request({
+					url: that.$API.spaceList(),
 					data:{
 						"limit":10,
 						"page":page,

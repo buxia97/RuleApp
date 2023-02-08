@@ -179,8 +179,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -374,8 +372,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.deleteMsg(),
+				            that.$Net.request({
+				            	url: that.$API.deleteMsg(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -428,8 +426,8 @@
 				// 		return false;
 				// 	}
 				// }
-				Net.request({
-					url: API.msgList(),
+				that.$Net.request({
+					url: that.$API.msgList(),
 					data:{
 						"token":token,
 						"chatid":that.chatid,
@@ -504,9 +502,9 @@
 					token:token,
 					touid:that.toid,
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.isFollow(),
+					url: that.$API.isFollow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -530,8 +528,8 @@
 					"key":id,
 				}
 				
-				Net.request({
-					url: API.getUserInfo(),
+				that.$Net.request({
+					url: that.$API.getUserInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -565,8 +563,8 @@
 					"id":id,
 				}
 				
-				Net.request({
-					url: API.groupInfo(),
+				that.$Net.request({
+					url: that.$API.groupInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -617,9 +615,9 @@
 					"type":0,
 					
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.sendMsg(),
+					url: that.$API.sendMsg(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -714,9 +712,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.follow(),
+					url: that.$API.follow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -772,7 +770,7 @@
 						const tempFilePaths = res.tempFilePaths;
 						for(let i = 0;i < tempFilePaths.length; i++) {
 							const uploadTask = uni.uploadFile({
-							  url : API.upload(),
+							  url : that.$API.upload(),
 							  filePath: tempFilePaths[i],
 							  name: 'file',
 							  formData: {
@@ -831,9 +829,9 @@
 					"type":type,
 					
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.sendMsg(),
+					url: that.$API.sendMsg(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -952,8 +950,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.banChat(),
+				            that.$Net.request({
+				            	url: that.$API.banChat(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -1011,8 +1009,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.deleteChat(),
+				            that.$Net.request({
+				            	url: that.$API.deleteChat(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

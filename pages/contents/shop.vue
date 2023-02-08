@@ -83,15 +83,13 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				
 				userInfo:null,
@@ -132,7 +130,7 @@
 		},
 		onShow(){
 			var that = this;
-			that.currencyName = API.getCurrencyName();
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")
@@ -208,10 +206,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.shopList(),
+				that.$Net.request({
+					url: that.$API.shopList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"searchKey":that.searchText,
 						"limit":6,
 						"page":page,
@@ -269,8 +267,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -303,9 +301,9 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":token
 					},

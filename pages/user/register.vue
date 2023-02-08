@@ -47,15 +47,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				times: 60,
 				show:true,
@@ -128,11 +126,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userRegister(),
+					url: that.$API.userRegister(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -180,10 +178,10 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.RegSendCode(),
-					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					url: that.$API.RegSendCode(),
+					data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(data))},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -216,9 +214,9 @@
 			},
 			regConfig() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.regConfig(),
+					url: that.$API.regConfig(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},

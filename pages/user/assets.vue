@@ -89,8 +89,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -202,9 +200,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},
@@ -233,8 +231,8 @@
 				var data = {
 					"token":that.token
 				}
-				Net.request({
-					url: API.payLogList(),
+				that.$Net.request({
+					url: that.$API.payLogList(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -285,8 +283,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},

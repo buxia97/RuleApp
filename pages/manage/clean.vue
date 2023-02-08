@@ -66,8 +66,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -123,8 +121,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.dataClean(),
+				            that.$Net.request({
+				            	url: that.$API.dataClean(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

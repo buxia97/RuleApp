@@ -132,8 +132,6 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -433,7 +431,7 @@
 						});
 						const tempFilePaths = res.tempFilePaths;
 						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
+						  url : that.$API.upload(),
 						  filePath: tempFilePaths[0],
 						  name: 'file',
 						  formData: {
@@ -526,11 +524,11 @@
 					title: "加载中"
 				});
 				
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addShop(),
+					url: that.$API.addShop(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 						'text':that.text,
 						'isSpace':isSpace
@@ -604,11 +602,11 @@
 					title: "加载中"
 				});
 				
-				Net.request({
+				that.$Net.request({
 					
-					url: API.editShop(),
+					url: that.$API.editShop(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 					},
 					header:{
@@ -668,8 +666,8 @@
 					"key":that.sid,
 					"token":token
 				}
-				Net.request({
-					url: API.shopInfo(),
+				that.$Net.request({
+					url: that.$API.shopInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

@@ -54,15 +54,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				withdrawList:[],
 				
@@ -145,10 +143,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.withdrawList(),
+				that.$Net.request({
+					url: that.$API.withdrawList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"token":token
@@ -207,8 +205,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},

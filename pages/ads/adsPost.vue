@@ -102,8 +102,6 @@
 
 <script>
 import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-var API = require('../../utils/api')
-var Net = require('../../utils/net')
 export default {
 	data() {
 		return {
@@ -265,7 +263,7 @@ export default {
 					});
 					const tempFilePaths = res.tempFilePaths;
 					const uploadTask = uni.uploadFile({
-					  url : API.upload(),
+					  url : that.$API.upload(),
 					  filePath: tempFilePaths[0],
 					  name: 'file',
 					  formData: {
@@ -303,8 +301,8 @@ export default {
 		},
 		getAdsConfig(){
 			var that = this;
-			Net.request({
-				url: API.adsConfig(),
+			that.$Net.request({
+				url: that.$API.adsConfig(),
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
 				},
@@ -343,8 +341,8 @@ export default {
 				"token":that.token,
 			}
 			
-			Net.request({
-				url: API.adsInfo(),
+			that.$Net.request({
+				url: that.$API.adsInfo(),
 				data:data,
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
@@ -389,11 +387,11 @@ export default {
 			uni.showLoading({
 				title: "加载中"
 			});
-			Net.request({
+			that.$Net.request({
 				
-				url: API.addAds(),
+				url: that.$API.addAds(),
 				data:{
-					"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+					"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					"day":that.day,
 					"token":that.token,
 				},
@@ -452,11 +450,11 @@ export default {
 			uni.showLoading({
 				title: "加载中"
 			});
-			Net.request({
+			that.$Net.request({
 				
-				url: API.editAds(),
+				url: that.$API.editAds(),
 				data:{
-					"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+					"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					"token":that.token,
 				},
 				header:{

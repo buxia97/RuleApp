@@ -213,8 +213,6 @@
 	import Tabbar from '@/pages/components/tabBar.vue'
 	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -226,7 +224,7 @@
 				userInfo:null,
 				token:"",
 				isLoading:0,
-				raiders:API.GetRaiders(),
+				raiders:this.$API.GetRaiders(),
 				toolid:0,
 				
 				noticeSum:0,
@@ -324,9 +322,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},
@@ -367,7 +365,7 @@
 				});
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -377,9 +375,9 @@
 			},
 			unreadNum() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.unreadNum(),
+					url: that.$API.unreadNum(),
 					data:{
 						"token":that.token
 					},

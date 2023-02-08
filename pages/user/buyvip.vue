@@ -63,8 +63,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -101,8 +99,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -153,8 +151,8 @@
 								title: "加载中"
 							});
 							
-							Net.request({
-								url: API.buyVIP(),
+							that.$Net.request({
+								url: that.$API.buyVIP(),
 								data:data,
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'

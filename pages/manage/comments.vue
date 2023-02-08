@@ -91,8 +91,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -203,7 +201,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -211,7 +209,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -246,10 +244,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"searchKey":that.searchText,
@@ -348,8 +346,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.commentsDelete(),
+				            that.$Net.request({
+				            	url: that.$API.commentsDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -405,8 +403,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.commentsAudit(),
+				            that.$Net.request({
+				            	url: that.$API.commentsAudit(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

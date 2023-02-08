@@ -277,8 +277,7 @@
 	import Tabbar from '@/pages/components/tabBar.vue'
 	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
+	
 	export default {
 		data() {
 			return {
@@ -357,7 +356,7 @@
 			if (res.from === 'menu') {
 				// 来自页面内分享按钮
 			}
-			var title = API.GetAppName();
+			var title = that.$API.GetAppName();
 			var data = {
 				title: title,
 			}
@@ -367,7 +366,7 @@
 		},
 		onShareTimeline() {
 			var that = this;
-			var title = API.GetAppName();
+			var title = that.$API.GetAppName();
 			var data = {
 				title: title,
 			}
@@ -495,9 +494,9 @@
 				}else{
 					return false;
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.setClientId(),
+					url: that.$API.setClientId(),
 					data:{
 						"clientId":cid,
 						"token":token
@@ -557,10 +556,10 @@
 				var data = {
 					"type":type,
 				}
-				Net.request({
-					url: API.adsList(),
+				that.$Net.request({
+					url: that.$API.adsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":100,
 					},
 					header:{
@@ -680,10 +679,10 @@
 					"type":"post",
 					"isswiper":1
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":1,
 						"order":"modified"
@@ -731,10 +730,10 @@
 				var data = {
 					"type":"category"
 				}
-				Net.request({
-					url: API.getMetasList(),
+				that.$Net.request({
+					url: that.$API.getMetasList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":15,
 						"page":1,
 					},
@@ -777,10 +776,10 @@
 				var data = {
 					"isrecommend":"1"
 				}
-				Net.request({
-					url: API.getMetasList(),
+				that.$Net.request({
+					url: that.$API.getMetasList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":4,
 						"page":1,
 					},
@@ -819,10 +818,10 @@
 					"type":"post",
 					"istop":1,
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
 						"order":"modified"
@@ -839,7 +838,7 @@
 								
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){
@@ -873,10 +872,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"order":"created"
@@ -909,7 +908,7 @@
 								// #endif
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){
@@ -963,10 +962,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getMetaContents(),
+				that.$Net.request({
+					url: that.$API.getMetaContents(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"order":"created"
@@ -988,7 +987,7 @@
 							if(list.length>0){
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){
@@ -1023,9 +1022,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},
@@ -1052,9 +1051,9 @@
 			},
 			unreadNum() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.unreadNum(),
+					url: that.$API.unreadNum(),
 					data:{
 						"token":that.token
 					},
@@ -1160,7 +1159,7 @@
 				return result;
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -1173,8 +1172,8 @@
 			},
 			getAnnouncement(){
 				var that = this;
-				Net.request({
-					url: API.GetUpdateUrl(),
+				that.$Net.request({
+					url: that.$API.GetUpdateUrl(),
 					header: {
 							'content-type': 'application/json'
 						},
@@ -1209,8 +1208,8 @@
 					that.wgtVer = inf.version //获取当前版本号
 					that.versionCode = inf.versionCode;
 					var version = inf.versionCode;
-					Net.request({
-						url: API.GetUpdateUrl(),
+					that.$Net.request({
+						url: that.$API.GetUpdateUrl(),
 						header: {
 								'content-type': 'application/json'
 							},

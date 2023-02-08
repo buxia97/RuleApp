@@ -91,8 +91,6 @@
 
 <script>
 import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-var API = require('../../utils/api')
-var Net = require('../../utils/net')
 export default {
 	data() {
 		return {
@@ -278,10 +276,10 @@ export default {
 			var data = {
 				"status":that.status
 			}
-			Net.request({
-				url: API.adsList(),
+			that.$Net.request({
+				url: that.$API.adsList(),
 				data:{
-					"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+					"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					"limit":8,
 					"searchKey":that.searchText,
 					"page":page,
@@ -356,8 +354,8 @@ export default {
 			            	title: "加载中"
 			            });
 			            
-			            Net.request({
-			            	url: API.auditAds(),
+			            that.$Net.request({
+			            	url: that.$API.auditAds(),
 			            	data:data,
 			            	header:{
 			            		'Content-Type':'application/x-www-form-urlencoded'
@@ -421,8 +419,8 @@ export default {
 				title: "加载中"
 			});
 			
-			Net.request({
-				url: API.renewalAds(),
+			that.$Net.request({
+				url: that.$API.renewalAds(),
 				data:data,
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
@@ -478,8 +476,8 @@ export default {
 			            	title: "加载中"
 			            });
 			            
-			            Net.request({
-			            	url: API.deleteAds(),
+			            that.$Net.request({
+			            	url: that.$API.deleteAds(),
 			            	data:data,
 			            	header:{
 			            		'Content-Type':'application/x-www-form-urlencoded'

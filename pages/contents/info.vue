@@ -298,8 +298,6 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -457,7 +455,7 @@
 		// #endif
 		onShow(){
 			var that = this;
-			that.currencyName = API.getCurrencyName();
+			that.currencyName = that.$API.getCurrencyName();
 			if(localStorage.getItem('userinfo')){
 				
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -474,7 +472,7 @@
 			// #endif
 			
 			// #ifdef MP
-			that.isComment = API.GetIsComment();
+			that.isComment = that.$API.GetIsComment();
 			// #endif
 			
 			// #ifdef APP-PLUS
@@ -669,7 +667,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -677,7 +675,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -724,8 +722,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -757,8 +755,8 @@
 					"isMd":0,
 				}
 				
-				Net.request({
-					url: API.getContentsInfo(),
+				that.$Net.request({
+					url: that.$API.getContentsInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -806,8 +804,8 @@
 					"key":id,
 				}
 				
-				Net.request({
-					url: API.getUserInfo(),
+				that.$Net.request({
+					url: that.$API.getUserInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -836,10 +834,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":4,
 						"page":page,
 					},
@@ -933,11 +931,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addLog(),
+					url: that.$API.addLog(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -983,11 +981,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addLog(),
+					url: that.$API.addLog(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -1040,9 +1038,9 @@
 			},
 			toIsMark(){
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.getIsMark(),
+					url: that.$API.getIsMark(),
 					data:{
 						"token":that.token,
 						"cid":that.cid
@@ -1077,11 +1075,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addLog(),
+					url: that.$API.addLog(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -1121,9 +1119,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.removeLog(),
+					url: that.$API.removeLog(),
 					data:{
 						"key":that.logid,
 						"token":that.token
@@ -1220,7 +1218,7 @@
 			ToShare(){
 				
 				var that = this;
-				var linkRule = API.GetLinkRule();
+				var linkRule = that.$API.GetLinkRule();
 				
 				
 				var url = linkRule.replace("{cid}",that.cid);
@@ -1230,7 +1228,7 @@
 				}
 				//console.log(url);
 				if(that.type!="post"){
-					var pageRule = API.GetPageRule();
+					var pageRule = that.$API.GetPageRule();
 					url = pageRule.replace("{slug}",that.slug);
 				}
 				
@@ -1266,10 +1264,10 @@
 				var data = {
 					"cid":that.cid,
 				}
-				Net.request({
-					url: API.shopList(),
+				that.$Net.request({
+					url: that.$API.shopList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":1,
 						"page":1,
 					},
@@ -1320,8 +1318,8 @@
 					"key":that.cid,
 					"token":token
 				}
-				Net.request({
-					url: API.isCommnet(),
+				that.$Net.request({
+					url: that.$API.isCommnet(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -1395,8 +1393,8 @@
 					"sid":sid,
 					"token":token
 				}
-				Net.request({
-					url: API.isBuyShop(),
+				that.$Net.request({
+					url: that.$API.isBuyShop(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -1454,8 +1452,8 @@
 							uni.showLoading({
 								title: "加载中"
 							});
-							Net.request({
-								url: API.buyShop(),
+							that.$Net.request({
+								url: that.$API.buyShop(),
 								data:data,
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'
@@ -1524,8 +1522,8 @@
 						"key":id,
 						"token":token
 					}
-					Net.request({
-						url: API.shopInfo(),
+					that.$Net.request({
+						url: that.$API.shopInfo(),
 						data:data,
 						header:{
 							'Content-Type':'application/x-www-form-urlencoded'
@@ -1617,8 +1615,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.commentsDelete(),
+				            that.$Net.request({
+				            	url: that.$API.commentsDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
@@ -1666,9 +1664,9 @@
 					token:token,
 					touid:uid,
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.isFollow(),
+					url: that.$API.isFollow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -1711,9 +1709,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.follow(),
+					url: that.$API.follow(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

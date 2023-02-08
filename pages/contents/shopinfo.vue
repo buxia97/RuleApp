@@ -69,8 +69,6 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -128,7 +126,7 @@
 		},
 		onLoad(res) {
 			var that = this;
-			that.currencyName = API.getCurrencyName();
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
@@ -150,8 +148,8 @@
 				var data = {
 					"key":that.sid,
 				}
-				Net.request({
-					url: API.shopInfo(),
+				that.$Net.request({
+					url: that.$API.shopInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -228,8 +226,8 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
-					url: API.buyShop(),
+				that.$Net.request({
+					url: that.$API.buyShop(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -283,8 +281,8 @@
 					"key":id,
 				}
 				
-				Net.request({
-					url: API.getUserInfo(),
+				that.$Net.request({
+					url: that.$API.getUserInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -327,8 +325,8 @@
 					"sid":that.sid,
 					"token":token
 				}
-				Net.request({
-					url: API.isBuyShop(),
+				that.$Net.request({
+					url: that.$API.isBuyShop(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -365,8 +363,8 @@
 			},
 			getVipInfo(){
 				var that = this;
-				Net.request({
-					url: API.getVipInfo(),
+				that.$Net.request({
+					url: that.$API.getVipInfo(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -399,9 +397,9 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":token
 					},

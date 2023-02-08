@@ -57,8 +57,6 @@
 
 <script>
 import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-var API = require('../../utils/api')
-var Net = require('../../utils/net')
 export default {
 	data() {
 		return {
@@ -179,10 +177,10 @@ export default {
 				"status":that.status,
 				"uid":uid
 			}
-			Net.request({
-				url: API.adsList(),
+			that.$Net.request({
+				url: that.$API.adsList(),
 				data:{
-					"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+					"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 					"limit":8,
 					"page":page,
 					"token":that.token,

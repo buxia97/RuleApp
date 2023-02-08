@@ -74,8 +74,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -159,8 +157,8 @@
 					"page":page,
 				}
 
-				Net.request({
-					url: API.getForeverblog(),
+				that.$Net.request({
+					url: that.$API.getForeverblog(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

@@ -104,9 +104,9 @@
 			},
 			userBindStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userBindStatus(),
+					url: that.$API.userBindStatus(),
 					data:{
 						"token":that.token
 					},
@@ -165,11 +165,11 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.apiBind(),
+									url: that.$API.apiBind(),
 									data:{
-										"params":JSON.stringify(API.removeObjectEmptyKey(formdata)),
+										"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata)),
 										"token":that.token
 									},
 									header:{
@@ -249,11 +249,11 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.apiBind(),
+									url: that.$API.apiBind(),
 									data:{
-										"params":JSON.stringify(API.removeObjectEmptyKey(formdata)),
+										"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata)),
 										"token":that.token
 									},
 									header:{
@@ -326,11 +326,11 @@
 								uni.showLoading({
 									title: "加载中"
 								});
-								Net.request({
+								that.$Net.request({
 									
-									url: API.apiBind(),
+									url: that.$API.apiBind(),
 									data:{
-										"params":JSON.stringify(API.removeObjectEmptyKey(formdata)),
+										"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata)),
 										"token":that.token
 									},
 									header:{

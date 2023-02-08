@@ -131,8 +131,6 @@
 	// #ifdef MP
 	var owo = [];
 	// #endif
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -220,8 +218,8 @@
 				var data = {
 					"id":that.id
 				}
-				Net.request({
-					url: API.spaceInfo(),
+				that.$Net.request({
+					url: that.$API.spaceInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -322,7 +320,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -330,7 +328,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -354,7 +352,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			
@@ -363,7 +361,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -372,8 +370,8 @@
 				if(!i){
 					var i = 0;
 				}
-				var lv  = API.getLever(i);
-				var leverList = API.GetLeverList();
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
 				return leverList[lv];
 			},
 			getLvStyle(i){
@@ -381,8 +379,8 @@
 				if(!i){
 					var i = 0;
 				}
-				var lv  = API.getLever(i);
-				var rankStyle = API.GetRankStyle();
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
 			},

@@ -49,8 +49,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -135,8 +133,8 @@
 				if(that.searchText!=""){
 					data.searchKey = that.searchText;
 				}
-				Net.request({
-					url: API.contentsImage(),
+				that.$Net.request({
+					url: that.$API.contentsImage(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -290,7 +288,7 @@
 						if (res.statusCode === 200) {
 							var path = res.tempFilePath;
 							const uploadTask = uni.uploadFile({
-							  url : API.upload(),
+							  url : that.$API.upload(),
 							  filePath: path,
 							  name: 'file',
 							  formData: {

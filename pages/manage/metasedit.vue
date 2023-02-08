@@ -78,15 +78,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				mid:0,
 				name:'',
@@ -134,9 +132,9 @@
 			
 			geMetaInfo(){
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.geMetaInfo(),
+					url: that.$API.geMetaInfo(),
 					data:{
 						"key":that.mid
 					},
@@ -190,11 +188,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.editMeta(),
+					url: that.$API.editMeta(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":token
 					},
 					header:{
@@ -259,11 +257,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.addMeta(),
+					url: that.$API.addMeta(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":token
 					},
 					header:{
@@ -318,7 +316,7 @@
 						const tempFilePaths = res.tempFilePaths;
 						for(let i = 0;i < tempFilePaths.length; i++) {
 							const uploadTask = uni.uploadFile({
-							  url : API.upload(),
+							  url : that.$API.upload(),
 							  filePath: tempFilePaths[i],
 							  name: 'file',
 							  formData: {

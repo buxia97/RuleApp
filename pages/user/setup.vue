@@ -47,8 +47,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -157,8 +155,8 @@
 					that.wgtVer = inf.version //获取当前版本号
 					that.versionCode = inf.versionCode;
 					var version = inf.versionCode;
-					Net.request({
-						url: API.GetUpdateUrl(),
+					that.$Net.request({
+						url: that.$API.GetUpdateUrl(),
 						method: 'get',
 						success: function(res) {
 							var versionCode = res.data.versionCode;
@@ -204,8 +202,8 @@
 							var data={
 								"token":that.token
 							}
-							Net.request({
-								url: API.signOut(),
+							that.$Net.request({
+								url: that.$API.signOut(),
 								data:data,
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'

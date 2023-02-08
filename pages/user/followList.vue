@@ -63,8 +63,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -150,8 +148,8 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.followList(),
+				that.$Net.request({
+					url: that.$API.followList(),
 					data:{
 						"uid":that.uid,
 						"limit":10,

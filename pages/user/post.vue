@@ -232,8 +232,6 @@
 	// #ifdef MP
 	var owo = [];
 	// #endif
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -598,7 +596,7 @@
 						const tempFilePaths = res.tempFilePaths;
 						for(let i = 0;i < tempFilePaths.length; i++) {
 							const uploadTask = uni.uploadFile({
-							  url : API.upload(),
+							  url : that.$API.upload(),
 							  filePath: tempFilePaths[i],
 							  name: 'file',
 							  formData: {
@@ -703,11 +701,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.contentsAdd(),
+					url: that.$API.contentsAdd(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 						'text':that.text,
 						"isSpace":isSpace,
@@ -767,11 +765,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.contentsUpdate(),
+					url: that.$API.contentsUpdate(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 						'text':that.text
 					},
@@ -824,8 +822,8 @@
 					"isMd":0,
 				}
 				
-				Net.request({
-					url: API.getContentsInfo(),
+				that.$Net.request({
+					url: that.$API.getContentsInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -911,10 +909,10 @@
 					"uid":uid,
 					"status":1,
 				}
-				Net.request({
-					url: API.shopList(),
+				that.$Net.request({
+					url: that.$API.shopList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":1000,
 						"page":1,
 					},

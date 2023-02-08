@@ -173,8 +173,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -330,7 +328,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -338,7 +336,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
@@ -376,8 +374,8 @@
 					});
 					return false
 				}
-				Net.request({
-					url: API.getInbox(),
+				that.$Net.request({
+					url: that.$API.getInbox(),
 					data:{
 						"token":that.token,
 						"limit":8,
@@ -441,8 +439,8 @@
 					});
 					return false
 				}
-				Net.request({
-					url: API.myChat(),
+				that.$Net.request({
+					url: that.$API.myChat(),
 					data:{
 						"token":that.token,
 						"limit":30,
@@ -615,7 +613,7 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankList = API.GetRankList();
+				var rankList = that.$API.GetRankList();
 				return rankList[i];
 			},
 			getUserLvStyle(i){
@@ -623,15 +621,15 @@
 				if(!i){
 					var i = 0;
 				}
-				var rankStyle = API.GetRankStyle();
+				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
 			setRead() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.setRead(),
+					url: that.$API.setRead(),
 					data:{
 						"token":that.token
 					},

@@ -50,8 +50,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -200,10 +198,10 @@
 				var data = {
 					"type":"category"
 				}
-				Net.request({
-					url: API.getMetasList(),
+				that.$Net.request({
+					url: that.$API.getMetasList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":15,
 						"page":1,
 					},
@@ -260,13 +258,13 @@
 					that.contentsList = [];
 				}
 				var data = {
-					"searchParams":JSON.stringify(API.removeObjectEmptyKey(info)),
+					"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(info)),
 					"limit":5,
 					"page":page,
 					"order":order
 				};
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -296,7 +294,7 @@
 								// #endif
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){
@@ -358,10 +356,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getMetaContents(),
+				that.$Net.request({
+					url: that.$API.getMetaContents(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"order":"created"
@@ -380,7 +378,7 @@
 							if(list.length>0){
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
-								var curFields = API.GetFields();
+								var curFields = that.$API.GetFields();
 								for(var i in list){
 									var fields = list[i].fields;
 									if(fields.length>0){

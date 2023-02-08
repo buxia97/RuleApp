@@ -34,8 +34,6 @@
 <script>
 	import mpHtml from '@/components/mp-html/mp-html'
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -106,8 +104,8 @@
 					"key":that.sid,
 					"token":token
 				}
-				Net.request({
-					url: API.shopInfo(),
+				that.$Net.request({
+					url: that.$API.shopInfo(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

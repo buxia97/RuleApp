@@ -79,8 +79,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -182,11 +180,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userEdit(),
+					url: that.$API.userEdit(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
 					},
 					header:{
@@ -238,7 +236,7 @@
 						});
 						const tempFilePaths = res.tempFilePaths;
 						const uploadTask = uni.uploadFile({
-						  url : API.upload(),
+						  url : that.$API.upload(),
 						  filePath: tempFilePaths[0],
 						  name: 'file',
 						  formData: {
@@ -274,9 +272,9 @@
 			},
 			userStatus() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userStatus(),
+					url: that.$API.userStatus(),
 					data:{
 						"token":that.token
 					},

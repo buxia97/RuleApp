@@ -89,8 +89,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -220,9 +218,9 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.banUser(),
+					url: that.$API.banUser(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

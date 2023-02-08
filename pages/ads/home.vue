@@ -148,9 +148,9 @@ export default {
 		},
 		getUserData() {
 			var that = this;
-			Net.request({
+			that.$Net.request({
 				
-				url: API.getUserData(),
+				url: that.$API.getUserData(),
 				data:{
 					"token":that.token
 				},
@@ -175,8 +175,8 @@ export default {
 		},
 		getAdsConfig(){
 			var that = this;
-			Net.request({
-				url: API.adsConfig(),
+			that.$Net.request({
+				url: that.$API.adsConfig(),
 				header:{
 					'Content-Type':'application/x-www-form-urlencoded'
 				},

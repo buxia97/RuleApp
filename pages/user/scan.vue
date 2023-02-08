@@ -38,8 +38,6 @@
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -73,7 +71,7 @@
 			}else{
 				that.token = "";
 			}
-			that.appname = API.GetAppName();
+			that.appname = that.$API.GetAppName();
 			
 		},
 		onLoad(res) {
@@ -101,9 +99,9 @@
 					})
 					return false;
 				}
-				Net.request({
+				that.$Net.request({
 					
-					url: API.setScan(),
+					url: that.$API.setScan(),
 					data:{
 						"token":that.token,
 						"codeContent":that.text,

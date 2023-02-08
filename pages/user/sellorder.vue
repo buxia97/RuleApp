@@ -84,8 +84,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -174,8 +172,8 @@
 					"page":page,
 					"token":that.token
 				}
-				Net.request({
-					url: API.orderSellList(),
+				that.$Net.request({
+					url: that.$API.orderSellList(),
 					data:data,
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

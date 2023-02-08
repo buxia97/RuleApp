@@ -84,15 +84,13 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				uid:0,
 				name:'',
@@ -119,8 +117,8 @@
 			
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.appname = API.GetAppName();
-			that.email = API.GetAppEmail();
+			that.appname = that.$API.GetAppName();
+			that.email = that.$API.GetAppEmail();
 		},
 		onLoad() {
 			var that = this;

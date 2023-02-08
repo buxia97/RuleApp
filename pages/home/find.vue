@@ -197,8 +197,6 @@
 	import Tabbar from '@/pages/components/tabBar.vue'
 	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -315,8 +313,8 @@
 			getAds(){
 				var that = this;
 				
-				Net.request({
-					url: API.GetAds(),
+				that.$Net.request({
+					url: that.$API.GetAds(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -339,10 +337,10 @@
 					"type":"post",
 					"isrecommend":1
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
 						"order":"modified"
@@ -376,10 +374,10 @@
 				var info = {
 					"type":"post"
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(info)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(info)),
 						"limit":5,
 						"page":1,
 						"order":"commentsNum"
@@ -421,10 +419,10 @@
 					"type":"category",
 					"parent":0
 				}
-				Net.request({
-					url: API.getMetasList(),
+				that.$Net.request({
+					url: that.$API.getMetasList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":15,
 						"page":1,
 						"order":"order"
@@ -469,10 +467,10 @@
 				var data = {
 					"type":"tag"
 				}
-				Net.request({
-					url: API.getMetasList(),
+				that.$Net.request({
+					url: that.$API.getMetasList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":20,
 						"page":1,
 						"order":"count"
@@ -554,7 +552,7 @@
 				});
 			},
 			toGroup(){
-				var url = API.GetGroupUrl();
+				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
@@ -572,9 +570,9 @@
 			},
 			unreadNum() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.unreadNum(),
+					url: that.$API.unreadNum(),
 					data:{
 						"token":that.token
 					},

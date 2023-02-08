@@ -73,8 +73,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -169,10 +167,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
 						"order":"created",
@@ -221,9 +219,9 @@
 			},
 			contentConfig(){
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.contentConfig(),
+					url: that.$API.contentConfig(),
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
@@ -259,8 +257,8 @@
 				            	title: "加载中"
 				            });
 				            
-				            Net.request({
-				            	url: API.contentsDelete(),
+				            that.$Net.request({
+				            	url: that.$API.contentsDelete(),
 				            	data:data,
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'

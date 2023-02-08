@@ -125,11 +125,11 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.userEdit(),
+					url: that.$API.userEdit(),
 					data:{
-						"params":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token
 					},
 					header:{
@@ -196,10 +196,10 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				Net.request({
+				that.$Net.request({
 					
-					url: API.RegSendCode(),
-					data:{"params":JSON.stringify(API.removeObjectEmptyKey(data))},
+					url: that.$API.RegSendCode(),
+					data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(data))},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
@@ -243,9 +243,9 @@
 			},
 			regConfig() {
 				var that = this;
-				Net.request({
+				that.$Net.request({
 					
-					url: API.regConfig(),
+					url: that.$API.regConfig(),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},

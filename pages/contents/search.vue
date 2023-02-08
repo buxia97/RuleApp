@@ -144,8 +144,6 @@
 
 <script>
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-	var API = require('../../utils/api')
-	var Net = require('../../utils/net')
 	export default {
 		data() {
 			return {
@@ -281,10 +279,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getContentsList(),
+				that.$Net.request({
+					url: that.$API.getContentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
 						"searchKey":that.searchText,
@@ -340,10 +338,10 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getCommentsList(),
+				that.$Net.request({
+					url: that.$API.getCommentsList(),
 					data:{
-						"searchParams":JSON.stringify(API.removeObjectEmptyKey(data)),
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
 						"searchKey":that.searchText,
@@ -399,8 +397,8 @@
 				if(isPage){
 					page++;
 				}
-				Net.request({
-					url: API.getUserList(),
+				that.$Net.request({
+					url: that.$API.getUserList(),
 					data:{
 						"searchParams":"",
 						"limit":10,
