@@ -8,9 +8,11 @@
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					动态详情
 				</view>
-				<view class="action" @tap="userRecharge">
-					<text class="cuIcon-more"></text>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="action" @tap="toSearch">
+					<text class="cuIcon-search"></text>
 				</view>
+				<!--  #endif -->
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
@@ -35,10 +37,10 @@
 							</view>
 						</view>
 						<view class="action space-follow">
-							<view class="cu-btn bg-red" v-if="spaceInfo.isFollow==0">
+							<view class="cu-btn bg-red" v-if="spaceInfo.isFollow==0" @tap="follow(1,spaceInfo.userJson.uid)">
 								<text class="cuIcon-add"></text>关注
 							</view>
-							<view class="cu-btn text-red isFollow" v-if="spaceInfo.isFollow==1">
+							<view class="cu-btn text-red isFollow" v-if="spaceInfo.isFollow==1" @tap="follow(0,spaceInfo.userJson.uid)">
 								已关注
 							</view>
 						</view>
@@ -47,66 +49,200 @@
 				<view class="text-content">
 					<rich-text :nodes="markHtml(spaceInfo.text)"></rich-text>
 				</view>
-				<view class="grid flex-sub padding-lr col-3 grid-square" v-if="spaceInfo.picList.length>0">
-					<view class="bg-img" :style="'background-image:url('+data+');'"
-					 v-for="(data,i) in spaceInfo.picList" :key="i" @tap="previewImage(spaceInfo.picList,data)">
+				
+				<block  v-if="spaceInfo.type==0">
+					
+					<view class="grid flex-sub padding-lr col-3 grid-square" v-if="spaceInfo.picList.length>0">
+						<view class="bg-img" :style="'background-image:url('+data+');'"
+						 v-for="(data,i) in spaceInfo.picList" :key="i" @tap="previewImage(spaceInfo.picList,data)">
+						</view>
 					</view>
-				</view>
+				</block>
+				<block  v-if="spaceInfo.type==1">
+					<view class="grid flex-sub padding-lr">
+						<view class="user-post-info" @tap="goContentInfo(spaceInfo)">
+							<view class="user-post-pic" v-if="spaceInfo.contentJson.images.length>0">
+								<image :src="spaceInfo.contentJson.images[0]" mode="widthFix"></image>
+							</view>
+							<view class="user-post-text">
+								<view class="user-post-title">
+									{{spaceInfo.contentJson.title}}
+								</view>
+								<view class="user-post-intro">
+									{{spaceInfo.contentJson.text}}
+								</view>
+							</view>
+						</view>
+					</view>
+				</block>
+				<block  v-if="spaceInfo.type==2">
+					<view class="grid flex-sub padding-lr">
+						
+						<view class="user-space-info" @tap="toInfo(spaceInfo.forwardJson.id)">
+							<view class="user-space-text">
+								<text class="text-blue">@{{spaceInfo.forwardJson.username}}：</text>{{spaceInfo.forwardJson.text}}
+							</view>
+							
+							<view class="grid flex-sub col-3 grid-square margin-top-xs" v-if="spaceInfo.forwardJson.picList.length>0">
+								<view class="bg-img" :style="'background-image:url('+data+');'"
+								 v-for="(data,i) in spaceInfo.forwardJson.picList" :key="i">
+								</view>
+							</view>
+						</view>
+					</view>
+				</block>
+				<block  v-if="spaceInfo.type==4">
+					<view class="padding-lr spaceVideo">
+						<video :src="spaceInfo.pic"></video>
+					</view>
+				</block>
+				<block  v-if="spaceInfo.type==5">
+					<view class="grid flex-sub padding-lr">
+						<view class="user-post-info" @tap="goShopInfo(spaceInfo)">
+							<view class="user-post-pic">
+								<image :src="spaceInfo.shopJson.imgurl" mode="widthFix"></image>
+							</view>
+							<view class="user-post-text">
+								<view class="user-post-title">
+									{{spaceInfo.shopJson.title}}
+								</view>
+								<view class="user-post-intro">
+									<text class="text-red text-lg text-bold">{{parseInt(spaceInfo.shopJson.price)}} {{currencyName}}</text>
+									
+								</view>
+								<view class="user-post-intro">
+									<text class="text-gray text-sm">剩余数量：{{spaceInfo.shopJson.num}}</text>
+									
+								</view>
+							</view>
+						</view>
+					</view>
+				</block>
 
 			</view>
 		</view>
 		<view class="space-reply">
 			<view class="space-reply-head">
-				<text>转发 <block v-if="spaceInfo.forward>0">{{formatNumber(spaceInfo.forward)}}</block></text>
-				<text class="margin-left-xl cur">评论 <block v-if="spaceInfo.reply>0">{{formatNumber(spaceInfo.reply)}}</block></text>
+				<text @tap="setInfoType(1)" :class="infoType==1?'cur':''">转发 <block v-if="spaceInfo.forward>0">{{formatNumber(spaceInfo.forward)}}</block></text>
+				<text class="margin-left-xl" @tap="setInfoType(0)" :class="infoType==0?'cur':''">评论 <block v-if="spaceInfo.reply>0">{{formatNumber(spaceInfo.reply)}}</block></text>
 				<text class="space-reply-likes">赞 <block v-if="spaceInfo.likes>0">{{formatNumber(spaceInfo.likes)}}</block></text>
 			</view>
-			<view class="space-reply-list">
-				<view class="cu-list menu-avatar comment">
-					<view class="cu-item">
-						<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-						<view class="content">
-							<view class="text-grey">老实人</view>
-							<view class="text-gray text-content text-df">
-								这个是测试的回复内容，反正是用来测试的，很强总之
-							</view>
-							<view class="space-reply-num padding-xs radius margin-top-sm  text-sm">
-								<text class="text-blue">共10条回复<text class="cuIcon-right margin-left-xs"></text></text>
-							</view>
-							<view class="margin-top-sm flex justify-between">
-								<view class="text-gray text-df">2018年12月4日</view>
-								<view>
-									<text class="cuIcon-forward text-gray"></text>
-									<text class="cuIcon-message text-gray margin-left-xl"></text>
-									<text class="cuIcon-appreciate text-gray margin-left-xl">1.13万</text>
+			<block v-if="infoType==0">
+				<view class="space-reply-list">
+					<view class="cu-list menu-avatar comment" v-for="(item,index) in replyList" :key="index">
+						<view class="cu-item">
+							<view class="cu-avatar round" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)"></view>
+							<view class="content">
+								<view class="text-grey">
+									{{spaceInfo.userJson.name}}
+									
+									<!--  #ifdef H5 || APP-PLUS -->
+									<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
+									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
+									
+									<!--  #endif -->
+									<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
+								</view>
+								<view class="text-content text-df">
+									<rich-text :nodes="markHtml(item.text)"></rich-text>
+								</view>
+								<view class="space-reply-num padding-xs radius margin-top-sm  text-sm" v-if="item.reply>0">
+									<text class="text-blue">共{{item.reply}}条回复<text class="cuIcon-right margin-left-xs"></text></text>
+								</view>
+								<view class="margin-top-sm flex justify-between">
+									<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+									<view>
+										<text class="cuIcon-forward text-gray" @tap="forward(item.id)">
+											{{formatNumber(item.forward) || ''}}
+										</text>
+										<text class="cuIcon-message text-gray margin-left-xl" @tap="goReply(item.id)">
+											{{formatNumber(item.reply) || ''}}
+										</text>
+										<text class="cuIcon-appreciate  margin-left-xl" @tap="toListLike(item.id,'reply',index)" :class="item.isLikes==1?'text-red':'text-gray'">
+											{{formatNumber(item.likes) || ''}}
+										</text>
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-				<view class="no-data">
-					<text class="cuIcon-text"></text>
-					
-					暂时没有消息
-					<view class="text-center margin-top-sm">
-						<text class="cu-btn bg-blue">我要抢首评</text>
+					<view class="no-data" v-if="replyList.length==0">
+						<text class="cuIcon-text"></text>
+						
+						暂时没有消息
+						<view class="text-center margin-top-sm">
+							<text class="cu-btn bg-blue" @tap="goReply(spaceInfo.id)">我要抢首评</text>
+						</view>
+						
+					</view>
+					<view class="load-more" @tap="loadMore" v-if="replyList.length>0">
+						<text>{{moreText}}</text>
 					</view>
 					
 				</view>
-				
-			</view>
+			</block>
+			<block v-if="infoType==1">
+				<view class="space-reply-list">
+					<view class="cu-list menu-avatar comment" v-for="(item,index) in forwardList" :key="index">
+						<view class="cu-item">
+							<view class="cu-avatar round" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)"></view>
+							<view class="content">
+								<view class="text-grey">
+									{{spaceInfo.userJson.name}}
+									
+									<!--  #ifdef H5 || APP-PLUS -->
+									<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
+									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
+									
+									<!--  #endif -->
+									<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
+								</view>
+								<view class="text-content text-df">
+									<rich-text :nodes="markHtml(item.text)"></rich-text>
+								</view>
+								<view class="margin-top-sm flex justify-between">
+									<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+									<view>
+										<text class="cuIcon-forward text-gray" @tap="forward(item.id)">
+											{{formatNumber(item.forward) || ''}}
+										</text>
+										<text class="cuIcon-message text-gray margin-left-xl" @tap="goReply(item.id)">
+											{{formatNumber(item.reply) || ''}}
+										</text>
+										<text class="cuIcon-appreciate text-gray margin-left-xl" @tap="toListLike(item.id,'forward',index)"  :class="item.isLikes==1?'text-red':'text-gray'">
+											{{formatNumber(item.likes) || ''}}
+										</text>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="no-data" v-if="forwardList.length==0">
+						<text class="cuIcon-text"></text>
+						
+						暂时还没有人转发
+
+						
+					</view>
+					<view class="load-more" @tap="loadMore" v-if="forwardList.length>0">
+						<text>{{moreText}}</text>
+					</view>
+					
+				</view>
+			</block>
+			
 		</view>
 		<view class="space-footer grid col-3">
-			<view class="space-footer-box">
+			<view class="space-footer-box" @tap="forward(spaceInfo.id)">
 				<text class="cuIcon-forward"></text>
 				转发
 			</view>
-			<view class="space-footer-box">
+			<view class="space-footer-box" @tap="goReply(spaceInfo.id)">
 				<text class="cuIcon-message"></text>
 				评论
 			</view>
-			<view class="space-footer-box">
-				<text class="cuIcon-appreciate"></text>
+			<view class="space-footer-box" @tap="toLike(spaceInfo.id)">
+				<text class="cuIcon-appreciate"  :class="spaceInfo.isLikes==1?'text-red':''"></text>
 				点赞
 			</view>
 		</view>
@@ -156,11 +292,18 @@
 					modified:0,
 					picList:[]
 				},
-				
+				replyList:[],
+				forwardList:[],
+				isLoad:0,
 				isLoading:0,
+				page:1,
+				moreText:"加载更多",
+				dataLoad:false,
 				
 				owo:owo,
 				owoList:[],
+				
+				infoType:0,
 				
 			}
 		},
@@ -168,11 +311,17 @@
 			var that = this;
 			if(that.id!=0){
 				that.getInfo();
+				that.getReplyList(false)
 			}
 			var timer = setTimeout(function() {
 				
 				uni.stopPullDownRefresh();
 			}, 1000)
+		},
+		onReachBottom() {
+		    //触底后执行的方法，比如无限加载之类的
+			var that = this;
+			that.loadMore();
 		},
 		onHide() {
 			localStorage.removeItem('getuid')
@@ -180,10 +329,14 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
-			
+			that.isLoad=0;
+			that.page=1;
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
 			if(localStorage.getItem('getuid')){
 				that.toid = localStorage.getItem('getuid');
 			}
@@ -205,9 +358,23 @@
 			if(res.id){
 				that.id = res.id;
 				that.getSpaceInfo();
+				that.getReplyList(false)
 			}
 		},
 		methods: {
+			loadMore(){
+				var that = this;
+				that.moreText="正在加载中...";
+				if(that.isLoad==0){
+					that.getReplyList(true);
+					if(that.infoType==0){
+						that.getReplyList(false)
+					}
+					if(that.infoType==1){
+						that.getForwardList(false);
+					}
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -305,16 +472,6 @@
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
-			toUserContents(data){
-				var that = this;
-				var name = data.author;
-				var title = data.author+"的信息";
-				var id= data.authorId;
-				var type="user";
-				uni.navigateTo({
-				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
-				});
-			},
 			getUserLv(i){
 				var that = this;
 				if(!i){
@@ -334,6 +491,8 @@
 			},
 			markHtml(text){
 				var that = this;
+				text = that.replaceAll(text,"<","&lt;");
+				text = that.replaceAll(text,">","&gt;");
 				var owoList=that.owoList;
 				for(var i in owoList){
 				
@@ -383,6 +542,440 @@
 				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
+			},
+			goReply(id){
+				uni.navigateTo({
+				    url: '/pages/space/reply?id='+id
+				});
+			},
+			forward(id){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post?type=2&id='+id
+				});
+			},
+			getReplyList(isPage){
+				var that = this;
+				var page = that.page;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"toid":that.id,
+					"type":3
+				}
+				if(isPage){
+					page++;
+				}
+				that.$Net.request({
+					url: that.$API.spaceList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"order":"created",
+						"token":token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							var list = res.data.data;
+							var replyList = [];
+							for(var i in list){
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
+							}
+							replyList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.replyList = that.replyList.concat(replyList);
+								}else{
+									that.replyList = replyList;
+								}
+								
+							}else{
+								that.moreText="没有更多数据了";
+							}
+						}
+					},
+					fail: function(res) {
+						
+						that.moreText="加载更多";
+						that.isLoad=0;
+					}
+				})
+			},
+			getForwardList(isPage){
+				var that = this;
+				var page = that.page;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"toid":that.id,
+					"type":2
+				}
+				if(isPage){
+					page++;
+				}
+				that.$Net.request({
+					url: that.$API.spaceList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"order":"created",
+						"token":token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							var list = res.data.data;
+							var forwardList = [];
+							for(var i in list){
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
+							}
+							forwardList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.forwardList = that.forwardList.concat(forwardList);
+								}else{
+									that.forwardList = forwardList;
+								}
+								
+							}else{
+								that.moreText="没有更多数据了";
+							}
+						}
+					},
+					fail: function(res) {
+						
+						that.moreText="加载更多";
+						that.isLoad=0;
+					}
+				})
+			},
+			follow(type,uid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				that.spaceInfo.isFollow = type;
+				var data = {
+					token:token,
+					touid:uid,
+					type:type,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.follow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==0){
+							that.spaceInfo.isFollow = 0;
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			toLike(id){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				if(that.spaceInfo.isLikes==1){
+					uni.showToast({
+						title: "你已经点赞过了",
+						icon: 'none'
+					});
+					return false;
+				}else{
+					that.spaceInfo.isLikes = 1;
+				}
+				
+				that.spaceInfo.likes += 1;
+				var data = {
+					token:token,
+					id:id,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.spaceLikes(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==0){
+							that.spaceInfo.isLikes = 0;
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			toListLike(id,type,index){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				if(type=="forward"){
+					if(that.forwardList[index].isLikes==1){
+						uni.showToast({
+							title: "你已经点赞过了",
+							icon: 'none'
+						});
+						return false;
+					}else{
+						that.forwardList[index].isLikes = 1;
+					}
+					that.forwardList[index].likes += 1;
+				}
+				if(type=="reply"){
+					if(that.replyList[index].isLikes==1){
+						uni.showToast({
+							title: "你已经点赞过了",
+							icon: 'none'
+						});
+						return false;
+					}else{
+						that.replyList[index].isLikes = 1;
+					}
+					that.replyList[index].likes += 1;
+				}
+				
+				
+				var data = {
+					token:token,
+					id:id,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.spaceLikes(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==0){
+							if(type=="forward"){
+								that.forwardList[index].isLikes = 0;
+							}
+							if(type=="reply"){
+								that.replyList[index].isLikes = 1;
+							}
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			setInfoType(type){
+				var that = this;
+				that.page = 1;
+				if(type==0){
+					that.getReplyList(false)
+				}
+				if(type==1){
+					that.getForwardList(false);
+				}
+				that.infoType = type;
+			},
+			toSearch(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/contents/search'
+				});
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return userlvStyle;
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				var id= data.uid;
+				if(id==0){
+					uni.showToast({
+						title: "用户不存在或已注销",
+						icon: 'none'
+					})
+					return false
+				}
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
 			},
 		}
 	}

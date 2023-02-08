@@ -2448,6 +2448,7 @@ page{
 }
 .space-pic .bg-img{
 	position: relative;
+	
 }
 .space-pic .bg-img .cuIcon-close{
 	width:60upx;
@@ -2474,4 +2475,10 @@ page{
 .spaceVideo video{
 	width: 100%;
 	border-radius: 8upx;
+}
+.bg-img{
+	background-color: #f3f3f3;
+}
+.search-space{
+	background-color: #f6f6f6;
 }

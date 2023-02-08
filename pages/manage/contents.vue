@@ -30,15 +30,16 @@
 					<text>已发布</text>
 				</view>
 			</view>
-			<view class="no-data" v-if="contentsList.length==0">
-				<text class="cuIcon-text"></text>暂时没有数据
-			</view>
+			
 			<view class="cu-card article no-card">
 				<view class="data-select" v-if="type=='publish'">
 					<text :class="dataSelect==0?'act':''" @tap="toSelect(0)">全部</text>
 					<text :class="dataSelect==1?'act':''" @tap="toSelect(1)">推荐</text>
 					<text :class="dataSelect==2?'act':''" @tap="toSelect(2)">置顶</text>
 					<text :class="dataSelect==3?'act':''" @tap="toSelect(3)">轮播</text>
+				</view>
+				<view class="no-data" v-if="contentsList.length==0">
+					<text class="cuIcon-text"></text>暂时没有数据
 				</view>
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
 					<view class="content">

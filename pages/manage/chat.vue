@@ -43,11 +43,16 @@
 									<block v-if="item.lastMsg">
 										
 										<block v-if="item.lastMsg.type!=4">
-											<block v-if="item.lastMsg.uid==item.uid">
-												{{item.userJson.name}}: 
+											<block v-if="item.type==0">
+												<block v-if="item.lastMsg.uid==item.uid">
+													{{item.userJson.name}}: 
+												</block>
+												<block v-if="item.lastMsg.uid==item.toid">
+													{{item.userJson.toName}}: 
+												</block>
 											</block>
-											<block v-if="item.lastMsg.uid==item.toid">
-												{{item.userJson.toName}}: 
+											<block v-if="item.type==1">
+												{{item.lastMsg.name}}: 
 											</block>
 											<block v-if="item.lastMsg.type==0">
 												{{item.lastMsg.text}}
@@ -109,7 +114,13 @@
 										</block>
 									</block>
 									<block v-else>
-										<text class="text-blue">[聊天者已开启屏蔽]</text>
+										<block v-if="item.lastMsg.text=='ban'">
+											<text class="text-blue">[聊天者已开启屏蔽]</text>
+										</block>
+										<block v-else>
+											<text class="text-blue">[聊天者已关闭屏蔽]</text>
+										</block>
+										
 									</block>
 								</view>
 							</view>
@@ -181,6 +192,9 @@
 				that.token = localStorage.getItem('token');
 				that.getMyChat(false);
 			}
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onHide() {
 			var that = this

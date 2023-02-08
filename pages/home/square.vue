@@ -5,7 +5,7 @@
 				<view class="action">
 					<text class="square-box" :class="squareid==0?'cur':''" @tap="setSquare(0)">动态</text>
 					<text class="square-box" :class="squareid==1?'cur':''" @tap="setSquare(1)">群聊</text>
-					<text class="square-box" :class="squareid==2?'cur':''" @tap="setSquare(2)">综合</text>
+					<!-- <text class="square-box" :class="squareid==2?'cur':''" @tap="setSquare(2)">综合</text> -->
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					
@@ -48,10 +48,19 @@
 					</view>
 				</view>
 			</view>
-			
+			<view class="no-data" v-if="spaceList.length==0">
+				<text class="cuIcon-text"></text>
+				
+				暂时没有动态哦！
+				<view class="text-center margin-top-sm">
+					<text class="cu-btn bg-gradual-orange radius" @tap="postSpace(0)">我要发布</text>
+				
+				</view>
+				
+			</view>
 				
 			<spaceItem :spaceList="spaceList"></spaceItem>
-			<view class="load-more" @tap="loadMore" v-if="dataLoad">
+			<view class="load-more" @tap="loadMore" v-if="dataLoad&&chatList.length>0">
 				<text>{{moreText}}</text>
 			</view>
 			
@@ -59,8 +68,17 @@
 		</block>
 		<block v-if="squareid==1">
 			
-			
-			<view class="cu-list menu-avatar"  v-if="chatList.length>0">
+			<view class="no-data" v-if="token==''">
+				<text class="cuIcon-text"></text>
+				
+				请先登录哦！
+				<view class="text-center margin-top-sm">
+					<text class="cu-btn bg-blue radius" @tap="goLogin()">登录</text>
+					<text class="cu-btn line-blue margin-left-sm radius" @tap="goRegister()">注册</text>
+				</view>
+				
+			</view>
+			<view class="cu-list menu-avatar" v-if="token!=''">
 				<view class="cu-bar bg-white search">
 					<view class="search-form round">
 						<text class="cuIcon-search"></text>
@@ -69,6 +87,7 @@
 					</view>
 				</view>
 				<view class="no-data" v-if="chatList.length==0">
+					<text class="cuIcon-text"></text>
 					暂时没有数据
 				</view>
 				<block v-for="(item,index) in chatList" :key="index">
@@ -138,11 +157,18 @@
 				<image src="../../static/loading.gif"></image>
 			</view>
 		</view>
+		<!--  #ifdef APP-PLUS -->
+		<view style="height: 100upx;"></view>
+		<Tabbar :current="2"></Tabbar>
+		<!--  #endif -->
 	</view>
 </template>
 
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
+	// #ifdef APP-PLUS
+	import Tabbar from '@/pages/components/tabBar.vue'
+	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	export default {
 		data() {
@@ -666,6 +692,7 @@
 					}
 				})
 			},
+			
 			goUserInfo(){
 				 
 				var that = this;
@@ -679,10 +706,29 @@
 					url: '/pages/home/user'
 				});
 			},
+			goLogin(){
+				uni.navigateTo({
+				    url: '/pages/user/login'
+				});
+			},
+			goRegister(){
+				uni.navigateTo({
+				    url: '/pages/user/register'
+				});
+			}
 		},
+		// #ifdef APP-PLUS
+		components: {
+			waves,
+			Tabbar
+		},
+		// #endif
+		
+		// #ifdef H5 || MP
 		components: {
 			waves
-		}
+		},
+		// #endif
 	}
 </script>
 

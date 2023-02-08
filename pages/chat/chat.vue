@@ -885,8 +885,8 @@
 			},
 			markHtml(text){
 				var that = this;
-				text = that.replaceAll(text,"&lt;","<");
-				text = that.replaceAll(text,"&gt;",">");
+				text = that.replaceAll(text,"<","&lt;");
+				text = that.replaceAll(text,">","&gt;");
 				// #ifdef APP-PLUS || H5
 				var owoList=that.owoList;
 				for(var i in owoList){

@@ -30,6 +30,10 @@
 				</view>
 			</view>
 			<view class="cu-form-group margin-top">
+				<view class="title">用户名经验</view>
+				<input placeholder="请输入用户名经验" name="input" type="number" v-model="experience"></input>
+			</view>
+			<view class="cu-form-group margin-top">
 				<view class="title">昵称</view>
 				<input placeholder="请输入昵称" name="input" v-model="screenName"></input>
 			</view>
@@ -105,6 +109,7 @@
 				url:'',
 				customize:'',
 				token:'',
+				experience:0,
 				
 				groupText:"贡献者",
 				group:"contributor",
@@ -195,6 +200,7 @@
 							that.group = res.data.data.groupKey;
 							that.customize = res.data.data.customize;
 							that.assets =  res.data.data.assets;
+							that.experience=  res.data.data.experience;
 							var list = that.groupList;
 							for(var i in list){
 								if(list[i].group == that.group){
@@ -239,7 +245,8 @@
 					mail:that.mail,
 					url:that.url,
 					customize:that.customize,
-					group:that.group
+					group:that.group,
+					experience:that.experience
 				}
 				uni.showLoading({
 					title: "加载中"

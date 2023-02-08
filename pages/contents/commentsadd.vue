@@ -9,8 +9,8 @@
 					发布评论
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="commentsadd">
-					<text class="cuIcon-upload"></text>
+				<view class="action">
+					<button class="cu-btn round bg-blue" @tap="commentsadd()">发布</button>
 				</view>
 				<!--  #endif -->
 			</view>

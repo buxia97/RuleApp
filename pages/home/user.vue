@@ -13,7 +13,7 @@
 					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
@@ -23,7 +23,7 @@
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
-					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
 					
 				</view>
 				<!--  #endif -->
@@ -624,6 +624,10 @@
 								if(res.data.data.vip){
 									userInfo.vip = res.data.data.vip;
 								}
+								if(res.data.data.experience){
+									userInfo.experience = res.data.data.experience;
+								}
+								localStorage.setItem('userinfo',JSON.stringify(userInfo));
 								// if(res.data.data.avatar){
 								// 	that.userInfo = res.data.data.avatar;
 								// }

@@ -313,7 +313,9 @@
 		},
 		{
 			"path": "pages/contents/search",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/contents/userinfo",

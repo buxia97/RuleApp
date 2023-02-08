@@ -33,13 +33,16 @@
 				</view>
 			</view>
 			<!--  #endif -->
-			<view class="search-type grid col-3">
+			<view class="search-type grid col-4">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 					<text>评论</text>
+				</view>
+				<view class="search-type-box" @tap="toType(3)" :class="type==3?'active':''">
+					<text>动态</text>
 				</view>
 				<!--  #endif -->
 				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
@@ -54,7 +57,8 @@
 					<text>{{moreText}}</text>
 				</view>
 				<view class="no-data" v-if="contentsList.length==0">
-					<text class="cuIcon-text"></text>暂时没有数据
+					<text class="cuIcon-text"></text>
+					暂时没有数据
 				</view>
 
 			</view>
@@ -62,39 +66,13 @@
 			<!--评论-->
 			<view class="cu-list menu-avatar" v-if="type==1">
 				<view class="no-data" v-if="commentsList.length==0">
+					<text class="cuIcon-text"></text>
 					暂时没有评论
 				</view>
 				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-					<view class="cu-item" v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-						<view class="cu-list menu-avatar comment">
-							<text class="copy-comment" @tap="ToCopy(item.text)">
-								复制
-							</text>
-							<view class="cu-item">
-								<view class="cu-avatar round" :style="item.style"></view>
-								<view class="content">
-									<view class="text-grey">{{item.author}}</view>
-									<view class="text-content text-df">
-										{{item.text}}
-									</view>
-									<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
-										<view class="flex" @tap="toInfoComment(item.cid,item.contenTitle)">
-											<view>{{replaceSpecialChar(item.contenTitle)}}</view>
-											
-										</view>
-									</view>
-									<view class="margin-top-sm flex justify-between">
-										<view class="text-gray text-df">{{formatDate(item.created)}}</view>
-										<view>
-											<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1)"></text>
-										</view>
-									</view>
-								</view>
-							</view>
-				
-							
-						</view>
-					</view>
+					<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+						<commentItem :item="item"></commentItem>
+					</block>
 				</view>
 				
 				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
@@ -102,9 +80,24 @@
 				</view>
 			</view>
 			<!--评论结束-->
+			<!--动态-->
+			<view class="search-space" v-if="type==3">
+				<view class="no-data" v-if="spaceList.length==0">
+					<text class="cuIcon-text"></text>
+					暂时没有动态
+				</view>
+				<spaceItem :spaceList="spaceList"></spaceItem>
+				<view class="load-more" @tap="loadMore">
+					<text>{{moreText}}</text>
+				</view>
+			</view>
 			
+			<!--动态结束-->
 			<view class="cu-list menu-avatar userList" style="margin-top: 4upx;" v-if="type==2">
-				
+				<view class="no-data" v-if="userList.length==0">
+					<text class="cuIcon-text"></text>
+					暂时没有数据
+				</view>
 				<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
 					<view class="cu-avatar round lg" :style="item.style"></view>
 					<view class="content">
@@ -158,6 +151,8 @@
 				
 				userList:[],
 				
+				spaceList:[],
+				
 				searchText:"",
 				
 				type:0,
@@ -171,6 +166,25 @@
 				
 				changeLoading:1,
 			}
+		},
+		onPullDownRefresh(){
+			var that = this;
+			that.page=1;
+			that.moreText="加载更多";
+			that.isLoad=0;
+			if(that.type==0){
+				that.getContentsList(false);
+			}else if(that.type==1){
+				that.getCommentsList(false)
+			}else if(that.type==2){
+				that.getUserList(false)
+			}else{
+				that.getSpaceList(false)
+			}
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
+			
 		},
 		onShow(){
 			var that = this;
@@ -211,8 +225,10 @@
 					that.getContentsList(false);
 				}else if(i==1){
 					that.getCommentsList(false)
-				}else{
+				}else if(i==2){
 					that.getUserList(false)
+				}else{
+					that.getSpaceList(false)
 				}
 			},
 			back(){
@@ -228,8 +244,10 @@
 					that.getContentsList(true);
 				}else if(that.type==1){
 					that.getCommentsList(true)
-				}else{
+				}else if(that.type==2){
 					that.getUserList(true)
+				}else{
+					that.getSpaceList(true)
 				}
 				
 			},
@@ -239,8 +257,10 @@
 					that.getContentsList();
 				}else if(that.type==1){
 					that.getCommentsList()
-				}else{
+				}else if(that.type==2){
 					that.getUserList()
+				}else{
+					that.getSpaceList()
 				}
 				
 			},
@@ -253,8 +273,10 @@
 					that.getContentsList();
 				}else if(that.type==1){
 					that.getCommentsList()
-				}else{
+				}else if(that.type==2){
 					that.getUserList()
+				}else{
+					that.getSpaceList()
 				}
 
 			},
@@ -266,8 +288,10 @@
 					that.getContentsList();
 				}else if(that.type==1){
 					that.getCommentsList()
-				}else{
+				}else if(that.type==2){
 					that.getUserList()
+				}else{
+					that.getSpaceList()
 				}
 			},
 			getContentsList(isPage){
@@ -440,6 +464,84 @@
 						}, 300)
 					},
 					fail: function(res) {
+						that.changeLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			getSpaceList(isPage){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				that.$Net.request({
+					url: that.$API.spaceList(),
+					data:{
+						"limit":10,
+						"page":page,
+						"order":"created",
+						"searchKey":that.searchText,
+						"token":token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.changeLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							var list = res.data.data;
+							var spaceList = [];
+							for(var i in list){
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
+							}
+							spaceList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.spaceList = that.spaceList.concat(spaceList);
+								}else{
+									that.spaceList = spaceList;
+								}
+								
+							}else{
+								that.moreText="没有更多动态了";
+							}
+						}
+					},
+					fail: function(res) {
+						
 						that.changeLoading = 1;
 						that.isLoad=0;
 						that.moreText="加载更多";

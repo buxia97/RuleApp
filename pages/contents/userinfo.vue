@@ -89,13 +89,17 @@
 				</view>
 			</view>
 			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="search-type grid col-2">
+			<view class="search-type grid col-3">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
+				</view>
+				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
+					<text>动态</text>
 				</view>
 				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 					<text>评论</text>
 				</view>
+				
 			</view>
 			<!--  #endif -->
 			
@@ -107,14 +111,25 @@
 					<text>{{moreText}}</text>
 				</view>
 				<view class="no-data" v-if="contentsList.length==0">
-					<text class="cuIcon-text"></text>暂时没有数据
+					<text class="cuIcon-text"></text>
+					暂时没有数据
 				</view>
 
 			</view>
-			
+			<view class="search-space" v-if="type==2">
+				<view class="no-data" v-if="spaceList.length==0">
+					<text class="cuIcon-text"></text>
+					暂时没有动态
+				</view>
+				<spaceItem :spaceList="spaceList"></spaceItem>
+				<view class="load-more" @tap="loadMore">
+					<text>{{moreText}}</text>
+				</view>
+			</view>
 			<!--评论-->
 			<view class="cu-list menu-avatar" v-if="type==1">
 				<view class="no-data" v-if="commentsList.length==0">
+					<text class="cuIcon-text"></text>
 					暂时没有评论
 				</view>
 				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
@@ -129,6 +144,7 @@
 				</view>
 			</view>
 			<!--评论结束-->
+			
 			<!--占位区域-->
 			<view style="width: 100%;height: 100upx;"></view>
 		</view>
@@ -180,6 +196,7 @@
 				contentsList:[],
 				
 				commentsList:[],
+				spaceList:[],
 				
 				userList:[],
 				owo:owo,
@@ -250,8 +267,10 @@
 			that.isLoad=0;
 			if(i==0){
 				that.getContentsList(false);
-			}else{
+			}else if(i==1){
 				that.getCommentsList(false)
+			}else{
+				that.getSpaceList(false)
 			}
 		},
 		onLoad(res) {
@@ -287,8 +306,10 @@
 				that.isLoad=0;
 				if(i==0){
 					that.getContentsList(false);
-				}else{
+				}else if(i==1){
 					that.getCommentsList(false)
+				}else{
+					that.getSpaceList(false)
 				}
 			},
 			goFanList(uid){
@@ -357,17 +378,21 @@
 				that.isLoad=1;
 				if(that.type==0){
 					that.getContentsList(true);
-				}else{
+				}else if(that.type==1){
 					that.getCommentsList(true)
+				}else{
+					that.getSpaceList(true)
 				}
 				
 			},
 			reload(){
 				var that = this;
 				if(that.type==0){
-					that.getContentsList();
+					that.getContentsList(false);
+				}else if(that.type==1){
+					that.getCommentsList(false)
 				}else{
-					that.getCommentsList()
+					that.getSpaceList(false)
 				}
 				
 			},
@@ -778,6 +803,89 @@
 				}else{
 					return "Ta还没有个人介绍哦"
 				}
+			},
+			getSpaceList(isPage){
+				var that = this;
+				var token = "";
+				var uid = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+					uid = userInfo.uid;
+				}
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				var data = {
+					"uid":uid
+				}
+				that.$Net.request({
+					url: that.$API.spaceList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"order":"created",
+						"token":token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.changeLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							var list = res.data.data;
+							var spaceList = [];
+							for(var i in list){
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
+							}
+							spaceList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.spaceList = that.spaceList.concat(spaceList);
+								}else{
+									that.spaceList = spaceList;
+								}
+								
+							}else{
+								that.moreText="没有更多动态了";
+							}
+						}
+					},
+					fail: function(res) {
+						
+						that.changeLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
 			},
 		}
 	}

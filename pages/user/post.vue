@@ -80,6 +80,7 @@
 				<text @tap="toItalic">I</text>
 				<!-- <text class="cuIcon-picfill" @tap="upload"></text> -->
 				<text class="cuIcon-picfill" @tap="showModal" data-target="imgModal"></text>
+				<text class="cuIcon-playfill" @tap="uploadVideo"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
 				<text class="cuIcon-attentionforbidfill" @tap="toHideText"></text>
@@ -87,7 +88,9 @@
 				<text class="cuIcon-tag" :class="tag!=''?'text-blue':''" @tap="addTag"></text>
 				<text class="text-red cuIcon-shopfill" @tap="setShop" v-if="shopID==-1"></text>
 				<text class="text-yellow cuIcon-shopfill" @tap="setShop" v-else></text>
+				
 				<text class="cuIcon-read" :class="isShow?'text-blue':''" @tap="toIsShow(false)"></text>
+				
 				
 			</view>
 			<view class="cu-form-group">
@@ -626,7 +629,7 @@
 										var text = h+"![图片名称]("+data.data.url+")";
 										//that.text+=text;
 										that.insetText(text);
-									   }
+									}
 								},fail:function(){
 									setTimeout(function () {
 										uni.hideLoading();
@@ -636,6 +639,61 @@
 							   
 							});
 						}
+					}
+				})
+			},
+			uploadVideo(){
+				var that = this;
+				
+				uni.chooseVideo({
+					sourceType: ['camera', 'album'],
+					success: (responent) => {
+						uni.showLoading({
+							title: "加载中"
+						});
+						let videoFile = responent.tempFilePath;
+						const uploadTask = uni.uploadFile({
+						  url : that.$API.upload(),
+						  filePath:videoFile,
+						  name: 'file',
+						  formData: {
+						   'token': that.token
+						  },
+						  success: function (uploadFileRes) {
+							  setTimeout(function () {
+							  	uni.hideLoading();
+							  }, 1000);
+								var data = JSON.parse(uploadFileRes.data);
+								//var data = uploadFileRes.data;
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
+								if(data.code==1){
+								   var h = "";
+								   if(that.text!=""){
+								   	h="\n";
+								   }
+								   var text = h+`
+								   !!!!
+								   <video src="${data.data.url}" controls width="100%"></video>
+								   !!!!
+								   `;
+								   //that.text+=text;
+								   that.insetText(text);
+								}
+							},fail:function(){
+								uni.showToast({
+									title: "网络异常，上传失败！",
+									icon: 'none'
+								})
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+							}
+							
+						   
+						});
 					}
 				})
 			},

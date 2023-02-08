@@ -5,7 +5,7 @@
 				<view class="cu-item">
 					<view class="cu-list menu-avatar">
 						<view class="cu-item">
-							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'">
+							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)">
 								<view class="curLv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</view>
 							</view>
 							<view class="content flex-sub">
@@ -23,10 +23,10 @@
 								</view>
 							</view>
 							<view class="action space-follow">
-								<view class="cu-btn bg-red" v-if="item.isFollow==0">
+								<view class="cu-btn bg-red" v-if="item.isFollow==0" @tap="follow(1,item.userJson.uid,index)">
 									<text class="cuIcon-add"></text>关注
 								</view>
-								<view class="cu-btn text-red isFollow" v-if="item.isFollow==1">
+								<view class="cu-btn text-red isFollow" v-if="item.isFollow==1" @tap="follow(0,item.userJson.uid,index)">
 									已关注
 								</view>
 							</view>
@@ -83,7 +83,7 @@
 					</block>
 					<block  v-if="item.type==5">
 						<view class="grid flex-sub padding-lr">
-							<view class="user-post-info" @tap="goShopInfo(item)">
+							<view class="user-post-info" @tap="goShopInfo(item.shopJson.id)">
 								<view class="user-post-pic">
 									<image :src="item.shopJson.imgurl" mode="widthFix"></image>
 								</view>
@@ -122,8 +122,8 @@
 								评论
 							</block>
 						</view>
-						<view class="square-post-btn">
-							<text class="cuIcon-appreciate"></text>
+						<view class="square-post-btn" @tap="toLike(item.id,index)">
+							<text class="cuIcon-appreciate" :class="item.isLikes==1?'text-red':''"></text>
 							<block v-if="item.likes>0">
 								{{formatNumber(item.likes)}}
 							</block>
@@ -287,6 +287,8 @@
 			},
 			markHtml(text){
 				var that = this;
+				text = that.replaceAll(text,"<","&lt;");
+				text = that.replaceAll(text,">","&gt;");
 				var owoList=that.owoList;
 				for(var i in owoList){
 				
@@ -337,12 +339,166 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
 			},
+			follow(type,uid,index){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				that.spaceList[index].isFollow = type;
+				var data = {
+					token:token,
+					touid:uid,
+					type:type,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.follow(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==0){
+							that.spaceList[index].isFollow = 0;
+						}else{
+							var spaceList = that.spaceList;
+							for(var i in spaceList){
+								if(spaceList[i].userJson.uid==uid){
+									spaceList[i].isFollow = type;
+								}
+							}
+							that.spaceList = spaceList;
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
+			toLike(id,index){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				if(that.spaceList[index].isLikes==1){
+					uni.showToast({
+						title: "你已经点赞过了",
+						icon: 'none'
+					});
+					return false;
+				}else{
+					that.spaceList[index].isLikes = 1;
+				}
+				
+				that.spaceList[index].likes += 1;
+				var data = {
+					token:token,
+					id:id,
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.spaceLikes(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res))
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==0){
+							that.spaceList[index].isLikes = 0;
+						}
+						
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						
+					}
+				})
+			},
 			forward(id){
 				var that = this;
 				uni.navigateTo({
 				    url: '/pages/space/post?type=2&id='+id
 				});
-			}
+			},
+			
+			goShopInfo(sid){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/contents/shopinfo?sid='+sid
+				});
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
 		}
 	}
 </script>

@@ -7,7 +7,7 @@ page{
 	z-index: 999;
 	left: 0px;
 	width: 100%;
-	
+	transition:0.3s all;
 }
 .header .cu-bar{
 	/*  #ifdef APP-PLUS || H5  */
@@ -298,10 +298,6 @@ page{
 	width: 100%;
 	height: 160upx;
 	transition:0.3s all;
-	-webkit-transition:0.3s all;
-	-moz-transition:0.3s all;
-	-o-transition:0.3s all;
-	-ms-transition:0.3s all;
 }
 .topic-main:hover image{
 	-webkit-transform:scale(1.3);
@@ -1662,13 +1658,30 @@ page{
 	font-size: 30upx;
 }
 .userlv{
-	font-size: 24upx;
+	font-size: 22upx;
 	background-color: #cecece;
 	line-height: 25upx;
-	padding: 4upx 15upx;
+	padding: 4upx 10upx;
 	border-radius: 8upx;
 	margin-left: 10upx;
 	margin-top: -4upx;
+}
+.cu-avatar{
+	position: relative;
+	overflow: hidden;
+}
+.curLv{
+	padding: 0upx;
+	font-size: 22upx;
+	font-weight: bold;
+	font-style: italic;
+	opacity: 0.7;
+	display: block;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	line-height: 30upx;
+	height: 30upx;
 }
 .userlv.customize{
 	background-color: #ba21a8;
@@ -2274,11 +2287,65 @@ page{
 	font-size: 35upx;
 }
 .user-post-info{
-	height: 150upx;
+	height: 180upx;
 	width: 100%;
-	background-color: #f3f3f3;
+	padding: 20upx;
+	background-color: #f9f9f9;
 	overflow: hidden;
 	border-radius: 10upx;
+}
+.user-post-pic{
+	width: 180upx;
+	height: 140upx;
+	overflow: hidden;
+	border-radius: 8upx;
+	margin-right: 20upx;
+	float: left;
+}
+.user-post-pic image{
+	background-color: #f3f3f3;
+}
+.user-post-title{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	font-size: 30upx;
+	font-weight: bold;
+	margin-top: 8upx;
+	margin-bottom: 18upx;
+	line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+.user-post-intro{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	font-size: 26upx;
+	line-height: 36upx;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+	color: #666666;
+}
+.user-space-info{
+	width: 100%;
+	padding: 20upx;
+	background-color: #f9f9f9;
+	overflow: hidden;
+	border-radius: 10upx;
+	color: #666;
+}
+.user-space-info .user-space-text{
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+	-webkit-box-orient: vertical;
 }
 .admin-btn{
 	display: none;
@@ -2303,4 +2370,115 @@ page{
 	height: 90upx;
 	text-align: center;
 	line-height: 90upx;
+}
+.space-info .cu-item{
+	padding-bottom: 30upx;
+}
+.space-reply{
+	background: #fff;
+	margin-top: 20upx;
+}
+.space-reply-head{
+	height: 90upx;
+	line-height: 70upx;
+	padding: 10upx 30upx;
+	font-size: 30upx;
+	border-bottom: solid 2upx #f6f6f6;
+}
+.space-reply-head text{
+	color: #999;
+	font-weight: bold;
+}
+.space-reply-head text.cur{
+	color: #333;
+	border-bottom: solid 4upx #2196f6;
+	padding-bottom: 16upx;
+}
+.space-reply-likes{
+	float: right;
+}
+.space-reply-list .no-data .cu-btn{
+	border-radius: 8upx;
+}
+.space-reply-num{
+	background: #f3f3f3;
+}
+.space-reply-list .comment .cu-item{
+	border-bottom: solid 2upx #f6f6f6;
+}
+.space-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100upx;
+	padding: 20upx 0upx;
+	line-height: 60upx;
+    background: #fff;
+	font-size: 30upx;
+    border-top: solid 2upx #f6f6f6;
+    text-align: center;
+}
+.space-footer-box text{
+	margin-right: 10upx;
+}
+.space-footer .space-footer-box:nth-child(2){
+	border-left: solid 2upx #f6f6f6;
+	border-right: solid 2upx #f6f6f6;
+}
+.space-owo{
+	height: 80upx;
+	background-color: #fff;
+}
+.space-owo .cuIcon-emoji{
+	float: right;
+}
+.space-owo .owo{
+	left: auto;
+	right: 30upx;
+}
+.space-pic{
+	padding: 20upx;
+}
+.space-upload{
+	background-color: #e0e0e0;
+}
+.space-upload text{
+	font-size:80upx !important;
+}
+.space-pic .bg-img{
+	position: relative;
+	
+}
+.space-pic .bg-img .cuIcon-close{
+	width:60upx;
+	opacity: 0.8;
+	height:60upx;
+	border-radius: 50%;
+	background: #CE292C;
+	color: #fff !important;
+	font-size: 30upx !important;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow{
+	width: 180upx;
+	margin-top: -28upx;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn{
+	border-radius: 10upx;
+	height: 58upx;
+	line-height: 58upx;
+	padding: 0upx 24upx;
+}
+.cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn text{
+	margin-right: 4upx;
+}
+.spaceVideo video{
+	width: 100%;
+	border-radius: 8upx;
+}
+.bg-img{
+	background-color: #f3f3f3;
+}
+.search-space{
+	background-color: #f6f6f6;
 }

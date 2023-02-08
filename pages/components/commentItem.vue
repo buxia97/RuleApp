@@ -83,7 +83,6 @@
 				owoList:[],
 			};
 		},
-		
 		created(){
 			var that = this;
 			// #ifdef APP-PLUS || H5
@@ -203,7 +202,8 @@
 			},
 			markHtml(text){
 				var that = this;
-				
+				text = that.replaceAll(text,"<","&lt;");
+				text = that.replaceAll(text,">","&gt;");
 				var owoList=that.owoList;
 				// console.log(JSON.stringify(owoList));
 				for(var i in owoList){

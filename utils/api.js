@@ -1,5 +1,5 @@
-var API_URL = 'http://127.0.0.4/';
-//var API_URL = 'https://api.ruletree.club/';
+//var API_URL = 'http://127.0.0.4/';
+var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 
@@ -510,6 +510,10 @@ module.exports = {
 	spaceDelete:function(){
 		return API_URL + 'typechoSpace/spaceDelete';
 	},
+	spaceLikes:function(){
+		return API_URL + 'typechoSpace/spaceLikes';
+	},
+	
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);
