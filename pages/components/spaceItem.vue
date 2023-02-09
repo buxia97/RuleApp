@@ -6,7 +6,7 @@
 					<view class="cu-list menu-avatar">
 						<view class="cu-item">
 							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)">
-								<view class="curLv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</view>
+								<view class="curLv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</view>
 							</view>
 							<view class="content flex-sub">
 								<view>{{item.userJson.name}}

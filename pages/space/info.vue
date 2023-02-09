@@ -21,7 +21,7 @@
 				<view class="cu-list menu-avatar" v-if="spaceInfo.userJson">
 					<view class="cu-item">
 						<view class="cu-avatar round lg"  :style="'background-image:url('+spaceInfo.userJson.avatar+');'">
-							<view class="curLv" :style="getLvStyle(spaceInfo.userJson.lv)">{{getLv(spaceInfo.userJson.experience)}}</view>
+							<view class="curLv" :style="getLvStyle(spaceInfo.userJson.experience)">{{getLv(spaceInfo.userJson.experience)}}</view>
 						</view>
 						<view class="content flex-sub">
 							<view>{{spaceInfo.userJson.name}}
@@ -134,10 +134,10 @@
 							<view class="cu-avatar round" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)"></view>
 							<view class="content">
 								<view class="text-grey">
-									{{spaceInfo.userJson.name}}
+									{{item.userJson.name}}
 									
 									<!--  #ifdef H5 || APP-PLUS -->
-									<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
+									<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
 									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
 									
 									<!--  #endif -->
@@ -188,10 +188,10 @@
 							<view class="cu-avatar round" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)"></view>
 							<view class="content">
 								<view class="text-grey">
-									{{spaceInfo.userJson.name}}
+									{{item.userJson.name}}
 									
 									<!--  #ifdef H5 || APP-PLUS -->
-									<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
+									<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
 									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
 									
 									<!--  #endif -->

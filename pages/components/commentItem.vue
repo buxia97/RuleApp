@@ -23,7 +23,7 @@
 						</block>
 						<block v-if="isHead">
 							<!--  #ifdef H5 || APP-PLUS -->
-							<text class="userlv" :style="getLvStyle(item.lv)">{{getLv(item.experience)}}</text>
+							<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
 							<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
 							
 							<!--  #endif -->

@@ -464,6 +464,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoading = 0;
 						that.isLoad=0;
 						if(res.data.code==1){
 							var list = res.data.data;
@@ -523,6 +524,7 @@
 						}
 					},
 					fail: function(res) {
+						that.isLoading = 0;
 						that.isLoad=0;
 						// that.moreText="加载更多";
 					}
@@ -643,6 +645,7 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.isLoading = 0;
 						that.isLoad=0;
 						that.moreText="加载更多";
 						if(!isPage){
@@ -686,7 +689,7 @@
 						}
 					},
 					fail: function(res) {
-						
+						that.isLoading = 0;
 						that.moreText="加载更多";
 						that.isLoad=0;
 					}
