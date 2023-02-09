@@ -45,35 +45,59 @@
 					</block>
 					<block  v-if="item.type==1">
 						<view class="grid flex-sub padding-lr">
-							<view class="user-post-info" @tap="goContentInfo(item)">
-								<view class="user-post-pic" v-if="item.contentJson.images.length>0">
-									<image :src="item.contentJson.images[0]" mode="widthFix"></image>
-								</view>
-								<view class="user-post-text">
-									<view class="user-post-title">
-										{{item.contentJson.title}}
+							<block v-if="item.contentJson.cid==0">
+								<view class="user-post-info">
+									<view class="user-post-text">
+										<view class="user-post-title">
+											文章不存在
+										</view>
+										<view class="user-post-intro">
+											该文章已被删除或数据缺失！
+										</view>
 									</view>
-									<view class="user-post-intro">
-										{{item.contentJson.text}}
+								</view>
+							</block>
+							<block v-else>
+								<view class="user-post-info" @tap="goContentInfo(item)">
+									<view class="user-post-pic" v-if="item.contentJson.images.length>0">
+										<image :src="item.contentJson.images[0]" mode="widthFix"></image>
+									</view>
+									<view class="user-post-text">
+										<view class="user-post-title">
+											{{item.contentJson.title}}
+										</view>
+										<view class="user-post-intro">
+											{{item.contentJson.text}}
+										</view>
 									</view>
 								</view>
-							</view>
+							</block>
+							
 						</view>
 					</block>
 					<block  v-if="item.type==2">
 						<view class="grid flex-sub padding-lr">
-							
-							<view class="user-space-info" @tap="toInfo(item.forwardJson.id)">
-								<view class="user-space-text">
-									<text class="text-blue">@{{item.forwardJson.username}}：</text>{{item.forwardJson.text}}
-								</view>
-								
-								<view class="grid flex-sub col-3 grid-square margin-top-xs" v-if="item.forwardJson.picList.length>0">
-									<view class="bg-img" :style="'background-image:url('+data+');'"
-									 v-for="(data,i) in item.forwardJson.picList" :key="i">
+							<block v-if="item.forwardJson.id==0">
+								<view class="user-space-info">
+									<view class="user-space-text">
+										该动态已被删除或数据缺失！
 									</view>
 								</view>
-							</view>
+							</block>
+							<block v-else>
+								<view class="user-space-info" @tap="toInfo(item.forwardJson.id)">
+									<view class="user-space-text">
+										<text class="text-blue">@{{item.forwardJson.username}}：</text>{{item.forwardJson.text}}
+									</view>
+									
+									<view class="grid flex-sub col-3 grid-square margin-top-xs" v-if="item.forwardJson.picList.length>0">
+										<view class="bg-img" :style="'background-image:url('+data+');'"
+										 v-for="(data,i) in item.forwardJson.picList" :key="i">
+										</view>
+									</view>
+								</view>
+							</block>
+							
 						</view>
 					</block>
 					<block  v-if="item.type==4">
@@ -83,24 +107,44 @@
 					</block>
 					<block  v-if="item.type==5">
 						<view class="grid flex-sub padding-lr">
-							<view class="user-post-info" @tap="goShopInfo(item.shopJson.id)">
-								<view class="user-post-pic">
-									<image :src="item.shopJson.imgurl" mode="widthFix"></image>
+							<block v-if="item.shopJson.id==0">
+								<view class="user-post-info">
+									<view class="user-post-text">
+										<view class="user-post-title">
+											该商品不存在或已被删除！
+										</view>
+										<view class="user-post-intro">
+											<text class="text-red text-lg text-bold">-- {{currencyName}}</text>
+											
+										</view>
+										<view class="user-post-intro">
+											<text class="text-gray text-sm">剩余数量：0</text>
+											
+										</view>
+									</view>
 								</view>
-								<view class="user-post-text">
-									<view class="user-post-title">
-										{{item.shopJson.title}}
+							</block>
+							<block v-else>
+								<view class="user-post-info" @tap="goShopInfo(item.shopJson.id)">
+									<view class="user-post-pic">
+										<image :src="item.shopJson.imgurl" mode="widthFix"></image>
 									</view>
-									<view class="user-post-intro">
-										<text class="text-red text-lg text-bold">{{parseInt(item.shopJson.price)}} {{currencyName}}</text>
-										
-									</view>
-									<view class="user-post-intro">
-										<text class="text-gray text-sm">剩余数量：{{item.shopJson.num}}</text>
-										
+									<view class="user-post-text">
+										<view class="user-post-title">
+											{{item.shopJson.title}}
+										</view>
+										<view class="user-post-intro">
+											<text class="text-red text-lg text-bold">{{parseInt(item.shopJson.price)}} {{currencyName}}</text>
+											
+										</view>
+										<view class="user-post-intro">
+											<text class="text-gray text-sm">剩余数量：{{item.shopJson.num}}</text>
+											
+										</view>
 									</view>
 								</view>
-							</view>
+							</block>
+							
 						</view>
 					</block>
 					<view class="text-center grid col-3 padding-xs">

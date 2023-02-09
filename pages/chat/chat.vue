@@ -288,6 +288,8 @@
 				
 					that.InputBottom = 0;
 					
+				}else{
+					that.InputBottom = res.height;
 				}
 			});
 			// #endif

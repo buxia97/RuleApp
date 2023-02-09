@@ -2359,6 +2359,7 @@ page{
 .chat-owo.owo{
 	width: 100%;
 	left: 0px;
+	position: fixed;
 	border-radius: 0upx;
 	bottom:100upx;
 	top: auto;

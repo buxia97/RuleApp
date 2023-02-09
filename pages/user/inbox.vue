@@ -394,7 +394,7 @@
 								var inboxList = [];
 								for(var i in list){
 									var arr = list[i];
-									arr.style = "background-image:url("+list[i].avatar+");"
+									arr.style = "background-image:url("+list[i].userJson.avatar+");"
 									inboxList.push(arr);
 								}
 								if(isPage){
