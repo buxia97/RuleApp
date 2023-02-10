@@ -137,11 +137,11 @@
 									{{item.userJson.name}}
 									
 									<!--  #ifdef H5 || APP-PLUS -->
-									<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
-									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
+									<text class="userlv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</text>
+									<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
 									
 									<!--  #endif -->
-									<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
+									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
 								<view class="text-content text-df">
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
@@ -191,11 +191,11 @@
 									{{item.userJson.name}}
 									
 									<!--  #ifdef H5 || APP-PLUS -->
-									<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
-									<text class="userlv" :style="getUserLvStyle(spaceInfo.userJson.lv)">{{getUserLv(spaceInfo.userJson.lv)}}</text>
+									<text class="userlv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</text>
+									<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
 									
 									<!--  #endif -->
-									<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
+									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
 								<view class="text-content text-df">
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
@@ -382,8 +382,14 @@
 			},
 			getSpaceInfo(){
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('token')){
+					
+					token = localStorage.getItem('token');
+				}
 				var data = {
-					"id":that.id
+					"id":that.id,
+					"token":token
 				}
 				that.$Net.request({
 					url: that.$API.spaceInfo(),
@@ -479,15 +485,6 @@
 				}
 				var rankList = that.$API.GetRankList();
 				return rankList[i];
-			},
-			getUserLvStyle(i){
-				var that = this;
-				if(!i){
-					var i = 0;
-				}
-				var rankStyle = that.$API.GetRankStyle();
-				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
-				return userlvStyle;
 			},
 			markHtml(text){
 				var that = this;

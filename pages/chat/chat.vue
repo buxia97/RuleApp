@@ -46,8 +46,8 @@
 					{{formatDate(item.created)}}
 					<block  v-if="group=='administrator'||group=='editor'">
 						<text class="admin-btn margin-left-sm" v-if="item.uid!=uid">
-							<text class="text-red" @tap="toDelete(item.id)">删除</text>
-							<text class="text-black margin-left-sm" @tap="toBan(item.uid)">禁言</text>
+							<text class="text-red" @tap="toDeleteMsg(item.id)">删除</text>
+							<text class="text-black margin-left-sm" @tap="toBanMsg(item.uid)">禁言</text>
 						</text>
 					</block>
 					
@@ -227,6 +227,7 @@
 				
 				modalName:"",
 				ban:0,
+				lastid:0,
 				
 			};
 		},
@@ -342,7 +343,7 @@
 					current: imgArr[0]
 				});
 			},
-			toBan(uid){
+			toBanMsg(uid){
 				if(!uid){
 					uni.showToast({
 						title: "该用户不存在",
@@ -354,7 +355,7 @@
 				    url: '/pages/manage/banuser?uid='+uid
 				});
 			},
-			toDelete(id){
+			toDeleteMsg(id){
 				var that = this;
 				var token = "";
 				
@@ -433,7 +434,7 @@
 					data:{
 						"token":token,
 						"chatid":that.chatid,
-						"limit":300,
+						"limit":200,
 						"page":page,
 					},
 					header:{
@@ -449,13 +450,22 @@
 							var list = res.data.data;
 							if(list.length>0){
 								//that.contentsList = list;
+								
+								
+								
 								if(isPage){
 									that.page++;
 									list = list.reverse();
 									list = list.concat(that.msgList);
 									that.msgList = list;
 								}else{
-									
+									var lastid = list[list.length-1].id;
+									//如果最新消息等于最后消息，那么不更新列表
+									if(that.lastid==lastid){
+										return false;
+									}else{
+										that.lastid = lastid;
+									}
 									that.msgList = list.reverse();
 									
 									
@@ -604,6 +614,8 @@
 						title: "请先登录",
 						icon: 'none'
 					})
+					clearInterval(that.msgLoading);
+					that.msgLoading = null
 					uni.navigateTo({
 						url: '/pages/user/login'
 					});
@@ -617,6 +629,23 @@
 					"type":0,
 					
 				}
+				//添加一个新字段
+				var curtime = Date.parse(new Date());
+				var msg ={
+					"created": curtime / 1000,
+					"text":that.msg,
+					"type": 0,
+					"uid": that.uid,
+					"userJson": that.userInfo
+				}
+				that.msgList.push(msg);
+				setTimeout(() => {
+					uni.pageScrollTo({
+						duration: 0,
+						scrollTop: 99999999
+					})
+				},100)
+				
 				that.$Net.request({
 					
 					url: that.$API.sendMsg(),
@@ -647,6 +676,8 @@
 			},
 			goUserInfo(name,toid,type){
 				var that = this;
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				var title = name+"的信息";
 				var type="user";
 				if(type==0){
@@ -700,6 +731,8 @@
 						title: "请先登录",
 						icon: 'none'
 					})
+					clearInterval(that.msgLoading);
+					that.msgLoading = null
 					uni.navigateTo({
 						url: '/pages/user/login'
 					});
@@ -757,6 +790,8 @@
 						title: "请先登录",
 						icon: 'none'
 					})
+					clearInterval(that.msgLoading);
+					that.msgLoading = null
 					uni.navigateTo({
 						url: '/pages/user/login'
 					});
@@ -1050,6 +1085,8 @@
 			},
 			addGroup(){
 				var that = this;
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				var chatid = that.chatid;
 				uni.navigateTo({
 				    url: '/pages/manage/addGroup?chatid='+chatid+"&postType=edit"

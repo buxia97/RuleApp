@@ -439,7 +439,12 @@
 		// #endif
 		,{
 			"path": "pages/chat/chat",
-			"style": {}
+			"style": {
+				"app-plus":{
+					// 将回弹属性关掉
+					"bounce":"none"
+				}
+			}
 		},
 		{
 			"path": "pages/space/info",

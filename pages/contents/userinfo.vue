@@ -122,7 +122,7 @@
 					暂时没有动态
 				</view>
 				<spaceItem :spaceList="spaceList"></spaceItem>
-				<view class="load-more" @tap="loadMore">
+				<view class="load-more" @tap="loadMore" v-if="spaceList.length>0">
 					<text>{{moreText}}</text>
 				</view>
 			</view>
@@ -146,7 +146,7 @@
 			<!--评论结束-->
 			
 			<!--占位区域-->
-			<view style="width: 100%;height: 100upx;"></view>
+			<view style="width: 100%;height: 100upx; background-color: #f6f6f6;"></view>
 		</view>
 		<!--底部操作-->
 		<view class="userInfo-bottom-btn" v-if="vid!=uid">
@@ -807,18 +807,17 @@
 			getSpaceList(isPage){
 				var that = this;
 				var token = "";
-				var uid = 0;
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
-					uid = userInfo.uid;
+
 				}
 				var page = that.page;
 				if(isPage){
 					page++;
 				}
 				var data = {
-					"uid":uid
+					"uid":that.uid 
 				}
 				that.$Net.request({
 					url: that.$API.spaceList(),

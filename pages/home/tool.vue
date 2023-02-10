@@ -200,18 +200,11 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
-		<!--  #ifdef APP-PLUS -->
-		<view style="height: 100upx;"></view>
-		<Tabbar :current="2"></Tabbar>
-		<!--  #endif -->
 	</view>
 </template>
 
 <script>
 	import waves from '@/components/xxley-waves/waves.vue';
-	// #ifdef APP-PLUS
-	import Tabbar from '@/pages/components/tabBar.vue'
-	// #endif
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	export default {
 		data() {
@@ -400,18 +393,9 @@
 				})
 			},
 		},
-		// #ifdef APP-PLUS
-		components: {
-			waves,
-			Tabbar
-		},
-		// #endif
-		
-		// #ifdef H5 || MP
 		components: {
 			waves
-		},
-		// #endif
+		}
 	}
 </script>
 
