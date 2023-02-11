@@ -161,6 +161,7 @@
 		<view style="height: 100upx;"></view>
 		<Tabbar :current="2"></Tabbar>
 		<!--  #endif -->
+		
 	</view>
 </template>
 
@@ -732,6 +733,7 @@
 			waves
 		},
 		// #endif
+		
 	}
 </script>
 

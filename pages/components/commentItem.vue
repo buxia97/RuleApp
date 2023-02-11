@@ -46,6 +46,10 @@
 								<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
 							</view>
 						</view>
+						<view class="comment-operation"  v-if="group=='administrator'||group=='editor'">
+							<text class="text-black" @tap="toBan(item.authorId)">封禁</text>
+							<text class="text-red" @tap="toDelete(item.coid)">删除</text>
+						</view>
 					</view>
 				</view>
 							
@@ -56,6 +60,7 @@
 </template>
 
 <script>
+	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	// #ifdef APP-PLUS
 	import owo from '../../static/app-plus/owo/OwO.js'
 	// #endif
@@ -81,10 +86,16 @@
 			return {
 				owo:owo,
 				owoList:[],
+				group:""
 			};
 		},
 		created(){
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+							
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+			}
 			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
 			var owoList=[];
@@ -217,6 +228,72 @@
 			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
+			},
+			toBan(uid){
+				if(!uid){
+					uni.showToast({
+						title: "该用户不存在",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: '/pages/manage/banuser?uid='+uid
+				});
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+					title: '确定要删除该评论吗',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.commentsDelete(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: res.data.msg,
+										icon: 'none'
+									})
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
 			},
 		}
 	}

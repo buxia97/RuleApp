@@ -224,6 +224,7 @@
 				
 				groupUserName:"",
 				groupUser:0,
+				groupUserAvatar:"",
 				
 				modalName:"",
 				ban:0,
@@ -459,7 +460,7 @@
 									list = list.concat(that.msgList);
 									that.msgList = list;
 								}else{
-									var lastid = list[list.length-1].id;
+									var lastid = list[0].id;
 									//如果最新消息等于最后消息，那么不更新列表
 									if(that.lastid==lastid){
 										return false;
@@ -561,7 +562,7 @@
 								}else{
 									that.groupUserName = res.data.data.name;
 								}
-								
+								that.groupUserAvatar = res.data.data.avatar;
 							}
 						}
 					},
@@ -686,7 +687,7 @@
 					});
 				}else{
 					uni.navigateTo({
-					    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+toid+"&avatar="+encodeURIComponent(that.avatar)
+					    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+toid+"&avatar="+encodeURIComponent(that.groupUserAvatar)
 					});
 				}
 				

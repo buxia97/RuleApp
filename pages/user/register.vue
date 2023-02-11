@@ -22,7 +22,7 @@
 				<view class="cu-form-group">
 					<input name="input" v-model="mail" placeholder="请输入邮箱(必填)"></input>
 				</view>
-				<view class="cu-form-group" v-if="isEmail==1">
+				<view class="cu-form-group" v-if="isEmail>0">
 					<input name="input" v-model="code" placeholder="请输入验证码"></input>
 					<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
 					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>

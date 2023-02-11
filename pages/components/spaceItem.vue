@@ -303,16 +303,6 @@
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
-			toUserContents(data){
-				var that = this;
-				var name = data.author;
-				var title = data.author+"的信息";
-				var id= data.authorId;
-				var type="user";
-				uni.navigateTo({
-				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
-				});
-			},
 			getUserLv(i){
 				var that = this;
 				if(!i){

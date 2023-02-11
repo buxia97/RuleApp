@@ -1,6 +1,40 @@
 <template>
 	
     <view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}" >
+		<view class="tabbar-operate" :class="isPost?'show':''">
+			<view class="tabbar-operate-main grid col-3">
+				<view class="index-sort-box">
+					<view class="index-sort-main"  @tap="toLink('../user/post?type=add')">
+						<view class="index-sort-i" style="background: rgba(30, 134, 231, 0.2);">
+							<text class="cuIcon-writefill" style="color:  #1e86e7;"></text>
+						</view>
+						<view class="index-sort-text">
+							文章
+						</view>
+					</view>
+				</view>
+				<view class="index-sort-box">
+					<view class="index-sort-main" @tap="toLink('../space/post?type=0')">
+						<view class="index-sort-i" style="background: rgba(21, 159, 44, 0.2);">
+							<text class="cuIcon-creativefill" style="color:  #159f2c;"></text>
+						</view>
+						<view class="index-sort-text">
+							动态
+						</view>
+					</view>
+				</view>
+				<view class="index-sort-box">
+					<view class="index-sort-main" @tap="toLink('../user/addshop')">
+						<view class="index-sort-i" style="background: rgba(255, 0, 127, 0.2);">
+							<text class="cuIcon-cartfill" style="color:  #ff007f;"></text>
+						</view>
+						<view class="index-sort-text">
+							商品
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
 		<block  v-for="(item, index) in list" 
 			    :key="index">
 			
@@ -9,7 +43,7 @@
 			    <image class="item-img" :src="item.icon" v-else></image>
 			    <view class="item-name" :class="{'tabbarActive': current == index}" v-if="item.text">{{item.text}}</view>
 			</view>
-			<view class="tabbar-item addPost" v-if="index==1"   @tap="toLink('../user/post?type=add')">
+			<view class="tabbar-item addPost" v-if="index==1" @tap="isPost=!isPost">
 				<view class="addPost-main">
 					<view class="addPost-i">
 						 <text class="cuIcon-add"></text>
@@ -29,6 +63,7 @@ export default {
     },
     data() {
         return {
+			isPost:false,
             paddingBottomHeight: 0,  //苹果X以上手机底部适配高度
             list: [{
                     text: '首页',  
@@ -119,6 +154,7 @@ export default {
 	    display: block;
 	    height: 100upx;
 		float: left;
+		background: #fff;
 		width: calc(25% - 32upx);
 		text-align: center;
 	    height: 100upx;
@@ -169,6 +205,37 @@ export default {
 		text-align: center;
 		font-size: 70upx;
 		color: #fff;
+		font-weight: bold;
+	}
+	.tabbar-operate{
+		position: fixed;
+		z-index: -20;
+		bottom: -200upx;
+		width: 100%;
+		left: 0;
+		padding: 0upx 30upx;
+		box-sizing: border-box;
+		text-align: center;
+		transition: 0.3s all;
+	}
+	.tabbar-operate.show{
+		bottom: 140upx;
+	}
+	.tabbar-operate-main{
+		width: 100%;
+		height: 200upx;
+		border-radius: 40upx;
+		padding-top: 18upx;
+		background: #fff;
+		box-shadow: 0px 0px 10upx rgba(0, 0, 0, 0.2);
+		overflow: hidden;
+	}
+	.tabbar-operate-main>view{
+		width: 33.33%;
+		float: left;
+	}
+	.tabbar-operate-main .index-sort-text{
+		font-size: 28upx;
 		font-weight: bold;
 	}
 </style>

@@ -272,6 +272,7 @@
 </template>
 
 <script>
+	
 	import waves from '@/components/xxley-waves/waves.vue';
 	// #ifdef APP-PLUS
 	import Tabbar from '@/pages/components/tabBar.vue'
