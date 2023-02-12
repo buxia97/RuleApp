@@ -54,7 +54,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 			}
 		},
@@ -80,6 +80,7 @@
 				});
 			},
 			toGroup(){
+				var that = this;
 				var url = that.$API.GetGroupUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
@@ -89,6 +90,7 @@
 				// #endif
 			},
 			toWeb(){
+				var that = this;
 				var url = that.$API.GetWebUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
@@ -98,6 +100,7 @@
 				// #endif
 			},
 			toGithub(){
+				var that = this;
 				var url = that.$API.GetGithubUrl();
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 

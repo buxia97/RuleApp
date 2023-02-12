@@ -45,7 +45,7 @@
 				<text class="cuIcon-more"></text>
 			</view>
 		</view>
-		<view :style="[{padding:NavBar+40 + 'px 10px 0px 10px'}]"></view>
+		<view :style="[{padding:NavBar+45 + 'px 10px 0px 10px'}]"></view>
 		<block v-if="TabCur==0">
 			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 			 :autoplay="true" interval="5000" duration="500">

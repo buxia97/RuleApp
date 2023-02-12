@@ -424,6 +424,9 @@
 			"path": "pages/manage/addGroup"
 		},
 		{
+			"path": "pages/manage/userClean"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

@@ -10,16 +10,30 @@
 							</view>
 							<view class="content flex-sub">
 								<view>{{item.userJson.name}}
-								
-								<!--  #ifdef H5 || APP-PLUS -->
-								<!-- <text class="userlv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</text> -->
-								<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
-								
-								<!--  #endif -->
-								<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
+								<block v-if="item.userJson.uid!=0">
+									<!--  #ifdef H5 || APP-PLUS -->
+									<!-- <text class="userlv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</text> -->
+									<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
+									
+									<!--  #endif -->
+									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
+									
+								</block>
 								</view>
-								<view class="text-gray text-sm flex justify-between">
+								<view class="text-gray text-sm flex">
 									{{formatDate(item.created)}}
+									<block v-if="group=='administrator'||group=='editor'">
+										<text class="text-blue margin-left-sm" @tap="edit(item.id)">编辑</text>
+										<text class="text-black margin-left-sm" @tap="toBan(item.userJson.uid)">封禁</text>
+										<text class="text-red margin-left-sm" @tap="toDelete(item.id)">删除</text>
+									</block>
+									<block v-else>
+										<block v-if="item.userJson.uid!=0&&item.userJson.uid==uid">
+											<text class="text-blue margin-left-sm" @tap="edit(item.id)">编辑</text>
+											<text class="text-red margin-left-sm" @tap="toDelete(item.id)">删除</text>
+										</block>
+										
+									</block>
 								</view>
 							</view>
 							<view class="action space-follow">
@@ -58,7 +72,7 @@
 								</view>
 							</block>
 							<block v-else>
-								<view class="user-post-info" @tap="goContentInfo(item)">
+								<view class="user-post-info" @tap="goContentInfo(item.contentJson)">
 									<view class="user-post-pic" v-if="item.contentJson.images.length>0">
 										<image :src="item.contentJson.images[0]" mode="widthFix"></image>
 									</view>
@@ -211,10 +225,18 @@
 				owoList:[],
 				vipDiscount:0,
 				currencyName:"",
+				group:"",
+				uid:0
 			};
 		},
 		created(){
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+							
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+				that.uid = userInfo.uid;
+			}
 			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || H5
 			var owo = that.owo.data;
@@ -511,6 +533,12 @@
 					}
 				})
 			},
+			edit(id){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post?postType=edit&id='+id
+				});
+			},
 			forward(id){
 				var that = this;
 				uni.navigateTo({
@@ -532,6 +560,80 @@
 				var type="user";
 				uni.navigateTo({
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
+			toBan(uid){
+				if(uid==0){
+					uni.showToast({
+						title: "该用户不存在",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: '/pages/manage/banuser?uid='+uid
+				});
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"id":id,
+					"token":token
+				}
+				uni.showModal({
+					title: '确定要删除该动态吗',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.spaceDelete(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: res.data.msg+"，刷新数据后生效",
+											icon: 'none'
+										})
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
 				});
 			},
 		}

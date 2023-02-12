@@ -142,7 +142,7 @@
 					page++;
 				}
 				that.$Net.request({
-					url: that.$that.$API.violationList(),
+					url: that.$API.violationList(),
 					data:{
 						"limit":10,
 						"page":page,

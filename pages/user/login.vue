@@ -230,7 +230,7 @@
 			toQQlogin(){
 				//QQ登陆
 				//后端直接根据access_token来判断用户的唯一性。
-				
+				var that = this;
 				uni.login({
 					provider: 'qq',
 					success: resp => {
@@ -273,6 +273,7 @@
 									method: "get",
 									dataType: 'json',
 									success: function(res) {
+										console.log(res)
 										setTimeout(function () {
 											uni.hideLoading();
 										}, 1000);
@@ -320,6 +321,7 @@
 				});
 			},
 			toWexinlogin(){
+				var that = this;
 				//微信登陆
 				//后端直接根据unionId来判断用户的唯一性。
 				
@@ -409,6 +411,7 @@
 				});
 			},
 			toWeibologin(){
+				var that = this;
 				//微博登陆
 				//后端直接根据access_token来判断用户的唯一性。
 				

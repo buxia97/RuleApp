@@ -6,7 +6,12 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					动态详情
+					<block v-if="replyType==0">
+						动态详情
+					</block>
+					<block v-else>
+						动态评论详情
+					</block>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="toSearch">
@@ -123,8 +128,8 @@
 		</view>
 		<view class="space-reply">
 			<view class="space-reply-head">
-				<text @tap="setInfoType(1)" :class="infoType==1?'cur':''">转发 <block v-if="spaceInfo.forward>0">{{formatNumber(spaceInfo.forward)}}</block></text>
-				<text class="margin-left-xl" @tap="setInfoType(0)" :class="infoType==0?'cur':''">评论 <block v-if="spaceInfo.reply>0">{{formatNumber(spaceInfo.reply)}}</block></text>
+				<text @tap="setInfoType(1)" class="margin-right-xl" :class="infoType==1?'cur':''" v-if="replyType==0">转发 <block v-if="spaceInfo.forward>0">{{formatNumber(spaceInfo.forward)}}</block></text>
+				<text  @tap="setInfoType(0)" :class="infoType==0?'cur':''">评论 <block v-if="spaceInfo.reply>0">{{formatNumber(spaceInfo.reply)}}</block></text>
 				<text class="space-reply-likes">赞 <block v-if="spaceInfo.likes>0">{{formatNumber(spaceInfo.likes)}}</block></text>
 			</view>
 			<block v-if="infoType==0">
@@ -146,7 +151,7 @@
 								<view class="text-content text-df">
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
 								</view>
-								<view class="space-reply-num padding-xs radius margin-top-sm  text-sm" v-if="item.reply>0">
+								<view class="space-reply-num padding-xs radius margin-top-sm  text-sm" v-if="item.reply>0" @tap="toReplyInfo(item.id)">
 									<text class="text-blue">共{{item.reply}}条回复<text class="cuIcon-right margin-left-xs"></text></text>
 								</view>
 								<view class="margin-top-sm flex justify-between">
@@ -232,8 +237,8 @@
 			</block>
 			
 		</view>
-		<view class="space-footer grid col-3">
-			<view class="space-footer-box" @tap="forward(spaceInfo.id)">
+		<view class="space-footer grid " :class="replyType==0?'col-3':'col-2'">
+			<view class="space-footer-box" @tap="forward(spaceInfo.id)" v-if="replyType==0">
 				<text class="cuIcon-forward"></text>
 				转发
 			</view>
@@ -275,7 +280,7 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				
-				
+				replyType:0,
 				id:0,
 				token:'',
 				
@@ -300,6 +305,8 @@
 				moreText:"加载更多",
 				dataLoad:false,
 				
+				currencyName:"",
+				
 				owo:owo,
 				owoList:[],
 				
@@ -310,7 +317,7 @@
 		onPullDownRefresh(){
 			var that = this;
 			if(that.id!=0){
-				that.getInfo();
+				that.getSpaceInfo();
 				that.getReplyList(false)
 			}
 			var timer = setTimeout(function() {
@@ -340,10 +347,15 @@
 			if(localStorage.getItem('getuid')){
 				that.toid = localStorage.getItem('getuid');
 			}
+			if(that.id!=0){
+				that.getSpaceInfo();
+				that.getReplyList(false)
+			}
 			
 		},
 		onLoad(res) {
 			var that = this;
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
@@ -355,6 +367,9 @@
 			}
 			that.owoList = owoList;
 			// #endif
+			if(res.replyType){
+				that.replyType = res.replyType;
+			}
 			if(res.id){
 				that.id = res.id;
 				that.getSpaceInfo();
@@ -972,6 +987,13 @@
 				var type="user";
 				uni.navigateTo({
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
+			toReplyInfo(id){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/space/info?id='+id+'&replyType=1'
 				});
 			},
 		}

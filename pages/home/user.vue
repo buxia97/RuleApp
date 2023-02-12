@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="toSearch">
@@ -329,7 +329,6 @@
 		},
 		onShow(){
 			var that = this;
-			console.log(this.$store.state.AppStyle);
 			// #ifdef APP-PLUS
 			uni.hideTabBar({
 				animation: false

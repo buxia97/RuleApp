@@ -163,20 +163,6 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i" style="background-color: #4a7aff;">
-								<text class="cuIcon-newfill"></text>
-							</view>
-							<view class="index-sort-text">
-								聊天室<text class="text-sm text-gray margin-left-sm">开发中</text>
-							</view>
-						</view>
-					</waves>
-					
-				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -190,7 +176,6 @@
 					</waves>
 					
 				</view>
-				<!--  #endif -->
 			</view>
 		</view>
 		<!--加载遮罩-->

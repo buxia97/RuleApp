@@ -79,13 +79,13 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" :selectable="true" :show-img-menu="true" :ImgCache="true" :scroll-table="true" :markdown="true"/>
+				<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :markdown="true"/>
 				
 				<view class="shop-value" v-if="shopValue!=''">
 					<view class="shop-value-title">
 						付费内容
 					</view>
-					<mp-html :content="shopValue" :selectable="true" :show-img-menu="true" :ImgCache="true" scroll-table="true" :markdown="true"/>
+					<mp-html :content="shopValue" :selectable="true" :show-img-menu="true"  :scroll-table="true" :markdown="true"/>
 				</view>
 				<view class="content-shop" v-if="shopValue==''">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">
@@ -274,6 +274,32 @@
 		</view>
 		<!--加载遮罩结束-->
 		<!--  #ifdef H5 || APP-PLUS -->
+		<view class="info-operate-bg" :class="isShare?'show':''" @tap="isShare=false"></view>
+		<view class="info-operate" :class="isShare?'show':''">
+			<view class="info-operate-main grid col-2">
+				<view class="index-sort-box">
+					<view class="index-sort-main" @tap="toLink('../space/post?type=1&toid='+cid)">
+						<view class="index-sort-i" style="background: rgba(21, 159, 44, 0.2);">
+							<text class="cuIcon-creativefill" style="color:  #159f2c;"></text>
+						</view>
+						<view class="index-sort-text">
+							分享到我的动态
+						</view>
+					</view>
+				</view>
+				<view class="index-sort-box">
+					<view class="index-sort-main"  @tap="ToShare">
+						<view class="index-sort-i" style="background: rgba(30, 134, 231, 0.2);">
+							<text class="cuIcon-share" style="color:  #1e86e7;"></text>
+						</view>
+						<view class="index-sort-text">
+							分享到其他应用
+						</view>
+					</view>
+				</view>
+			</view>
+			
+		</view>
 		<view class="info-footer grid col-2">
 			<view class="info-footer-input">
 				<view class="info-input-box"  @tap="commentsAdd(title,0,0)">
@@ -287,7 +313,7 @@
 				<text class="cuIcon-favorfill text-orange" @tap="rmMark" v-else></text>
 				<!-- <text class="cuIcon-recharge"  @tap="toReward"></text> -->
 				<text class="cuIcon-recharge"  @tap="showModal" data-target="ChooseModal"></text>
-				<text class="cuIcon-share text-blue" @tap="ToShare"></text>
+				<text class="cuIcon-share text-blue" @tap="isShare=!isShare"></text>
 				
 				
 			</view>
@@ -410,6 +436,8 @@
 				isFollow:0,
 				
 				currencyName:"",
+				
+				isShare:false
 				
 			}
 		},
@@ -1741,6 +1769,20 @@
 						that.getIsFollow(that.authorId);
 					}
 				})
+			},
+			toLink(text){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: text
+				});
 			},
 		}
 	}

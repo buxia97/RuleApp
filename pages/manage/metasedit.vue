@@ -274,16 +274,20 @@
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
-						uni.showToast({
-							title: res.data.msg,
-							icon: 'none'
-						})
 						if(res.data.code==1){
+							uni.showToast({
+								title: res.data.msg+"，请等待缓存生效",
+								icon: 'none'
+							})
 							var timer = setTimeout(function() {
 								that.back();
 								clearTimeout('timer')
 							}, 1000)
-							
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
 						}
 					},
 					fail: function(res) {

@@ -86,7 +86,19 @@
 								<text class="cuIcon-file"></text>
 							</view>
 							<view class="index-sort-text">
-								数据清理
+								常规数据清理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/userClean')">
+							<view class="index-sort-i">
+								<text class="cuIcon-file"></text>
+							</view>
+							<view class="index-sort-text">
+								用户数据清理
 							</view>
 						</view>
 					</waves>

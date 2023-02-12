@@ -6,24 +6,34 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					<block v-if="type==0">
-						发布新动态
+					<block v-if="postType=='add'">
+						<block v-if="type==0">
+							发布新动态
+						</block>
+						<block v-if="type==1">
+							转发文章
+						</block>
+						<block v-if="type==2">
+							转发动态
+						</block>
+						<block v-if="type==4">
+							发布视频动态
+						</block>
+						<block v-if="type==5">
+							转发商品
+						</block>
 					</block>
-					<block v-if="type==1">
-						转发文章
-					</block>
-					<block v-if="type==2">
-						转发动态
-					</block>
-					<block v-if="type==4">
-						发布视频动态
-					</block>
-					<block v-if="type==5">
-						转发商品
+					<block v-else>
+						编辑动态
 					</block>
 				</view>
 				<view class="action">
-					<button class="cu-btn round bg-gradual-orange" @tap="addSpace()">发布</button>
+					<block v-if="postType=='add'">
+						<button class="cu-btn round bg-gradual-orange" @tap="addSpace()">发布</button>
+					</block>
+					<block v-else>
+						<button class="cu-btn round bg-gradual-orange" @tap="editSpace()">保存</button>
+					</block>
 				</view>
 			</view>
 		</view>
@@ -85,11 +95,50 @@
 				</view>
 			</block>
 			<block v-if="type==2">
-				<view class="grid flex-sub padding-sm bg-white" v-if="forwardInfo!=null">
+				<view class="grid flex-sub padding-sm bg-white" v-if="forwardJson!=null">
 					
 					<view class="user-space-info">
 						<view class="user-space-text">
-							<text class="text-blue">@老实人：</text>{{forwardInfo.text}}
+							<text class="text-blue">@{{forwardJson.userJson.name}}：</text>{{forwardJson.text}}
+						</view>
+					</view>
+				</view>
+			</block>
+			<block  v-if="type==1">
+				<view class="grid flex-sub padding-lr margin-top-sm" v-if="contentJson!=null&&contentJson.cid!=0">
+					<view class="user-post-info">
+						<view class="user-post-pic" v-if="contentJson.images.length>0">
+							<image :src="contentJson.images[0]" mode="widthFix"></image>
+						</view>
+						<view class="user-post-text">
+							<view class="user-post-title">
+								{{contentJson.title}}
+							</view>
+							<view class="user-post-intro">
+								{{contentJson.text}}
+							</view>
+						</view>
+					</view>
+				</view>
+			</block>
+			<block  v-if="type==5">
+				<view class="grid flex-sub padding-lr" v-if="shopJson!=null&&shopJson.id!=0">
+					<view class="user-post-info">
+						<view class="user-post-pic">
+							<image :src="shopJson.imgurl" mode="widthFix"></image>
+						</view>
+						<view class="user-post-text">
+							<view class="user-post-title">
+								{{shopJson.title}}
+							</view>
+							<view class="user-post-intro">
+								<text class="text-red text-lg text-bold">{{parseInt(shopJson.price)}} {{currencyName}}</text>
+								
+							</view>
+							<view class="user-post-intro">
+								<text class="text-gray text-sm">剩余数量：{{shopJson.num}}</text>
+								
+							</view>
 						</view>
 					</view>
 				</view>
@@ -126,19 +175,25 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
 				
+				id:0,
+				postType:"add",
 				type:0,
 				text:"",
 				toid:0,
 				pic:"",
 				picList:[],
 				token:"",
+				currencyName:"",
 				
-				forwardInfo:null,
+				forwardJson:null,
+				contentJson:null,
+				shopJson:null,
 				
 				isOwO:false,
 				owo:owo,
 				owoList:[],
 				OwOtype:"paopao",
+				
 				
 				
 				
@@ -164,6 +219,7 @@
 		},
 		onLoad(res) {
 			var that = this;
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
@@ -173,10 +229,25 @@
 			if(res.type){
 				that.type = res.type;
 			}
+			if(res.toid){
+				that.toid = res.toid;
+				that.getInfo()
+			}
+			
+			
+			if(res.postType){
+				that.postType = res.postType;
+			}
 			if(res.id){
 				that.id = res.id;
-				that.getSpaceInfo();
+				if(that.postType=='add'){
+					that.getForwardInfo(that.id);
+				}else{
+					that.getSpaceInfo();
+				}
+				
 			}
+			
 		},
 		methods: {
 			back(){
@@ -210,6 +281,33 @@
 				var that = this;
 				that.isOwO = !that.isOwO;
 			},
+			getForwardInfo(toid){
+				var that = this;
+				var data = {
+					"id":toid
+				}
+				that.$Net.request({
+					url: that.$API.spaceInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoading=1;
+						if(res.data.code==1){
+							that.forwardJson = res.data.data;
+							that.toid = res.data.data.id;
+							
+						}
+					},
+					fail: function(res) {
+						that.isLoading=1;
+					}
+				});
+				
+			},
 			getSpaceInfo(){
 				var that = this;
 				var data = {
@@ -226,8 +324,27 @@
 					success: function(res) {
 						that.isLoading=1;
 						if(res.data.code==1){
-							that.forwardInfo = res.data.data;
-							that.toid = res.data.data.id;
+							that.id = res.data.data.id;
+							that.type = res.data.data.type;
+							that.text = res.data.data.text;
+							that.toid = res.data.data.toid;
+							that.pic = res.data.data.pic;
+							if(that.type==0){
+								if(that.pic.indexOf("||"!=-1)){
+									that.picList = that.pic.split("||");
+								}else{
+									that.picList = that.picList.push(that.pic);
+								}
+							}
+							if(that.type==1){
+								that.contentJson = res.data.data.contentJson;
+							}
+							if(that.type==5){
+								that.shopJson = res.data.data.shopJson;
+							}
+							if(that.type==2){
+								that.getForwardInfo(that.toid);
+							}
 							
 						}
 					},
@@ -236,6 +353,34 @@
 					}
 				});
 				
+			},
+			getInfo(){
+				var that = this;
+				var data = {
+					"key":that.toid,
+					"isMd":0,
+				}
+				
+				that.$Net.request({
+					url: that.$API.getContentsInfo(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						uni.stopPullDownRefresh();
+						if(res.data.title){
+							that.contentJson = res.data;
+
+							
+						}
+					},
+					fail: function(res) {
+						uni.stopPullDownRefresh();
+					}
+				})
 			},
 			addSpace(){
 				var that = this;
@@ -306,6 +451,109 @@
 				that.$Net.request({
 					
 					url: that.$API.addSpace(),
+					data:that.$API.removeObjectEmptyKey(data),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+						if(res.data.code==1){
+							var timer = setTimeout(function() {
+								that.back();
+							}, 1000)
+							
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						uni.stopPullDownRefresh()
+					}
+				})
+			},
+			editSpace(){
+				var that = this;
+				if(that.token==""){
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					
+					var timer = setTimeout(function() {
+						uni.navigateTo({
+						    url: '/pages/user/login'
+						});
+						clearTimeout('timer')
+					}, 1000)
+					return false
+				}
+				if(that.type==2){
+					if (that.text == "") {
+						text = "转发了动态"
+					}
+				}
+				if (that.text == "") {
+					uni.showToast({
+					    title:"请输入动态内容",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var text  = that.text;
+				if(that.type==0){
+					var picList = that.picList;
+					var pic = "";
+					for(var i in picList){
+						if(i==0){
+							pic += picList[i];
+						}else{
+							pic += "||"+picList[i];
+						}
+					}
+					that.pic = pic;
+				}
+				if(that.type==4){
+					if(that.pic==""){
+						uni.showToast({
+						    title:"请上传视频文件",
+							icon:'none',
+							duration: 1000,
+							position:'bottom',
+						});
+						return false;
+					}
+				}
+				var data = {
+					id:that.id,
+					type:that.type,
+					text:text,
+					toid:that.toid,
+					pic:that.pic,
+					token:that.token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.editSpace(),
 					data:that.$API.removeObjectEmptyKey(data),
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

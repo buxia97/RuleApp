@@ -1,6 +1,7 @@
 <template>
 	
     <view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}" >
+		<view class="tabbar-operate-bg" :class="isPost?'show':''" @tap="isPost=false"></view>
 		<view class="tabbar-operate" :class="isPost?'show':''">
 			<view class="tabbar-operate-main grid col-3">
 				<view class="index-sort-box">
@@ -106,6 +107,7 @@ export default {
     },
     methods: {
         tabbarChange(path) {
+			this.isPost = false;
             uni.switchTab({
                 url: path
             })
@@ -237,5 +239,21 @@ export default {
 	.tabbar-operate-main .index-sort-text{
 		font-size: 28upx;
 		font-weight: bold;
+	}
+	.tabbar-operate-bg{
+		position: fixed;
+		background-color: #000;
+		width: 100%;
+		height: 100vh;
+		opacity: 0;
+		z-index: -30;
+		left: 0px;
+		top: 0px;
+		transition: 0.2s all;
+		visibility:hidden;
+	}
+	.tabbar-operate-bg.show{
+		opacity: 0.3;
+		visibility:visible;
 	}
 </style>

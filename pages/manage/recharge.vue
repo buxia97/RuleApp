@@ -29,8 +29,8 @@
 				</view>
 			</view>
 			<view class="cu-form-group">
-				<view class="title">用户ID</view>
-				<input placeholder="请输入用户ID" name="input" type="number" v-model="toid"></input>
+				<view class="title">用户UID</view>
+				<input placeholder="请输入用户UID" name="input" type="number" v-model="toid"></input>
 				<view class="action">
 					<text class="text-blue" @tap="toUser">选择用户</text>
 				</view>
@@ -100,6 +100,7 @@
 			
 			if(localStorage.getItem('getuid')){
 				that.toid = localStorage.getItem('getuid');
+				localStorage.removeItem('getuid');
 			}
 			
 		},

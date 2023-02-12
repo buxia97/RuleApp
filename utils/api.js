@@ -231,6 +231,9 @@ module.exports = {
 	violationList:function(){
 		return API_URL + 'typechoUsers/violationList';
 	},
+	userClean:function(){
+		return API_URL + 'typechoUsers/userClean';
+	},
 	
 	
 	
