@@ -78,7 +78,7 @@
 									</view>
 									<view class="user-post-text">
 										<view class="user-post-title">
-											{{item.contentJson.title}}
+											{{replaceSpecialChar(item.contentJson.title)}}
 										</view>
 										<view class="user-post-intro">
 											{{item.contentJson.text}}
@@ -101,7 +101,7 @@
 							<block v-else>
 								<view class="user-space-info" @tap="toInfo(item.forwardJson.id)">
 									<view class="user-space-text">
-										<text class="text-blue">@{{item.forwardJson.username}}：</text>{{item.forwardJson.text}}
+										<text class="text-blue">@{{item.forwardJson.username}}：</text><rich-text :nodes="markHtml(item.forwardJson.text)"></rich-text>
 									</view>
 									
 									<view class="grid flex-sub col-3 grid-square margin-top-xs" v-if="item.forwardJson.picList.length>0">
@@ -145,7 +145,7 @@
 									</view>
 									<view class="user-post-text">
 										<view class="user-post-title">
-											{{item.shopJson.title}}
+											{{replaceSpecialChar(item.shopJson.title)}}
 										</view>
 										<view class="user-post-intro">
 											<text class="text-red text-lg text-bold">{{parseInt(item.shopJson.price)}} {{currencyName}}</text>
@@ -354,7 +354,19 @@
 						
 					}
 				}
+				text = that.TransferString(text);
 				return text;
+			},
+			TransferString(content)
+			{  
+			    var string = content;  
+			    try{  
+			        string=string.replace(/\r\n/g,"<br>")  
+			        string=string.replace(/\n/g,"<br>");  
+			    }catch(e) {  
+			        return content;
+			    }  
+			    return string;  
 			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);

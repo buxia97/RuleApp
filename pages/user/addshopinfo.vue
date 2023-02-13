@@ -43,6 +43,7 @@
 				<text @tap="toBold">B</text>
 				<text @tap="toItalic">I</text>
 				<text class="cuIcon-picfill" @tap="upload"></text>
+				<text class="cuIcon-playfill" @tap="uploadVideo"></text>
 				<text class="cuIcon-font" @tap="toCode"></text>
 				<text class="cuIcon-link" @tap="showModal" data-target="LinksModal"></text>
 				<text class="cuIcon-read" @tap="toIsShow"></text>
@@ -456,6 +457,7 @@
 				let that = this				
 				uni.chooseImage({
 					count: 1,  // 最多可以选择的图片张数，默认9
+					sizeType:['original'],
 					sourceType: ['album', 'camera'], 
 				    success: function (res) {						
 						uni.showLoading({

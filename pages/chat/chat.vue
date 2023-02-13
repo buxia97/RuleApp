@@ -220,6 +220,7 @@
 				isOwO:false,
 				owo:owo,
 				owoList:[],
+				owoTextList:[],
 				OwOtype:"paopao",
 				
 				groupUserName:"",
@@ -296,6 +297,7 @@
 			});
 			// #endif
 			// #ifdef APP-PLUS || H5
+			that.owoTextList = that.owo.data.paopao.container;
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
 		},
@@ -926,7 +928,7 @@
 				text = that.replaceAll(text,"<","&lt;");
 				text = that.replaceAll(text,">","&gt;");
 				// #ifdef APP-PLUS || H5
-				var owoList=that.owoList;
+				var owoList=that.owoTextList;
 				for(var i in owoList){
 				
 					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){

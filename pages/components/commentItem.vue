@@ -34,7 +34,13 @@
 							<rich-text :nodes="markHtml(item.text)"></rich-text>
 							
 						</view>
-						<view class="bg-grey light padding-sm radius margin-top-sm  text-sm">
+						<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.parent>0&&isContent">
+							<view class="flex">
+								<view v-if="item.parentComments.author">{{item.parentComments.author}}：</view>
+								<view class="flex-sub break-all"><rich-text :nodes="markHtml(item.parentComments.text)"></rich-text></view>
+							</view>
+						</view>
+						<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="!isContent">
 							<view class="flex" @tap="toInfo(item.cid,item.contenTitle)">
 								<view class="break-all">{{replaceSpecialChar(item.contenTitle)}}</view>
 								
@@ -79,6 +85,10 @@
 			isHead: {
 			  type: Boolean,
 			  default: true
+			},
+			isContent: {
+			  type: Boolean,
+			  default: false
 			}
 	    },
 		name: "commentItem",

@@ -237,7 +237,7 @@
 				<view class="cu-item" @tap="toSetUp">
 					<view class="content">
 						<text class="cuIcon-settingsfill text-blue"></text>
-						<text>系统设置</text>
+						<text>账户和设置</text>
 					</view>
 					<view class="action">
 						<text class="cuIcon-right"></text>

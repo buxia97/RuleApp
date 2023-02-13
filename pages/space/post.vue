@@ -591,6 +591,7 @@
 				let that = this				
 				uni.chooseImage({
 					count: 9,  // 最多可以选择的图片张数，默认9
+					sizeType:['original'],
 					sourceType: ['album', 'camera'], 
 				    success: function (res) {						
 						uni.showLoading({
@@ -640,6 +641,7 @@
 				
 				uni.chooseVideo({
 					sourceType: ['camera', 'album'],
+					compressed:false,
 					success: (responent) => {
 						uni.showLoading({
 							title: "加载中"

@@ -302,6 +302,7 @@
 				isLoad:0,
 				isLoading:0,
 				page:1,
+				pageSize:10,
 				moreText:"加载更多",
 				dataLoad:false,
 				
@@ -513,7 +514,19 @@
 						
 					}
 				}
+				text = that.TransferString(text);
 				return text;
+			},
+			TransferString(content)
+			{  
+			    var string = content;  
+			    try{  
+			        string=string.replace(/\r\n/g,"<br>")  
+			        string=string.replace(/\n/g,"<br>");  
+			    }catch(e) {  
+			        return content;
+			    }  
+			    return string;  
 			},
 			replaceAll(string, search, replace) {
 			  return string.split(search).join(replace);
@@ -585,7 +598,7 @@
 					url: that.$API.spaceList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
-						"limit":10,
+						"limit":that.pageSize,
 						"page":page,
 						"order":"created",
 						"token":token
@@ -661,7 +674,7 @@
 					url: that.$API.spaceList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
-						"limit":10,
+						"limit":that.pageSize,
 						"page":page,
 						"order":"created",
 						"token":token

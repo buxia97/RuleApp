@@ -425,7 +425,9 @@
 			
 			// #ifdef APP-PLUS
 			//外部启动APP处理
-			var args= plus.runtime.arguments;  
+			var args= plus.runtime.arguments;
+			plus.runtime.arguments=null;
+			plus.runtime.arguments="";
 			if(args){  
 				
 				//跳转到文章
@@ -440,7 +442,7 @@
 					var arr = args.split("?scan=");
 					that.scanLogin(arr[1]);
 				}
-			} 
+			}
 			// #endif
 			
 			

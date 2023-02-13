@@ -592,6 +592,7 @@
 				uni.chooseImage({
 					count: 9,  // 最多可以选择的图片张数，默认9
 					sourceType: ['album', 'camera'], 
+					sizeType:['original'],
 				    success: function (res) {						
 						uni.showLoading({
 							title: "加载中"
@@ -647,6 +648,7 @@
 				
 				uni.chooseVideo({
 					sourceType: ['camera', 'album'],
+					compressed:false,
 					success: (responent) => {
 						uni.showLoading({
 							title: "加载中"
@@ -674,10 +676,7 @@
 								   if(that.text!=""){
 								   	h="\n";
 								   }
-								   var text = h+`
-								   !!!!
-								   <video src="${data.data.url}" controls width="100%"></video>
-								   !!!!
+								   var text = h+`\n!!!\n<video src="${data.data.url}" controls width="100%"></video>\n!!!
 								   `;
 								   //that.text+=text;
 								   that.insetText(text);

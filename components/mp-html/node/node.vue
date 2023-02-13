@@ -733,7 +733,7 @@ myAudio,
 		  this.root.navigateTo(href.substring(1)).catch(() => { })
 		} else if (href.split('?')[0].includes('://')) {
 			//判断链接是否为站内链接
-			var linkRule = API.GetLinkRule();
+			var linkRule = this.$API.GetLinkRule();
 			var linkRuleArr = linkRule.split("{cid}");
 			if(href.indexOf(linkRuleArr[0])!=-1){
 				//是本站链接

@@ -14,6 +14,22 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="cu-list menu margin-top">
+			<view class="cu-item">
+				<view class="content">
+					<text>账号状态</text>
+				</view>
+				<view class="action">
+					<block v-if="systemBan==-1">
+						<text class="text-blue">获取中…</text>
+					</block>
+					<block v-if="systemBan==1">
+						<text class="text-red">功能限制</text>
+					</block>
+					<block v-if="systemBan==0">
+						<text class="text-green">正常</text>
+					</block>
+				</view>
+			</view>
 			<view class="cu-item" @tap="rmlocal">
 				<view class="content">
 					<text>清除缓存</text>
@@ -53,9 +69,10 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				localdata: '',
+				systemBan:"-1",
 				
 				versionCode:0,
 				wgtVer:'',
@@ -98,6 +115,7 @@
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.get_cache_size();
+			that.getUserData();
 		},
 		methods: {
 			back(){
@@ -118,6 +136,33 @@
 				        }
 				    }
 				});
+			},
+			getUserData() {
+				var that = this;
+				that.$Net.request({
+					
+					url: that.$API.getUserData(),
+					data:{
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							that.systemBan = res.data.data.systemBan;
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			closeLocal() {
 				var that = this

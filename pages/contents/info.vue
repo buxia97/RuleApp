@@ -79,7 +79,7 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :markdown="true"/>
+				<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :markdown="true" :lazy-load="false"/>
 				
 				<view class="shop-value" v-if="shopValue!=''">
 					<view class="shop-value-title">
@@ -237,7 +237,7 @@
 				</view>
 				<view class="cu-card dynamic no-card info-comment" style="margin-top: 20upx;">
 					<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-						<commentItem :item="item"></commentItem>
+						<commentItem :item="item" :isContent="true"></commentItem>
 					</block>
 				</view>
 				
@@ -636,18 +636,6 @@
 				//下面奇怪的代码是为了解决可执行代码区域问题
 				text = that.replaceAll(text,"@!!!","@@@@");
 				
-
-				
-				// var code = /!!!(([\s\S])*?)!!!/g;
-				// var result = text.match(code);
-				// for(var i in result){
-				// 	var str = result[i];
-				// 	str = that.replaceAll(str,"&lt;","<");
-				// 	str = that.replaceAll(str,"&gt;",">");
-				// 	text = that.replaceAll(text,result[i],str);
-				// }
-
-				
 				text = that.replaceAll(text,"!!!","");
 				text = that.replaceAll(text,"@@@@","@!!!");
 				
@@ -676,6 +664,7 @@
 				return text;
 				
 			},
+			
 			markCommentHtml(text){
 				var that = this;
 				// #ifdef APP-PLUS || H5
