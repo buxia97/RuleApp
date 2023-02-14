@@ -297,7 +297,13 @@
 			});
 			// #endif
 			// #ifdef APP-PLUS || H5
-			that.owoTextList = that.owo.data.paopao.container;
+			//that.owoTextList = that.owo.data.paopao.container;
+			var owo = that.owo.data;
+			var owoList=[];
+			for(var i in owo){
+				owoList = owoList.concat(owo[i].container);
+			}
+			that.owoTextList = owoList;
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
 		},

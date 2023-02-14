@@ -17,12 +17,15 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			<view class="search-type grid col-2">
+			<view class="search-type grid col-3">
 				<view class="search-type-box" @tap="toType('waiting')" :class="type=='waiting'?'active':''">
 					<text>待审核</text>
 				</view>
 				<view class="search-type-box" @tap="toType('publish')" :class="type=='publish'?'active':''">
 					<text>已发布</text>
+				</view>
+				<view class="search-type-box" @tap="toType('reject')" :class="type=='reject'?'active':''">
+					<text>已拒绝</text>
 				</view>
 			</view>
 			<view class="cu-card article no-card">

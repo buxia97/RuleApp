@@ -16,7 +16,7 @@
 		<view class="cu-list menu margin-top">
 			<view class="cu-item">
 				<view class="content">
-					<text>账号状态</text>
+					<text>账号状态<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="Modal"></text></text>
 				</view>
 				<view class="action">
 					<block v-if="systemBan==-1">
@@ -57,6 +57,19 @@
 			</view>
 			
 		</view>
+		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">账号状态说明</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					如果您的账号存在刷评论、文章、动态，或频繁出现疑似非人工操作行为，即会进入<text class="text-red text-bold">功能限制</text>状态，该状态持续时间为10-30分钟，期间平台内部分功能将操作受限，并且无法以任何方式解除。
+				</view>
+			</view>
+		</view>
 		
 	</view>
 </template>
@@ -70,6 +83,8 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
+				
+				modalName: null,
 				
 				localdata: '',
 				systemBan:"-1",
@@ -103,10 +118,7 @@
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				//that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 			}
-			if(localStorage.getItem('token')){
-				
-				that.token = localStorage.getItem('token');
-			}
+			
 			
 		},
 		onLoad() {
@@ -114,6 +126,10 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(localStorage.getItem('token')){
+				
+				that.token = localStorage.getItem('token');
+			}
 			that.get_cache_size();
 			that.getUserData();
 		},
@@ -122,6 +138,12 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			rmlocal(){
 				var that = this;

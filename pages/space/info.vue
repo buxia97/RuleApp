@@ -424,6 +424,13 @@
 							}else{
 								that.spaceInfo.picList = [];
 							}
+							if(res.data.data.forwardJson){
+								if(res.data.data.forwardJson.pic&&res.data.data.forwardJson.pic!=""){
+									that.spaceInfo.forwardJson.picList = res.data.data.forwardJson.pic.split("||");
+								}else{
+									that.spaceInfo.forwardJson.picList = [];
+								}
+							}
 						}
 					},
 					fail: function(res) {
@@ -514,6 +521,7 @@
 						
 					}
 				}
+				text = that.replaceAll(text,"/r/n","<br>");
 				text = that.TransferString(text);
 				return text;
 			},

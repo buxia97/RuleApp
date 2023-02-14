@@ -22,12 +22,15 @@
 					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
-			<view class="search-type grid col-2">
+			<view class="search-type grid col-3">
 				<view class="search-type-box" @tap="toType('waiting')" :class="type=='waiting'?'active':''">
 					<text>待审核</text>
 				</view>
 				<view class="search-type-box" @tap="toType('publish')" :class="type=='publish'?'active':''">
 					<text>已发布</text>
+				</view>
+				<view class="search-type-box" @tap="toType('reject')" :class="type=='reject'?'active':''">
+					<text>已拒绝</text>
 				</view>
 			</view>
 			
@@ -48,14 +51,16 @@
 							<view>
 								<view class="cu-tag bg-green light sm round" v-if="item.status=='publish'">已发布</view>
 								<view class="cu-tag bg-orange light sm round" v-if="item.status=='waiting'">待审核</view>
+								<view class="cu-tag bg-red light sm round" v-if="item.status=='reject'">已拒绝</view>
 								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
 							</view>
 						</view>
 						
 					</view>
 					<view class="manage-btn">
-						<text class="text-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid)">快捷审核</text>
-						<block v-if="item.status!='waiting'&&group=='administrator'">
+						<text class="text-green radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid,0)">通过</text>
+						<text class="text-yellow radius"  v-if="item.status=='waiting'" @tap="toAudit(item.cid,1)">拒绝</text>
+						<block v-if="item.status=='publish'&&group=='administrator'">
 							<text class="text-green radius" v-if="item.isrecommend==0"  @tap="addRecommend(item.cid)">推荐</text>
 							<text class="text-grey radius" v-else  @tap="rmRecommend(item.cid)">取消推荐</text>
 							<text class="text-green radius" v-if="item.istop==0"  @tap="addTop(item.cid)">置顶</text>
@@ -100,6 +105,26 @@
 				</radio-group>
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='reject'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">输入拒绝理由</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					<textarea maxlength="-1" v-model="reason" placeholder="输入拒绝理由" style="width: 100%;height: 150upx;"></textarea>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="toAudit(curCid,1)">确定</button>
+		
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -123,6 +148,9 @@
 				searchText:"",
 				
 				type:"waiting",
+				
+				reason:"",
+				curCid:0,
 				
 				isLoading:0,
 				
@@ -361,20 +389,33 @@
 				// 返回
 				return result;
 			},
-			toAudit(id){
+			toAudit(id,type){
 				var that = this;
 				var token = "";
-				
+				that.modalName=null;
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
+				if(type==1){
+					if(that.reason==""){
+						that.modalName='reject';
+						that.curCid = id;
+						return false
+					}
+				}
+				var alert = "确定要审核通过该文章吗？";
+				if(type==1){
+					alert = "确定要拒绝该文章吗？";
+				}
 				var data = {
+					"type":type,
 					"key":id,
-					"token":token
+					"token":token,
+					"reason":that.reason
 				}
 				uni.showModal({
-				    title: '确定要审核通过该文章吗？',
+				    title: alert,
 				    success: function (res) {
 				        if (res.confirm) {
 				            uni.showLoading({
@@ -403,6 +444,8 @@
 				            			that.isLoad=0;
 				            			that.getContentsList();
 				            		}
+									that.reason="";
+									that.curCid=0;
 				            		
 				            	},
 				            	fail: function(res) {

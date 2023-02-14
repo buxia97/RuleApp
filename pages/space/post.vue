@@ -438,6 +438,8 @@
 						return false;
 					}
 				}
+				text = text.replace(/\r\n/g,"/r/n");
+				text = text.replace(/\n/g,"/r/n");
 				var data = {
 					type:that.type,
 					text:text,
@@ -540,6 +542,8 @@
 						return false;
 					}
 				}
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				var data = {
 					id:that.id,
 					type:that.type,

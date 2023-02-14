@@ -360,6 +360,7 @@
 							that.vip = res.data.data.vip;
 							that.isvip = res.data.data.isvip;
 							that.lv = res.data.data.lv;
+							that.avatar = res.data.data.avatar;
 							that.customize = res.data.data.customize;
 							that.introduce = res.data.data.introduce;
 						}

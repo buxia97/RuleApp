@@ -755,6 +755,9 @@
 					'tag':that.tag,
 					'sid':that.shopID
 				}
+				var text = that.text;
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -764,7 +767,7 @@
 					data:{
 						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
-						'text':that.text,
+						'text':text,
 						"isSpace":isSpace,
 					},
 					header:{
@@ -822,13 +825,16 @@
 				uni.showLoading({
 					title: "加载中"
 				});
+				var text = that.text;
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				that.$Net.request({
 					
 					url: that.$API.contentsUpdate(),
 					data:{
 						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
-						'text':that.text
+						'text':text
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

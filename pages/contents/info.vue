@@ -661,6 +661,7 @@
 				}
 				// #endif
 				
+				text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
 				return text;
 				
 			},

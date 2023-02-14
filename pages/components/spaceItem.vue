@@ -354,6 +354,7 @@
 						
 					}
 				}
+				text = that.replaceAll(text,"/r/n","<br>");
 				text = that.TransferString(text);
 				return text;
 			},
