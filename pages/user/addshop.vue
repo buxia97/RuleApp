@@ -619,6 +619,7 @@
 				if(that.isSpace){
 					isSpace = 1;
 				}
+				
 				var data = {
 					'title':that.title,
 					'type':that.category,
@@ -631,14 +632,16 @@
 				uni.showLoading({
 					title: "加载中"
 				});
-				
+				var text = that.text;
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				that.$Net.request({
 					
 					url: that.$API.addShop(),
 					data:{
 						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
-						'text':that.text,
+						'text':text,
 						'isSpace':isSpace
 					},
 					header:{
@@ -706,6 +709,9 @@
 					'value':userShopinfo.value,
 					'vipDiscount':userShopinfo.vipDiscount,
 				}
+				var text = that.text;
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				uni.showLoading({
 					title: "加载中"
 				});

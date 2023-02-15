@@ -662,6 +662,7 @@
 				// #endif
 				
 				text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
+				text = that.replaceAll(text,"||rn||","\n\n");
 				return text;
 				
 			},

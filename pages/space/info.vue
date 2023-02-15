@@ -26,7 +26,9 @@
 				<view class="cu-list menu-avatar" v-if="spaceInfo.userJson">
 					<view class="cu-item">
 						<view class="cu-avatar round lg"  :style="'background-image:url('+spaceInfo.userJson.avatar+');'">
+							<!--  #ifdef H5 || APP-PLUS -->
 							<view class="curLv" :style="getLvStyle(spaceInfo.userJson.experience)">{{getLv(spaceInfo.userJson.experience)}}</view>
+							<!--  #endif -->
 						</view>
 						<view class="content flex-sub">
 							<view>{{spaceInfo.userJson.name}}
@@ -522,6 +524,7 @@
 					}
 				}
 				text = that.replaceAll(text,"/r/n","<br>");
+				text =that.replaceAll(text,"||rn||","<br>");
 				text = that.TransferString(text);
 				return text;
 			},
@@ -531,6 +534,7 @@
 			    try{  
 			        string=string.replace(/\r\n/g,"<br>")  
 			        string=string.replace(/\n/g,"<br>");  
+					
 			    }catch(e) {  
 			        return content;
 			    }  

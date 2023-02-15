@@ -53,12 +53,21 @@ import markdown from './markdown/index.js'
 import audio from './audio/index.js'
 import emoji from './emoji/index.js'
 import highlight from './highlight/index.js'
+// #ifdef APP-PLUS || H5
 import latex from './latex/index.js'
+// #endif
+
 import search from './search/index.js'
 import style from './style/index.js'
 import imgCache from './img-cache/index.js'
 import editable from './editable/index.js'
+// #ifdef APP-PLUS || H5
 const plugins=[markdown,audio,emoji,highlight,latex,search,style,imgCache,editable,]
+// #endif
+// #ifdef MP
+const plugins=[markdown,audio,emoji,highlight,search,style,imgCache,editable,]
+// #endif
+
 // #ifdef APP-PLUS-NVUE
 const dom = weex.requireModule('dom')
 // #endif

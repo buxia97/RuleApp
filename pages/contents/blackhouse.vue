@@ -84,7 +84,11 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.page = 1;
+			that.getUserList(false);
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的

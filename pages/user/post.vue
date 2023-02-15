@@ -367,7 +367,7 @@
 			//
 			//that.poststyle = "height:200upx";
 			that.poststyle = "height:"+inputHeight+"px";
-			that.readstyle = "height:"+(inputHeight+30)+"px";
+			that.readstyle = "height:"+(inputHeight+30)+"px;white-space: pre-wrap;";
 			// #ifdef H5
 			//that.h5Keyboard();
 			// #endif
@@ -407,6 +407,9 @@
 						
 					}
 				}
+				console.log(JSON.stringify(text));
+				text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
+				text = that.replaceAll(text,"||rn||","\n\n");
 				return text;
 			},
 			replaceSpecialChar(text) {

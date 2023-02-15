@@ -2523,3 +2523,37 @@ page{
 .search-space{
 	background-color: #f6f6f6;
 }
+.videoPlay{
+	position: fixed;
+	z-index: 1000;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100vh;
+}
+.videoPlay-bg{
+	position: fixed;
+	z-index: 1;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	background-color: #111;
+	height: 100vh;
+}
+.videoPlay video{
+	position: absolute;
+	height: 500upx;
+	width: 100%;
+	top:50%;
+	margin-top:-250upx;
+}
+.spaceVideo-play{
+	width: 100%;
+	border-radius: 8upx;
+	background-color: #000;
+	font-size: 70upx;
+	color:#fff;
+	text-align: center;
+	height: 400upx;
+	line-height: 400upx;
+}

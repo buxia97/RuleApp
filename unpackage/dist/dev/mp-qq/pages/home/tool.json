@@ -1,6 +1,0 @@
-{
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "waves": "/components/xxley-waves/waves"
-  }
-}

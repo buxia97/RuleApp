@@ -125,8 +125,8 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toRand">
-							<view class="index-sort-i" style="background: rgba(170,85,255, 0.2);">
-								<text class="cuIcon-refresh" style="color:  #aa55ff;"></text>
+							<view class="index-sort-i" style="background: rgba(255,51,51, 0.2);">
+								<text class="cuIcon-refresh" style="color:  #ff3333;"></text>
 							</view>
 							<view class="index-sort-text">
 								随机阅读

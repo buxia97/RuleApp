@@ -1,6 +1,0 @@
-{
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "mp-html": "/components/mp-html/mp-html"
-  }
-}

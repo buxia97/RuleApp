@@ -30,7 +30,7 @@
 			</view>
 			<block v-for="(item,index) in msgList">
 				<view class="cu-item " :class="item.uid==uid?'self':''" v-if="item.type!=4">
-					<view class="cu-avatar radius"  v-if="item.uid!=uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+					<view class="cu-avatar radius" @tap="toUserContents(item.userJson)"  v-if="item.uid!=uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 					<view class="main">
 						<block v-if="item.type==0">
 							<view class="content shadow" :class="item.uid==uid?'bg-green':''" @longtap="ToCopy(item.text)">
@@ -1099,6 +1099,16 @@
 				var chatid = that.chatid;
 				uni.navigateTo({
 				    url: '/pages/manage/addGroup?chatid='+chatid+"&postType=edit"
+				});
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			},
 		}

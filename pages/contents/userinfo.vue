@@ -101,6 +101,15 @@
 				</view>
 				
 			</view>
+			<!--  #endif MP -->
+			<view class="search-type grid col-2">
+				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
+					<text>文章</text>
+				</view>
+				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
+					<text>动态</text>
+				</view>
+			</view>
 			<!--  #endif -->
 			
 			<view class="cu-card article no-card" v-if="type==0">

@@ -28,12 +28,14 @@
 					</block>
 				</view>
 				<view class="action">
+					<!--  #ifdef H5 || APP-PLUS -->
 					<block v-if="postType=='add'">
 						<button class="cu-btn round bg-gradual-orange" @tap="addSpace()">发布</button>
 					</block>
 					<block v-else>
 						<button class="cu-btn round bg-gradual-orange" @tap="editSpace()">保存</button>
 					</block>
+					<!--  #endif -->
 				</view>
 			</view>
 		</view>
@@ -89,8 +91,8 @@
 					<view class="space-upload" v-if="pic == ''" @tap="uploadVideo">
 						<text class="cuIcon-add"></text>
 					</view>
-					<view class="space-upload bg-black" v-if="pic != ''">
-						<text class="cuIcon-close" @tap="pic=''"></text>
+					<view class="space-upload " v-if="pic != ''">
+						<text class="cuIcon-close bg-black" @tap="pic=''"></text>
 					</view>
 				</view>
 			</block>
@@ -146,7 +148,13 @@
 			<!--  #ifdef MP -->
 			<view class="all-btn">
 				<view class="user-btn flex flex-direction">
-					<button class="cu-btn bg-cyan margin-tb-sm lg" @tap="commentsadd">发布</button>
+					<block v-if="postType=='add'">		
+						<button class="cu-btn bg-gradual-orange margin-tb-sm lg" @tap="addSpace()">发布</button>
+					</block>
+					<block v-else>
+						<button class="cu-btn bg-gradual-orange margin-tb-sm lg" @tap="editSpace()">保存</button>
+					</block>
+					
 					
 				</view>
 			</view>
@@ -308,6 +316,9 @@
 				});
 				
 			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
+			},
 			getSpaceInfo(){
 				var that = this;
 				var data = {
@@ -326,16 +337,22 @@
 						if(res.data.code==1){
 							that.id = res.data.data.id;
 							that.type = res.data.data.type;
-							that.text = res.data.data.text;
+							var text = res.data.data.text;
+							text = that.replaceAll(text,"/r/n","\n");
+							text = that.replaceAll(text,"||rn||","\n");
+							that.text = text;
 							that.toid = res.data.data.toid;
-							that.pic = res.data.data.pic;
-							if(that.type==0){
-								if(that.pic.indexOf("||"!=-1)){
-									that.picList = that.pic.split("||");
-								}else{
-									that.picList = that.picList.push(that.pic);
+							if(res.data.data.pic){
+								that.pic = res.data.data.pic;
+								if(that.type==0){
+									if(that.pic.indexOf("||")!=-1){
+										that.picList = that.pic.split("||");
+									}else{
+										that.picList = that.picList.push(that.pic);
+									}
 								}
 							}
+							
 							if(that.type==1){
 								that.contentJson = res.data.data.contentJson;
 							}
@@ -373,6 +390,7 @@
 						uni.stopPullDownRefresh();
 						if(res.data.title){
 							that.contentJson = res.data;
+							
 
 							
 						}
@@ -438,8 +456,8 @@
 						return false;
 					}
 				}
-				text = text.replace(/\r\n/g,"/r/n");
-				text = text.replace(/\n/g,"/r/n");
+				text = text.replace(/\r\n/g,"||rn||");
+				text = text.replace(/\n/g,"||rn||");
 				var data = {
 					type:that.type,
 					text:text,

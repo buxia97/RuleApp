@@ -6,7 +6,9 @@
 					<view class="cu-list menu-avatar">
 						<view class="cu-item">
 							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)">
+								<!--  #ifdef H5 || APP-PLUS -->
 								<view class="curLv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</view>
+								<!--  #endif -->
 							</view>
 							<view class="content flex-sub">
 								<view>{{item.userJson.name}}
@@ -116,7 +118,15 @@
 					</block>
 					<block  v-if="item.type==4">
 						<view class="padding-lr spaceVideo">
+							<!--  #ifdef H5 || MP-->
 							<video :src="item.pic"></video>
+							<!--  #endif -->
+							<!--  #ifdef APP-PLUS -->
+							<view class="spaceVideo-play" @tap="goPlay(item.pic)">
+								<text class="cuIcon-playfill"></text>
+							</view>
+							<!--  #endif -->
+							
 						</view>
 					</block>
 					<block  v-if="item.type==5">
@@ -193,6 +203,10 @@
 				</view>
 			</block>
 		</view>
+		<view class="videoPlay" v-if="isPlay">
+			<view class="videoPlay-bg" @tap="isPlay=false"></view>
+			<video :src="curVideo"></video>
+		</view>
 	</view>
 </template>
 
@@ -226,7 +240,9 @@
 				vipDiscount:0,
 				currencyName:"",
 				group:"",
-				uid:0
+				uid:0,
+				isPlay:false,
+				curVideo:"",
 			};
 		},
 		created(){
@@ -649,6 +665,11 @@
 					}
 				});
 			},
+			goPlay(url){
+				var that = this;
+				that.curVideo =url;
+				that.isPlay=true;
+			}
 		}
 	}
 </script>

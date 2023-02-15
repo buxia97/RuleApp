@@ -143,7 +143,7 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-		z-index: 1000;
+		z-index: 990;
 		overflow: initial;
         display: block;
         width: 100%;

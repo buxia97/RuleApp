@@ -323,12 +323,14 @@
 				"enablePullDownRefresh":true
 			}
 		},
+		// #ifdef APP-PLUS || H5
 		{
 			"path": "pages/contents/foreverblog",
 			"style": {
 				"enablePullDownRefresh":true
 			}
 		},
+		// #endif
 		{
 			"path": "pages/contents/blackhouse",
 			"style": {
