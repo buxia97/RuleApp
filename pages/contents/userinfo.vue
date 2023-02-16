@@ -101,7 +101,8 @@
 				</view>
 				
 			</view>
-			<!--  #endif MP -->
+			<!--  #endif -->
+			<!--  #ifdef MP -->
 			<view class="search-type grid col-2">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>

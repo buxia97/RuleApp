@@ -53,7 +53,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="text-content">
+				<view class="text-content break-all">
 					<rich-text :nodes="markHtml(spaceInfo.text)"></rich-text>
 				</view>
 				
@@ -150,7 +150,7 @@
 									<!--  #endif -->
 									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
-								<view class="text-content text-df">
+								<view class="text-content text-df break-all">
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
 								</view>
 								<view class="space-reply-num padding-xs radius margin-top-sm  text-sm" v-if="item.reply>0" @tap="toReplyInfo(item.id)">
@@ -169,6 +169,20 @@
 											{{formatNumber(item.likes) || ''}}
 										</text>
 									</view>
+								</view>
+								<view class="comment-operation">
+									<block v-if="group=='administrator'||group=='editor'">
+										<!-- <text class="text-blue margin-left-sm" @tap="edit(item.id)">编辑</text> -->
+										<text class="text-black" @tap="toBan(item.userJson.uid)">封禁</text>
+										<text class="text-red margin-left-sm" @tap="toDelete(item.id)">删除</text>
+									</block>
+									<block v-else>
+										<block v-if="item.userJson.uid!=0&&item.userJson.uid==uid">
+											<!-- <text class="text-blue margin-left-sm" @tap="edit(item.id)">编辑</text> -->
+											<text class="text-red" @tap="toDelete(item.id)">删除</text>
+										</block>
+										
+									</block>
 								</view>
 							</view>
 						</view>
@@ -204,7 +218,7 @@
 									<!--  #endif -->
 									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
-								<view class="text-content text-df">
+								<view class="text-content text-df break-all">
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
 								</view>
 								<view class="margin-top-sm flex justify-between">
@@ -314,7 +328,8 @@
 				owoList:[],
 				
 				infoType:0,
-				
+				group:"",
+				uid:0,
 			}
 		},
 		onPullDownRefresh(){
@@ -358,6 +373,12 @@
 		},
 		onLoad(res) {
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+							
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.group = userInfo.group;
+				that.uid = userInfo.uid;
+			}
 			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -1019,6 +1040,86 @@
 				
 				uni.navigateTo({
 				    url: '/pages/space/info?id='+id+'&replyType=1'
+				});
+			},
+			toBan(uid){
+				if(uid==0){
+					uni.showToast({
+						title: "该用户不存在",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+					url: '/pages/manage/banuser?uid='+uid
+				});
+			},
+			edit(id){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post?postType=edit&id='+id
+				});
+			},
+			toDelete(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"id":id,
+					"token":token
+				}
+				uni.showModal({
+					title: '确定要删除该动态吗',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.spaceDelete(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: res.data.msg+"，刷新数据后生效",
+											icon: 'none'
+										})
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
 				});
 			},
 		}

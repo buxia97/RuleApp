@@ -48,7 +48,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="text-content" @tap="toInfo(item.id)">
+					<view class="text-content break-all" @tap="toInfo(item.id)">
 						<rich-text :nodes="markHtml(item.text)"></rich-text>
 					</view>
 					<block  v-if="item.type==0">

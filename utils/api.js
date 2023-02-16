@@ -1,3 +1,7 @@
+//RuleApp是一套开源免费的客户端代码，如果您通过任何收费渠道下载到了此代码，则可以认为你被忽悠了。
+//正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
+//github内测版地址：https://github.com/buxia97/RuleApp
+
 //var API_URL = 'http://127.0.0.4/';
 var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
@@ -5,7 +9,7 @@ var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
-//配合nginx实现的访问key
+//配合nginx实现的访问key（部分情况会导致网络错误，建议不要配置）
 var key = "";
 
 var currencyName = "规则豆";

@@ -229,6 +229,7 @@
 		},
 		onShow(){
 			var that = this;
+			that.page = 1;
 			// #ifdef APP-PLUS
 			uni.hideTabBar({
 				animation: false
