@@ -30,8 +30,8 @@
 				</view>
 			</view>
 			<view class="cu-form-group margin-top">
-				<view class="title">用户名经验</view>
-				<input placeholder="请输入用户名经验" name="input" type="number" v-model="experience"></input>
+				<view class="title">用户经验</view>
+				<input placeholder="请输入用户经验" name="input" type="number" v-model="experience"></input>
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">昵称</view>

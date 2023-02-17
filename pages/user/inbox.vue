@@ -58,7 +58,7 @@
 													</block>
 													</block>
 												</view>
-												<view class="text-content text-df">
+												<view class="text-content text-df break-all">
 													<rich-text :nodes="markHtml(item.text)"></rich-text>
 												</view>
 												<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='comment'">

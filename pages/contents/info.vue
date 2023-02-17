@@ -661,7 +661,9 @@
 				}
 				// #endif
 				
-				text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
+				//text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
+				//兼容垃圾的Safari浏览器
+				text = text.replace(/([^\r])\n([^\r])/g, "$1\n\n$2");
 				text = that.replaceAll(text,"||rn||","\n\n");
 				return text;
 				

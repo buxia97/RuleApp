@@ -399,6 +399,7 @@
 						});
 					},
 					fail: err => {
+						console.log(err)
 						uni.showToast({
 							title: '请求出错啦！',
 							icon: 'none',
