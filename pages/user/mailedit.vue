@@ -85,6 +85,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.getCacheInfo();
 		},
 		methods: {
 			back(){

@@ -346,6 +346,7 @@
 								formdata.openId=infoRes.userInfo.openId;
 								formdata.accessToken=infoRes.userInfo.unionId,
 								formdata.type = "app";
+								formdata.js_code = js_code;
 								// #endif
 								// #ifdef MP-WEIXIN
 								formdata.type = "applets";

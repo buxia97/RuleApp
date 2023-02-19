@@ -372,176 +372,12 @@
 		methods:{
 			toLogin(){
 				var that = this;
-				
-				// #ifdef MP-WEIXIN
-				//that.toWexinlogin();
-				//return false;
-				// #endif
-				// #ifdef MP-QQ
-				// that.toQQlogin();
-				// return false;
-				// #endif
 				uni.navigateTo({
 					url: '/pages/user/login'
 				});
 				
 			},
-			toWexinlogin(){
-				//微信登陆
-				//后端直接根据unionId来判断用户的唯一性。
-				uni.showLoading({
-					title: "加载中"
-				});
-				uni.login({
-					provider: 'weixin',
-					success: res => {
-						uni.getUserInfo({
-							provider: 'weixin',
-							success: function(infoRes) {
-								console.log(JSON.stringify(infoRes));
-								let formdata = {
-									nickName: infoRes.userInfo.nickName,
-									//gender: infoRes.userInfo.gender,
-									appLoginType:"weixin",
-				                    headImgUrl: infoRes.userInfo.avatarUrl,
-									openId: infoRes.userInfo.openId,
-									accessToken: infoRes.userInfo.unionId
-								};
-								that.$Net.request({
-									
-									url: that.$API.userApi(),
-									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
-									header:{
-										'Content-Type':'application/x-www-form-urlencoded'
-									},
-									method: "get",
-									dataType: 'json',
-									success: function(res) {
-										setTimeout(function () {
-											uni.hideLoading();
-										}, 1000);
-										uni.showToast({
-											title: res.data.msg,
-											icon: 'none'
-										})
-										if(res.data.code==1){
-											//保存用户信息
-											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
-											localStorage.setItem('token',res.data.data.token);
-											var timer = setTimeout(function() {
-												uni.reLaunch({
-													url: '/pages/home/home'
-												})
-												clearTimeout('timer')
-											}, 1000)
-										}
-									},
-									fail: function(res) {
-										setTimeout(function () {
-											uni.hideLoading();
-										}, 1000);
-										uni.showToast({
-											title: "网络开小差了哦",
-											icon: 'none'
-										})
-										uni.stopPullDownRefresh()
-									}
-								})
-								
-							}
-						});
-					},
-					fail: err => {
-						uni.showToast({
-							title: '请求出错啦！',
-							icon: 'none',
-							duration: 3000
-						});
-						setTimeout(function () {
-							uni.hideLoading();
-						}, 1000);
-					}
-				});
-			},
-			toQQlogin(){
-				//QQ登陆
-				//后端直接根据access_token来判断用户的唯一性。
-				uni.showLoading({
-					title: "加载中"
-				});
-				uni.login({
-					provider: 'qq',
-					success: resp => {
-						var access_token = resp.authResult.access_token;
-						uni.getUserInfo({
-							provider: 'qq',
-							success: function(infoRes) {
-								
-								var formdata = {
-									nickName: infoRes.userInfo.nickname,
-									//gender: infoRes.userInfo.gender == '男' ? 1 : 2,
-									appLoginType:"qq",
-				                    headImgUrl: infoRes.userInfo.figureurl_qq_2,
-									openId: infoRes.userInfo.openId,
-									accessToken: access_token
-								};
-								
-								that.$Net.request({
-									
-									url: that.$API.userApi(),
-									data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
-									header:{
-										'Content-Type':'application/x-www-form-urlencoded'
-									},
-									method: "get",
-									dataType: 'json',
-									success: function(res) {
-										setTimeout(function () {
-											uni.hideLoading();
-										}, 1000);
-										uni.showToast({
-											title: res.data.msg,
-											icon: 'none'
-										})
-										if(res.data.code==1){
-											//保存用户信息
-											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
-											localStorage.setItem('token',res.data.data.token);
-											var timer = setTimeout(function() {
-												uni.reLaunch({
-													url: '/pages/home/home'
-												})
-												clearTimeout('timer')
-											}, 1000)
-										}
-									},
-									fail: function(res) {
-										setTimeout(function () {
-											uni.hideLoading();
-										}, 1000);
-										uni.showToast({
-											title: "网络开小差了哦",
-											icon: 'none'
-										})
-										uni.stopPullDownRefresh()
-									}
-								})
-								
-							}
-						});
-					},
-					fail: err => {
-						uni.showToast({
-							title: '请求出错啦！',
-							icon: 'none',
-							duration: 3000
-						});
-						setTimeout(function () {
-							uni.hideLoading();
-						}, 1000);
-					}
-				});
-			},
+			
 			getUserLv(i){
 				var that = this;
 				var rankList = that.$API.GetRankList();
@@ -681,6 +517,9 @@
 				})
 			},
 			formatNumber(num) {
+				if(num==0||!num){
+					return 0;
+				}
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
 			toClock(){
