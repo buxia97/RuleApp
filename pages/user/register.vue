@@ -96,11 +96,24 @@
 			PickerChange(e) {
 				this.index = e.detail.value
 			},
+			validatePassword(password) {
+			  const regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+			  return regex.test(password);
+			},
 			userRegister() {
 				var that = this;
 				if (that.name == ""||that.mail == ""||that.password == ""||that.repassword == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				if(that.validatePassword(that.password)){
+					uni.showToast({
+						title:"密码必须包含字母和数字，且长度必须大于8",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',

@@ -337,7 +337,6 @@
 			plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
-				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 				that.avatar = that.userInfo.avatar;

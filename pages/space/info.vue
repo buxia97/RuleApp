@@ -39,7 +39,7 @@
 							<!--  #endif -->
 							<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
 							</view>
-							<view class="text-gray text-sm flex justify-between">
+							<view class="text-gray text-sm">
 								{{formatDate(spaceInfo.created)}} <text class="margin-left-sm" v-if="spaceInfo.created!=spaceInfo.modified">已编辑</text>
 							</view>
 						</view>

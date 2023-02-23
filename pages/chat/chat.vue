@@ -33,7 +33,7 @@
 					<view class="cu-avatar radius" @tap="toUserContents(item.userJson)"  v-if="item.uid!=uid" :style="'background-image:url('+item.userJson.avatar+');'"></view>
 					<view class="main">
 						<block v-if="item.type==0">
-							<view class="content shadow" :class="item.uid==uid?'bg-green':''" @longtap="ToCopy(item.text)">
+							<view class="content shadow break-all" :class="item.uid==uid?'bg-green':''" @longtap="ToCopy(item.text)">
 								<rich-text :nodes="markHtml(item.text)"></rich-text>
 							</view>
 						</block>

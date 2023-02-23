@@ -179,6 +179,10 @@
 			hideModal(e) {
 				this.modalName = null
 			},
+			validatePassword(password) {
+			  const regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+			  return regex.test(password);
+			},
 			getCacheInfo(){
 				var that = this;
 				if(localStorage.getItem('userinfo')){
@@ -196,6 +200,15 @@
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
+					if(that.validatePassword(that.password)){
+						uni.showToast({
+							title:"密码必须包含字母和数字，且长度必须大于8",
+							icon:'none',
+							duration: 1000,
+							position:'bottom',
+						});
+						return false
+					}
 					if (that.password != that.repassword) {
 						uni.showToast({
 						    title:"两次密码不一致",
@@ -208,7 +221,7 @@
 					
 				}
 				
-			
+				
 				var data = {
 					uid:that.uid,
 					name:that.name,

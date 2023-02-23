@@ -32,6 +32,7 @@
 				<text class="text-blue" v-if="category.length>0" @tap="toCategoryContents(category)">{{category[0].name}}</text>
 				<text class="text-gray" v-if="category.length==0">暂无分类</text>
 				<text class="info-date" v-if="created!=''">{{formatDate(created)}}
+					<text class="text-green margin-left-sm" @tap="goPost(cid)" v-if="authorId==uid">编辑</text>
 				</text>
 			</view>
 			<view class="info-author">
@@ -342,6 +343,7 @@
 				AppStyle:this.$store.state.AppStyle,
 				
 				cid:0,
+				uid:0,
 				title:"",
 				html:"",
 				commentsNum:0,
@@ -487,6 +489,7 @@
 			if(localStorage.getItem('userinfo')){
 				
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.uid = userInfo.uid;
 				that.group = userInfo.group;
 			}
 			// #ifdef MP-BAIDU
@@ -530,7 +533,8 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.isLoad=0;
+			that.page = 1;
 			var timer = setTimeout(function() {
 				that.getInfo(that.cid);
 				// #ifdef H5 || APP-PLUS
@@ -1777,6 +1781,21 @@
 					url: text
 				});
 			},
+			goPost(cid){
+				var that = this;
+				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				
+				uni.navigateTo({
+					url: '/pages/user/post?type=edit'+'&cid='+cid
+				});
+			}
 		}
 	}
 </script>

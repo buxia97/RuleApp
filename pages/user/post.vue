@@ -407,7 +407,6 @@
 						
 					}
 				}
-				console.log(JSON.stringify(text));
 				//text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
 				//兼容垃圾的Safari浏览器
 				text = text.replace(/([^\r])\n([^\r])/g, "$1\n\n$2");
