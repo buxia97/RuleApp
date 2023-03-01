@@ -204,7 +204,11 @@
 			</block>
 		</view>
 		<view class="videoPlay" v-if="isPlay">
-			<view class="videoPlay-bg" @tap="isPlay=false"></view>
+			<view class="videoPlay-bg" @tap="isPlay=false">
+				<view class="videoPlay-close" @tap="isPlay=false">
+					<i class="cuIcon-close"></i>
+				</view>
+			</view>
 			<video :src="curVideo"></video>
 		</view>
 	</view>

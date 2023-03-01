@@ -2557,3 +2557,10 @@ page{
 	height: 400upx;
 	line-height: 400upx;
 }
+.videoPlay-close{
+	position: fixed;
+	top: 80upx;
+	right: 30upx;
+	color: #fff;
+	font-size: 50upx;
+}

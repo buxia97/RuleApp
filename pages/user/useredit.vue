@@ -180,7 +180,7 @@
 				this.modalName = null
 			},
 			validatePassword(password) {
-			  const regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+			  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,}$/;
 			  return regex.test(password);
 			},
 			getCacheInfo(){
@@ -200,9 +200,9 @@
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
-					if(that.validatePassword(that.password)){
+					if(!that.validatePassword(that.password)){
 						uni.showToast({
-							title:"密码必须包含字母和数字，且长度必须大于8",
+							title:"密码必须包含字母、数字和特殊符号，且长度必须大于8",
 							icon:'none',
 							duration: 1000,
 							position:'bottom',
