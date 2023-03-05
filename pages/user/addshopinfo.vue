@@ -510,6 +510,9 @@
 				var that= this;
 				that.isShow = !that.isShow;
 			},
+			isInteger(obj){
+			         return typeof obj === 'number' && obj%1 === 0;
+			},
 			submit(){
 				var that = this;
 				if(that.imgurl==""||that.value==""||that.price==""||that.num==""){
@@ -524,6 +527,15 @@
 				if(that.price<0||that.num<0){
 					uni.showToast({
 						title:"请输入正确的参数",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				if(!that.isInteger(that.price)){
+					uni.showToast({
+						title:"价格必须为整数",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',

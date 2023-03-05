@@ -12,6 +12,9 @@ var GithubUrl = 'https://github.com/buxia97/RuleApp';
 //配合nginx实现的访问key（部分情况会导致网络错误，建议不要配置）
 var key = "";
 
+//上传方式，可以设置为cos(腾讯云对象存储)，oss(阿里云对象存储)，ftp(远程ftp)，local(本地服务器)
+var uploadType = 'local';
+
 var currencyName = "规则豆";
 
 //对于个人小程序，将不会出现积分商城，交易，评论等页面，因为会导致无法过审。如果是企业，可以自行注释条件编译判断，开启那些功能。
@@ -238,7 +241,9 @@ module.exports = {
 	userClean:function(){
 		return API_URL + 'typechoUsers/userClean';
 	},
-	
+	restrict:function(){
+		return API_URL + 'typechoUsers/restrict';
+	},
 	
 	
 	getMarkList:function(){
@@ -344,12 +349,20 @@ module.exports = {
 	contentConfig:function(){
 		return API_URL + 'typechoContents/contentConfig';
 	},
-	//下面这个方法涉及图片上传，自己修改定义接口路径
+	//下面这个方法涉及图片上传，根据上方的uploadType进行调整
 	upload:function(){
-		//return API_URL + 'upload/ossUpload';//OSS对象存储接口
-		return API_URL + 'upload/cosUpload';//COS对象存储接口
-		//return API_URL + 'upload/ftpUpload'; //远程ftp上传接口
-		//return API_URL + 'upload/localUpload'; //本地上传接口
+		if(uploadType=='cos'){
+			return API_URL + 'upload/cosUpload';
+		}
+		if(uploadType=='oss'){
+			return API_URL + 'upload/ossUpload';
+		}
+		if(uploadType=='ftp'){
+			return API_URL + 'upload/ftpUpload';
+		}
+		if(uploadType=='local'){
+			return API_URL + 'upload/localUpload';
+		}
 	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';

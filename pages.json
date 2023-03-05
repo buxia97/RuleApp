@@ -429,6 +429,9 @@
 			"path": "pages/manage/userClean"
 		},
 		{
+			"path": "pages/manage/endException"
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

@@ -115,6 +115,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/banuser')">
+							<view class="index-sort-i" style="background-color: #ea4eea;">
+								<text class="cuIcon-paintfill"></text>
+							</view>
+							<view class="index-sort-text">
+								解除异常
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<view class="data-box">
