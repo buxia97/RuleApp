@@ -40,7 +40,7 @@
 							</view>
 							<view class="order-btn">
 								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/scale}}</text>
-								<text class="text-blue order-status" @tap="toPay(item.pay)">用户收款码</text>
+								<text class="text-blue order-status" @tap="showUserPay(item.pay)">用户收款信息</text>
 							</view>
 							<view class="order-kill" v-if="item.cid==-1">
 								<text class="cu-btn text-green radius" @tap="toStatus(item.id,1)">已打款</text>
@@ -52,6 +52,33 @@
 					
 					<view class="load-more" @tap="loadMore" v-if="withdrawList.length>0">
 						<text>{{moreText}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-modal" :class="modalName=='payInfo'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">收款信息</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-lg text-left">
+					<view class="payinfo-text">
+						<text class="payinfo-text-name">支付方式：</text>
+						<text class="payinfo-text-value">{{curPay[0]}}</text>
+					</view>
+					<view class="payinfo-text">
+						<text class="payinfo-text-name">真实姓名：</text>
+						<text class="payinfo-text-value">{{curPay[1]}}</text>
+					</view>
+					<view class="payinfo-text">
+						<text class="payinfo-text-name">支付账号：</text>
+						<text class="payinfo-text-value">{{curPay[2]}}</text>
+					</view>
+					<view class="payinfo-text">
+						<text class="payinfo-text-name">收款二维码：</text><text class="text-blue" @tap="toPay(curPay)">点击查看</text>
 					</view>
 				</view>
 			</view>
@@ -85,6 +112,8 @@
 				
 				isLoading:0,
 				scale:0,
+				modalName: null,
+				curPay:[],
 			}
 		},
 		onPullDownRefresh(){
@@ -119,6 +148,9 @@
 			that.getWithdrawList(false);
 		},
 		methods:{
+			hideModal(e) {
+				this.modalName = null
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -226,15 +258,16 @@
 				// 返回
 				return result;
 			},
-			toPay(text){
-				if(!text){
+			toPay(curPay){
+				var that = this;
+				if(curPay.length < 1){
 					uni.showToast({
-						title: "该用户未设置收款",
+						title: "该用户未设置收款信息",
 						icon: 'none'
 					})
 					return false;
 				}
-				var arr = text.split("|");
+				var arr = curPay;
 				var image=arr[3];
 				var imgArr = [];
 				imgArr.push(image);
@@ -243,6 +276,21 @@
 					urls: imgArr,
 					current: imgArr[0]
 				});
+				that.modalName = null;
+			},
+			showUserPay(text){
+				var that = this;
+				that.curPay = [];
+				if(!text){
+					uni.showToast({
+						title: "该用户未设置收款信息",
+						icon: 'none'
+					})
+					return false;
+				}
+				var arr = text.split("|");
+				that.curPay = arr;
+				that.modalName = "payInfo";
 			},
 			toStatus(id,type){
 				var that = this;

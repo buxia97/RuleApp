@@ -306,6 +306,12 @@
 			that.owoTextList = owoList;
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
+			setTimeout(() => {
+				uni.pageScrollTo({
+					duration: 0,
+					scrollTop: 99999999
+				})
+			},1000)
 		},
 		methods: {
 			loadMore(){

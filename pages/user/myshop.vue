@@ -109,6 +109,7 @@
 		},
 		onShow(){
 			var that = this;
+			localStorage.removeItem('userShopinfo');
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")

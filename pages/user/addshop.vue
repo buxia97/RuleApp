@@ -334,6 +334,7 @@
 				// #endif
 			},
 			back(){
+				localStorage.removeItem('userShopinfo');
 				uni.navigateBack({
 					delta: 1
 				});

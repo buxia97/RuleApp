@@ -197,6 +197,17 @@
 					that.introduce = userInfo.introduce;
 				}
 			},
+			validateString(str) {
+			  // 判断是否包含空格或中文空格
+			  if (/\s|　/.test(str)) {
+			    return false;
+			  }
+			  // 判断是否只包含空格
+			  if (/^\s+$/.test(str)) {
+			    return false;
+			  }
+			  return true;
+			},
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
@@ -220,7 +231,15 @@
 					}
 					
 				}
-				
+				if(!that.isValidString(that.name)){
+					uni.showToast({
+					    title:"昵称不能存在空格",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				
 				var data = {
 					uid:that.uid,

@@ -2564,3 +2564,14 @@ page{
 	color: #fff;
 	font-size: 50upx;
 }
+.payinfo-text{
+	margin-bottom: 20upx;
+}
+.payinfo-text-name{
+	margin-right: 20upx;
+}
+.payinfo-text-value{
+	font-size: 30upx;
+	color: #000;
+	font-weight: bold;
+}
