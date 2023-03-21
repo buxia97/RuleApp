@@ -510,8 +510,8 @@
 				var that= this;
 				that.isShow = !that.isShow;
 			},
-			isInteger(obj){
-			         return typeof obj === 'number' && obj%1 === 0;
+			isInteger(str) {
+			  return /^\d+$/.test(str);
 			},
 			submit(){
 				var that = this;

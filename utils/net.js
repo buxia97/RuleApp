@@ -1,4 +1,19 @@
 var API = require('../utils/api');
+
+
+var isVPN = 0;
+
+// #ifdef APP-PLUS
+var banVPN = API.getBanVPN();
+if(banVPN==1){
+	if(plus.networkinfo.isSetProxy()){
+		isVPN = 1;
+	}
+}
+
+// #endif
+
+
 var requestHandler = {
     url: '',
     data: {},
@@ -24,6 +39,10 @@ var requestHandler = {
 	if(API.getKey()!=""){
 		header.Accept = "application/json; charset=utf-8"
 		header.key = API.getKey();
+	}
+	if(isVPN==1){
+		requestHandler.fail();
+		return false;
 	}
     uni.request({
       url: url,

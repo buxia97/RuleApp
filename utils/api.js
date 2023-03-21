@@ -2,15 +2,16 @@
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
 
-//var API_URL = 'http://127.0.0.4/';
+//var API_URL = 'https://mllt.xyz/';
 var API_URL = 'https://api.ruletree.club/';
 var WEB_URL = 'https://www.ruletree.club/';
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
 
-//配合nginx实现的访问key（部分情况会导致网络错误，建议不要配置）
-var key = "";
+//是否禁止网络代理，为1时开启（可以在安卓和苹果APP中防止抓包，但同时也会禁止VPN环境使用APP）
+//由于uniapp官方的问题，只能拦截部分条件
+var banVPN = 0;
 
 //上传方式，可以设置为cos(腾讯云对象存储)，oss(阿里云对象存储)，ftp(远程ftp)，local(本地服务器)
 var uploadType = 'local';
@@ -51,6 +52,9 @@ var isComment = 1;
 
 //自定义字段配置（和可视化配置中心保持一致，英文逗号分割），默认的字段名称是小灯泡模板的abcimg字段，假如你的模板是用其它的字段进行判断，可以自己全局搜索abcimg进行修改，当然也可以什么都不做，这并不会导致使用出现问题。
 var fields = "abcimg";
+
+//配合nginx实现的访问key（部分情况会导致网络错误，建议不要配置）
+var key = "";
 // #ifdef H5
 //var API_URL = '/';
 // #endif
@@ -62,6 +66,9 @@ import { localStorage } from '@/js_sdk/mp-storage/mp-storage/index.js'
 module.exports = {
 	getKey(){
 		return key;
+	},
+	getBanVPN(){
+		return banVPN;
 	},
 	getCurrencyName(){
 		return currencyName;
