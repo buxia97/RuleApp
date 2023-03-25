@@ -803,6 +803,7 @@
 						}
 						that.categoryText = that.metaList[that.category-1].name;
 						localStorage.setItem('userShopinfo',JSON.stringify(data));
+						that.isInfo = 1;
 					},
 					fail: function(res) {
 						uni.stopPullDownRefresh();
