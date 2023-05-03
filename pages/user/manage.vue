@@ -199,6 +199,18 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/space')">
+							<view class="index-sort-i" style="background-color: #eb4d18;">
+								<text class="cuIcon-new"></text>
+							</view>
+							<view class="index-sort-text">
+								动态管理
+							</view>
+						</view>
+					</waves>
+				</view>
 				
 			</view>
 		</view>

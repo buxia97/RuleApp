@@ -1457,6 +1457,46 @@ page{
 .info-footer-btn text{
 	margin: 0upx 20upx;
 }
+
+.info-operate-bg{
+	position: fixed;
+	background-color: #000;
+	width: 100%;
+	height: 100vh;
+	opacity: 0;
+	z-index: 170;
+	left: 0px;
+	top: 0px;
+	transition: 0.2s all;
+	visibility:hidden;
+}
+.info-operate-bg.show{
+	opacity: 0.3;
+	visibility:visible;
+}
+.info-operate{
+	position: fixed;
+	z-index: 180;
+	bottom:-200upx;
+	left: 0;
+	width: 100%;
+	padding: 0upx 30upx;
+	transition: 0.2s all;
+}
+.info-operate.show{
+	bottom:120upx;
+}
+.info-operate-main{
+	width: 100%;
+	height: 200upx;
+	border-radius: 40upx;
+	padding-top: 18upx;
+	background: #fff;
+	box-shadow: 0px 0px 10upx rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	text-align: center;
+}
+
 .user-list-btn{
 	width: 340upx !important;
 }
@@ -2359,6 +2399,7 @@ page{
 .chat-owo.owo{
 	width: 100%;
 	left: 0px;
+	position: fixed;
 	border-radius: 0upx;
 	bottom:100upx;
 	top: auto;
@@ -2481,4 +2522,38 @@ page{
 }
 .search-space{
 	background-color: #f6f6f6;
+}
+.videoPlay{
+	position: fixed;
+	z-index: 1000;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100vh;
+}
+.videoPlay-bg{
+	position: fixed;
+	z-index: 1;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	background-color: #111;
+	height: 100vh;
+}
+.videoPlay video{
+	position: absolute;
+	height: 500upx;
+	width: 100%;
+	top:50%;
+	margin-top:-250upx;
+}
+.spaceVideo-play{
+	width: 100%;
+	border-radius: 8upx;
+	background-color: #000;
+	font-size: 70upx;
+	color:#fff;
+	text-align: center;
+	height: 400upx;
+	line-height: 400upx;
 }

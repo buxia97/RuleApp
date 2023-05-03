@@ -541,7 +541,12 @@ module.exports = {
 	spaceLikes:function(){
 		return API_URL + 'typechoSpace/spaceLikes';
 	},
-	
+	spaceReview:function(){
+		return API_URL + 'typechoSpace/spaceReview';
+	},
+	spaceLock:function(){
+		return API_URL + 'typechoSpace/spaceLock';
+	},
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);

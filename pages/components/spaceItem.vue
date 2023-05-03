@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="cu-card dynamic no-card square-list">
+			
 			<block  v-for="(item,index) in spaceList" :key="index" v-if="spaceList.length>0">
 				<view class="cu-item">
 					<view class="cu-list menu-avatar">

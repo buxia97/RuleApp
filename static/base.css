@@ -2575,3 +2575,6 @@ page{
 	color: #000;
 	font-weight: bold;
 }
+.cu-card.space-info>.cu-item>.text-content,.cu-card.square-list>.cu-item>.text-content{
+	max-height: unset !important;
+}

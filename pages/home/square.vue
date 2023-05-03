@@ -636,9 +636,13 @@
 				if(isPage){
 					page++;
 				}
+				var data = {
+					"status":1
+				}
 				that.$Net.request({
 					url: that.$API.spaceList(),
 					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":10,
 						"page":page,
 						"order":"created",

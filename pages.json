@@ -432,6 +432,12 @@
 			"path": "pages/manage/endException"
 		},
 		{
+			"path": "pages/manage/space",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{

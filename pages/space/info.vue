@@ -188,6 +188,7 @@
 						</view>
 					</view>
 					<view class="no-data" v-if="replyList.length==0">
+						
 						<text class="cuIcon-text"></text>
 						
 						暂时没有消息
@@ -253,7 +254,7 @@
 			</block>
 			
 		</view>
-		<view class="space-footer grid " :class="replyType==0?'col-3':'col-2'">
+		<view class="space-footer grid " :class="replyType==0?'col-3':'col-2'" v-if="spaceInfo.status==1">
 			<view class="space-footer-box" @tap="forward(spaceInfo.id)" v-if="replyType==0">
 				<text class="cuIcon-forward"></text>
 				转发
