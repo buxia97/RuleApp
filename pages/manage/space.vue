@@ -638,6 +638,51 @@
 					}
 				});
 			},
+			toInfo(id){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/space/info?id='+id
+				});
+			},
+			forward(id){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/space/post?type=2&id='+id
+				});
+			},
+			
+			goShopInfo(sid){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/contents/shopinfo?sid='+sid
+				});
+			},
+			toUserContents(data){
+				var that = this;
+				var name = data.name;
+				var title = data.name+"的信息";
+				var id= data.uid;
+				var type="user";
+				uni.navigateTo({
+				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
+				});
+			},
+			goContentInfo(data){
+				var that = this;
+				if(data.status!="publish"){
+					uni.showToast({
+						title:"文章正在审核中，请稍后再试！",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
+				});
+			},
 		},
 	}
 </script>

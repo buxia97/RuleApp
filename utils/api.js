@@ -2,7 +2,7 @@
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
 
-var API_URL = 'http://127.0.0.4/';
+var API_URL = 'http://192.168.0.183:8081/';
 //var API_URL = 'https://api.ruletree.club/';
 
 var WEB_URL = 'https://www.ruletree.club/';

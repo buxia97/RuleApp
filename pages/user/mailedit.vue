@@ -104,19 +104,15 @@
 			},
 			userEdit() {
 				var that = this;
-				if (that.password != "") {
-					if (that.password != that.repassword) {
-						uni.showToast({
-						    title:"两次密码不一致",
-							icon:'none',
-							duration: 1000,
-							position:'bottom',
-						});
-						return false
-					}
-					
+				if (that.mail == ""||that.code == "") {
+					uni.showToast({
+						title:"请完整填写表单",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
 				}
-			
 				var data = {
 					uid:that.uid.toString(),
 					name:that.name,

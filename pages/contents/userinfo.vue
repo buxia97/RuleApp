@@ -506,6 +506,7 @@
 					"type":"post",
 					"authorId":that.uid,
 				}
+				
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -564,6 +565,13 @@
 				var data = {
 					"type":"comment",
 					"authorId":that.uid,
+				}
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					var uid = userInfo.uid;
+					if(uid != that.uid){
+						data.status = "approved"
+					}
 				}
 				var page = that.page;
 				if(isPage){
@@ -818,17 +826,20 @@
 			getSpaceList(isPage){
 				var that = this;
 				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-
-				}
 				var page = that.page;
 				if(isPage){
 					page++;
 				}
 				var data = {
 					"uid":that.uid 
+				}
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+					var uid = userInfo.uid;
+					if(uid != that.uid){
+						data.status = 1
+					}
 				}
 				that.$Net.request({
 					url: that.$API.spaceList(),
