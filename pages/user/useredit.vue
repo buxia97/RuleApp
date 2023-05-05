@@ -208,6 +208,9 @@
 			  }
 			  return true;
 			},
+			isValidString(str) {
+				return /\s/.test(str);
+			},
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
@@ -231,16 +234,15 @@
 					}
 					
 				}
-				if(!that.isValidString(that.name)){
+				if(that.isValidString(that.screenName)){
 					uni.showToast({
-					    title:"昵称不能存在空格",
+					    title:"昵称不能包含空格",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',
 					});
 					return false
 				}
-				
 				var data = {
 					uid:that.uid,
 					name:that.name,

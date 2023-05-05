@@ -299,6 +299,11 @@
 				var data = {
 					"type":"post",
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -310,12 +315,13 @@
 						"limit":8,
 						"page":page,
 						"searchKey":that.searchText,
-						"order":"created"
+						"order":"created",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;
@@ -374,7 +380,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;
@@ -433,7 +439,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;
@@ -494,7 +500,7 @@
 						"searchKey":that.searchText,
 						"token":token
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;

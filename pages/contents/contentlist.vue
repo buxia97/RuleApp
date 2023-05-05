@@ -208,7 +208,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -257,11 +257,17 @@
 				}else{
 					that.contentsList = [];
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var data = {
 					"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(info)),
 					"limit":5,
 					"page":page,
-					"order":order
+					"order":order,
+					"token":token
 				};
 				that.$Net.request({
 					url: that.$API.getContentsList(),
@@ -269,7 +275,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -352,6 +358,11 @@
 				var data = {
 					"mid":meta
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -362,12 +373,13 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"order":"created"
+						"order":"created",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))

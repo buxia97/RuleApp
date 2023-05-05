@@ -2,7 +2,7 @@
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
 
-var API_URL = 'http://192.168.0.183:8081/';
+var API_URL = 'http://127.0.0.4/';
 //var API_URL = 'https://api.ruletree.club/';
 
 var WEB_URL = 'https://www.ruletree.club/';
@@ -14,7 +14,7 @@ var GithubUrl = 'https://github.com/buxia97/RuleApp';
 //由于uniapp官方的问题，只能拦截部分条件
 var banVPN = 0;
 
-//上传方式，可以设置为cos(腾讯云对象存储)，oss(阿里云对象存储)，ftp(远程ftp)，local(本地服务器)
+//上传方式，可以设置为cos(腾讯云对象存储)，oss(阿里云对象存储)，ftp(远程ftp)，local(本地服务器),qiniu(七牛云)
 var uploadType = 'local';
 
 var currencyName = "规则豆";
@@ -370,6 +370,9 @@ module.exports = {
 		}
 		if(uploadType=='local'){
 			return API_URL + 'upload/localUpload';
+		}
+		if(uploadType=='qiniu'){
+			return API_URL + 'upload/qiniuUpload';
 		}
 	},
 	shopList:function(){

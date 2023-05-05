@@ -157,6 +157,20 @@
 				<image src="../../static/loading.gif"></image>
 			</view>
 		</view>
+		<!--加载遮罩结束-->
+		<view class="full-noLogin" v-if="noLogin">
+			<view class="full-noLogin-main">
+				<view class="full-noLogin-text">
+					您需要登录后才可以查看内容哦！
+				</view>
+				<view class="full-noLogin-btn">
+					<view class="cu-btn bg-blue" @tap="goLogin()">
+						立即登录
+					</view>
+				</view>
+			</view>
+		</view>
+		<!--登录遮罩结束-->
 		<!--  #ifdef APP-PLUS -->
 		<view style="height: 100upx;"></view>
 		<Tabbar :current="2"></Tabbar>
@@ -201,6 +215,7 @@
 				
 				page:1,
 				moreText:"加载更多",
+				noLogin:false
 				
 				
 			}
@@ -254,9 +269,7 @@
 			}
 			that.userStatus();
 			that.unreadNum();
-			if(that.squareid==0){
-				that.getSpaceList(false);
-			}
+			that.getSpaceList(false);
 			
 		},
 		onLoad() {
@@ -332,6 +345,12 @@
 			},
 			toSearch(){
 				var that = this;
+				if(that.noLogin){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
 				clearInterval(that.chatLoading);
 				that.chatLoading = null
 				uni.navigateTo({
@@ -366,7 +385,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoading=1;
@@ -419,7 +438,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -463,7 +482,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoading = 1;
@@ -648,7 +667,7 @@
 						"order":"created",
 						"token":that.token
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoading = 1;
@@ -658,6 +677,7 @@
 							that.dataLoad = true;
 						}
 						if(res.data.code==1){
+							that.noLogin = false;
 							var list = res.data.data;
 							var spaceList = [];
 							for(var i in list){
@@ -691,6 +711,10 @@
 								
 							}else{
 								that.moreText="没有更多动态了";
+							}
+						}else{
+							if(res.data.msg=="用户未登录或Token验证失败"){
+								that.noLogin = true;
 							}
 						}
 					},

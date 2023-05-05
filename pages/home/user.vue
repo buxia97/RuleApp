@@ -424,7 +424,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==0){
@@ -498,7 +498,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -540,7 +540,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -724,7 +724,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){

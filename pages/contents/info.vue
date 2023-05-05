@@ -752,7 +752,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -775,9 +775,15 @@
 			},
 			getInfo(cid){
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var data = {
 					"key":that.cid,
 					"isMd":0,
+					"token":token
 				}
 				
 				that.$Net.request({
@@ -786,7 +792,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -835,7 +841,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -869,7 +875,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -966,7 +972,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.hideModal();
@@ -1016,7 +1022,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -1073,7 +1079,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -1110,7 +1116,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -1154,7 +1160,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -1299,7 +1305,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -1349,7 +1355,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -1424,7 +1430,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -1483,7 +1489,7 @@
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'
 								},
-								method: "get",
+								method: "post",
 								dataType: 'json',
 								success: function(res) {
 									setTimeout(function () {
@@ -1553,7 +1559,7 @@
 						header:{
 							'Content-Type':'application/x-www-form-urlencoded'
 						},
-						method: "get",
+						method: "post",
 						dataType: 'json',
 						success: function(res) {
 							
@@ -1646,7 +1652,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -1696,7 +1702,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isFollow = res.data.code;
@@ -1741,7 +1747,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))

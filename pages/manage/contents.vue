@@ -301,7 +301,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;
@@ -428,7 +428,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -490,7 +490,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -551,7 +551,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -612,7 +612,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -673,7 +673,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -734,7 +734,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -795,7 +795,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -856,7 +856,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "get",
+				            	method: "post",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -943,7 +943,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.modalName =  null;

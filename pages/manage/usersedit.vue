@@ -217,6 +217,9 @@
 					}
 				})
 			},
+			isValidString(str) {
+				return /\s/.test(str);
+			},
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
@@ -229,7 +232,15 @@
 						});
 						return false
 					}
-					
+				}
+				if(that.isValidString(that.screenName)){
+					uni.showToast({
+					    title:"昵称不能存在空格",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
 				}
 				var token = "";
 				
@@ -292,6 +303,17 @@
 						uni.stopPullDownRefresh()
 					}
 				})
+			},
+			validateString(str) {
+			  // 判断是否包含空格或中文空格
+			  if (/\s|　/.test(str)) {
+			    return false;
+			  }
+			  // 判断是否只包含空格
+			  if (/^\s+$/.test(str)) {
+			    return false;
+			  }
+			  return true;
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target

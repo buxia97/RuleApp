@@ -184,6 +184,19 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<view class="full-noLogin" v-if="noLogin">
+			<view class="full-noLogin-main">
+				<view class="full-noLogin-text">
+					您需要登录后才可以查看内容哦！
+				</view>
+				<view class="full-noLogin-btn">
+					<view class="cu-btn bg-blue" @tap="goLogin()">
+						立即登录
+					</view>
+				</view>
+			</view>
+		</view>
+		<!--登录遮罩结束-->
 		<!--  #ifdef APP-PLUS -->
 		<view style="height: 100upx;"></view>
 		<Tabbar :current="1"></Tabbar>
@@ -217,7 +230,7 @@
 				
 				noticeSum:0,
 				token:"",
-				
+				noLogin:false
 			}
 		},
 		onPullDownRefresh(){
@@ -244,7 +257,7 @@
 				that.token = localStorage.getItem('token');
 			}
 			that.unreadNum();
-			
+			that.getRecommend();
 		},
 		onLoad() {
 			var that = this;
@@ -318,7 +331,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.isAds==1){
@@ -331,11 +344,22 @@
 					}
 				})
 			},
+			goLogin(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/user/login'
+				});
+			},
 			getRecommend(){
 				var that = this;
 				var data = {
 					"type":"post",
 					"isrecommend":1
+				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
 				}
 				that.$Net.request({
 					url: that.$API.getContentsList(),
@@ -343,16 +367,18 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
-						"order":"modified"
+						"order":"modified",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						
 						if(res.data.code==1){
+							that.noLogin = false;
 							var list = res.data.data;
 							if(list.length>0){
 							
@@ -362,6 +388,10 @@
 								that.recommendList = [];
 							}
 							localStorage.setItem('recommendList',JSON.stringify(that.recommendList));
+						}else{
+							if(res.data.msg=="用户未登录或Token验证失败"){
+								that.noLogin = true;
+							}
 						}
 					},
 					fail: function(res) {
@@ -374,18 +404,24 @@
 				var info = {
 					"type":"post"
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				that.$Net.request({
 					url: that.$API.getContentsList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(info)),
 						"limit":5,
 						"page":1,
-						"order":"commentsNum"
+						"order":"commentsNum",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -430,7 +466,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -478,7 +514,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -498,7 +534,12 @@
 			},
 			toSearch(){
 				var that = this;
-				
+				if(that.noLogin){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
 				uni.navigateTo({
 				    url: '/pages/contents/search'
 				});
@@ -579,7 +620,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){

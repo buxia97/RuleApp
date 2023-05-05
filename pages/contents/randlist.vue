@@ -82,6 +82,11 @@
 				var data = {
 					"type":"post",
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 
 				that.$Net.request({
 					url: that.$API.getContentsList(),
@@ -90,6 +95,7 @@
 						"limit":10,
 						"page":1,
 						"random":1,
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

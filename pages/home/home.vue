@@ -205,6 +205,20 @@
 			</view>
 		</view>
 		<!--加载遮罩结束-->
+		<!--登录遮罩-->
+		<view class="full-noLogin" v-if="noLogin">
+			<view class="full-noLogin-main">
+				<view class="full-noLogin-text">
+					您需要登录后才可以查看内容哦！
+				</view>
+				<view class="full-noLogin-btn">
+					<view class="cu-btn bg-blue" @tap="goLogin()">
+						立即登录
+					</view>
+				</view>
+			</view>
+		</view>
+		<!--登录遮罩结束-->
 		<!--弹窗公告-->
 		<view class="announcement" v-if="isAnnouncement&&Update!=1">
 			<view class="announcement-bg" @tap="isAnnouncement=false">
@@ -224,6 +238,7 @@
 			</view>
 		</view>
 		<!--update-->
+		
 		<!--  #ifdef APP-PLUS -->
 		<view class="update" v-if="Update==1">
 			<view class="update-bg">
@@ -339,6 +354,8 @@
 				userInfo:null,
 				token:"",
 				
+				noLogin:false,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -377,6 +394,8 @@
 		// #endif
 		onShow(){
 			var that = this;
+			that.getSwiper();
+			that.getTopPic();
 			if(localStorage.getItem('appStyle')){
 				// that.appStyle = localStorage.getItem('appStyle');
 				// that.$store.state.AppStyle = that.appStyle;
@@ -422,6 +441,8 @@
 			that.userStatus();
 			that.unreadNum();
 			that.getCID();
+			
+			
 			
 			// #ifdef APP-PLUS
 			//外部启动APP处理
@@ -507,7 +528,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -568,7 +589,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -682,22 +703,29 @@
 					"type":"post",
 					"isswiper":1
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				that.$Net.request({
 					url: that.$API.getContentsList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":1,
-						"order":"modified"
+						"order":"modified",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						
 						if(res.data.code==1){
+							that.noLogin = false;
 							var list = res.data.data;
 							var swiper = [];
 							if(list.length>0){
@@ -720,6 +748,10 @@
 								that.swiperList = [];
 							}
 							localStorage.setItem('swiperList',JSON.stringify(that.swiperList));
+						}else{
+							if(res.data.msg=="用户未登录或Token验证失败"){
+								that.noLogin = true;
+							}
 						}
 					},
 					fail: function(res) {
@@ -743,7 +775,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -789,7 +821,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -832,7 +864,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -883,7 +915,7 @@
 						"page":page,
 						"order":"created"
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;
@@ -976,7 +1008,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(!isPage){
@@ -1034,7 +1066,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==0){
@@ -1063,7 +1095,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -1096,7 +1128,12 @@
 			},
 			toSearch(){
 				var that = this;
-				
+				if(that.noLogin){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
 				uni.navigateTo({
 				    url: '/pages/contents/search'
 				});
@@ -1264,6 +1301,12 @@
 				var type="meta";
 				uni.navigateTo({
 				    url: '/pages/contents/contentlist?title='+title+"&type=top&id="+id
+				});
+			},
+			goLogin(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/user/login'
 				});
 			},
 			goUserInfo(){

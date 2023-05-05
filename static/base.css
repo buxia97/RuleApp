@@ -24,7 +24,6 @@ page{
 .swiper-text{
 	position: absolute;
 	top: 0upx;
-	
 	width: 100%;
 	height: 100%;
 	color: #fff;
@@ -707,6 +706,28 @@ page{
 .loading image{
 	width: 100upx;
 	height: 100upx;
+}
+.full-noLogin{
+	width: 100%;
+	height: 100vh;
+	z-index: 899;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	text-align: center;
+}
+.full-noLogin-main{
+	position: fixed;
+	width: 100%;
+	top: 40%;
+}
+.full-noLogin-text{
+	font-size: 28upx;
+	margin-bottom: 20upx;
+}
+.full-noLogin-btn .cu-btn{
+	border-radius: 10upx;
 }
 .menu-avatar{
 	position: relative;

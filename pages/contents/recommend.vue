@@ -111,6 +111,11 @@
 					"type":"post",
 					"isrecommend":1
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -121,12 +126,13 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":8,
 						"page":page,
-						"order":"created"
+						"order":"created",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;
