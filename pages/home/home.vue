@@ -853,13 +853,19 @@
 					"type":"post",
 					"istop":1,
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				that.$Net.request({
 					url: that.$API.getContentsList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":1,
-						"order":"modified"
+						"order":"modified",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -903,6 +909,11 @@
 					"type":"post",
 					"istop":0,
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -913,7 +924,8 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"order":"created"
+						"order":"created",
+						"token":token
 					},
 					method: "post",
 					dataType: 'json',
@@ -993,6 +1005,11 @@
 					"mid":meta,
 					"type":"post"
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -1003,7 +1020,8 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"order":"created"
+						"order":"created",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
