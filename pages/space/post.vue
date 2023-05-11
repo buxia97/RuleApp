@@ -294,6 +294,12 @@
 				var data = {
 					"id":toid
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				data.token = token;
 				that.$Net.request({
 					url: that.$API.spaceInfo(),
 					data:data,
@@ -324,6 +330,12 @@
 				var data = {
 					"id":that.id
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				data.token = token;
 				that.$Net.request({
 					url: that.$API.spaceInfo(),
 					data:data,
@@ -377,7 +389,12 @@
 					"key":that.toid,
 					"isMd":0,
 				}
-				
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				data.token = token;
 				that.$Net.request({
 					url: that.$API.getContentsInfo(),
 					data:data,
