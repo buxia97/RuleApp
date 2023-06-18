@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -130,6 +130,7 @@
 				password:'',
 				repassword:'',
 				mail:'',
+				phone:"",
 				url:'',
 				avatar:"",
 				avatarNew:"",
@@ -148,10 +149,10 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
-			that.getCacheInfo();
+			that.userStatus();
 			
 			if(localStorage.getItem('toAvatar')){
 				var toAvatar = JSON.parse(localStorage.getItem('toAvatar'));
@@ -183,19 +184,74 @@
 			  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,}$/;
 			  return regex.test(password);
 			},
-			getCacheInfo(){
+
+			userStatus() {
 				var that = this;
+				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					that.uid=userInfo.uid;
-					that.screenName=userInfo.screenName;
-					that.name=userInfo.name;
-					that.mail=userInfo.mail;
-					that.url=userInfo.url;
-					that.token=userInfo.token;
-					that.avatar=userInfo.avatar;
-					that.introduce = userInfo.introduce;
+					token=userInfo.token;
 				}
+				that.$Net.request({
+					
+					url: that.$API.userStatus(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.uid=res.data.data.uid;
+							that.screenName=res.data.data.screenName;
+							that.name=res.data.data.name;
+							that.mail=res.data.data.mail;
+							that.url=res.data.data.url;
+							that.token=res.data.data.token;
+							that.avatar=res.data.data.avatar;
+							that.introduce = res.data.data.introduce;
+							if(localStorage.getItem('userinfo')){
+								
+								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+								if(userInfo.screenName){
+									that.screenName = userInfo.screenName;
+								}else{
+									that.screenName = userInfo.name;
+								}
+								if(res.data.data.customize){
+									userInfo.customize = res.data.data.customize;
+								}
+								if(res.data.data.lv){
+									userInfo.lv = res.data.data.lv;
+								}
+								if(res.data.data.isvip){
+									userInfo.isvip = res.data.data.isvip;
+								}
+								if(res.data.data.vip){
+									userInfo.vip = res.data.data.vip;
+								}
+								if(res.data.data.experience){
+									userInfo.experience = res.data.data.experience;
+								}
+								localStorage.setItem('userinfo',JSON.stringify(userInfo));
+								// if(res.data.data.avatar){
+								// 	that.userInfo = res.data.data.avatar;
+								// }
+								
+							}
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			validateString(str) {
 			  // 判断是否包含空格或中文空格
@@ -208,11 +264,13 @@
 			  }
 			  return true;
 			},
-			isValidString(str) {
-				return /\s/.test(str);
-			},
 			userEdit() {
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				if (that.password != "") {
 					if(!that.validatePassword(that.password)){
 						uni.showToast({
@@ -262,7 +320,7 @@
 					url: that.$API.userEdit(),
 					data:{
 						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
-						"token":that.token
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -299,7 +357,7 @@
 								}
 								that.avatarNew = '';
 								localStorage.setItem('userinfo',JSON.stringify(userInfo));
-								that.getCacheInfo();
+								//that.getCacheInfo();
 							}
 							
 						}
@@ -371,6 +429,11 @@
 			avatarUpload(base64){
 				
 				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				base64ToPath(base64)
 				  .then(path => {
 					var file = path;
@@ -382,7 +445,7 @@
 					 // },
 					  name: 'file',
 					  formData: {
-					   'token': that.token
+					   'token': token
 					  },
 					  success: function (uploadFileRes) {
 						  setTimeout(function () {
@@ -422,6 +485,9 @@
 				  .catch(error => {
 					console.error("失败"+error)
 				  })
+			},
+			isValidString(str) {
+			  return /\s/g.test(str);
 			}
 		}
 	}

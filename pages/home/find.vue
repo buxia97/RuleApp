@@ -648,6 +648,12 @@
 				uni.navigateTo({
 					url: text
 				});
+			},
+			goLogin(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/user/login'
+				});
 			}
 		},
 		// #ifdef APP-PLUS

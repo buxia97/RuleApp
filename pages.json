@@ -123,22 +123,13 @@
 		},
 		// #endif
 		{
-			"path": "pages/user/login",
-			"style": {
-				"softinputMode": "adjustResize"
-			}
+			"path": "pages/user/login"
 		},
 		{
-			"path": "pages/user/foget",
-			"style": {
-				"softinputMode": "adjustResize"
-			}
+			"path": "pages/user/foget"
 		},
 		{
-			"path": "pages/user/register",
-			"style": {
-				"softinputMode": "adjustResize"
-			}
+			"path": "pages/user/register"
 		},
 		{
 			"path": "pages/user/setup",

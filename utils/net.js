@@ -36,10 +36,6 @@ var requestHandler = {
 	if(requestHandler.header){
 		header = requestHandler.header;
 	}
-	if(API.getKey()!=""){
-		header.Accept = "application/json; charset=utf-8"
-		header.key = API.getKey();
-	}
 	if(isVPN==1){
 		requestHandler.fail();
 		return false;
