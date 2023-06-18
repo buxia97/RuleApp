@@ -1266,17 +1266,20 @@
 					that.wgtVer = inf.version //获取当前版本号
 					that.versionCode = inf.versionCode;
 					var version = inf.versionCode;
-					that.$Net.request({
-						url: that.$API.GetUpdateUrl(),
-						header: {
-								'content-type': 'application/json'
-							},
-						method: 'get',
-						success: function(res) {
-							var versionCode = res.data.versionCode;
-							that.versionUrl =  res.data.versionUrl;
-							that.versionTitle = res.data.version;
-							that.versionIntro = res.data.versionIntro;
+					//从缓存里读取版本号
+					if(localStorage.getItem('AppInfo')){
+						try{
+							var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+							var versionCode = AppInfo.versionCode;
+							let platform=uni.getSystemInfoSync().platform;
+							if(platform=='ios'){
+								that.versionUrl =  AppInfo.iosUrl;
+							}else if(platform=='android'){
+								that.versionUrl =  AppInfo.androidUrl;
+							}
+							
+							that.versionTitle = AppInfo.version;
+							that.versionIntro = AppInfo.versionIntro;
 							if(Status){
 								// uni.showToast({
 								// 	title:"检测完成",
@@ -1293,19 +1296,17 @@
 								})
 								that.Update=1;
 								if(Status){
-									if(res.data.versionUrl!=""){
-										plus.runtime.openURL(res.data.versionUrl);  
+									if(that.versionUrl!=""){
+										plus.runtime.openURL(that.versionUrl);  
 									}
 								}
 							}
-							
-						},
-						fail:function(res){
-							
+						}catch(e){
+							console.log(e);
 						}
-					})
-					
-				})
+						
+					}
+				});
 			},
 			toImagetoday(){
 				var that = this;
