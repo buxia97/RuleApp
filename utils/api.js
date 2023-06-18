@@ -391,21 +391,7 @@ module.exports = {
 	},
 	//下面这个方法涉及图片上传，根据上方的uploadType进行调整
 	upload:function(){
-		if(uploadType=='cos'){
-			return API_URL + 'upload/cosUpload';
-		}
-		if(uploadType=='oss'){
-			return API_URL + 'upload/ossUpload';
-		}
-		if(uploadType=='ftp'){
-			return API_URL + 'upload/ftpUpload';
-		}
-		if(uploadType=='local'){
-			return API_URL + 'upload/localUpload';
-		}
-		if(uploadType=='qiniu'){
-			return API_URL + 'upload/qiniuUpload';
-		}
+		return API_URL + 'upload/full';
 	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';
