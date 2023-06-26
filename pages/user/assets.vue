@@ -15,11 +15,12 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="myAssets">
-				<text class="text-red myAssets-num">{{assets}}</text>积分
+				<text class="text-red myAssets-num">{{assets}}</text>{{currencyName}}
 			</view>
 			<view class="myAssets-btn">
-				<text class="cu-btn bg-blue radius" @tap="userrecharge">在线充值</text>
-				<text class="cu-btn bg-red radius" @tap="userwithdraw">快捷提现</text>
+				<text class="cu-btn bg-blue radius" @tap="userrecharge">充值</text>
+				<text class="cu-btn bg-red radius" @tap="userwithdraw">提现</text>
+				<text class="cu-btn bg-yellow radius cuIcon-videofill" v-if="adpid!=''||!adpid" @tap="show">获取</text>
 			</view>
 			<view class="vip-maim" v-if="isvip==1">
 				<view class="bg-gradual-red text-center shadow-blur">
@@ -56,7 +57,7 @@
 					<view class="order-time">{{formatDate(item.created)}}</view>
 				</view>
 				<view class="order-btn">
-					<text class="text-red">{{item.totalAmount}}积分</text>
+					<text class="text-red">{{item.totalAmount}}{{currencyName}}</text>
 					<text class="text-yellow pay-status" v-if="item.status==0">未支付</text>
 					<text class="text-green pay-status" v-if="item.status==1">已支付</text>
 				</view>
@@ -87,6 +88,7 @@
 </template>
 
 <script>
+	const ERROR_CODE = [-5001, -5002, -5003, -5004, -5005, -5006];
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 	export default {
@@ -112,7 +114,14 @@
 				
 				vipDiscount:0,
 				vipPrice:0,
-				scale:0
+				scale:0,
+				currencyName:"",
+				
+				title: '激励视频广告',
+				loading: false,
+				loadError: false,
+				adpid:'',
+				adsLogid:''
 				
 			}
 		},
@@ -129,11 +138,22 @@
 				uni.stopPullDownRefresh();
 			}, 1000)
 		},
+		onReady() {
+		    // #ifdef APP-PLUS
+			this.adpid = this.$API.GetAdpid();
+		    this.adOption = {
+		        adpid: this.adpid
+		    };
+			this.createAd();
+		    // #endif
+		    
+		},
 		onShow(){
 			var that = this;
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			
 			// #endif
 			if(localStorage.getItem('userinfo')){
@@ -318,6 +338,133 @@
 					return num;
 				}
 				
+			},
+			//激励视频
+			createAd() {
+				var that = this;
+			    var rewardedVideoAd = this.rewardedVideoAd = uni.createRewardedVideoAd(this.adOption);
+			    rewardedVideoAd.onLoad(() => {
+			        this.loading = false;
+			        this.loadError = false;
+			        console.log('onLoad event')
+			    });
+			    rewardedVideoAd.onClose((res) => {
+			        this.loading = true;
+			        // 用户点击了【关闭广告】按钮
+			        if (res && res.isEnded) {
+			            // 正常播放结束
+			            console.log("onClose " + res.isEnded);
+						console.log("开始广告")
+						that.adsGiftNotify();
+			        } else {
+			            // 播放中途退出
+			            console.log("onClose " + res.isEnded);
+						setTimeout(() => {
+						    uni.showToast({
+						        title: "您未完成广告播放，无法获得奖励！",
+						        duration: 10000,
+						        position: 'bottom'
+						    })
+						}, 500)
+			        }
+					uni.hideLoading();
+			        
+			    });
+			    rewardedVideoAd.onError((err) => {
+					uni.hideLoading();
+			        this.loading = false;
+			        if (err.code && ERROR_CODE.indexOf(err.code) !== -1) {
+			            this.loadError = true;
+			        }
+			        console.log('onError event', err)
+					uni.showToast({
+					    title: err.errMsg,
+					    duration: 10000,
+					    position: 'bottom'
+					})
+			    });
+			    this.loading = true;
+			},
+			show() {
+				var that = this;
+				uni.showLoading();
+				that.$Net.request({
+					
+					url: that.$API.adsGift(),
+					data:{
+						"token":that.token,
+						"appkey":that.$API.getAppKey()
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						console.log(JSON.stringify(res));
+						uni.hideLoading();
+						if(res.data.code==1){
+							that.adsLogid = res.data.data.logid;
+							const rewardedVideoAd = that.rewardedVideoAd;
+							rewardedVideoAd.show().catch(() => {
+							    rewardedVideoAd.load()
+							        .then(() => rewardedVideoAd.show())
+							        .catch(err => {
+							            console.log('激励视频 广告显示失败', err)
+							            uni.showToast({
+							                title: err.errMsg || err.message,
+							                duration: 5000,
+							                position: 'bottom'
+							            })
+							        })
+							})
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			    
+			},
+			adsGiftNotify(){
+				var that = this;
+
+				that.$Net.request({
+					
+					url: that.$API.adsGiftNotify(),
+					data:{
+						"token":that.token,
+						"logid":that.adsLogid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						console.log(JSON.stringify(res));
+						if(res.data.code==1){
+							uni.showToast({
+							    title: "已获得"+res.data.data.award+that.currencyName+"奖励",
+							    duration: 3000,
+							    position: 'bottom'
+							})
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},			
+			reloadAd() {
+			    this.loading = true;
+			    this.rewardedVideoAd.load();
 			}
 		},
 		components: {

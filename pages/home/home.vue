@@ -1230,15 +1230,11 @@
 			},
 			getAnnouncement(){
 				var that = this;
-				that.$Net.request({
-					url: that.$API.GetUpdateUrl(),
-					header: {
-							'content-type': 'application/json'
-						},
-					method: 'get',
-					success: function(res) {
-						that.announcement = res.data.announcement;
-						if(that.announcement!=""||res.data.announcement){
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.announcement = AppInfo.announcement;
+						if(that.announcement!=""||AppInfo.announcement){
 							if(localStorage.getItem('isAnnouncement')){
 								var oldTime = Number(localStorage.getItem('isAnnouncement'));
 								var curTime=new Date().getTime();
@@ -1251,12 +1247,10 @@
 							}
 							
 						}
-						
-					},
-					fail:function(res){
-						
+					}catch(e){
+						console.log(e);
 					}
-				})
+				}
 			},
 			isUpdate(Status) {
 				var that = this;

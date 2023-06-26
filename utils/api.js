@@ -88,6 +88,9 @@ module.exports = {
 	getBanVPN(){
 		return banVPN;
 	},
+	getAppKey(){
+		return appKey;
+	},
 	getCurrencyName(){
 		var currencyName = "积分";
 		if(localStorage.getItem('AppInfo')){
@@ -124,6 +127,14 @@ module.exports = {
 			appEmail = AppInfo.mail;
 		}
 		return appEmail;
+	},
+	GetAdpid:function(){
+		var adpid = "";
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			adpid = AppInfo.adpid;
+		}
+		return adpid;
 	},
 	GetLinkRule:function(){
 		return linkRule;
@@ -305,7 +316,12 @@ module.exports = {
 	dataClean:function(){
 		return API_URL + 'typechoUserlog/dataClean';
 	},
-	
+	adsGift:function(){
+		return API_URL + 'typechoUserlog/adsGift';
+	},
+	adsGiftNotify:function(){
+		return API_URL + 'typechoUserlog/adsGiftNotify';
+	},
 	
 	getCommentsList:function(){
 		return API_URL + 'typechoComments/commentsList';
