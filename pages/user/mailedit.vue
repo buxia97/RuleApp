@@ -27,7 +27,7 @@
 				<view class="title">新邮箱</view>
 				<input placeholder="请输入新邮箱" v-model="mail" name="input"></input>
 			</view>
-			<view class="cu-form-group" v-if="isEmail==1">
+			<view class="cu-form-group" v-if="isEmail>0">
 				<view class="title">验证码</view>
 				<input placeholder="填写新邮箱验证码" v-model="code" name="input"></input>
 				<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
