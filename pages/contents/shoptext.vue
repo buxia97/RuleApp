@@ -94,6 +94,9 @@
 					delta: 1
 				});
 			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
+			},
 			getInfo(sid){
 				var that = this;
 				var token = "";

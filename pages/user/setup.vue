@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -14,22 +14,33 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="cu-list menu margin-top">
-			<view class="cu-item">
-				<view class="content">
-					<text>账号状态<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="Modal"></text></text>
+			<block v-if="token!=''">
+				<view class="cu-item">
+					<view class="content">
+						<text>账号状态<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="Modal"></text></text>
+					</view>
+					<view class="action">
+						<block v-if="systemBan==-1">
+							<text class="text-blue">获取中…</text>
+						</block>
+						<block v-if="systemBan==1">
+							<text class="text-red">功能限制</text>
+						</block>
+						<block v-if="systemBan==0">
+							<text class="text-green">正常</text>
+						</block>
+					</view>
 				</view>
-				<view class="action">
-					<block v-if="systemBan==-1">
-						<text class="text-blue">获取中…</text>
-					</block>
-					<block v-if="systemBan==1">
-						<text class="text-red">功能限制</text>
-					</block>
-					<block v-if="systemBan==0">
-						<text class="text-green">正常</text>
-					</block>
+				<view class="cu-item">
+					<view class="content">
+						<text>注销账户<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="deleteTips"></text></text>
+					</view>
+					<view class="action">
+						<text class="text-blue"  @tap="showModal" data-target="deleteUser">申请注销</text>
+					</view>
 				</view>
-			</view>
+			</block>
+			
 			<view class="cu-item" @tap="rmlocal">
 				<view class="content">
 					<text>清除缓存</text>
@@ -38,18 +49,7 @@
 					<text class="text-gray">{{ localdata }}</text>
 				</view>
 			</view>
-			<!--  #ifdef APP-PLUS -->
-			<view class="cu-item" @tap="isUpdate(true)">
-				<view class="content">
-					<text>检查更新</text>
-				</view>
-				<view class="action">
-					<text class="text-gray" v-if="Update==0">{{wgtVer}}</text>
-					<text class="update-tips bg-red"  v-if="Update==1">News</text>
-					<text class="cuIcon-right"></text>
-				</view>
-			</view>
-			<!--  #endif -->
+			
 		</view>
 		<view class="logout" v-if="token!=''" @tap="logout">
 			<view class="logout-main">
@@ -57,6 +57,7 @@
 			</view>
 			
 		</view>
+		
 		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
@@ -68,6 +69,45 @@
 				<view class="padding-xl text-left">
 					如果您的账号存在刷评论、文章、动态，或频繁出现疑似非人工操作行为，即会进入<text class="text-red text-bold">功能限制</text>状态，该状态持续时间为10-30分钟，期间平台内部分功能将操作受限，并且无法以任何方式解除。
 				</view>
+			</view>
+		</view>
+		<view class="cu-modal" :class="modalName=='deleteTips'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">用户注销说明</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl text-left">
+					申请注销后，您的用户信息将从本平台数据库删除，但您发布的文章等信息将继续保留，此时内容作者将不在提示具体信息，将以“账号已注销”代替。如您需要删除您发布的所有信息，可联系管理员处理。
+				</view>
+			</view>
+		</view>
+		<view class="cu-modal bottom-modal" :class="modalName=='deleteUser'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="action">注销账户</view>
+					<view class="action text-blue" @tap="hideModal">取消</view>
+					
+					
+				</view>
+				<view class="padding-top padding-bottom text-left">
+					<form>
+						<view class="cu-form-group">
+							<view class="title">用户名</view>
+							<input name="input" disabled="disabled" :value="name"></input>
+						</view>
+						<view class="all-btn">
+							<view class="user-btn flex flex-direction">
+								<button class="cu-btn bg-blue margin-tb-sm lg" @tap="selfDelete()">确认注销</button>
+								
+							</view>
+						</view>
+						
+					</form>
+				</view>
+				
 			</view>
 		</view>
 		
@@ -97,6 +137,9 @@
 				
 				userInfo:null,
 				token:"",
+				code:'',
+				
+				name:""
 				
 				
 			}
@@ -109,13 +152,14 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			
-			that.isUpdate(false);
+			
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.name = that.userInfo.name;
 				//that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 			}
 			
@@ -215,46 +259,7 @@
 					console.log('浏览器不支持localStorage')
 				}
 			},
-			isUpdate(Status) {
-				var that = this;
-				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
-					
-					that.wgtVer = inf.version //获取当前版本号
-					that.versionCode = inf.versionCode;
-					var version = inf.versionCode;
-					that.$Net.request({
-						url: that.$API.GetUpdateUrl(),
-						method: 'get',
-						success: function(res) {
-							var versionCode = res.data.versionCode;
-							that.versionUrl =  res.data.versionUrl;
-							if(Status){
-								uni.showToast({
-									title:"检测完成",
-									icon:'none',
-									duration: 1000,
-									position:'bottom',
-								});
-								
-							}
-							if(versionCode > version){
-								console.log("有更新");
-								that.Update=1;
-								if(Status){
-									if(res.data.versionUrl!=""){
-										plus.runtime.openURL(res.data.versionUrl);  
-									}
-								}
-							}
-							
-						},
-						fail:function(res){
-							
-						}
-					})
-					
-				})
-			},
+			
 			logout(){
 				var that = this;
 				uni.showModal({
@@ -320,6 +325,70 @@
 				            
 				        } else if (res.cancel) {
 				            
+				        }
+				    }
+				});
+			},
+			selfDelete(){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"token":token
+				}
+				that.hideModal();
+				uni.showModal({
+				    title: '确定要注销自己的账号吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            that.$Net.request({
+				            	url: that.$API.selfDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										localStorage.removeItem('userinfo');
+										localStorage.removeItem('token');
+										var timer = setTimeout(function() {
+											uni.reLaunch({
+												url: '/pages/home/home'
+											})
+											clearTimeout('timer')
+										}, 1000)
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
 				        }
 				    }
 				});

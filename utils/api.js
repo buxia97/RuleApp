@@ -3,13 +3,14 @@
 //github内测版地址：https://github.com/buxia97/RuleApp
 //var API_URL = 'https://api.ruletree.club/';
 var API_URL = 'http://127.0.0.4/';
-
 //在API配置中心创建的应用Key
 var appKey = "dSY0uo0H";
-
+//web网站地址
+var WEB_URL = '';
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
+
 
 //是否禁止网络代理，为1时开启（可以在安卓和苹果APP中防止抓包，但同时也会禁止VPN环境使用APP）
 //由于uniapp官方的问题，只能拦截部分条件
@@ -26,6 +27,16 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 //链接规则(用于站内链接自动跳转和文章分享)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
 //{cid}对应文章id，{category}对应分类缩略名，{slug}对应独立页面名称，其实本质上就是页面拼接。
+
+if(localStorage.getItem('AppInfo')){
+	try{
+		var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+		WEB_URL = AppInfo.website;
+	}catch(e){
+		console.log(e);
+	}
+	
+}
 var linkRule =WEB_URL+"archives/{cid}/" //普通文章
 var pageRule =WEB_URL+"{slug}.html" //独立页面
 
@@ -73,16 +84,7 @@ uni.request({
 	}
 })
 
-var WEB_URL = '';
-if(localStorage.getItem('AppInfo')){
-	try{
-		var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
-		WEB_URL = AppInfo.website;
-	}catch(e){
-		console.log(e);
-	}
-	
-}
+
 
 module.exports = {
 	getBanVPN(){
@@ -99,7 +101,30 @@ module.exports = {
 		}
 		return currencyName;
 	},
-	
+	GetAppName:function(){
+		var appName = "";
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			appName = AppInfo.name;
+		}
+		return appName;
+	},
+	GetAppEmail:function(){
+		var appEmail = "";
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			appEmail = AppInfo.mail;
+		}
+		return appEmail;
+	},
+	GetLogo:function(){
+		var logo = "";
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			logo = AppInfo.logo;
+		}
+		return logo;
+	},
 	GetIsComment(){
 		return isComment;
 	},
@@ -278,6 +303,9 @@ module.exports = {
 	},
 	fanList:function(){
 		return API_URL + 'typechoUsers/fanList';
+	},
+	selfDelete:function(){
+		return API_URL + 'typechoUsers/selfDelete';
 	},
 	//封禁
 	banUser:function(){

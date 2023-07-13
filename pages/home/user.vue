@@ -13,7 +13,7 @@
 					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
@@ -23,7 +23,7 @@
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					
 				</view>
 				<!--  #endif -->
@@ -72,7 +72,7 @@
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
-								{{userInfo.mail || "未设置邮箱"}}
+								UID : {{userInfo.uid}}
 							</view>
 						</view>
 						
@@ -89,17 +89,18 @@
 							<view class="user-data-value">{{userData.contentsNum}}</view>
 							<view class="user-data-title">文章</view>
 						</view>
-						<view class="user-data-box"  @tap="toLink('/pages/user/fanList?uid='+uid)">
-							<view class="user-data-value">{{formatNumber(userData.fanNum)}}</view>
-							<view class="user-data-title">粉丝</view>
-						</view>
 						<view class="user-data-box" @tap="toLink('/pages/user/usercomments')">
 							<view class="user-data-value">{{userData.commentsNum}}</view>
 							<view class="user-data-title">评论</view>
 						</view>
+						<view class="user-data-box"  @tap="toLink('/pages/user/fanList?uid='+uid)">
+							<view class="user-data-value">{{formatNumber(userData.fanNum)}}</view>
+							<view class="user-data-title">粉丝</view>
+						</view>
+						
 						<view class="user-data-box" @tap="toLink('/pages/user/assets')">
 							<view class="user-data-value">{{formatNumber(userData.assets)}}</view>
-							<view class="user-data-title">积分</view>
+							<view class="user-data-title">{{currencyName}}</view>
 						</view>
 					</view>
 					<!--  #endif -->
@@ -216,20 +217,39 @@
 			</view>
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
-		<view class="data-box" v-if="group=='administrator'||group=='editor'">
-			<view class="cu-list menu" @tap="toManage">
-				<view class="cu-item">
-					<view class="content">
-						<text class="cuIcon-colorlens text-red"></text>
-						<text>管理中心 </text>
-					</view>
-					<view class="action">
-						<text class="text-sm text-gray">仅管理员&编辑显示</text>
-						<text class="cuIcon-right"></text>
+		<block v-if="group=='administrator'||group=='editor'">
+			<view class="data-box">
+				<view class="cu-list menu" @tap="toManage">
+					<view class="cu-item">
+						<view class="content">
+							<text class="cuIcon-colorlens text-red"></text>
+							<text>管理中心 </text>
+						</view>
+						<view class="action">
+							<text class="text-sm text-gray">仅管理员&编辑显示</text>
+							<text class="cuIcon-right"></text>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
+		</block>
+		<block v-if="group!='administrator'&&group!='editor'">
+			<view class="data-box" v-if="isModerator">
+				<view class="cu-list menu" @tap="toManage">
+					<view class="cu-item">
+						<view class="content">
+							<text class="cuIcon-colorlens text-red"></text>
+							<text>圈子管理中心 </text>
+						</view>
+						<view class="action">
+							<text class="text-sm text-gray">仅圈子管理成员可见</text>
+							<text class="cuIcon-right"></text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
+		
 		<!--  #endif -->
 		<view class="data-box">
 			
@@ -254,7 +274,7 @@
 					</view>
 				</view>
 				<!--  #endif -->
-				<view class="cu-item" @tap="toPage('关于平台',aboutme)">
+				<view class="cu-item" @tap="toAbout()">
 					<view class="content">
 						<text class="cuIcon-servicefill text-blue"></text>
 						<text>关于我们</text>
@@ -321,20 +341,30 @@
 				
 				noticeSum:0,
 				
+				isModerator:false,
+				
+				currencyName:""
+				
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
-			
+			that.getUserData();
+			that.userStatus();
+			that.unreadNum();
+			var timer = setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000)
 		},
 		onShow(){
 			var that = this;
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS
 			uni.hideTabBar({
 				animation: false
 			})
 			
-			plus.navigator.setStatusBarStyle("dark")
+			////plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -424,7 +454,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==0){
@@ -498,7 +528,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -540,7 +570,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -697,6 +727,13 @@
 				    url: '/pages/user/clothes'
 				});
 			},
+			toAbout(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/home/about'
+				});
+			},
 			isJSON(str) {
 			
 			    if (typeof str == 'string') {
@@ -724,7 +761,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){

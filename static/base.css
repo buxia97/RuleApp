@@ -2599,3 +2599,30 @@ page{
 .cu-card.space-info>.cu-item>.text-content,.cu-card.square-list>.cu-item>.text-content{
 	max-height: unset !important;
 }
+
+.app-about{
+	text-align: center;
+	margin-top: 80upx;
+	margin-bottom: 50upx;
+	padding:30upx;
+}
+.app-logo image{
+	width: 160upx;
+	border-radius: 30%;
+	border: solid 1px #f3f3f3;
+}
+.app-name{
+	font-size: 40upx;
+	margin-top: 16upx;
+	font-weight: bold;
+}
+.about-tips{
+	font-size:24upx;
+	padding: 30upx;
+	opacity: 0.7;
+	text-align: center;
+}
+.app-ver{
+	font-size:24upx;
+	opacity: 0.8;
+}

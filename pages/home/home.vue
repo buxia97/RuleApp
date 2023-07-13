@@ -36,11 +36,14 @@
 			</view>
 		</view>
 		<view class="home-nav metaList" :style="'top:'+CustomBar+'px'">
-			<scroll-view scroll-x class="bg-white nav " scroll-with-animation :scroll-left="scrollLeft" >
-				<view class="cu-item" :class="item.mid==TabCur?'text-blue cur':''" v-for="(item,index) in metaList" :key="index" @tap="tabSelect" :data-id="item.mid" v-if="item.parent==0">
-					{{item.name}}
-				</view>
-			</scroll-view>
+			<block v-if="metaList.length>0">
+				<scroll-view scroll-x class="bg-white nav " scroll-with-animation :scroll-left="scrollLeft" >
+					<view class="cu-item" :class="item.mid==TabCur?'text-blue cur':''" v-for="(item,index) in metaList" :key="index" @tap="tabSelect" :data-id="item.mid" v-if="item.parent==0">
+						{{item.name}}
+					</view>
+				</scroll-view>
+			</block>
+			
 			<view class="goCategory" @tap="goCategory">
 				<text class="cuIcon-more"></text>
 			</view>
