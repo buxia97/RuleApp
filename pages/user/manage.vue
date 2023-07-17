@@ -33,6 +33,7 @@
 				</view>
 			</view>
 		</view>
+		
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">

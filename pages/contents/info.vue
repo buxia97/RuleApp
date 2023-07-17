@@ -124,7 +124,7 @@
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 									<view class="tool-price" v-else>
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后下载</text>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">购买后下载</text>
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>
@@ -146,7 +146,7 @@
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 									<view class="tool-price" v-else>
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后下载</text>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">购买后下载</text>
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>
@@ -164,7 +164,7 @@
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
 									</view>
 									<view class="tool-price" v-else>
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">购买后阅读剩余内容</text>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">购买后阅读剩余内容</text>
 									</view>
 								</view>
 							</block>
@@ -1450,7 +1450,7 @@
 					}
 				})
 			},
-			shopBuy(sid){
+			shopBuy(sid,type){
 				var that = this;
 				var token= "";
 				if(localStorage.getItem('userinfo')){
@@ -1503,12 +1503,17 @@
 										
 										
 										//跳转订单页面
-										var timer = setTimeout(function() {
-											uni.redirectTo({
-											    url: '/pages/user/order'
-											});
-											clearTimeout('timer')
-										}, 1000)
+										if(type!=4){
+											var timer = setTimeout(function() {
+												uni.redirectTo({
+												    url: '/pages/user/order'
+												});
+												clearTimeout('timer')
+											}, 1000)
+										}else{
+											that.toShopValue(sid,type);
+										}
+										
 									}else{
 										if(res.data.msg=="购买实体商品前，需要先设置收货地址"){
 											var timer = setTimeout(function() {
