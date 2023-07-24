@@ -102,7 +102,7 @@
 										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price">
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id)">立即下单</text>
+										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">立即下单</text>
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>

@@ -147,7 +147,8 @@
         },
         "uniStatistics" : {
             "enable" : true
-        }
+        },
+        "template" : "template.h5.html"
     },
     "fallbackLocale" : "zh-Hans"
 }
