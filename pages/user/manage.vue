@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -13,28 +13,107 @@
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="data-box manage-data" >
-			<view class="user-data grid col-4">
-				<view class="user-data-box">
-					<view class="user-data-value">{{allContents}}</view>
-					<view class="user-data-title">全站文章</view>
+		<view class="data-box"  v-if="group=='administrator'||group=='editor'">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>全站数据
 				</view>
-				<view class="user-data-box">
-					<view class="user-data-value">{{allComments}}</view>
-					<view class="user-data-title">全站评论</view>
-				</view>
-				<view class="user-data-box">
-					<view class="user-data-value">{{allShop}}</view>
-					<view class="user-data-title">全站商品</view>
-				</view>
-				<view class="user-data-box">
-					<view class="user-data-value">{{allUsers}}</view>
-					<view class="user-data-title">用户注册</view>
+				<view class="action more">
+					
 				</view>
 			</view>
+			<view class="manage-data">
+				<view class="manage-dataLoad" v-if="allData==null">
+					<image src="../../static/loading.gif" mode="widthFix"></image>
+				</view>
+				<view class="user-data grid col-3" v-if="allData!=null">
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allContents}}</view>
+						<view class="user-data-title">文章总计</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allComments}}</view>
+						<view class="user-data-title">文章评论</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allShop}}</view>
+						<view class="user-data-title">商品总计</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allUsers}}</view>
+						<view class="user-data-title">用户总计</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allSpace}}</view>
+						<view class="user-data-title">动态总计</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">{{allData.allAds}}</view>
+						<view class="user-data-title">广告总计</view>
+					</view>
+				</view>
+			</view>
+			
 		</view>
-		
-		<view class="data-box">
+		<view class="data-box"  v-if="group=='administrator'||group=='editor'">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>待办事项
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="manage-data upcoming">
+				<view class="manage-dataLoad" v-if="allData==null">
+					<image src="../../static/loading.gif" mode="widthFix"></image>
+				</view>
+				<view class="manage-dataLoad" v-if="allData!=null&&upcomingTotal==0">
+					你做得很好！暂无待办事项！
+				</view>
+				<view class="user-data grid col-3"  v-if="allData!=null&&upcomingTotal>0">
+					<view class="user-data-box" v-if="allData.upcomingContents!=0">
+						<view class="user-data-main"  @tap="toLink('/pages/manage/contents')">
+							<view class="user-data-value">{{allData.upcomingContents}}</view>
+							<view class="user-data-title">待审核文章</view>
+						</view>
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingComments!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/comments')">
+							<view class="user-data-value">{{allData.upcomingComments}}</view>
+							<view class="user-data-title">待审核评论</view>
+						</view>
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingShop!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/shop')">
+							<view class="user-data-value">{{allData.upcomingShop}}</view>
+							<view class="user-data-title">待审核商品</view>
+						</view>
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingSpace!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/space')">
+							<view class="user-data-value">{{allData.upcomingSpace}}</view>
+							<view class="user-data-title">待审核动态</view>
+						</view>
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingAds!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/ads')">
+							<view class="user-data-value">{{allData.upcomingAds}}</view>
+							<view class="user-data-title">待审核广告</view>
+						</view>
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingWithdraw!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/withdraw')">
+							<view class="user-data-value">{{allData.upcomingWithdraw}}</view>
+							<view class="user-data-title">待审核提现</view>
+						</view>
+						
+					</view>
+				</view>
+			</view>
+			
+		</view>
+		<view class="data-box" v-if="group=='administrator'||group=='editor'">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text>用户模块
@@ -130,7 +209,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="data-box">
+		<view class="data-box" v-if="group=='administrator'||group=='editor'">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text>内容模块
@@ -147,7 +226,7 @@
 								<text class="cuIcon-text"></text>
 							</view>
 							<view class="index-sort-text">
-								内容管理
+								文章管理
 							</view>
 						</view>
 					</waves>
@@ -212,7 +291,6 @@
 						</view>
 					</waves>
 				</view>
-				
 			</view>
 		</view>
 		<view class="data-box" v-if="group=='administrator'">
@@ -325,16 +403,13 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				
 				userInfo:null,
 				token:"",
-				allComments:"",
-				allUsers:"",
-				allShop:"",
-				allContents:"",
-				
+				allData:null,
+				upcomingTotal:0,
 				ruleApiInfo:null,
 				
 				group:"",
@@ -349,7 +424,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			
 			// #endif
 			if(localStorage.getItem('userinfo')){
@@ -361,7 +436,7 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
-				that.allData();
+				that.getAllData();
 			}
 			
 			that.getInfo();
@@ -392,7 +467,7 @@
 					url: text
 				});
 			},
-			allData() {
+			getAllData() {
 				var that = this;
 				that.$Net.request({
 					
@@ -407,10 +482,9 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
-							that.allComments = res.data.data.allComments;
-							that.allUsers = res.data.data.allUsers;
-							that.allShop = res.data.data.allShop;
-							that.allContents = res.data.data.allContents;
+							that.allData = res.data.data;
+							var data = res.data.data;
+							that.upcomingTotal = Number(data.upcomingContents)+Number(data.upcomingComments)+Number(data.upcomingShop)+Number(data.upcomingSpace)+Number(data.upcomingAds)+Number(data.upcomingWithdraw);
 						}
 					},
 					fail: function(res) {
@@ -434,6 +508,7 @@
 					success: function(res) {
 						if(res.data.ruleappVersion){
 							that.ruleApiInfo = res.data;
+							
 						}
 						
 					},
@@ -470,7 +545,7 @@
 				// #ifdef H5
 				window.open(url)
 				// #endif
-			}
+			},
 		},
 		components: {
 			waves

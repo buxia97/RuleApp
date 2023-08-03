@@ -1,5 +1,5 @@
 <template>
-	<view :class="AppStyle">
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -38,20 +38,6 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('../user/post?type=add')">
-							<view class="index-sort-i" style="background-color: #c16000;">
-								<text class="cuIcon-edit"></text>
-							</view>
-							<view class="index-sort-text">
-								发布文章
-							</view>
-						</view>
-					</waves>
-				</view>
-				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="goPage('/pages/contents/randlist')">
@@ -222,7 +208,7 @@
 			})
 			
 			
-			plus.navigator.setStatusBarStyle("dark")
+			////plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				

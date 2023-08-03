@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>上传头像</title>
+    <link rel="stylesheet" href="cropper.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="cropper.min.js"></script>
+    <script src="uni.webview.1.5.2.js"></script>
+  </head>
+  <body>
+    <div class="file-upload-box" style="padding-top:60px;">
+      <input
+        id="my-input"
+        type="file"
+        class="hidden-input"
+        accept="image/png, image/jpeg, image/webp"
+      />
+      <label for="my-input" class="input-label">+</label>
+    </div>
+
+    <div class="img-crop-area"></div>
+
+    <div class="previewAll">
+      <div class="preview"></div>
+      <div class="preview"></div>
+      <div class="preview"></div>
+      <div class="preview"></div>
+    </div>
+
+    <p class="upload-btn">
+      <button class="btn primary" id="save">确定上传</button>
+    </p>
+
+    <script src="index.js"></script>
+  </body>
+</html>

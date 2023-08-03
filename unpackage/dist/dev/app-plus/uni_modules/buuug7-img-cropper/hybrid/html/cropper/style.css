@@ -1,0 +1,157 @@
+/* button styles */
+.btn {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #000;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: #e9ecef;
+  border: 1px solid #e9ecef;
+  padding: 0.475rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.btn *,
+.btn *::before,
+.btn *::after {
+  box-sizing: inherit;
+}
+.btn img,
+.btn svg {
+  display: inline-flex;
+  vertical-align: -0.125em;
+  width: 1em;
+  height: 1em;
+}
+.btn:hover {
+  text-decoration: none;
+  background-color: #cbd3da;
+}
+.btn:focus {
+  outline: none;
+}
+.btn.disabled,
+.btn:disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.btn.primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+.btn.primary:hover {
+  text-decoration: none;
+  background-color: #0062cc;
+}
+
+.btn.outline {
+  background-color: transparent;
+  border-color: #e9ecef;
+}
+.btn.outline:hover {
+  text-decoration: none;
+  background-color: #e9ecef;
+}
+
+.btn.link {
+  background-color: transparent;
+  color: #007bff;
+  border-color: transparent;
+}
+.btn.link:hover {
+  background-color: #e9ecef;
+}
+
+.btn.block {
+  width: 100%;
+  display: block;
+}
+
+.btn.small {
+  padding: 0.1rem 0.4rem;
+}
+
+/* index.html */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 0.5rem;
+}
+
+img {
+  display: block;
+  /* This rule is very important, please don't ignore this */
+  max-width: 100%;
+  max-height: 400px;
+  width: 100%;
+}
+
+.previewAll {
+  display: grid;
+  grid-template-columns: 4fr 3fr 2fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.previewAll .preview {
+  overflow: hidden;
+}
+
+/* file input */
+
+.file-upload-box {
+  position: relative;
+}
+.file-upload-box .hidden-input {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+}
+.file-upload-box input.hidden-input:focus + label {
+  outline: thin dotted;
+}
+.file-upload-box input.hidden-input:focus-within + label {
+  outline: thin dotted;
+}
+.file-upload-box .input-label {
+	border: 1px solid #eee;
+	background: #fff;
+	width: 200px;
+	height: 200px;
+	margin:0px auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	font-weight: lighter;
+	color: #555;
+}
+.upload-btn{
+	text-align: center;
+}
+.img-crop-area{
+	margin-top: 50px;
+}

@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<!--  #ifdef H5 || APP-PLUS -->
@@ -79,14 +79,24 @@
 			
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
-				
-				<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :markdown="true" :lazy-load="false"/>
+				<block v-if="markdown==1">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :markdown="true" :lazyLoad="false"/>
+				</block>
+				<block v-if="markdown==0">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :scroll-table="true" :lazyLoad="false" :markdown="false" />
+				</block>
 				
 				<view class="shop-value" v-if="shopValue!=''">
 					<view class="shop-value-title">
 						付费内容
 					</view>
-					<mp-html :content="shopValue" :selectable="true" :show-img-menu="true"  :scroll-table="true" :markdown="true"/>
+					<block v-if="shopIsMd==1">
+						<mp-html :content="shopValue" :selectable="true" :show-img-menu="true"  :scroll-table="true" :markdown="true"/>
+					</block>
+					<block v-if="shopIsMd==0">
+						<mp-html :content="shopValue" :selectable="true" :show-img-menu="true"  :scroll-table="true" :markdown="false"/>
+					</block>
+					
 				</view>
 				<view class="content-shop" v-if="shopValue==''">
 						<view class="cu-card article no-card" v-for="(item,index) in shopList" :key="index">
@@ -102,7 +112,7 @@
 										<text class="text-red text-bold">{{item.price}} {{currencyName}}</text><text class="margin-left-sm text-sm">VIP只需</text><text class="text-yellow text-bold">{{parseInt(item.price * item.vipDiscount)}} {{currencyName}}</text>
 									</view>
 									<view class="tool-price">
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">立即下单</text>
+										<text class="cu-btn bg-blue"  @tap="shopBuy(item.id,item.type)">立即下单</text>
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>
@@ -124,7 +134,7 @@
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 									<view class="tool-price" v-else>
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">购买后下载</text>
+										<text class="cu-btn bg-blue"  @tap="shopBuy(item.id,item.type)">购买后下载</text>
 										<text class="cu-btn text-red" @tap="shopInfo(item)">商品详情</text>
 									</view>
 								</view>
@@ -164,28 +174,13 @@
 										<text class="cu-btn bg-blue" @tap="toShopValue(item.id,item.type)">查看收费内容</text>
 									</view>
 									<view class="tool-price" v-else>
-										<text class="cu-btn bg-blue" @tap="shopBuy(item.id,item.type)">购买后阅读剩余内容</text>
+										<text class="cu-btn bg-blue"  @tap="shopBuy(item.id,item.type)">购买后阅读剩余内容</text>
 									</view>
 								</view>
 							</block>
 					</view>
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="content-btn grid col-2">
-					<view class="content-btn-box">
-						<view class="content-btn-i" @tap="toLikes">
-							<text class="cuIcon-appreciatefill btn-i"></text>
-							<text>点赞( {{formatNumber(likes)}} )</text>
-						</view>
-					</view>
-					<view class="content-btn-box"  @tap="showModal" data-target="ChooseModal">
-						<view class="content-btn-i">
-							<text class="cuIcon-rechargefill btn-i"></text>
-							<text>投币</text>
-						</view>
-					</view>
-				</view>
-				<!--  #endif -->
+				
 				<!--  #ifdef MP -->
 				<view class="content-btn grid col-2">
 					<view class="content-btn-box">
@@ -219,7 +214,33 @@
 					</text>
 					
 				</view>
+				
 			</view>
+			<!--  #ifdef H5 || APP-PLUS -->
+			<view class="reward-log" v-if="rewardLog.length > 0">
+				<view class="reward-log-main">
+					<view class="reward-log-box reward-total">
+						<view class="reward-log-i">
+							<text class="cuIcon-choicenessfill"></text>
+						</view>
+						<view class="reward-log-value">
+							+{{rewardTotal}}
+						</view>
+					</view>
+					<view class="reward-log-box" v-for="(item,index) in rewardLog">
+						<view class="reward-log-i">
+							<image :src="item.userJson.avatar"></image>
+						</view>
+						<view class="reward-log-value">
+							{{item.num}}
+						</view>
+					</view>
+				</view>
+				<view class="reward-log-btn" @tap="goReward(cid)">
+					<text class="cuIcon-more"></text>
+				</view>
+			</view>
+			<!--  #endif -->
 			<view class="ads-banner" v-if="bannerAdsInfo!=null">
 				<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 			</view>
@@ -301,7 +322,7 @@
 			</view>
 			
 		</view>
-		<view class="info-footer grid col-2">
+		<view class="info-footer grid col-2"  :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
 			<view class="info-footer-input">
 				<view class="info-input-box"  @tap="commentsAdd(title,0,0)">
 					<text class="cuIcon-writefill"></text>留下评论&吐槽
@@ -341,7 +362,7 @@
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
 				AppStyle:this.$store.state.AppStyle,
-				
+				paddingBottomHeight: 0,  //苹果X以上手机底部适配高度
 				cid:0,
 				uid:0,
 				title:"",
@@ -349,12 +370,13 @@
 				commentsNum:0,
 				category:[],
 				created:'',
+				markdown:-1,
 				markdownData: {},
 				userInfo:{},
 				slug:"",
 				tagList:[],
 				commentsList:[],
-				
+				shopIsMd:-1,
 				moreText:"加载更多",
 				page:1,
 				
@@ -439,7 +461,10 @@
 				
 				currencyName:"",
 				
-				isShare:false
+				isShare:false,
+				
+				rewardLog:[],
+				rewardTotal:0
 				
 			}
 		},
@@ -509,7 +534,7 @@
 			// #ifdef APP-PLUS
 
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.isLoad=0;
 			that.page=1;
@@ -544,7 +569,19 @@
 		},
 		onLoad(res) {
 			var that = this;
-			
+			uni.getSystemInfo({
+			    success: function (res) {
+			        let model = ['X', 'XR', 'XS', '11', '12', '13', '14', '15'];
+					console.log("当前设备型号："+res.model)
+			        model.forEach(item => {
+						
+			            //适配iphoneX以上的底部，给tabbar一定高度的padding-bottom
+			            if(res.model.indexOf(item) != -1 && res.model.indexOf('iPhone') != -1) {
+			                that.paddingBottomHeight = 40;
+			            }
+			        })
+			    }
+			});
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
@@ -574,6 +611,8 @@
 			that.allCache();
 			that.getInfo(that.cid);
 			
+			that.getRewardLog(that.cid);
+			
 			// #ifdef H5 || APP-PLUS
 			that.getShopList();
 			// #endif
@@ -597,17 +636,17 @@
 				}
 			},
 			backHome(){
-				uni.switchTab({
-					url: '/pages/home/home'
+				uni.redirectTo({
+					url: '/pages/home/index'
 				});
 			},
 			back(){
 				
 				const pages = getCurrentPages()
 				if (pages.length === 1) {
-				  uni.switchTab({
-				  	url: '/pages/home/home'
-				  })
+				  uni.redirectTo({
+				  	url: '/pages/home/index'
+				  });
 				} else {
 				  uni.navigateBack({
 				  	delta: 1
@@ -623,7 +662,13 @@
 					that.created = postInfo.created;
 					that.commentsNum = postInfo.commentsNum;
 					that.images = postInfo.images;
-					that.html=that.markHtml(postInfo.text);
+					that.markdown = postInfo.markdown;
+					if(postInfo.markdown==1){
+						that.html=that.markHtml(postInfo.text);
+					}else{
+						that.html=that.quillHtml(postInfo.text);
+					}
+					
 					that.tagList=postInfo.tag;
 					that.slug = postInfo.slug;
 					that.authorId = postInfo.authorId
@@ -635,16 +680,9 @@
 				}
 				 
 			},
-			markHtml(text){
+			markExpand(text){
 				var that = this;
-				//下面奇怪的代码是为了解决可执行代码区域问题
-				text = that.replaceAll(text,"@!!!","@@@@");
-				
-				text = that.replaceAll(text,"!!!","");
-				text = that.replaceAll(text,"@@@@","@!!!");
-				
-				//结束
-				
+				//评论可见
 				if(that.isCommnet==1){
 					text = that.replaceAll(text,"[hide]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
 					text = that.replaceAll(text,"[/hide]","</div>");
@@ -654,10 +692,22 @@
 					text = text.replace(/\[hide(([\s\S])*?)\[\/hide\]/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
 					text = text.replace(/{hide(([\s\S])*?){\/hide}/g,"<div style='width:100%;padding:15px 15px;background:#f2dede;color:#a94442;border:solid 1px #ebccd1;box-sizing: border-box;border-radius: 5px;'>此内容需要评论后方可阅读！</div>");
 				}
+				var isVip = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					isVip = userInfo.vip;
+				}
+				if(isVip > 0){
+					text = that.replaceAll(text,"[vip]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
+					text = that.replaceAll(text,"[/vip]","</div>");
+				}else{
+					text = text.replace(/\[vip(([\s\S])*?)\[\/vip\]/g,"<div style='width:100%;padding:15px 15px;background:rgba(251,189,8,0.2);color:#fbbd08;border:solid 1px #fbbd08;box-sizing: border-box;border-radius: 5px;'>此内容仅VIP权限阅读！</div>");
+				}
+				//表情包
 				// #ifdef APP-PLUS || H5
 				var owoList=that.owoList;
 				for(var i in owoList){
-
+				
 					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
 						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
 						
@@ -665,6 +715,16 @@
 				}
 				// #endif
 				
+				return text;
+			},
+			markHtml(text){
+				var that = this;
+				//下面奇怪的代码是为了解决可执行代码区域问题
+				text = that.replaceAll(text,"@!!!","@@@@");
+				
+				text = that.replaceAll(text,"!!!","");
+				text = that.replaceAll(text,"@@@@","@!!!");
+				text = that.markExpand(text);
 				//text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
 				//兼容垃圾的Safari浏览器
 				text = text.replace(/([^\r])\n([^\r])/g, "$1\n\n$2");
@@ -752,7 +812,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -773,6 +833,14 @@
 					}
 				})
 			},
+			quillHtml(text){
+				var that = this;
+				text = that.replaceAll(text,"hljs","hl");
+				text = that.replaceAll(text,"ql-syntax","hl-pre");
+				
+				text = that.markExpand(text);
+				return text;
+			},
 			getInfo(cid){
 				var that = this;
 				var token = "";
@@ -792,7 +860,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -802,8 +870,13 @@
 							that.created = res.data.created;
 							that.commentsNum = res.data.commentsNum;
 							that.images = res.data.images;
-							var html =that.markHtml(res.data.text);
-							
+							that.markdown = res.data.markdown;
+							var html = res.data.text;
+							if(res.data.markdown==1){
+								html =that.markHtml(res.data.text);
+							}else{
+								html =that.quillHtml(res.data.text);
+							}
 							that.html=html;
 							that.tagList=res.data.tag;
 							that.slug = res.data.slug;
@@ -841,7 +914,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -875,7 +948,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -972,7 +1045,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.hideModal();
@@ -1022,7 +1095,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -1079,7 +1152,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						
@@ -1116,7 +1189,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -1160,7 +1233,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -1305,7 +1378,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -1355,7 +1428,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -1430,7 +1503,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -1489,7 +1562,7 @@
 								header:{
 									'Content-Type':'application/x-www-form-urlencoded'
 								},
-								method: "post",
+								method: "get",
 								dataType: 'json',
 								success: function(res) {
 									setTimeout(function () {
@@ -1501,9 +1574,8 @@
 									})
 									if(res.data.code==1){
 										
-										
-										//跳转订单页面
 										if(type!=4){
+											//跳转订单页面
 											var timer = setTimeout(function() {
 												uni.redirectTo({
 												    url: '/pages/user/order'
@@ -1564,13 +1636,14 @@
 						header:{
 							'Content-Type':'application/x-www-form-urlencoded'
 						},
-						method: "post",
+						method: "get",
 						dataType: 'json',
 						success: function(res) {
 							
 							uni.stopPullDownRefresh();
 							if(res.data.value){
-								that.shopValue = res.data.value;
+								that.shopIsMd = res.data.isMd;
+								that.shopValue = that.quillHtml(res.data.value);
 							}
 							
 					
@@ -1657,7 +1730,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -1707,7 +1780,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.isFollow = res.data.code;
@@ -1752,7 +1825,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -1803,10 +1876,63 @@
 					return false;
 				}
 				
+				var markdown =  that.markdown;
+				if(markdown==1){
+					//MarkDown编辑器
+					uni.navigateTo({
+						url: '/pages/user/post?type=edit'+'&cid='+cid
+					});
+				}else{
+					//富文本编辑器
+					uni.navigateTo({
+						url: '/pages/edit/articlePost?type=edit'+'&cid='+cid
+					});
+				}
+			},
+			getRewardLog(id){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				that.$Net.request({
+					url: that.$API.rewardList(),
+					data:{
+						"limit":4,
+						"page":1,
+						"id":id,
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						uni.stopPullDownRefresh();
+						if(res.data.code==1){
+							that.rewardLog = res.data.data;
+							var list = res.data.data;
+							var rewardTotal = 0;
+							for(var i in list){
+								rewardTotal = rewardTotal + list[i].num;
+							}
+							that.rewardTotal = rewardTotal;
+						}
+					},
+					fail: function(res) {
+						uni.stopPullDownRefresh();
+					}
+				})
+			},
+			goReward(id){
+				var that = this;
+				
 				uni.navigateTo({
-					url: '/pages/user/post?type=edit'+'&cid='+cid
+				    url: '/pages/contents/rewardLog?id='+id
 				});
-			}
+			},
 		}
 	}
 </script>

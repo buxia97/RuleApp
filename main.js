@@ -13,6 +13,21 @@ Vue.prototype.$Net = Net
 // import cuCustom from './colorui/components/cu-custom.vue'
 // Vue.component('cu-custom',cuCustom)
 
+//页面类型
+//文章为主风格
+import find from './pages/tabPage/find.vue'
+Vue.component('find',find)
+
+import home from './pages/tabPage/home.vue'
+Vue.component('home',home)
+
+import square from './pages/tabPage/square.vue'
+Vue.component('square',square)
+
+import user from './pages/tabPage/user.vue'
+Vue.component('user',user)
+
+//通用
 import articleItem from './pages/components/articleItem.vue'
 Vue.component('articleItem',articleItem)
 
@@ -21,6 +36,9 @@ Vue.component('commentItem',commentItem)
 
 import spaceItem from './pages/components/spaceItem.vue'
 Vue.component('spaceItem',spaceItem)
+
+import shopItem from './pages/components/shopItem.vue'
+Vue.component('shopItem',shopItem)
 
 Vue.config.productionTip = false
 

@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -12,6 +12,9 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
+			<view class="fullpost-btn">
+				<text class="cu-btn bg-blue radius" @tap="toSort" v-if="group=='administrator'">商品分类</text>
+			</view>
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
@@ -19,6 +22,46 @@
 					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 			</view>
+			<view class="shop-sort shop-filter">
+				<view class="grid col-2 text-center">
+					<view class="shop-filter-box text-bold" @tap="sortShow=!sortShow,subtypeShow=false">
+						<block v-if="sort==0">
+							全部大类
+						</block>
+						<block v-else>
+							{{sortText}}
+						</block>
+						<text class="cuIcon-unfold margin-left-sm"></text>
+					</view>
+					<view class="shop-filter-box text-bold" @tap="subtypeShow=!subtypeShow,sortShow=false">
+						<block v-if="sort==0||subtypeText==''">
+							全部
+						</block>
+						<block v-else>
+							{{subtypeText}}
+						</block>
+						<text class="cuIcon-unfold margin-left-sm"></text>
+					</view>
+				</view>
+				
+				<view class="shop-sort-list" v-if="sortShow">
+					<view class="shop-sort-list-box" :class="sort == 0?'text-blue':''" @tap="setSort(null)">
+						全部
+					</view>
+					<view class="shop-sort-list-box" v-for="(item,index) in sortList" :class="item.id == sort?'text-blue':''"  @tap="setSort(item)">
+						{{item.name}}
+					</view>
+				</view>
+				<view class="shop-sort-list" v-if="subtypeShow">
+					<view class="shop-sort-list-box" :class="subtype == 0?'text-blue':''" @tap="setSubtype(null)">
+						全部
+					</view>
+					<view class="shop-sort-list-box" v-for="(item,index) in subtypeList" :class="item.id == subtype?'text-blue':''"  @tap="setSubtype(item)">
+						{{item.name}}
+					</view>
+				</view>
+			</view>
+			<view class="shop-sort-list-bg" v-if="sortShow||subtypeShow" @tap="sortShow=false,subtypeShow=false"></view>
 			<view class="search-type grid col-2">
 				<view class="search-type-box" @tap="toType(0)" :class="status==0?'active':''">
 					<text>待审核</text>
@@ -33,25 +76,10 @@
 			<view class="no-data" v-if="shopList.length==0">
 				暂时没有商品
 			</view>
-			<view class="shop-list grid col-2">
-				<view class="shop-box" v-for="(item,index) in shopList" :key="index">
-					<view class="shop-main">
-						<text class="bg-orange shop-status" v-if="item.status==0">待审核</text>
-						<text class="bg-green shop-status" v-if="item.status==1">已上架</text>
-						<text class="bg-red shop-status" v-if="item.status==2">已禁用</text>
-						<view class="shop-img" @tap="editShop(item.id)">
-							<image :src="item.imgurl" mode="widthFix"></image>
-						</view>
-						<view class="shop-title">
-							{{item.title}}
-						</view>
-						<view class="shop-info text-center">
-							<text class="shop-btn text-blue" v-if="item.status==0" @tap="getUserInfo(item.uid)">用户</text>
-							<text class="shop-btn text-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
-							<text class="shop-btn text-red" @tap="deleteShop(item.id)" v-if="group=='administrator'">删除</text>
-						</view>
-					</view>
-				</view>
+			<view class="shop-list">
+				<block v-for="(item,index) in shopList" :key="index">
+					<shopItem :item="item" :isAdmin="true" @updateList="updateList"></shopItem>
+				</block>
 
 				
 			</view>
@@ -96,12 +124,23 @@
 				isLoading:0,
 				group:"",
 				
+				shopTypelist:[],
+				sortShow:false,
+				sort:0,
+				sortText:"",
+				sortList:[],
+				subtypeShow:false,
+				subtype:0,
+				subtypeText:"",
+				subtypeList:[],
+				
 			}
 		},
 		onPullDownRefresh(){
 			var that = this;
 			that.page=1;
 			that.getShopList();
+			that.getShopTypeList();
 			var timer = setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 1000)
@@ -117,7 +156,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			
 			// #endif
 			if(localStorage.getItem('userinfo')){
@@ -141,6 +180,7 @@
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getShopList();
+			that.getShopTypeList();
 		},
 		methods: {
 			back(){
@@ -154,6 +194,104 @@
 				that.isLoad=1;
 				that.getShopList(true);
 				
+			},
+			getShopTypeList(){
+				var that = this;
+				that.$Net.request({
+					url: that.$API.shopTypeList(),
+					data:{
+						"limit":50,
+						"page":1,
+						"token":that.token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						uni.stopPullDownRefresh()
+						that.isLoad=0;
+						if(res.data.code==1){
+							that.shopTypelist = res.data.data;
+							var list = res.data.data;
+							var sortList = [];
+							for(var i in list){
+								if(list[i].parent==0){
+									sortList.push(list[i]);
+								}
+							}
+							that.sortList = sortList;
+							if(that.sort > 0){
+								for(var s in sortList){
+									if(sortList[s].id==that.sort){
+										that.setSort(sortList[s],true);
+									}
+								}
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						uni.stopPullDownRefresh()
+						that.moreText="加载更多";
+						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			setSort(data,noSub){
+				var that = this;
+				
+				that.sortShow = false;
+				if(data==null){
+					that.sort = 0;
+					that.sortText = "";
+					that.subtype = 0;
+					that.subtypeText = "";
+					that.page = 1;
+					that.getShopList();
+					return false;
+				}
+				that.sort = data.id;
+				that.sortText = data.name;
+				
+				if(that.sort != 0){
+					var list = that.shopTypelist;
+					var subtypeList = [];
+					for(var i in list){
+						if(list[i].parent==that.sort){
+							subtypeList.push(list[i]);
+						}
+					}
+					that.subtypeList = subtypeList;
+					that.subtype = 0;
+					that.subtypeText =  ""
+					
+					
+				}
+				that.getShopList();
+				
+			},
+			setSubtype(data){
+				var that = this;
+				that.subtypeShow = false;
+				if(data==null){
+					that.subtype = 0;
+					that.subtypeText = "";
+					that.page = 1;
+					that.getShopList();
+					return false;
+				}
+				that.subtype = data.id;
+				that.subtypeText = data.name;
+				that.getShopList();
 			},
 			getShopList(isPage){
 				var that = this;
@@ -181,6 +319,12 @@
 				var data = {
 					"status":that.status
 				}
+				if(that.sort!=0){
+					data.sort = that.sort;
+				}
+				if(that.subtype!=0){
+					data.subtype = that.subtype;
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -192,6 +336,7 @@
 						"limit":6,
 						"searchKey":that.searchText,
 						"page":page,
+						"order":"created"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -329,11 +474,21 @@
 				    url: '/pages/user/addshop'
 				});
 			},
-			editShop(sid){
+			editShop(data){
 				var that = this;
-				uni.navigateTo({
-				    url: '/pages/user/addshop?type=edit'+'&sid='+sid
-				});
+				var sid = data.id;
+				var isMd = data.isMd;
+				if(isMd==1){
+					uni.navigateTo({
+					    url: '/pages/user/addshop?type=edit'+'&sid='+sid
+					});
+				}else{
+					//富文本编辑器
+					uni.navigateTo({
+						url: '/pages/edit/addshop?type=edit'+'&id='+sid
+					});
+				}
+				
 			},
 			auditShop(sid){
 				var that = this;
@@ -413,6 +568,13 @@
 				that.isLoad=0;
 				that.getShopList(false);
 			},
+			updateList(){
+				var that = this;
+				that.page=1;
+				that.moreText="加载更多";
+				that.isLoad=0;
+				that.getShopList(false);
+			},
 			getUserInfo(uid){
 				var that = this;
 				uni.showLoading({
@@ -468,6 +630,12 @@
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(data.avatar)
 				});
 			},
+			toSort(){
+				var that = this;
+				uni.navigateTo({
+				    url: '/pages/manage/shoptype'
+				});
+			}
 			
 		},
 		components: {

@@ -41,7 +41,7 @@
 					<text class="cuIcon-text"></text>暂时没有数据
 				</view>
 				<view class="cu-item shadow"  v-for="(item,index) in contentsList" :key="index">
-					<view class="content"  @tap="toEdit(item.cid)">
+					<view class="content"  @tap="toEdit(item)">
 						<image v-if="item.images.length>0" :src="item.images[0]"
 						 mode="aspectFill"></image>
 						<view class="desc">
@@ -118,7 +118,7 @@
 			that.page = 1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				that.token=localStorage.getItem('token');
@@ -304,15 +304,25 @@
 				var that = this;
 				
 				uni.navigateTo({
-					url: '/pages/user/post'
+					url: '/pages/edit/articlePost'
 				});
 			},
-			toEdit(cid){
+			toEdit(data){
 				var that = this;
+				var cid = data.cid;
+				var markdown =  data.markdown;
+				if(markdown==1){
+					//MarkDown编辑器
+					uni.navigateTo({
+						url: '/pages/user/post?type=edit'+'&cid='+cid
+					});
+				}else{
+					//富文本编辑器
+					uni.navigateTo({
+						url: '/pages/edit/articlePost?type=edit'+'&cid='+cid
+					});
+				}
 				
-				uni.navigateTo({
-					url: '/pages/user/post?type=edit'+'&cid='+cid
-				});
 			},
 			toType(i){
 				var that = this;

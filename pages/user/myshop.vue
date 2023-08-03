@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -30,25 +30,11 @@
 			<view class="no-data" v-if="shopList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
-			<view class="shop-list grid col-2">
+			<view class="shop-list">
 				
-				<view class="shop-box" v-for="(item,index) in shopList" :key="index">
-					<view class="shop-main">
-						<text class="bg-orange shop-status" v-if="item.status==0">待审核</text>
-						<text class="bg-green shop-status" v-if="item.status==1">已上架</text>
-						<text class="bg-red shop-status" v-if="item.status==2">已禁用</text>
-						<view class="shop-img">
-							<image :src="item.imgurl"></image>
-						</view>
-						<view class="shop-title">
-							{{item.title}}
-						</view>
-						<view class="shop-info text-center">
-							<text class="shop-btn text-blue" @tap="editShop(item.id)">编辑</text>
-							<text class="shop-btn text-red" @tap="deleteShop(item.id)">删除</text>
-						</view>
-					</view>
-				</view>
+				<block v-for="(item,index) in shopList" :key="index">
+					<shopItem :item="item" :isAdmin="true"></shopItem>
+				</block>
 
 				
 			</view>
@@ -112,7 +98,7 @@
 			localStorage.removeItem('userShopinfo');
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			
 			// #endif
 			if(localStorage.getItem('userinfo')){
@@ -306,7 +292,7 @@
 			toShop(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '/pages/user/addshop'
+				    url: '/pages/edit/addshop'
 				});
 			},
 			sellOrder(){
@@ -315,11 +301,21 @@
 				    url: '/pages/user/sellorder'
 				});
 			},
-			editShop(sid){
+			editShop(data){
 				var that = this;
-				uni.navigateTo({
-				    url: '/pages/user/addshop?type=edit'+'&sid='+sid
-				});
+				var sid = data.id;
+				var isMd = data.isMd;
+				if(isMd==1){
+					uni.navigateTo({
+					    url: '/pages/user/addshop?type=edit'+'&sid='+sid
+					});
+				}else{
+					//富文本编辑器
+					uni.navigateTo({
+						url: '/pages/edit/addshop?type=edit'+'&id='+sid
+					});
+				}
+				
 			},
 			
 		},

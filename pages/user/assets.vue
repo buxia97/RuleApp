@@ -141,10 +141,13 @@
 		onReady() {
 		    // #ifdef APP-PLUS
 			this.adpid = this.$API.GetAdpid();
-		    this.adOption = {
-		        adpid: this.adpid
-		    };
-			this.createAd();
+			if(this.adpid!=""&&this.adpid){
+				this.adOption = {
+				    adpid: this.adpid
+				};
+				this.createAd();
+			}
+		    
 		    // #endif
 		    
 		},

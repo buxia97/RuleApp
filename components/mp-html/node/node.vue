@@ -842,7 +842,7 @@ myAudio,
   }
 }
 </script>
-<style>/deep/ .hl-code,/deep/ .hl-pre{color:#ccc;background:0 0;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}/deep/ .hl-pre{padding:1em;margin:.5em 0;overflow:auto}/deep/ .hl-pre{background:#2d2d2d}/deep/ .hl-block-comment,/deep/ .hl-cdata,/deep/ .hl-comment,/deep/ .hl-doctype,/deep/ .hl-prolog{color:#999}/deep/ .hl-punctuation{color:#ccc}/deep/ .hl-attr-name,/deep/ .hl-deleted,/deep/ .hl-namespace,/deep/ .hl-tag{color:#e2777a}/deep/ .hl-function-name{color:#6196cc}/deep/ .hl-boolean,/deep/ .hl-function,/deep/ .hl-number{color:#f08d49}/deep/ .hl-class-name,/deep/ .hl-constant,/deep/ .hl-property,/deep/ .hl-symbol{color:#f8c555}/deep/ .hl-atrule,/deep/ .hl-builtin,/deep/ .hl-important,/deep/ .hl-keyword,/deep/ .hl-selector{color:#cc99cd}/deep/ .hl-attr-value,/deep/ .hl-char,/deep/ .hl-regex,/deep/ .hl-string,/deep/ .hl-variable{color:#7ec699}/deep/ .hl-entity,/deep/ .hl-operator,/deep/ .hl-url{color:#67cdcc}/deep/ .hl-bold,/deep/ .hl-important{font-weight:700}/deep/ .hl-italic{font-style:italic}/deep/ .hl-entity{cursor:help}/deep/ .hl-inserted{color:green}
+<style>/deep/ .hl-code,/deep/ .hl-pre,/deep/ .ql-syntax{color:#ccc;background:0 0;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}/deep/ .hl-pre,/deep/ .ql-syntax{padding:1em;margin:.5em 0;overflow:auto}/deep/ .hl-pre,/deep/ .ql-syntax{background:#2d2d2d}/deep/ .hl-block-comment,/deep/ .hl-cdata,/deep/ .hl-comment,/deep/ .hl-doctype,/deep/ .hl-prolog{color:#999}/deep/ .hl-punctuation{color:#ccc}/deep/ .hl-attr-name,/deep/ .hl-deleted,/deep/ .hl-namespace,/deep/ .hl-tag{color:#e2777a}/deep/ .hl-function-name{color:#6196cc}/deep/ .hl-boolean,/deep/ .hl-function,/deep/ .hl-number{color:#f08d49}/deep/ .hl-class-name,/deep/ .hl-constant,/deep/ .hl-property,/deep/ .hl-symbol{color:#f8c555}/deep/ .hl-atrule,/deep/ .hl-builtin,/deep/ .hl-important,/deep/ .hl-keyword,/deep/ .hl-selector{color:#cc99cd}/deep/ .hl-attr-value,/deep/ .hl-char,/deep/ .hl-regex,/deep/ .hl-string,/deep/ .hl-variable{color:#7ec699}/deep/ .hl-entity,/deep/ .hl-operator,/deep/ .hl-url{color:#67cdcc}/deep/ .hl-bold,/deep/ .hl-important{font-weight:700}/deep/ .hl-italic{font-style:italic}/deep/ .hl-entity{cursor:help}/deep/ .hl-inserted{color:green}
 /deep/ .md-p {
   margin-block-start: 1em;
   margin-block-end: 1em;
@@ -935,7 +935,9 @@ myAudio,
   text-decoration: underline;
   opacity: 0.7;
 }
-
+p{
+	word-wrap:break-word
+}
 /* 图片默认效果 */
 ._img {
   max-width: 100%;
@@ -1046,6 +1048,7 @@ p{
   font-size: smaller;
   vertical-align: super;
 }
+
 
 ._thead,
 ._tbody,

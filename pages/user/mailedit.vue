@@ -149,8 +149,8 @@
 								localStorage.removeItem('userinfo');
 								localStorage.removeItem('token');
 								var timer = setTimeout(function() {
-									uni.reLaunch({
-										url: '/pages/home/home'
+									uni.redirectTo({
+										url: '/pages/home/index'
 									})
 									clearTimeout('timer')
 								}, 1000)

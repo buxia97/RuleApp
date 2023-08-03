@@ -2,35 +2,7 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/home/home",
-			"style": {
-				"enablePullDownRefresh":true
-			},
-			
-			"app-plus":{
-				"pullToRefresh":{
-					"color":"#54b5db",
-					"style":"circle"
-				}
-				
-			}
-		},
-		{
-			"path": "pages/home/find",
-			"style": {
-				"enablePullDownRefresh":true
-			},
-			
-			"app-plus":{
-				"pullToRefresh":{
-					"color":"#54b5db",
-					"style":"circle"
-				}
-				
-			}
-		},
-		{
-			"path": "pages/home/square",
+			"path": "pages/home/index",
 			"style": {
 				"enablePullDownRefresh":true
 			},
@@ -56,10 +28,6 @@
 				}
 				
 			}
-		},
-		{
-			"path": "pages/home/user",
-			"style": {}
 		},
 		{
 			"path": "pages/home/about",
@@ -120,6 +88,13 @@
 		},
 		{
 			"path": "pages/user/post",
+			"style": {},
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path": "pages/user/draftList",
 			"style": {},
 			"app-plus": {
 				"softinputMode": "adjustResize"
@@ -360,6 +335,15 @@
 			}
 		},
 		{
+			"path": "pages/manage/shoptype",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/manage/shopTypeAdd"
+		},
+		{
 			"path": "pages/manage/users",
 			"style": {
 				"enablePullDownRefresh":true
@@ -468,7 +452,15 @@
 		{
 			"path": "pages/space/reply",
 			"style": {}
+		},
+		// #ifdef APP-PLUS || H5
+		{
+			"path": "pages/edit/addshop"
+		},
+		{
+			"path": "pages/edit/articlePost"
 		}
+		// #endif
 		
 	],
 	"globalStyle": {
@@ -491,46 +483,6 @@
 				"query": "" //启动参数
 			}
 		]
-	},
-
-	"tabBar": {
-		"color": "#333333",
-		"selectedColor": "#54b5db", 
-		"borderStyle": "white",
-		"backgroundColor": "#ffffff",
-		// #ifdef APP-PLUS
-		"height":"0px",
-		// #endif
-		"list": [
-			{
-				"text": "首页",
-				"pagePath": "pages/home/home",
-				"iconPath": "static/tabbar/home.png",
-				"selectedIconPath": "static/tabbar/home_cur.png"
-	
-			},
-			{
-				"text": "发现",
-				"pagePath": "pages/home/find",
-				"iconPath": "static/tabbar/find.png",
-				"selectedIconPath": "static/tabbar/find_cur.png"
-			},
-			{
-				"text": "广场",
-				"pagePath": "pages/home/square",
-				"iconPath": "static/tabbar/square.png",
-				"selectedIconPath": "static/tabbar/square_cur.png"
-			},
-			{
-				"text": "我的",
-				"pagePath": "pages/home/user",
-				"iconPath": "static/tabbar/user.png",
-				"selectedIconPath": "static/tabbar/user_cur.png"
-			}
-		]
-	
-	
 	}
-
 
 }

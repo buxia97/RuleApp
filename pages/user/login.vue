@@ -195,8 +195,8 @@
 							localStorage.setItem('token',res.data.data.token);
 							that.getCID();
 							var timer = setTimeout(function() {
-								uni.switchTab({
-									url: '/pages/home/home'
+								uni.redirectTo({
+									url: '/pages/home/index'
 								})
 								clearTimeout('timer')
 							}, 1000)
@@ -286,8 +286,8 @@
 											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
 											localStorage.setItem('token',res.data.data.token);
 											var timer = setTimeout(function() {
-												uni.switchTab({
-													url: '/pages/home/home'
+												uni.redirectTo({
+													url: '/pages/home/index'
 												})
 												clearTimeout('timer')
 											}, 1000)
@@ -377,8 +377,8 @@
 											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
 											localStorage.setItem('token',res.data.data.token);
 											var timer = setTimeout(function() {
-												uni.switchTab({
-													url: '/pages/home/home'
+												uni.redirectTo({
+													url: '/pages/home/index'
 												})
 												clearTimeout('timer')
 											}, 1000)
@@ -459,8 +459,8 @@
 											localStorage.setItem('userinfo',JSON.stringify(res.data.data));
 											localStorage.setItem('token',res.data.data.token);
 											var timer = setTimeout(function() {
-												uni.switchTab({
-													url: '/pages/home/home'
+												uni.redirectTo({
+													url: '/pages/home/index'
 												})
 												clearTimeout('timer')
 											}, 1000)

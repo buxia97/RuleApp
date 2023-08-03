@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -26,12 +26,18 @@
 				<text class="text-sm shop-user text-blue"  @tap="toUserContents(userInfo)"><block v-if="userInfo.screenName!=''">{{userInfo.screenName}}</block>
 							<block v-else>{{userInfo.name}}</block>
 			</text>
-				<text class="text-sm text-right text-gray">剩余数量：{{num}}</text>
+				<text class="text-sm text-right text-gray">剩余{{num}}</text>
+				<text class="text-sm text-right text-gray margin-left-xs">已售出{{sellNum}}</text>
 			</view>
 			<view class="info-content shop-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
+				<block v-if="shopIsMd==1">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
+				</block>
+				<block v-if="shopIsMd==0">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="false"/>
+				</block>
 			</view>
 		</view>
 		<view class="shopinfo-bar grid col-2" v-if="isBuy==0||type==1">
@@ -85,9 +91,11 @@
 				markdownData: {},
 				price:"",
 				num:"",
+				sellNum:"",
 				imgurl:"",
 				
 				isLoading:0,
+				shopIsMd:-1,
 				
 				isBuy:0,
 				shopinfo:{},
@@ -113,7 +121,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.getVipInfo();
 			that.userStatus();
@@ -159,12 +167,14 @@
 					success: function(res) {
 						uni.stopPullDownRefresh();
 						that.shopinfo = res.data;
+						that.shopIsMd = res.data.isMd;
 						that.title = res.data.title;
 						that.type = res.data.type;
 						that.html = res.data.text;
 						that.imgurl = res.data.imgurl;
 						that.price = res.data.price;
 						that.num = res.data.num;
+						that.sellNum =  res.data.sellNum;
 						that.vipDiscount = res.data.vipDiscount;
 						if(res.data.type!=1){
 							that.isBuyShop(that.sid);

@@ -2,9 +2,7 @@
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
 //var API_URL = 'https://api.ruletree.club/';
-
-var API_URL = 'http://127.0.0.4/';
-//在API配置中心创建的应用Key
+var API_URL = 'http://192.168.0.183/';
 var appKey = "dSY0uo0H";
 //web网站地址
 var WEB_URL = '';
@@ -125,6 +123,9 @@ module.exports = {
 			logo = AppInfo.logo;
 		}
 		return logo;
+	},
+	getApiUrl:function(){
+		return API_URL;
 	},
 	GetIsComment(){
 		return isComment;
@@ -453,6 +454,21 @@ module.exports = {
 	deleteShop:function(){
 		return API_URL + 'typechoShop/deleteShop';
 	},
+	deleteShopType:function(){
+		return API_URL + 'typechoShop/deleteShopType';
+	},
+	shopTypeInfo:function(){
+		return API_URL + 'typechoShop/shopTypeInfo';
+	},
+	editShopType:function(){
+		return API_URL + 'typechoShop/editShopType';
+	},
+	addShopType:function(){
+		return API_URL + 'typechoShop/addShopType';
+	},
+	shopTypeList:function(){
+		return API_URL + 'typechoShop/shopTypeList';
+	},
 	buyShop:function(){
 		return API_URL + 'typechoShop/buyShop';
 	},
@@ -467,6 +483,9 @@ module.exports = {
 	},
 	buyVIP:function(){
 		return API_URL + 'typechoShop/buyVIP';
+	},
+	buyVIPpackage:function(){
+		return API_URL + 'typechoShop/buyVIPpackage';
 	},
 	orderList:function(){
 		return API_URL + 'typechoUserlog/orderList';
