@@ -238,17 +238,6 @@
 		<view class="data-box">
 			
 			<view class="cu-list menu">
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="cu-item" @tap="toRebate" v-if="userInfo!=null">
-					<view class="content">
-						<text class="cuIcon-attentionfavorfill text-green"></text>
-						<text>获取{{currencyName}}</text>
-					</view>
-					<view class="action">
-						<text class="cuIcon-right"></text>
-					</view>
-				</view>
-				<!--  #endif -->
 				<view class="cu-item" @tap="toSetUp">
 					<view class="content">
 						<text class="cuIcon-settingsfill text-blue"></text>

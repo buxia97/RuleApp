@@ -435,6 +435,9 @@ module.exports = {
 	contentConfig:function(){
 		return API_URL + 'typechoContents/contentConfig';
 	},
+	rewardList:function(){
+		return API_URL + 'typechoContents/rewardList';
+	},
 	//下面这个方法涉及图片上传，根据上方的uploadType进行调整
 	upload:function(){
 		return API_URL + 'upload/full';

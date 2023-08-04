@@ -262,6 +262,7 @@
 			}
 			that.owoList = owoList;
 			// #endif
+			localStorage.setItem('noticeSum',0);
 			
 		},
 		methods:{
