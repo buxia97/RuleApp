@@ -538,7 +538,7 @@
 				// #endif
 			},
 			toWord(){
-				var url = "https://www.ruletree.club/tag/RuleApp/";
+				var url = "https://www.yuque.com/buxia97/ruleproject";
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif

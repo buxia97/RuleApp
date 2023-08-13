@@ -2,8 +2,9 @@
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
 //var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'http://192.168.0.183/';
-var appKey = "dSY0uo0H";
+var API_URL = 'https://api.ruletree.club/';
+//在API配置中心创建的应用Key
+var appKey = "Yc9AQDnN";
 //web网站地址
 var WEB_URL = '';
 
@@ -15,7 +16,6 @@ var GithubUrl = 'https://github.com/buxia97/RuleApp';
 //由于uniapp官方的问题，只能拦截部分条件
 var banVPN = 0;
 //全局数据调用部分【重要】
-
 //评论等级头衔
 var rankList = ["小水友","资深水友","灌水大师","小龙王","大龙王","深海巨妖","水神","至尊水神"];
 //经验等级头衔

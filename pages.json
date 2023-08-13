@@ -452,9 +452,9 @@
 		{
 			"path": "pages/space/reply",
 			"style": {}
-		},
+		}
 		// #ifdef APP-PLUS || H5
-		{
+		,{
 			"path": "pages/edit/addshop"
 		},
 		{

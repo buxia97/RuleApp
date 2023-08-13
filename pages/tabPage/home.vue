@@ -1163,9 +1163,7 @@
 					});
 					return false;
 				}
-				uni.switchTab({
-					url: '/pages/home/user'
-				});
+				uni.$emit('goUser', 0); 
 			},
 			toMetas(){
 				var that = this;

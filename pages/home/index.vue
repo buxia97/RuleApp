@@ -167,10 +167,22 @@ export default {
 				localUrl:""
 			},
 			isStart:false,
+			backButtonPress:0,
         };
     },
 	onBackPress(){
-		return true
+		// #ifdef APP-PLUS
+		this.backButtonPress++;
+		if (this.backButtonPress > 1) { 
+			plus.runtime.quit();
+		} else {
+			plus.nativeUI.toast('再按一次退出应用');
+		} 
+		setTimeout(()=> {
+			this.backButtonPress = 0;
+		}, 1000);
+		// #endif
+		return true;
 	},
 	onPullDownRefresh(){
 		var that = this;
@@ -273,7 +285,9 @@ export default {
 		 // setTimeout(function() {
 		 // 	uni.$emit('onShow', 0);
 		 // }, 200); 
-		
+		uni.$on('goUser', function(data) {
+			that.tabbarChange("user",3)
+		});
     },
 	onReady() {
 		setTimeout(function() {

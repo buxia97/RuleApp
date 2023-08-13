@@ -173,8 +173,11 @@
 						</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
-								上次活跃: <text class="text-blue">{{formatDate(item.posttime)}}</text>
-							</view> </view>
+								上次活跃: 
+								<text class="text-blue" v-if="item.posttime>0">{{formatDate(item.posttime)}}</text>
+								<text class="text-blue" v-else>暂未活跃</text>
+							</view>
+						</view>
 					</view>
 					<view class="action goUserIndex">
 						<view class="cu-btn text-blue">主页</view>
