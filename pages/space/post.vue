@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -21,6 +21,9 @@
 						</block>
 						<block v-if="type==5">
 							转发商品
+						</block>
+						<block v-if="type==6">
+							转发帖子
 						</block>
 					</block>
 					<block v-else>
@@ -72,6 +75,10 @@
 						</view>
 					</view>
 				</view>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">仅自己可见</view>
+				<switch @change="OnlyMe" :class="onlyMe?'checked':''" :checked="onlyMe?true:false"></switch>
 			</view>
 			
 			<!--  #endif -->
@@ -161,6 +168,25 @@
 			<!--  #endif -->
 			
 		</form>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="addSpace">确定</view>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -195,6 +221,7 @@
 				
 				forwardJson:null,
 				contentJson:null,
+				postJson:null,
 				shopJson:null,
 				
 				isOwO:false,
@@ -203,7 +230,12 @@
 				OwOtype:"paopao",
 				
 				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
 				
+				onlyMe:false
 				
 			}
 		},
@@ -218,7 +250,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				that.token = localStorage.getItem('token');
@@ -239,7 +271,12 @@
 			}
 			if(res.toid){
 				that.toid = res.toid;
-				that.getInfo()
+				if(that.type==6){
+					that.getPostInfo();
+				}else{
+					that.getInfo()
+				}
+				
 			}
 			
 			
@@ -255,6 +292,7 @@
 				}
 				
 			}
+			that.getConfig();
 			
 		},
 		methods: {
@@ -262,6 +300,31 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			OnlyMe(e) {
+				this.onlyMe = e.detail.value
+			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
+			getConfig() {
+				var that = this;
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.verifyLevel = AppInfo.verifyLevel;
+					}catch(e){
+						console.log(e);
+					}
+					
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			toOwO(text){
 				var that = this;
@@ -291,15 +354,15 @@
 			},
 			getForwardInfo(toid){
 				var that = this;
-				var data = {
-					"id":toid
-				}
 				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				data.token = token;
+				var data = {
+					"id":that.id,
+					"token":token
+				}
 				that.$Net.request({
 					url: that.$API.spaceInfo(),
 					data:data,
@@ -327,15 +390,15 @@
 			},
 			getSpaceInfo(){
 				var that = this;
-				var data = {
-					"id":that.id
-				}
 				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-				data.token = token;
+				var data = {
+					"id":that.id,
+					"token":token
+				}
 				that.$Net.request({
 					url: that.$API.spaceInfo(),
 					data:data,
@@ -349,6 +412,10 @@
 						if(res.data.code==1){
 							that.id = res.data.data.id;
 							that.type = res.data.data.type;
+							
+							if(res.data.data.onlyMe==1){
+								that.onlyMe = true;
+							}
 							var text = res.data.data.text;
 							text = that.replaceAll(text,"/r/n","\n");
 							text = that.replaceAll(text,"||rn||","\n");
@@ -389,12 +456,7 @@
 					"key":that.toid,
 					"isMd":0,
 				}
-				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}
-				data.token = token;
+				
 				that.$Net.request({
 					url: that.$API.getContentsInfo(),
 					data:data,
@@ -410,6 +472,31 @@
 							
 
 							
+						}
+					},
+					fail: function(res) {
+						uni.stopPullDownRefresh();
+					}
+				})
+			},
+			getPostInfo(){
+				var that = this;
+				var data = {
+					"id":that.toid,
+				}
+				
+				that.$Net.request({
+					url: that.$API.postInfoForum(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						uni.stopPullDownRefresh();
+						if(res.data.code==1){
+							that.postJson = res.data.data;
 						}
 					},
 					fail: function(res) {
@@ -476,11 +563,15 @@
 				text = text.replace(/\r\n/g,"||rn||");
 				text = text.replace(/\n/g,"||rn||");
 				var data = {
-					type:that.type,
-					text:text,
-					toid:that.toid,
-					pic:that.pic,
-					token:that.token
+					"type":that.type,
+					"text":text,
+					"toid":that.toid,
+					"pic":that.pic,
+					"token":that.token,
+					'verifyCode':that.verifyCode
+				}
+				if(that.onlyMe){
+					data.onlyMe = 1;
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -495,6 +586,8 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -510,6 +603,8 @@
 						}
 					},
 					fail: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -586,6 +681,9 @@
 					toid:that.toid,
 					pic:that.pic,
 					token:that.token
+				}
+				if(that.onlyMe){
+					data.onlyMe = 1;
 				}
 				uni.showLoading({
 					title: "加载中"

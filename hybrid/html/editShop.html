@@ -152,6 +152,14 @@
 				  <input placeholder="输入商品数量" type="number"  v-model="num"/>
 			  </div>
 		</div>
+		<div class="form-box">
+			  <div class="form-label">
+			  	  积分抵扣
+			  </div>
+			  <div class="form-input">
+				  <input placeholder="抵扣积分数量,为0则禁止抵扣" type="number"  v-model="integral"/>
+			  </div>
+		</div>
 		<div class="form-box border-top">
 		  <div class="form-label">
 			  VIP折扣
@@ -442,6 +450,25 @@
   		</div>
   	</div>
   </div>
+  <div class="alertTips" v-if="isVerify">
+  	  <div class="alertTips-bg" @click="isVerify=false,verifyCode = ''"></div>
+  	  <div class="alertTips-box">
+  		  <div class="alertTips-main">
+  		  		<div class="alertTips-title">
+  		  			图片验证
+  		  		</div>
+  				<div class="alertTips-concent">
+  					<div class="alertTips-concent-pic">
+  						<img :src="kaptchaUrl" @click="reloadCode()"/>
+  					</div>
+  					<div class="alertTips-concent-input">
+  						<input  type="text" v-model="verifyCode" placeholder="输入验证码"/>
+  						<button type="button" @click="submit()">验证</button>
+  					</div>
+  				</div>
+  		  </div>
+  	  </div>
+  </div>
   <div class="editLoading" v-if="!loading">
 	  <div class="editLoading-main">
 	  	  <img src="loading.gif"/>
@@ -489,6 +516,7 @@ var wu = new Wu()
 	  num:"",
 	  value:"",
 	  uid:"",
+	  integral:"",
 	  
 	  shopTypelist:[],
 	  sortShow:false,
@@ -600,6 +628,10 @@ var wu = new Wu()
 	  selectionIndex:0,
 	  shopSelectionIndex:0,
 	  
+	  verifyLevel:0,
+	  verifyCode:"",
+	  kaptchaUrl:'',
+	  isVerify:false,
     },
 	created() {
 		var that = this;
@@ -677,6 +709,16 @@ var wu = new Wu()
 		},
 		submit(){
 			var that = this;
+			that.isVerify = false;
+			if (that.verifyCode == "") {
+				wu.showToast({
+				    title: '请完成图片验证',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
 			that.addShop()
 		},
 		addShop() {
@@ -704,9 +746,16 @@ var wu = new Wu()
 				'price':that.price,
 				'num':that.num,
 				'value':value,
+				'integral':that.integral,
 				'sort':that.sort,
 				'subtype':that.subtype,
 				'vipDiscount':that.vipDiscount,
+			}
+			if(that.verifyLevel > 1){
+				if (that.verifyCode == "") {
+					that.isVerify = true;
+					return false
+				}
 			}
 			var data = {
 				"params":JSON.stringify(that.removeObjectEmptyKey(params)),
@@ -719,6 +768,8 @@ var wu = new Wu()
 			wu.showLoading();
 			var url = that.apiUrl+'typechoShop/addShop';
 			request.post(url,that.qs(data)).then(function(res){
+				that.isVerify = false;
+				that.verifyCode = "";
 				setTimeout(function () {
 					wu.hideToast();
 				}, 1000);
@@ -769,8 +820,7 @@ var wu = new Wu()
 			var url = that.apiUrl+'typechoShop/shopInfo';
 			request.post(url,that.qs(data)).then(function(res){
 				that.getShopTypelist();
-				if(res.data.title){
-					
+				if(res.data.id){
 					that.title = res.data.title;
 					that.category = res.data.type;
 					
@@ -787,31 +837,36 @@ var wu = new Wu()
 					that.imgurl = res.data.imgurl;
 					that.price = res.data.price;
 					that.num = res.data.num;
+					
+					that.integral = res.data.integral;
 					that.value = res.data.value;
 					that.vipDiscount = res.data.vipDiscount;
 					
 					that.sort = res.data.sort;
 					that.subtype = res.data.subtype;
-					
-					var text = res.data.text;
-					var delta= quill.clipboard.convert(text);
-					var ops = delta.ops;
-					//去除多余的换行
-					for(var o in ops){
-						if(that.isString(ops[o].insert)){
-							ops[o].insert = that.replaceAll(ops[o].insert,"\n\n","\n");
+					if(res.data.text){
+						var text = res.data.text;
+						var delta= quill.clipboard.convert(text);
+						var ops = delta.ops;
+						//去除多余的换行
+						for(var o in ops){
+							if(that.isString(ops[o].insert)){
+								ops[o].insert = that.replaceAll(ops[o].insert,"\n\n","\n");
+							}
+							
 						}
-						
+						delta.ops = ops;
+						quill.setContents(delta);
 					}
-					delta.ops = ops;
-					quill.setContents(delta);
+					
 					
 					var value = res.data.value;
 					var deltaValue= quill.clipboard.convert(value);
 					var opsValue = deltaValue.ops;
+					console.log(opsValue);
 					//去除多余的换行
 					for(var o in opsValue){
-						if(that.isString(ops[o].insert)){
+						if(that.isString(opsValue[o].insert)){
 							opsValue[o].insert = that.replaceAll(opsValue[o].insert,"\n\n","\n");
 						}
 						
@@ -858,6 +913,7 @@ var wu = new Wu()
 				'value':value,
 				'vipDiscount':that.vipDiscount,
 				'sort':that.sort,
+				'integral':that.integral,
 				'subtype':that.subtype,
 			}
 			var data = {

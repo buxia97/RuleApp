@@ -13,7 +13,7 @@
 					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
@@ -23,7 +23,7 @@
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					
 				</view>
 				<!--  #endif -->
@@ -33,9 +33,11 @@
 		<view class="data-box" style="padding-bottom: 20upx;">
 			<view class="cu-list menu-avatar">
 				<view class="cu-item userinfo" v-if="userInfo==null">
-					<view class="cu-avatar round lg"></view>
+					<view class="cu-avatar round lg">
+						<i class="cuIcon-myfill"></i>
+					</view>
 					<view class="content" @tap="toLogin">
-						<view class="text-grey">点击登录</view>
+						<view class="text-black">点击登录</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut">
 								
@@ -48,7 +50,7 @@
 						<view class="curLv" :style="lvStyle">{{getLv(userInfo.experience)}}</view>
 					</view>
 					<view class="content">
-						<view class="text-grey">
+						<view class="text-black">
 							
 							<block v-if="userInfo.isvip==1">
 								<block v-if="userInfo.vip==1">
@@ -114,7 +116,7 @@
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/useredit')">
-							<view class="index-sort-i" style="background-color: #006493;">
+							<view class="index-sort-i" style="background-color: #ff5c5f;">
 								<text class="cuIcon-edit"></text>
 							</view>
 							<view class="index-sort-text">
@@ -123,11 +125,10 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/followList?uid='+uid)">
-							<view class="index-sort-i" style="background-color: #ff7a06;">
+							<view class="index-sort-i" style="background-color: #00aa7f;">
 								<text class="cuIcon-attentionfill"></text>
 							</view>
 							<view class="index-sort-text">
@@ -136,7 +137,6 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/usermark')">
@@ -149,62 +149,10 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/user/userpost')">
-							<view class="index-sort-i">
-								<text class="cuIcon-writefill"></text>
-							</view>
-							<view class="index-sort-text">
-								我的投稿
-							</view>
-						</view>
-					</waves>
-				</view>
-				
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/user/myshop')">
-							<view class="index-sort-i" style="background-color: #0aa347;">
-								<text class="cuIcon-present"></text>
-							</view>
-							<view class="index-sort-text">
-								我的商品
-							</view>
-						</view>
-					</waves>
-				</view>
-				<!--  #endif -->
-				<view class="index-sort-box"  @tap="toPage('帮助与反馈',feedback)">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i">
-								<text class="cuIcon-post"></text>
-							</view>
-							<view class="index-sort-text">
-								意见反馈
-							</view>
-						</view>
-					</waves>
-				</view>
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="index-sort-box" @tap="toLink('/pages/user/order')">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i" style="background-color: #f8c909;">
-								<text class="cuIcon-baby"></text>
-							</view>
-							<view class="index-sort-text">
-								订单记录
-							</view>
-						</view>
-					</waves>
-				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/user/assets')">
-							<view class="index-sort-i">
+							<view class="index-sort-i" style="background-color: #ff34b8;">
 								<text class="cuIcon-choicenessfill"></text>
 							</view>
 							<view class="index-sort-text">
@@ -213,7 +161,87 @@
 						</view>
 					</waves>
 				</view>
-				<!--  #endif -->
+			</view>
+		</view>
+		<view class="data-box">
+			<view class="user-title">
+				更多功能
+			</view>
+			<view class="index-sort grid col-4">
+				
+				<view class="index-sort-box" @tap="toLink('/pages/user/userpost')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color:#1e86e7;">
+								<text class="cuIcon-writefill"></text>
+							</view>
+							<view class="index-sort-text">
+								我的文章
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" @tap="toLink('/pages/space/mySpace')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #0aa347;">
+								<text class="cuIcon-creativefill"></text>
+							</view>
+							<view class="index-sort-text">
+								我的动态
+							</view>
+						</view>
+					</waves>
+				</view>
+				
+				<view class="index-sort-box" @tap="toLink('/pages/user/myshop')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #ff4398;">
+								<text class="cuIcon-shopfill"></text>
+							</view>
+							<view class="index-sort-text">
+								我的商品
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box"  @tap="toPage('帮助与反馈',feedback)">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #be5f00;">
+								<text class="cuIcon-post"></text>
+							</view>
+							<view class="index-sort-text">
+								意见反馈
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" @tap="toLink('/pages/user/order')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #5d72f8;">
+								<text class="cuIcon-baby"></text>
+							</view>
+							<view class="index-sort-text">
+								订单记录
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" @tap="toLink('/pages/user/inbox')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #9728aa;">
+								<text class="cuIcon-noticefill"></text>
+							</view>
+							<view class="index-sort-text">
+								消息通知
+							</view>
+						</view>
+					</waves>
+				</view>
 			</view>
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
@@ -233,11 +261,13 @@
 				</view>
 			</view>
 		</block>
+
 		
 		<!--  #endif -->
 		<view class="data-box">
 			
 			<view class="cu-list menu">
+
 				<view class="cu-item" @tap="toSetUp">
 					<view class="content">
 						<text class="cuIcon-settingsfill text-blue"></text>
@@ -286,6 +316,30 @@
 			
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='changeStyle'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">切换到圈子风格</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<block v-if="curFullStyle=='index'">
+						通过此操作可以进入圈子内容为主的首页模式，此页面仅供预览，重启APP后将还原。
+					</block>
+					<block v-else>
+						通过此入口可重新回到文章为主的首页模式，也可以通过重启APP回归。
+					</block>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn bg-purple" @tap="changeStyle">确认切换</button>
+		
+					</view>
+				</view>
+			</view>
+		</view>
 		<view style="width: 100%; height: 100upx;"></view>
 	</view>
 </template>
@@ -326,7 +380,13 @@
 				
 				noticeSum:0,
 				
-				currencyName:""
+				isModerator:false,
+				
+				currencyName:"",
+				
+				modalName:null,
+				
+				curFullStyle:""
 				
 			}
 		},
@@ -361,6 +421,9 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
+				if(localStorage.getItem('curFullStyle')){
+					that.curFullStyle = localStorage.getItem('curFullStyle');
+				}
 				
 			});
 			
@@ -398,7 +461,9 @@
 				});
 				
 			},
-			
+			hideModal(e) {
+				this.modalName = null
+			},
 			getUserLv(i){
 				var that = this;
 				var rankList = that.$API.GetRankList();
@@ -682,13 +747,7 @@
 			},
 			scanLogin(text){
 				var that = this;
-				if(that.token==""){
-					uni.showToast({
-						title: "请先登录",
-						icon: 'none'
-					})
-					return false;
-				}
+				
 				if(that.isJSON(text)){
 					text = JSON.parse(text);
 				}else{
@@ -700,13 +759,20 @@
 				}
 				if(text.type){
 					if(text.type=="Scan"){
+						if(that.token==""){
+							uni.showToast({
+								title: "请先登录",
+								icon: 'none'
+							})
+							return false;
+						}
 						uni.navigateTo({
 						    url: '/pages/user/scan?text='+text.data
 						});
 						return false;
 					}else if(text.type=="Invite"){
 						uni.navigateTo({
-						    url: '/pages/user/register?inviteCode='+text.data
+						    url: '/pages/user/register?inviteCode='+text.code
 						});
 						return false;
 					}else{
@@ -786,7 +852,6 @@
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
 				});
 			},
-			
 		},
 		// #ifdef APP-PLUS
 		components: {

@@ -168,7 +168,7 @@
 			shopInfo(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '/pages/contents/shopinfo?sid='+sid
+				    url: '/pages/shop/shopinfo?sid='+sid
 				});
 			},
 			toInfo(data){
@@ -179,7 +179,7 @@
 					})
 				}else{
 					uni.navigateTo({
-					    url: '/pages/contents/shoptext?sid='+data.id
+					    url: '/pages/shop/shoptext?sid='+data.id
 					});
 				}
 			},

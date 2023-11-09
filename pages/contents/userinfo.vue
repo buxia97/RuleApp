@@ -11,8 +11,11 @@
 					</block>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toSearch">
+				<view class="action" @tap="toSearch" v-if="vid!=uid">
 					<text class="cuIcon-search"></text>
+				</view>
+				<view class="action" @tap="toEdit" v-else>
+					<text class="cuIcon-writefill"></text>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -21,8 +24,11 @@
 		<view class="all-box" style="margin-top:-10upx">
 			
 			<view class="user-info" :style="'padding-top:'+NavBar+'px;'">
-				<view class="user-info-bg">
+				<view class="user-info-bg" v-if="userBg==''">
 					<image :src="avatar" mode="aspectFill"></image>
+				</view>
+				<view class="user-info-bg infoBg-Show" v-else>
+					<image :src="userBg" mode="aspectFill"></image>
 				</view>
 				<view class="user-info-main">
 					<view class="user-info-content">
@@ -89,7 +95,7 @@
 				</view>
 			</view>
 			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="search-type grid col-3">
+			<view class="search-type grid col-4">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
 				</view>
@@ -230,6 +236,7 @@
 				vip:"",
 				isvip:"",
 				introduce:"",
+				userBg:"",
 				fanNum:0,
 				contentsNum:0,
 				commentsNum:0,
@@ -238,7 +245,6 @@
 				isFollow:0,
 				
 				vid:"",
-				
 				
 			}
 		},
@@ -255,7 +261,7 @@
 			}
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			
@@ -292,7 +298,7 @@
 			that.title = res.title;
 			that.uid =  res.uid;
 			that.avatar =  res.avatar;
-			that.name =  res.name;
+			// that.name =  res.name;
 			that.getIsFollow();
 			that.getUserInfo();
 			that.getUserData();
@@ -351,7 +357,6 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
-
 			getUserInfo(){
 				var that = this;
 				that.$Net.request({
@@ -363,16 +368,27 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
+							if(res.data.data.screenName){
+								that.name = res.data.data.screenName;
+							}else{
+								that.name = res.data.data.name;
+							}
+							that.local = res.data.data.local;
 							that.vip = res.data.data.vip;
 							that.isvip = res.data.data.isvip;
 							that.lv = res.data.data.lv;
 							that.avatar = res.data.data.avatar;
 							that.customize = res.data.data.customize;
 							that.introduce = res.data.data.introduce;
+							
+							if(res.data.data.userBg){
+								that.userBg = res.data.data.userBg;
+							}
+							
 						}
 					},
 					fail: function(res) {
@@ -438,7 +454,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -482,7 +498,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res));
@@ -502,14 +518,15 @@
 			},
 			getContentsList(isPage){
 				var that = this;
-				var data = {
-					"type":"post",
-					"authorId":that.uid,
-				}
-				var token = "";
+				var token = ""
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
+				
+				}
+				var data = {
+					"type":"post",
+					"authorId":that.uid,
 				}
 				var page = that.page;
 				if(isPage){
@@ -527,7 +544,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -571,13 +588,6 @@
 					"type":"comment",
 					"authorId":that.uid,
 				}
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					var uid = userInfo.uid;
-					if(uid != that.uid){
-						data.status = "approved"
-					}
-				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -593,7 +603,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						uni.stopPullDownRefresh();
@@ -652,7 +662,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.isFollow = res.data.code;
@@ -697,7 +707,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -722,6 +732,7 @@
 					}
 				})
 			},
+			
 			commentsAdd(title,coid,reply){
 				var that = this;
 				var cid = that.cid;
@@ -738,7 +749,13 @@
 			},
 			toEdit(cid){
 				var that = this;
-				
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
 				uni.navigateTo({
 					url: '/pages/user/post?type=edit'+'&cid='+cid
 				});
@@ -773,6 +790,13 @@
 				
 				uni.redirectTo({
 				    url: '/pages/contents/search'
+				});
+			},
+			toEdit(){
+				var that = this;
+				
+				uni.redirectTo({
+				    url: '/pages/user/useredit'
 				});
 			},
 			ToCopy(text) {
@@ -831,20 +855,17 @@
 			getSpaceList(isPage){
 				var that = this;
 				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
 				}
 				var data = {
 					"uid":that.uid 
-				}
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-					var uid = userInfo.uid;
-					if(uid != that.uid){
-						data.status = 1
-					}
 				}
 				that.$Net.request({
 					url: that.$API.spaceList(),
@@ -855,7 +876,7 @@
 						"order":"created",
 						"token":token
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;

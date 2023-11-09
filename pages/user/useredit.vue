@@ -57,7 +57,15 @@
 		</form>
 		<!--  #ifdef H5 || APP-PLUS -->
 		<view class="cu-list menu">
-			<view class="cu-item margin-top" @tap="toBind">
+			<view class="cu-item margin-top" @tap="toBg">
+				<view class="content">
+					<text>主页背景图</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
+			<view class="cu-item" @tap="toBind">
 				<view class="content">
 					<text>社会化登陆绑定</text>
 				</view>
@@ -139,6 +147,7 @@
 				modalName: null,
 				
 				token:'',
+				styleIndex:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -213,6 +222,7 @@
 							that.token=res.data.data.token;
 							that.avatar=res.data.data.avatar;
 							that.introduce = res.data.data.introduce;
+							that.phone = res.data.data.phone;
 							if(localStorage.getItem('userinfo')){
 								
 								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -342,9 +352,10 @@
 								localStorage.removeItem('userinfo');
 								localStorage.removeItem('token');
 								var timer = setTimeout(function() {
+									var styleIndex = that.styleIndex;
 									uni.redirectTo({
-										url: '/pages/home/index'
-									})
+										url: '/pages/home/'+styleIndex
+									});
 									clearTimeout('timer')
 								}, 1000)
 							}else{
@@ -393,6 +404,13 @@
 				
 				uni.navigateTo({
 				    url: '/pages/user/pay'
+				});
+			},
+			toBg(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/userBg'
 				});
 			},
 			toBind(){

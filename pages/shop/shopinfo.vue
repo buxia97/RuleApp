@@ -22,7 +22,11 @@
 			<view class="shopinfo-title">
 				{{title}}
 			</view>
+			<view class="shopinfo-tips" v-if="integral>0">
+				<text class="text-green">该商品支持{{integral}}积分抵扣</text>
+			</view>
 			<view class="shopinfo-info">
+				
 				<text class="text-sm shop-user text-blue"  @tap="toUserContents(userInfo)"><block v-if="userInfo.screenName!=''">{{userInfo.screenName}}</block>
 							<block v-else>{{userInfo.name}}</block>
 			</text>
@@ -93,6 +97,7 @@
 				num:"",
 				sellNum:"",
 				imgurl:"",
+				integral:0,
 				
 				isLoading:0,
 				shopIsMd:-1,
@@ -101,6 +106,7 @@
 				shopinfo:{},
 				
 				vipDiscount:0,
+				
 				vipPrice:0,
 				scale:0,
 				isvip:0,
@@ -172,6 +178,7 @@
 						that.type = res.data.type;
 						that.html = res.data.text;
 						that.imgurl = res.data.imgurl;
+						that.integral = res.data.integral;
 						that.price = res.data.price;
 						that.num = res.data.num;
 						that.sellNum =  res.data.sellNum;
@@ -210,80 +217,9 @@
 			},
 			shopBuy(){
 				var that = this;
-				var token= "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}else{
-					uni.showToast({
-					    title:"请先登录",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					var timer = setTimeout(function() {
-						uni.navigateTo({
-							url: '../user/login'
-						});
-						clearTimeout('timer')
-					}, 1000)
-					return false
-				}
-				var data = {
-					"token":token,
-					"sid":that.sid
-				}
-				uni.showLoading({
-					title: "加载中"
+				uni.navigateTo({
+				    url: '/pages/shop/orderpay?sid='+that.sid
 				});
-				that.$Net.request({
-					url: that.$API.buyShop(),
-					data:data,
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						setTimeout(function () {
-							uni.hideLoading();
-						}, 1000);
-						uni.showToast({
-							title: res.data.msg,
-							icon: 'none'
-						})
-						if(res.data.code==1){
-							
-							
-							//跳转订单页面
-							var timer = setTimeout(function() {
-								uni.redirectTo({
-								    url: '/pages/user/order'
-								});
-								clearTimeout('timer')
-							}, 1000)
-						}else{
-							if(res.data.msg=="购买实体商品前，需要先设置收货地址"){
-								var timer = setTimeout(function() {
-									uni.redirectTo({
-									    url: '/pages/user/address'
-									});
-									clearTimeout('timer')
-								}, 1000)
-							}
-						}
-
-					},
-					fail: function(res) {
-						setTimeout(function () {
-							uni.hideLoading();
-						}, 1000);
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
-					}
-				})
 			},
 			getUserInfo(id){
 				var that = this;
@@ -319,7 +255,7 @@
 					})
 				}else{
 					uni.navigateTo({
-					    url: '/pages/contents/shoptext?sid='+data.id
+					    url: '/pages/shop/shoptext?sid='+data.id
 					});
 				}
 			},

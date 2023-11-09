@@ -5,6 +5,7 @@
 				<view class="action">
 					<text class="square-box" :class="squareid==0?'cur':''" @tap="setSquare(0,true)">动态</text>
 					<text class="square-box" :class="squareid==1?'cur':''" @tap="setSquare(1,true)">群聊</text>
+					<!-- <text class="square-box" :class="squareid==2?'cur':''" @tap="setSquare(2)">综合</text> -->
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					
@@ -47,16 +48,30 @@
 					</view>
 				</view>
 			</view>
-			<view class="no-data" v-if="spaceList.length==0">
-				<text class="cuIcon-text"></text>
-				
-				暂时没有动态哦！
-				<view class="text-center margin-top-sm">
-					<text class="cu-btn bg-gradual-orange radius" @tap="postSpace(0)">我要发布</text>
-				
-				</view>
-				
+			<view class="square-data-type">
+				<text :class="spaceDataType==0?'cur':''" @tap="setSpaceDataType(0)">只看关注</text>
+				<text :class="spaceDataType==1?'cur':''" @tap="setSpaceDataType(1)">点赞最多</text>
+				<text :class="spaceDataType==2?'cur':''" @tap="setSpaceDataType(2)">实时最新</text>
 			</view>
+			<block v-if="spaceList.length==0">
+			
+				<block v-if="spaceLoad">
+					<view class="no-data" >
+						<text class="cuIcon-text"></text>
+						
+						暂时没有动态哦！
+						<view class="text-center margin-top-sm">
+							<text class="cu-btn bg-gradual-orange radius" @tap="postSpace(0)">我要发布</text>
+						
+						</view>
+					</view>
+				</block>
+				<block v-else>
+					<view class="dataLoad" v-if="!dataLoad">
+						<image src="../../static/loading.gif"></image>
+					</view>
+				</block>
+			</block>	
 				
 			<spaceItem :spaceList="spaceList"></spaceItem>
 			<view class="load-more" @tap="loadMore" v-if="dataLoad&&chatList.length>0">
@@ -214,7 +229,13 @@
 				page:1,
 				moreText:"加载更多",
 				
-				noLogin:false
+				sectionList:[],
+				swiperList:[],
+				
+				noLogin:false,
+				
+				spaceDataType:2,
+				spaceLoad:false
 				
 				
 			}
@@ -470,7 +491,6 @@
 						"token":that.token,
 						"limit":30,
 						"page":page,
-						"type":that.type,
 						"order":"lastTime"
 					},
 					header:{
@@ -643,6 +663,14 @@
 				
 				
 			},
+			setSpaceDataType(type){
+				var that = this;
+				that.spaceDataType = type;
+				that.spaceLoad = false;
+				that.page = 1;
+				that.spaceList = [];
+				that.getSpaceList(false);
+			},
 			getSpaceList(isPage){
 				var that = this;
 				var page = that.page;
@@ -658,18 +686,28 @@
 					token=userInfo.token;
 				
 				}
+				var spaceDataType = that.spaceDataType;
+				var url = that.$API.followSpace();
+				var order = "created";
+				if(spaceDataType > 0 ){
+					url = that.$API.spaceList();
+				}
+				if(spaceDataType  == 1 ){
+					order = "likes";
+				}
 				that.$Net.request({
-					url: that.$API.spaceList(),
+					url: url,
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":10,
 						"page":page,
-						"order":"created",
+						"order":order,
 						"token":token
 					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.spaceLoad = true;
 						that.isLoading = 1;
 						that.isLoad=0;
 						that.moreText="加载更多";
@@ -714,12 +752,16 @@
 							}
 							
 						}else{
-							if(res.data.msg=="用户未登录或Token验证失败"){
-								that.noLogin = true;
+							if(url!=that.$API.followSpace()){
+								if(res.data.msg=="用户未登录或Token验证失败"){
+									that.noLogin = true;
+								}
 							}
+							
 						}
 					},
 					fail: function(res) {
+						that.spaceLoad = true;
 						that.isLoading = 1;
 						that.moreText="加载更多";
 						that.isLoad=0;
@@ -750,6 +792,7 @@
 				    url: '/pages/user/register'
 				});
 			},
+
 			subText(text,num){
 				if(text.length < null){
 					return text.substring(0,num)+"……"

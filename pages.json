@@ -56,6 +56,10 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/userBg",
+			"style": {}
+		},
+		{
 			"path": "pages/user/mailedit",
 			"style": {}
 		},
@@ -229,19 +233,25 @@
 		},
 		// #ifdef APP-PLUS || H5
 		{
-			"path": "pages/contents/shop",
+			"path": "pages/shop/shop",
 			"style": {
 				"enablePullDownRefresh":true
 			}
 		},
 		{
-			"path": "pages/contents/shopinfo",
+			"path": "pages/shop/shopinfo",
 			"style": {
 				"enablePullDownRefresh":true
 			}
 		},
 		{
-			"path": "pages/contents/shoptext",
+			"path": "pages/shop/shoptext",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/shop/orderpay",
 			"style": {
 				"enablePullDownRefresh":true
 			}
@@ -441,6 +451,12 @@
 		},
 		{
 			"path": "pages/space/info",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/space/mySpace",
 			"style": {
 				"enablePullDownRefresh":true
 			}

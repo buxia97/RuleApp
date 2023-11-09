@@ -90,7 +90,7 @@
 				<!--  #endif -->
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main"  @tap="goPage('/pages/contents/shop')">
+						<view class="index-sort-main"  @tap="goPage('/pages/shop/shop')">
 							<view class="index-sort-i" style="background-color: #ff3333;">
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
@@ -136,7 +136,7 @@
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 热销商品
 				</view>
-				<view class="action more" @tap="goPage('/pages/contents/shop')">
+				<view class="action more" @tap="goPage('/pages/shop/shop')">
 					<text>进入商城</text><text class="cuIcon-right"></text>
 				</view>
 			</view>

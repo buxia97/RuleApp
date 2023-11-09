@@ -114,7 +114,7 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main"  @tap="goPage('/pages/contents/shop')">
+						<view class="index-sort-main"  @tap="goPage('/pages/shop/shop')">
 							<view class="index-sort-i" style="background-color: #ff3333;">
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>

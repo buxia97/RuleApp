@@ -1456,7 +1456,7 @@
 					return false;
 				}
 				uni.navigateTo({
-				    url: '/pages/contents/shopinfo?sid='+sid
+				    url: '/pages/shop/shopinfo?sid='+sid
 				});
 			},
 			toSearch(){
@@ -1544,6 +1544,14 @@
 					}, 1000)
 					return false
 				}
+				//因为增加了金币抵扣，所以跳转订单确认
+				if(type!=4){
+					uni.navigateTo({
+					    url: '/pages/shop/orderpay?sid='+sid
+					});
+					return false
+				}
+				
 				var data = {
 					"token":token,
 					"sid":sid
@@ -1577,7 +1585,7 @@
 										if(type!=4){
 											//跳转订单页面
 											var timer = setTimeout(function() {
-												uni.redirectTo({
+												uni.navigateTo({
 												    url: '/pages/user/order'
 												});
 												clearTimeout('timer')
@@ -1666,7 +1674,7 @@
 					})
 				}else{
 					uni.navigateTo({
-					    url: '/pages/contents/shoptext?sid='+id
+					    url: '/pages/shop/shoptext?sid='+id
 					});
 				}
 			},

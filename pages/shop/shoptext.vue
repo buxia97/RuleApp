@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -18,7 +18,13 @@
 			<view class="info-content">
 				<!-- <joMarkdown :nodes="markdownData"></joMarkdown> -->
 				
-				<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
+				
+				<block v-if="shopIsMd==1">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="true"/>
+				</block>
+				<block v-if="shopIsMd==0">
+					<mp-html :content="html" :selectable="true" :show-img-menu="true" :lazy-load="true" :ImgCache="true" :markdown="false"/>
+				</block>
 			</view>
 		</view>
 		<!--加载遮罩-->
@@ -49,6 +55,7 @@
 				price:"",
 				num:"",
 				imgurl:"",
+				shopIsMd:-1,
 				
 				isLoading:0,
 				
@@ -67,7 +74,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			
@@ -94,9 +101,6 @@
 					delta: 1
 				});
 			},
-			replaceAll(string, search, replace) {
-			  return string.split(search).join(replace);
-			},
 			getInfo(sid){
 				var that = this;
 				var token = "";
@@ -119,7 +123,14 @@
 						
 						uni.stopPullDownRefresh();
 						if(res.data.value){
-							that.html = res.data.value;
+							that.shopIsMd = res.data.isMd;
+							var html = res.data.value;
+							if(res.data.isMd==1){
+								html =that.markHtml(res.data.value);
+							}else{
+								html =that.quillHtml(res.data.value);
+							}
+							that.html = html;
 						}
 						
 
@@ -140,6 +151,48 @@
 						}, 300)
 					}
 				})
+			},
+			quillHtml(text){
+				var that = this;
+				text = that.replaceAll(text,"hljs","hl");
+				text = that.replaceAll(text,"ql-syntax","hl-pre");
+				
+				text = that.markExpand(text);
+				return text;
+			},
+			replaceAll(string, search, replace) {
+			  return string.split(search).join(replace);
+			},
+			markExpand(text){
+				var that = this;
+				//表情包
+				// #ifdef APP-PLUS || H5
+				var owoList=that.owoList;
+				for(var i in owoList){
+				
+					if(that.replaceSpecialChar(text).indexOf(owoList[i].data) != -1){
+						text = that.replaceAll(that.replaceSpecialChar(text),owoList[i].data,"<img src='"+owoList[i].icon+"' class='tImg' />")
+						
+					}
+				}
+				// #endif
+				
+				return text;
+			},
+			markHtml(text){
+				var that = this;
+				//下面奇怪的代码是为了解决可执行代码区域问题
+				text = that.replaceAll(text,"@!!!","@@@@");
+				
+				text = that.replaceAll(text,"!!!","");
+				text = that.replaceAll(text,"@@@@","@!!!");
+				text = that.markExpand(text);
+				//text = text.replace(/(?<!\r)\n(?!\r)/g, "\n\n");
+				//兼容垃圾的Safari浏览器
+				text = text.replace(/([^\r])\n([^\r])/g, "$1\n\n$2");
+				text = that.replaceAll(text,"||rn||","\n\n");
+				return text;
+				
 			},
 		}
 	}

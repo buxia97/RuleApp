@@ -150,7 +150,15 @@
 	  	  	  付费价格
 	  	  </div>
 		  <div class="form-input">
-			  <input placeholder="输入价格(整数)" type="number" v-model="shopPice" />
+			  <input placeholder="输入价格(整数)" type="number" v-model="shopPice"/>
+		  </div>
+	  </div>
+	  <div class="form-box" v-if="isPaid">
+	  	  <div class="form-label">
+	  	  	  VIP折扣
+	  	  </div>
+		  <div class="form-input">
+			  <input placeholder="输入VIP折扣,必须包含小数点" type="text" v-model="shopDiscount" @input="formatInput" />
 		  </div>
 	  </div>
 	  <div class="form-box" :class="isPaid?'':'border-top'">
@@ -436,7 +444,25 @@
   		</div>
   	</div>
   </div>
-
+  <div class="alertTips" v-if="isVerify">
+	  <div class="alertTips-bg" @click="isVerify=false,verifyCode = ''"></div>
+	  <div class="alertTips-box">
+		  <div class="alertTips-main">
+		  		<div class="alertTips-title">
+		  			图片验证
+		  		</div>
+				<div class="alertTips-concent">
+					<div class="alertTips-concent-pic">
+						<img :src="kaptchaUrl" @click="reloadCode()"/>
+					</div>
+					<div class="alertTips-concent-input">
+						<input  type="text" v-model="verifyCode" placeholder="输入验证码"/>
+						<button type="button" @click="submit()">验证</button>
+					</div>
+				</div>
+		  </div>
+	  </div>
+  </div>
   <div class="editLoading" v-if="!loading">
 	  <div class="editLoading-main">
 	  	  <img src="loading.gif"/>
@@ -491,6 +517,7 @@ var wu = new Wu()
 	  curCategory:[],
 	  curTag:[],
 	  shopPice:'',
+	  shopDiscount:"1.0",
 	  searchText:"",
 	  tagsText:"",
 	  shopsText:"",
@@ -512,6 +539,10 @@ var wu = new Wu()
 	  env:"H5",
 	  selectionIndex:0,
 	  
+	  verifyLevel:0,
+	  verifyCode:"",
+	  kaptchaUrl:'',
+	  isVerify:false,
     },
 	created() {
 		var that = this;
@@ -576,6 +607,23 @@ var wu = new Wu()
 			kaptchaUrl += "?"+num;
 			that.kaptchaUrl = kaptchaUrl;
 		},
+		formatInput() {
+		  // 移除非数字和非小数点字符
+		  this.shopDiscount = this.shopDiscount.replace(/[^\d.]/g, "");
+	
+		  // 仅保留一个小数点
+		  const parts = this.shopDiscount.split('.');
+		  if (parts.length > 2) {
+			parts.pop();
+		  }
+	
+		  // 限制小数点后一位
+		  if (parts[1] && parts[1].length > 1) {
+			parts[1] = parts[1].slice(0, 1);
+		  }
+	
+		  this.shopDiscount = parts.join('.');
+		},
 		removeObjectEmptyKey(json) {
 		    var value;
 		    for (var key in json) {
@@ -588,6 +636,7 @@ var wu = new Wu()
 		    }
 		    return json;
 		},
+		
 		searchTags(){
 			var that = this;
 			var tagList = that.tagList;
@@ -781,6 +830,12 @@ var wu = new Wu()
 				isDraft = 1;
 			}
 			
+			if(that.verifyLevel > 1){
+				if (that.verifyCode == "") {
+					that.isVerify = true;
+					return false
+				}
+			}
 			var data = {
 				"params":JSON.stringify(that.removeObjectEmptyKey(params)),
 				"token":that.token,
@@ -788,6 +843,7 @@ var wu = new Wu()
 				"isSpace":isSpace,
 				"isDraft":isDraft,
 				"isMd":0,
+				'verifyCode':that.verifyCode
 			}
 			//付费阅读支持
 			var isPaid = 0;
@@ -806,11 +862,14 @@ var wu = new Wu()
 				data.isPaid = isPaid;
 				data.shopText = shopText;
 				data.shopPice = that.shopPice;
+				data.shopDiscount = that.shopDiscount;
 			}
 			
 			wu.showLoading();
 			var url = that.apiUrl+'typechoContents/contentsAdd';
 			request.post(url,that.qs(data)).then(function(res){
+				that.isVerify = false;
+				that.verifyCode = "";
 				setTimeout(function () {
 					wu.hideToast();
 				}, 1000);
@@ -982,6 +1041,7 @@ var wu = new Wu()
 				data.isPaid = isPaid;
 				data.shopText = shopText;
 				data.shopPice = that.shopPice;
+				data.shopDiscount = that.shopDiscount;
 			}
 			wu.showLoading();
 			var url = that.apiUrl+'typechoContents/contentsUpdate';
@@ -1083,6 +1143,7 @@ var wu = new Wu()
 							shopQuill.setContents(delta);
 						}
 						that.shopPice = paidInfo.price;
+						that.shopDiscount = paidInfo.vipDiscount;
 						
 					}
 				}
@@ -1118,6 +1179,16 @@ var wu = new Wu()
 		},
 		submit(){
 			var that = this;
+			that.isVerify = false;
+			if (that.verifyCode == "") {
+				wu.showToast({
+				    title: '请完成图片验证',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
 			that.contentsAdd()
 		},
 		

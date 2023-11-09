@@ -128,7 +128,7 @@ page{
 	background-color: #ff9f10;
 }
 .data-box{
-	margin-top: 20upx;
+	margin-top: 12upx;
 	background-color: #ffffff;
 	/* box-shadow: 0px 0px 5px rgba(0,0,0,.1); */
 	padding: 0upx;
@@ -1098,6 +1098,11 @@ page{
 	padding: 10upx 30upx;
 	background-color: #fff;
 }
+.shopinfo-tips{
+	padding: 10upx 30upx;
+	background-color: #fff;
+	font-size: 24upx;
+}
 .shop-btn{
 	padding: 8upx 0upx;
 	margin: 0upx 10upx;
@@ -1298,8 +1303,11 @@ page{
 	padding: 50upx 30upx;
 	
 }
+.myAssets .myAssets-box:nth-child(2){
+	border-left: solid 1px #f3f3f3;
+}
 .myAssets-num{
-	font-size: 60upx;
+	font-size: 55upx;
 	margin-right: 10upx;
 }
 .myAssets-btn{
@@ -1700,6 +1708,14 @@ page{
 	transform: scale(1.2);
 	
 }
+.user-info-bg.infoBg-Show{
+	filter: blur(0upx);
+}
+.section-info-bg{
+	/* #ifdef APP-PLUS || MP */
+	height: 500upx;
+	/* #endif */
+}
 .section-info-bg{
 	filter:none;
 }
@@ -1721,6 +1737,11 @@ page{
 	width: 100%;
 	z-index: 5;
 	background-color: rgba(0,0,0,0.2);
+}
+.section-info-main{
+	/* #ifdef APP-PLUS || MP */
+	height: 450upx;
+	/* #endif */
 }
 .user-info-content,.section-info-content{
 	width: 100%;
@@ -1840,6 +1861,14 @@ page{
 .userlv{
 	font-size: 22upx;
 	background-color: #cecece;
+	line-height: 25upx;
+	padding: 4upx 10upx;
+	border-radius: 8upx;
+	margin-left: 10upx;
+	margin-top: -4upx;
+}
+.identifyLv{
+	font-size: 22upx;
 	line-height: 25upx;
 	padding: 4upx 10upx;
 	border-radius: 8upx;
@@ -2768,9 +2797,13 @@ page{
 .section-item:hover{
 	background-color: #f6f6f6;
 }
+.section-intro{
+	padding-top: 4upx;
+}
 .section-item-value,.shop-item-value{
 	font-size: 24upx;
 	color: #999;
+	margin-top: 8upx;
 }
 .section-item-title,.shop-item-title{
 	margin-top: 12upx;
@@ -2899,7 +2932,7 @@ page{
 .forum-list-user{
 	width: 100%;
 	overflow: hidden;
-	margin-bottom: 10upx;
+	margin-bottom: 16upx;
 }
 .forum-avatar{
 	width: 90upx;
@@ -2942,7 +2975,8 @@ page{
 .forum-list-title{
 	color: #000;
 	font-weight: bold;
-	margin-bottom: 5upx;
+	margin-bottom: 12upx;
+	font-size: 32upx;
 }
 .forum-list-intro{
 	font-size: 28upx;
@@ -3027,6 +3061,14 @@ page{
 	font-size: 40upx;
 	background: #36accf;
 	color: #fff;
+}
+.section-ico-no.bg-pink {
+    background-color: #e03997;
+    color: #ffffff;
+}
+.section-ico-no.bg-purple{
+	background-color: #6739b6;
+	color: #ffffff;
 }
 .forum-post-btn{
 	position: fixed;
@@ -3451,4 +3493,168 @@ page{
 .home-section-value{
 	font-size: 24upx;
 	color: #999;
+}
+.square-data-type{
+	text-align: right;
+	padding: 20upx 20upx 10upx 20upx;
+}
+.square-data-type text{
+	color: #999;
+	margin-left: 20upx;
+}
+.square-data-type text.cur{
+	color: #000;
+	font-weight: bold;
+}
+.shop-order-concent{
+	overflow: hidden;
+	padding: 20upx;
+	background: #fff;
+}
+.shop-order-concent .shop-order-img{
+	width: 140upx;
+	float: left;
+	height: 100upx;
+	overflow: hidden;
+	border-radius: 10upx;
+}
+.shop-order-concent .shop-order-title{
+	width: calc(100% - 200upx);
+	float: left;
+	padding-left: 20upx;
+	font-size: 34upx;
+	line-height: 48upx;
+	font-weight: bold;
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp:2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.user-title{
+	height: 70upx;
+	font-weight: bold;
+	color: #000;
+	line-height: 70upx;
+	padding: 0upx 30upx;
+}
+.identify-box{
+	background: #fff;
+	height:250upx;
+	margin-top: 10upx;
+}
+.identify-title{
+	line-height: 90upx;
+	height: 90upx;
+	padding: 0upx 30upx;
+	border-bottom: solid 1px #f6f6f6;
+}
+.identify-title-text{
+	color: #000;
+	font-size: 34upx;
+	font-weight: bold;
+}
+.identify-title .text-blue,.identify-title .text-orange,.identify-title .text-green{
+	float: right;
+}
+.identify-concent{
+	padding: 30upx;
+}
+.identify-tips{
+	padding: 30upx;
+	color: #666;
+}
+.identify-tips-title{
+	margin-bottom: 20upx;
+	color: #333;
+	font-size: 30upx;
+	font-weight: bold;
+}
+.identify-tips-p{
+	margin-bottom: 18upx;
+	line-height: 40upx;
+}
+.identify-item-box{
+	padding: 30upx;
+	border-bottom: solid 1px #f6f6f6;
+}
+.identify-box-btn{
+	float: right;
+}
+.identify-box-user{
+	margin-top: 18upx;
+}
+.identify-box-value{
+	color: #666;
+	line-height: 50upx;
+}
+.identify-box-value text{
+	font-weight: bold;
+	color: #333;
+	font-size: 36upx;
+}
+/**风格切换**/
+.full-blue .header .cu-bar.bg-white{
+	background-color: #0081ff;
+	color: #fff;
+}
+.full-pink .header .cu-bar.bg-white{
+	background-color: #fa7298;
+	color: #fff;
+}
+.full-orange .header .cu-bar.bg-white{
+	background-color: #f47c35;
+	color: #fff;
+}
+.full-green .header .cu-bar.bg-white{
+	background-color: #8ebe58;
+	color: #fff;
+}
+.userIndex.full-blue .header.goScroll{
+	background: #0081ff;
+}
+.userIndex.full-pink .header.goScroll{
+	background: #fa7298;
+}
+.userIndex.full-orange .header.goScroll{
+	background: #f47c35;
+}
+.userIndex.full-green .header.goScroll{
+	background: #8ebe58;
+}
+.upload-bg{
+	padding: 30upx;
+}
+.upload-bg-no{
+	background: #ddd;
+	width: 100%;
+	height: 380upx;
+	border-radius: 8upx;
+	text-align: center;
+	font-size: 36upx;
+	color: #666;
+	line-height: 360upx;
+}
+.upload-bg-box{
+	position: relative;
+	width: 100%;
+	height: 380upx;
+	border-radius: 8upx;
+	overflow: hidden;
+	text-align: center;
+}
+.upload-bg-box image{
+	width: 100%;
+}
+.reload-btn{
+	position: absolute;
+	top: 42%;
+	z-index: 5;
+	width: 100%;
+	color: #fff;
+	font-weight: bold;
+	font-size: 42upx;
+	text-shadow: 0px 0px 4upx #000;
 }

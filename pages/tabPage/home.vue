@@ -116,7 +116,7 @@
 								<text class="cuIcon-shopfill" style="color:  #ff3333;"></text>
 							</view>
 							<view class="index-sort-text">
-								积分商城
+								商城
 							</view>
 						</view>
 					</waves>
@@ -1114,7 +1114,7 @@
 			toShop(){
 				var that = this;
 				uni.navigateTo({
-				    url: '/pages/contents/shop'
+				    url: '/pages/shop/shop'
 				});
 			},
 			formatDate(datetime) {

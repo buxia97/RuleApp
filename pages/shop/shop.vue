@@ -394,7 +394,7 @@
 			shopInfo(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '/pages/contents/shopinfo?sid='+sid
+				    url: '/pages/shop/shopinfo?sid='+sid
 				});
 			},
 			

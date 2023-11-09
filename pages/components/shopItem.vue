@@ -100,7 +100,7 @@
 					that.editShop(data);
 				}else{
 					uni.navigateTo({
-					    url: '/pages/contents/shopinfo?sid='+data.id
+					    url: '/pages/shop/shopinfo?sid='+data.id
 					});
 				}
 				

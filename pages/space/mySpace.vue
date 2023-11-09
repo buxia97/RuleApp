@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					动态管理
+					我的动态
 				</view>
 			</view>
 		</view>
@@ -175,17 +175,7 @@
 						</view>
 					</block>
 					<view class="forum-list-operate padding-sm text-center bg-white">
-						<block v-if="item.status==0">
-							<text class="bg-green cu-btn xs radius" @tap="toReview(item.id,1,index)"> <text class="cuIcon-check"></text>通过</text>
-							<text class="bg-red cu-btn xs radius margin-left" @tap="toReview(item.id,0,index)"><text class="cuIcon-close"></text>不通过</text>
-						</block>
-						<block v-if="item.status==1">
-							<text class="bg-black cu-btn xs radius" @tap="toLock(item.id,2,index)"><text class="cuIcon-lock"></text>锁定</text>
-						</block>
-						<block v-if="item.status==2">
-							<text class="bg-black cu-btn xs radius" @tap="toLock(item.id,1,index)"><text class="cuIcon-unlock"></text>解除锁定</text>
-						</block>
-						<text class="bg-red cu-btn xs radius margin-left" @tap="toDelete(item.id)"><text class="cuIcon-delete"></text>删除</text>
+						<text class="text-red" @tap="toDelete(item.id)">删除</text>
 					</view>
 				</view>
 			</block>
@@ -390,8 +380,16 @@
 				if(isPage){
 					page++;
 				}
+				var token = "";
+				var uid = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+					uid = userInfo.uid;
+				}
 				var data = {
-					"status":that.type
+					"status":that.type,
+					"uid":uid
 				}
 				that.$Net.request({
 					url: that.$API.spaceList(),
@@ -456,133 +454,7 @@
 					}
 				})
 			},
-			toLock(id,type,index){
-				var that = this;
-				
-				var typeText = "确定要锁定动态吗？";
-				if(type==1){
-					typeText = "确定要取消锁定动态吗？";
-				}
-				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}
-				var data = {
-					"id":id,
-					"type":type,
-					"token":token
-				}
-				uni.showModal({
-				    title: typeText,
-				    success: function (res) {
-				        if (res.confirm) {
-							
-				            uni.showLoading({
-				            	title: "加载中"
-				            });
-				            
-				            that.$Net.request({
-				            	url: that.$API.spaceLock(),
-				            	data:data,
-				            	header:{
-				            		'Content-Type':'application/x-www-form-urlencoded'
-				            	},
-				            	method: "post",
-				            	dataType: 'json',
-				            	success: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: res.data.msg,
-				            			icon: 'none'
-				            		})
-				            		if(res.data.code==1){
-				            			that.page=1;
-				            			that.getSpaceList(false);
-				            		}
-				            		
-				            	},
-				            	fail: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: "网络开小差了哦",
-				            			icon: 'none'
-				            		})
-				            	}
-				            })
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
-				});
-			},
-			toReview(id,type,index){
-				var that = this;
-				var typeText = "确定要审核通过动态吗？";
-				if(type==0){
-					typeText = "确定要不过审动态吗？";
-				}
-				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}
-				var data = {
-					"id":id,
-					"type":type,
-					"token":token
-				}
-				uni.showModal({
-				    title: typeText,
-				    success: function (res) {
-				        if (res.confirm) {
-							
-				            uni.showLoading({
-				            	title: "加载中"
-				            });
-				            
-				            that.$Net.request({
-				            	url: that.$API.spaceReview(),
-				            	data:data,
-				            	header:{
-				            		'Content-Type':'application/x-www-form-urlencoded'
-				            	},
-				            	method: "post",
-				            	dataType: 'json',
-				            	success: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: res.data.msg,
-				            			icon: 'none'
-				            		})
-				            		if(res.data.code==1){
-				            			that.page=1;
-				            			that.getSpaceList(false);
-				            		}
-				            		
-				            	},
-				            	fail: function(res) {
-				            		setTimeout(function () {
-				            			uni.hideLoading();
-				            		}, 1000);
-				            		uni.showToast({
-				            			title: "网络开小差了哦",
-				            			icon: 'none'
-				            		})
-				            	}
-				            })
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
-				});
-			},
+			
 			toDelete(id){
 				var that = this;
 				var token = "";

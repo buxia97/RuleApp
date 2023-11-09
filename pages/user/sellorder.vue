@@ -220,7 +220,7 @@
 			shopInfo(sid){
 				var that = this;
 				uni.navigateTo({
-				    url: '../contents/shopinfo?sid='+sid
+				    url: '../shop/shopinfo?sid='+sid
 				});
 			},
 			formatDate(datetime) {
