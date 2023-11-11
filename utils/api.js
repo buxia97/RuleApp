@@ -1,9 +1,12 @@
 //RuleApp是一套开源免费的客户端代码，如果您通过任何收费渠道下载到了此代码，则可以认为你被忽悠了。
 //正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
 //github内测版地址：https://github.com/buxia97/RuleApp
-var API_URL = 'https://api.ruletree.club/';
-//在API配置中心创建的应用Key
-var appKey = "Yc9AQDnN";
+// var API_URL = 'https://api.ruletree.club/';
+// //在API配置中心创建的应用Key
+// var appKey = "Yc9AQDnN";
+
+var API_URL = 'http://127.0.0.4/';
+var appKey = "dSY0uo0H";
 //web网站地址
 var WEB_URL = '';
 

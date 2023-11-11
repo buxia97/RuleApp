@@ -152,14 +152,6 @@
 				  <input placeholder="输入商品数量" type="number"  v-model="num"/>
 			  </div>
 		</div>
-		<div class="form-box">
-			  <div class="form-label">
-			  	  积分抵扣
-			  </div>
-			  <div class="form-input">
-				  <input placeholder="抵扣积分数量,为0则禁止抵扣" type="number"  v-model="integral"/>
-			  </div>
-		</div>
 		<div class="form-box border-top">
 		  <div class="form-label">
 			  VIP折扣
@@ -516,7 +508,6 @@ var wu = new Wu()
 	  num:"",
 	  value:"",
 	  uid:"",
-	  integral:"",
 	  
 	  shopTypelist:[],
 	  sortShow:false,
@@ -746,7 +737,6 @@ var wu = new Wu()
 				'price':that.price,
 				'num':that.num,
 				'value':value,
-				'integral':that.integral,
 				'sort':that.sort,
 				'subtype':that.subtype,
 				'vipDiscount':that.vipDiscount,
@@ -837,8 +827,7 @@ var wu = new Wu()
 					that.imgurl = res.data.imgurl;
 					that.price = res.data.price;
 					that.num = res.data.num;
-					
-					that.integral = res.data.integral;
+				
 					that.value = res.data.value;
 					that.vipDiscount = res.data.vipDiscount;
 					
@@ -913,7 +902,6 @@ var wu = new Wu()
 				'value':value,
 				'vipDiscount':that.vipDiscount,
 				'sort':that.sort,
-				'integral':that.integral,
 				'subtype':that.subtype,
 			}
 			var data = {

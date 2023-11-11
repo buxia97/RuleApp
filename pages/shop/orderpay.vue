@@ -48,12 +48,6 @@
 						</text>
 					</view>
 				</view>
-				<view class="cu-form-group" v-if="shopinfo.integral>0">
-					<view class="title">积分抵扣
-						<text class="text-green margin-right-xs">{{shopinfo.integral}}</text>积分
-					</view>
-					<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
-				</view>
 				
 				<view class="cu-form-group  margin-top">
 					<view class="title">我的资产</view>
@@ -63,14 +57,7 @@
 						</text>
 					</view>
 				</view>
-				<view class="cu-form-group">
-					<view class="title">我的积分</view>
-					<view class="action">
-						<text class="text-blue text-bold text-lg margin-right-xs">
-							{{points}}
-						</text>
-					</view>
-				</view>
+
 				<view class="shop-order-btn padding flex flex-direction">
 					<button class="cu-btn bg-green lg" @tap="shopBuy()">确认购买</button>
 				</view>
@@ -114,7 +101,6 @@
 				isLoading:0,
 				
 				assets:0,
-				points:0
 				
 				
 				
@@ -270,7 +256,6 @@
 							that.vip = res.data.data.vip;
 							that.isvip = res.data.data.isvip;
 							that.assets = res.data.data.assets;
-							that.points = res.data.data.points;
 						}
 					},
 					fail: function(res) {
