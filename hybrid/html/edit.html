@@ -166,7 +166,7 @@
 	  	  	  文章分类
 	  	  </div>
 	  		  <div class="form-action">
-	  			  <template v-if="curCategory.length==0">
+	  			  <template v-if="curCategory==''">
 	  				<button type="button" @click="categoryShow=true">选择分类</button>
 	  			  </template>
 	  			  <template v-else>
@@ -224,7 +224,7 @@
 	  </div>
   </div>
   <!-- <button onclick="send()">传送</button> -->
-  <div class="modal hasSearch" :class="categoryShow?'show':''">
+  <div class="modal categoryBox" :class="categoryShow?'show':''">
   	<div class="modal-bg" @click="categoryShow=false">
   	</div>
   	<div class="modal-main">
@@ -232,17 +232,32 @@
   			选择分类
   			<a href="javascript:;"  @click="categoryShow=false">关闭</a>
   		</div>
-		<div class="modal-search">
+		<!-- <div class="modal-search">
 			<input placeholder="输入关键词" type="text" v-model="searchText" @input="searchCategory()"/>
 			<button type="button"><i class="iconfont icon-magnify"></i></button>
-		</div>
+		</div> -->
   		<div class="modal-concent">
   			<div class="category-list">
-  				<div class="category-box" v-for="(item,index) in categoryList" :class="item.active==1?'action':''" @click="toCategoryContents(item.name,item.mid,index)">
+  				<!-- <div class="category-box" v-for="(item,index) in categoryList" :class="item.active==1?'action':''" @click="toCategoryContents(item.name,item.mid,index)">
   					<div class="category-main">
   						{{item.name}}
   					</div>
-  				</div>
+  				</div> -->
+				<div class="category-item" v-for="(item,index) in categoryList"  :key="index">
+					<div class="category-item-title"  @click="toCategoryContents(item)">
+						{{item.name}}
+						<span class="text-blue" v-if="item.subList.length==0&&item.active==0">选择</span>
+						<span class="text-blue" v-if="item.active==1">已选择</span>
+						
+					</div>
+					<div class="category-content grid col-2"  v-if="item.subList.length>0">
+						<div class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @click="toCategoryContents(data)">
+							<div class="category-main">
+								{{data.name}}
+							</div>
+						</div>
+					</div>
+				</div>
 
   			</div>
   		</div>
@@ -505,7 +520,7 @@ var wu = new Wu()
 	  cid:0,
 	  uid:"",
 	  token:"",
-	  apiUrl:"",
+	  apiUrl:"http://127.0.0.4/",
 	  isPaid:false,
 	  isSpace:false,
 	  isDraft:false,
@@ -514,7 +529,7 @@ var wu = new Wu()
 	  curNum:0,
 	  shopList:[],
 	  curTagNum:0,
-	  curCategory:[],
+	  curCategory:"",
 	  curTag:[],
 	  shopPice:'',
 	  shopDiscount:"1.0",
@@ -571,13 +586,16 @@ var wu = new Wu()
 		if(that.type=='edit'){
 			that.getInfo();
 			that.getPaid();
+		}else{
+			that.getCategorylist();
+			
 		}
 		if(that.env=='H5'){
 			that.editTopStyle = "padding-top:44px"
 		}
 		that.getTaglist();
 		that.getShoplist();
-		that.getCategorylist();
+		
 		
 	},
 	methods:{
@@ -700,11 +718,43 @@ var wu = new Wu()
 			//console.log(JSON.stringify(url));
 			request.post(url,that.qs(data)).then(function(res){
 				if(res.data.code==1){
-					var categoryList = res.data.data;
-					for(var i in categoryList){
-						categoryList[i].active = 0;
+					var list = res.data.data;
+					
+					if(list.length>0){
+						//处理之前的分类选中
+						if(that.curCategory!=""){
+							var category = that.curCategory.split(",");
+						}
+						var parentList = [];
+						for(var i in list){
+						  if(list[i].parent==0){
+						    list[i].show = false;
+							list[i].active = 0;
+							for(var c in  category){
+								if(list[i].mid==category[c]){
+									list[i].active = 1;
+								}
+							}
+						    parentList.push(list[i]);
+						  }
+						}
+						for(var o in parentList){
+						  var subList = [];
+						  for(var s in list){
+						    if(list[s].parent==parentList[o].mid){
+							  list[s].active = 0;
+							  for(var c in  category){
+							  	if(list[s].mid==category[c]){
+							  		list[s].active = 1;
+							  	}
+							  }
+						      subList.push(list[s]);
+						    }
+						  }
+						  parentList[o].subList = subList;
+						}
+						that.categoryList = parentList;
 					}
-					that.categoryList = categoryList;
 				}
 					
 			}).catch(function (error) {
@@ -712,38 +762,115 @@ var wu = new Wu()
 			});
 		},
 		
-		toCategoryContents(title,id,index){
-			var that = this;
+		// toCategoryContents(title,id,index){
+		// 	var that = this;
 				
-			if(that.categoryList[index].active==1){
-				that.curTagNum--;
-				that.categoryList[index].active=0;
-			}else{
-				if(that.curTagNum>1){
-					// uni.showToast({
-					// 	title: "最多选择三个分类",
-					// 	icon: 'none'
-					// });
-					wu.showToast({
-					    title: '最多选择两个分类',
-					    mask: false,
-					    icon: 'icon-info',
-					    duration: 3000
-					});
-					return false;
-				}
-				that.curTagNum++;
-				that.categoryList[index].active=1;
-			}
-			var curCategory = [];
-			var categoryList = that.categoryList;
-			for(var i in categoryList){
-				if(categoryList[i].active==1){
-					curCategory.push(categoryList[i]);
-				}
-			}
-			that.curCategory = curCategory;
+		// 	if(that.categoryList[index].active==1){
+		// 		that.curTagNum--;
+		// 		that.categoryList[index].active=0;
+		// 	}else{
+		// 		if(that.curTagNum>1){
+		// 			// uni.showToast({
+		// 			// 	title: "最多选择三个分类",
+		// 			// 	icon: 'none'
+		// 			// });
+		// 			wu.showToast({
+		// 			    title: '最多选择两个分类',
+		// 			    mask: false,
+		// 			    icon: 'icon-info',
+		// 			    duration: 3000
+		// 			});
+		// 			return false;
+		// 		}
+		// 		that.curTagNum++;
+		// 		that.categoryList[index].active=1;
+		// 	}
+		// 	var curCategory = [];
+		// 	var categoryList = that.categoryList;
+		// 	for(var i in categoryList){
+		// 		if(categoryList[i].active==1){
+		// 			curCategory.push(categoryList[i]);
+		// 		}
+		// 	}
+		// 	that.curCategory = curCategory;
 			
+		// },
+		toCategoryContents(data){
+			var that = this;
+			//清除所有的选中
+			var oldMetaList = that.categoryList;
+			for(var i in oldMetaList){
+				oldMetaList[i].active = 0;
+				
+				if(oldMetaList[i].subList.length>0){
+					var subList =  oldMetaList[i].subList;
+					for(var o in subList){
+						subList[o].active = 0;
+					}
+					oldMetaList[i].subList = subList;
+				}
+			}
+			that.categoryList = oldMetaList;
+			//判断是否为大类
+			if(data.parent==0){
+				var metaList = that.categoryList;
+				for(var i in metaList){
+					if(metaList[i].mid==data.mid){
+						//只有不存在任何小类的大类可以被直接选中
+						if(data.subList.length==0){
+							if(metaList[i].active==0){
+								metaList[i].active=1;
+							}
+						}
+					}
+				}
+				that.categoryList = metaList;
+			}else{
+				//开始新选择小类
+				var metaList = that.categoryList;
+				var parent = data.parent;
+				
+				for(var i in metaList){
+					if(metaList[i].mid==parent){
+						var subList =  metaList[i].subList;
+						var isActive = 0;
+						if(subList.length>0){
+							//点击的是小类，则给小类添加选中状态
+							for(var o in subList){
+								if(subList[o].mid == data.mid){
+									
+									if(data.active == 0){
+										subList[o].active = 1;
+										isActive = 1;
+									}
+								}
+								
+							}
+							metaList[i].subList = subList;
+						}
+						metaList[i].active = isActive;
+					}
+				}
+				that.categoryList = metaList;
+			}
+			
+			//添加进字段
+			var clist ="";
+			var list = that.categoryList;
+			for(var i in list){
+				if(list[i].active==1){
+					clist += ","+list[i].mid;
+					if(list[i].subList.length>0){
+						var subList =  list[i].subList;
+						for(var o in subList){
+							if(subList[o].active == 1){
+								clist += ","+subList[o].mid;
+							}
+						}
+					}
+				}
+			}
+			that.curCategory = clist;
 		},
 		toTagContents(title,id,index){
 			var that = this;
@@ -785,7 +912,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if (that.curCategory.length==0) {
+			if (that.curCategory=="") {
 				wu.showToast({
 				    title: '请选择分类',
 				    mask: false,
@@ -798,13 +925,6 @@ var wu = new Wu()
 			if(that.isSpace){
 				isSpace = 1;
 			}
-			var category ="";
-			var curCategory = that.curCategory;
-			for(var i in curCategory){
-				if(curCategory[i].active==1){
-					category += ","+curCategory[i].mid;
-				}
-			}
 			var tag ="";
 			if(that.curTag.length>0){
 				var curTag = that.curTag;
@@ -816,7 +936,7 @@ var wu = new Wu()
 			}
 			var params = {
 				'title':that.title,
-				'category':category,
+				'category':that.curCategory,
 				'tag':tag,
 				'sid':that.shopID
 			}
@@ -923,11 +1043,18 @@ var wu = new Wu()
 					
 					that.title = res.data.title;
 					if(res.data.category.length>0){
-						var curCategory = res.data.category;
-						for(var i in curCategory){
-							curCategory[i].active = 1;
+						// var curCategory = res.data.category;
+						// for(var i in curCategory){
+						// 	curCategory[i].active = 1;
+						// }
+						// that.curCategory = curCategory;
+						var clist ="";
+						var list = res.data.category;
+						for(var i in list){
+							clist += ","+list[i].mid;
 						}
-						that.curCategory = curCategory;
+						that.curCategory = clist;
+						that.getCategorylist();
 					}
 					if(res.data.tag.length>0){
 						var curTag = res.data.tag;
@@ -974,7 +1101,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if (that.curCategory.length==0) {
+			if (that.curCategory=="") {
 				wu.showToast({
 				    title: '请选择分类',
 				    mask: false,
@@ -987,13 +1114,13 @@ var wu = new Wu()
 			if(that.isSpace){
 				isSpace = 1;
 			}
-			var category ="";
-			var curCategory = that.curCategory;
-			for(var i in curCategory){
-				if(curCategory[i].active==1){
-					category += ","+curCategory[i].mid;
-				}
-			}
+			// var category ="";
+			// var curCategory = that.curCategory;
+			// for(var i in curCategory){
+			// 	if(curCategory[i].active==1){
+			// 		category += ","+curCategory[i].mid;
+			// 	}
+			// }
 			var tag ="";
 			if(that.curTag.length>0){
 				var curTag = that.curTag;
@@ -1006,7 +1133,7 @@ var wu = new Wu()
 			var params = {
 				'cid':that.cid,
 				'title':that.title,
-				'category':category,
+				'category':that.curCategory,
 				'tag':tag,
 				'sid':that.shopID
 			}

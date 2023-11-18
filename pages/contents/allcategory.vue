@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -21,18 +21,32 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
-		<view class="data-box">
+		<view class="allCategory">
 			<view class="no-data" v-if="metaList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="category">
-				<view class="category-content grid col-2">
-					<view class="category-box"  v-for="(item,index) in metaList" @tap="toCategoryContents(item.name,item.mid,index)" :class="item.active==1?'active':''" :key="index">
-						<view class="category-main">
-							{{item.name}}
+				<view class="category-item" v-for="(item,index) in metaList"  :key="index">
+					<view class="category-item-title"  @tap="toCategoryContents(item)">
+						{{item.name}}
+						<block v-if="type=='edit'">
+							<text class="text-blue" v-if="item.subList.length==0&&item.active==0">选择</text>
+							<text class="text-blue" v-if="item.active==1">已选择</text>
+						</block>
+						<block v-else>
+							<text class="cuIcon-right"></text>
+						</block>
+						
+					</view>
+					<view class="category-content grid col-2"  v-if="item.subList.length>0">
+						<view class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @tap="toCategoryContents(data)">
+							<view class="category-main">
+								{{data.name}}
+							</view>
 						</view>
 					</view>
 				</view>
+				
 			</view>
 		</view>
 
@@ -81,7 +95,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			
@@ -125,32 +139,26 @@
 							var list = res.data.data;
 							if(list.length>0){
 
-								var newList = [];
+								var parentList = [];
 								for(var i in list){
+								  if(list[i].parent==0){
+								    list[i].show = false;
 									list[i].active = 0;
-									if(that.type=="edit"){
-										if(localStorage.getItem('clist')){
-											var clist= localStorage.getItem('clist');
-											var arr = clist.split(",");
-											
-											for(var j in arr){
-												if(arr[j]!=""){
-													var index = Number(arr[j]);
-													if(list[i].mid == index){
-														list[i].active=1;
-														that.curNum++;
-													}
-													
-												}
-											}
-										}
-										
-									}
-									newList.push(list[i]);
+								    parentList.push(list[i]);
+								  }
 								}
+								for(var o in parentList){
+								  var subList = [];
+								  for(var s in list){
+								    if(list[s].parent==parentList[o].mid){
+									  list[s].active = 0;
+								      subList.push(list[s]);
+								    }
+								  }
+								  parentList[o].subList = subList;
+								}
+								that.metaList = parentList;
 								
-								
-								that.metaList = newList;
 								
 								localStorage.setItem('find_metaList',JSON.stringify(that.metaList));
 							}
@@ -172,8 +180,10 @@
 					}
 				})
 			},
-			toCategoryContents(title,id,index){
+			toCategoryContents(data){
 				var that = this;
+				var title = data.name;
+				var id = data.mid;
 				if(that.type=="all"){
 					var type="meta";
 					uni.navigateTo({
@@ -181,20 +191,63 @@
 					});
 				}else{
 					
-					if(that.metaList[index].active==1){
-						that.curNum--;
-						that.metaList[index].active=0;
-					}else{
-						if(that.curNum>2){
-							uni.showToast({
-								title: "最多选择三个分类",
-								icon: 'none'
-							});
-							return false;
+					//清除所有的选中
+					var oldMetaList = that.metaList;
+					for(var i in oldMetaList){
+						oldMetaList[i].active = 0;
+						
+						if(oldMetaList[i].subList.length>0){
+							var subList =  oldMetaList[i].subList;
+							for(var o in subList){
+								subList[o].active = 0;
+							}
+							oldMetaList[i].subList = subList;
 						}
-						that.curNum++;
-						that.metaList[index].active=1;
 					}
+					that.metaList = oldMetaList;
+					//判断是否为大类
+					if(data.parent==0){
+						var metaList = that.metaList;
+						for(var i in metaList){
+							if(metaList[i].mid==data.mid){
+								//只有不存在任何小类的大类可以被直接选中
+								if(data.subList.length==0){
+									if(metaList[i].active==0){
+										metaList[i].active=1;
+									}
+								}
+							}
+						}
+						that.metaList = metaList;
+					}else{
+						//开始新选择小类
+						var metaList = that.metaList;
+						var parent = data.parent;
+						
+						for(var i in metaList){
+							if(metaList[i].mid==parent){
+								var subList =  metaList[i].subList;
+								var isActive = 0;
+								if(subList.length>0){
+									//点击的是小类，则给小类添加选中状态
+									for(var o in subList){
+										if(subList[o].mid == data.mid){
+											
+											if(data.active == 0){
+												subList[o].active = 1;
+												isActive = 1;
+											}
+										}
+										
+									}
+									metaList[i].subList = subList;
+								}
+								metaList[i].active = isActive;
+							}
+						}
+						that.metaList = metaList;
+					}
+					
 					
 				}
 				
@@ -206,6 +259,14 @@
 				for(var i in list){
 					if(list[i].active==1){
 						clist += ","+list[i].mid;
+						if(list[i].subList.length>0){
+							var subList =  list[i].subList;
+							for(var o in subList){
+								if(subList[o].active == 1){
+									clist += ","+subList[o].mid;
+								}
+							}
+						}
 					}
 				}
 				if(clist==""){
@@ -216,11 +277,6 @@
 					return false;
 				}
 				localStorage.setItem('clist',clist);
-				//存入本地缓存后，恢复原本
-				var old_list = that.metaList;
-				for(var i in list){
-					that.metaList[i].active=0;
-				}
 				that.back();
 				
 			},

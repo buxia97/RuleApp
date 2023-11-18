@@ -13,7 +13,7 @@
 					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
-					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
@@ -23,7 +23,7 @@
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
-					<text class="cuIcon-clothes" @tap="goStyle"></text>
+					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
 					
 				</view>
 				<!--  #endif -->

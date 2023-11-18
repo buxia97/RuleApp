@@ -2,6 +2,9 @@
 	<view>
 		<view class="cu-item">
 			<view class="cu-list menu-avatar comment">
+				<text class="copy-comment" @tap="ToCopy(item.text)">
+					复制
+				</text>
 				<view class="cu-item">
 					<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
 					<view class="content">
@@ -304,6 +307,33 @@
 						}
 					}
 				});
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+				// #endif
 			},
 		}
 	}

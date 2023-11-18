@@ -121,12 +121,18 @@
 				if(isPage){
 					page++;
 				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token = userInfo.token;
+				}
 				that.$Net.request({
 					url: that.$API.getCommentsList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

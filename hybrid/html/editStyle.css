@@ -206,6 +206,9 @@ button{
 .hasSearch .modal-main{
 	height:350px;
 }
+.categoryBox .modal-main{
+	height:400px;
+}
 .modal-title{
 	font-weight: bold;
 	height: 40px;
@@ -228,6 +231,7 @@ button{
 	overflow: hidden;
 	box-sizing: border-box;
 	margin-top: 10px;
+	padding: 0px 5px;
 }
 .category-box{
 	width: 50%;
@@ -238,11 +242,37 @@ button{
 	padding: 5px;
 	box-sizing: border-box;
 }
+.category-item{
+	padding: 0px 5px;
+	background: #fff;
+	margin-bottom: 5px;
+	border-radius: 4px;
+}
+.category-item-title{
+	height: 45px;
+	font-size: 14px;
+	line-height: 45px;
+}
+.category-item-title span{
+	float: right;
+}
 .category-main{
-	color:  #0081ff;
-	border: solid 1px #0081ff;
-	border-radius: 14px;
+	padding: 4px;
+	text-align: center;
+	color: #000;
+	background-color: #f3f3f3;
 	font-size: 13px;
+	border-radius: 4px;
+}
+.category-content{
+	padding-bottom: 20upx;
+	width: 100%;
+	overflow: hidden;
+}
+.category-box.active .category-main{
+	color: #fff;
+	background-color:  #0081ff;
+	
 }
 .category-box.action .category-main{
 	background: #0081ff;

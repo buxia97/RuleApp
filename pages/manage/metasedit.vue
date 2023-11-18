@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -46,6 +46,13 @@
 					<text class="meta-type" :class="metaType=='tag'?'act':''" @tap="metaType='tag'">标签</text>
 				</view>
 			</view>
+			<view class="cu-form-group" v-if="metaType=='category'">
+				<view class="title">上级分类</view>
+				<view class="action"  @tap="showModal" data-target="parentList">
+					<text class="text-blue" v-if="curMid==0">选择分类</text>
+					<text class="text-blue" v-else>{{curName}}</text>
+				</view>
+			</view>
 			<view class="cu-form-group align-start">
 				<view class="title">简介</view>
 				<textarea v-model="description" placeholder="请输入分类和标签简介"></textarea>
@@ -73,6 +80,21 @@
 			<text class="cuIcon-upload"></text>
 		</view>
 		<!--  #endif -->
+		
+		<view class="cu-modal" :class="modalName=='parentList'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="midRadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item" v-for="(item,index) in parentList" :key="index">
+							<label class="flex justify-between align-center flex-sub" @tap="setMid(item.mid)">
+								<view class="flex-sub">{{item.name}}</view>
+								<radio class="round" :class="curMid==item.mid?'checked':''" :checked="curMid==item.mid?true:false"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -94,7 +116,12 @@
 				description:'',
 				metaType:"category",
 				
-				type:"add"
+				type:"add",
+				
+				curMid:0,
+				curName:"",
+				parentList:[],
+				modalName: null,
 				
 			}
 		},
@@ -106,7 +133,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
@@ -122,6 +149,7 @@
 				that.mid = res.mid;
 				that.geMetaInfo();
 			}
+			that.getMetaList();
 		},
 		methods: {
 			back(){
@@ -129,7 +157,66 @@
 					delta: 1
 				});
 			},
-			
+			midRadioChange(e){
+				this.curMid = e.detail.value;
+				
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			setMid(id){
+				let that = this	
+				that.curMid = id;
+				var list = that.parentList;
+				for(var i in list){
+					if(list[i].mid==that.curMid){
+						that.curName = list[i].name;
+					}
+				}
+				that.hideModal();
+			},
+			getMetaList(){
+				var that = this;
+				var data = {
+					"type":"category",
+					"parent":0
+				}
+				that.$Net.request({
+					url: that.$API.getMetasList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":50,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var list = res.data.data;
+							that.parentList = list;
+							if(that.curMid!=0){
+								for(var i in list){
+									if(list[i].mid = that.curMid){
+										that.curName = list[i].name;
+									}
+								}
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						uni.stopPullDownRefresh()
+					}
+				})
+			},
 			geMetaInfo(){
 				var that = this;
 				that.$Net.request({
@@ -150,6 +237,7 @@
 							that.order = res.data.data.orderKey;
 							that.description = res.data.data.description;
 							that.slug = res.data.data.slug;
+							that.curMid = res.data.data.parent;
 						}
 					},
 					fail: function(res) {
@@ -184,6 +272,9 @@
 					imgurl:that.imgurl,
 					slug:that.slug,
 					orderKey:that.order
+				}
+				if(that.type == 'category'){
+					data.parent = that.curMid;
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -253,6 +344,9 @@
 					slug:that.slug,
 					orderKey:that.order,
 					type:that.metaType
+				}
+				if(that.type == 'category'){
+					data.parent = that.curMid;
 				}
 				uni.showLoading({
 					title: "加载中"
