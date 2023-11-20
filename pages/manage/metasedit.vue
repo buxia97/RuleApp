@@ -148,8 +148,10 @@
 			if(res.mid){
 				that.mid = res.mid;
 				that.geMetaInfo();
+			}else{
+				that.getMetaList();
 			}
-			that.getMetaList();
+			
 		},
 		methods: {
 			back(){
@@ -201,7 +203,7 @@
 							that.parentList = list;
 							if(that.curMid!=0){
 								for(var i in list){
-									if(list[i].mid = that.curMid){
+									if(list[i].mid == that.curMid){
 										that.curName = list[i].name;
 									}
 								}
@@ -238,6 +240,7 @@
 							that.description = res.data.data.description;
 							that.slug = res.data.data.slug;
 							that.curMid = res.data.data.parent;
+							that.getMetaList();
 						}
 					},
 					fail: function(res) {
@@ -273,7 +276,7 @@
 					slug:that.slug,
 					orderKey:that.order
 				}
-				if(that.type == 'category'){
+				if(that.metaType == 'category'){
 					data.parent = that.curMid;
 				}
 				uni.showLoading({
@@ -345,7 +348,7 @@
 					orderKey:that.order,
 					type:that.metaType
 				}
-				if(that.type == 'category'){
+				if(that.metaType == 'category'){
 					data.parent = that.curMid;
 				}
 				uni.showLoading({
