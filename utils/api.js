@@ -382,8 +382,14 @@ module.exports = {
 	editMeta:function(){
 		return API_URL + 'typechoMetas/editMeta';
 	},
+	deleteMeta:function(){
+		return API_URL + 'typechoMetas/deleteMeta';
+	},
 	addMeta:function(){
 		return API_URL + 'typechoMetas/addMeta';
+	},
+	metaRecommend:function(){
+		return API_URL + 'typechoMetas/toRecommend';
 	},
 	
 	getContentsList:function(){
