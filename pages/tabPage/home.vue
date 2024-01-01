@@ -20,9 +20,9 @@
 				<view class="cu-avatar round" @tap="goUserInfo()" v-else>
 					<text class="home-noLogin">登录</text>
 				</view>
-				<view class="search-form radius">
+				<view class="search-form radius"  @tap="toSearch">
 					<text class="cuIcon-search"></text>
-					<input type="text" placeholder="搜索内容、评论、用户" confirm-type="search" disabled="disabled"  @tap="toSearch"></input>
+					<input type="text" placeholder="搜索内容、评论、用户" confirm-type="search" disabled="disabled" ></input>
 				</view>
 				<view class="action header-btn">
 					
