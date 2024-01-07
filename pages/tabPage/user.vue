@@ -10,7 +10,7 @@
 				</view>
 				<!--  #ifdef H5 -->
 				<view class="action header-btn">
-					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
@@ -19,7 +19,7 @@
 				<!--  #endif -->
 				<!--  #ifdef APP-PLUS -->
 				<view class="action header-btn">
-					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<text class="cuIcon-scan" @tap="toScan"></text>
@@ -230,7 +230,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box" @tap="toLink('/pages/user/inbox')">
+				<view class="index-sort-box" @tap="toLink('/pages/inbox/home')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i" style="background-color: #9728aa;">

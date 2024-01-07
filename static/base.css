@@ -96,6 +96,27 @@ page{
 	height: 90upx;
 	line-height: 90upx;
 }
+.inbox-sort{
+	padding: 20upx 0px;
+}
+.inbox-sort .index-sort-i{
+	width: 90upx;
+	height: 90upx;
+	line-height: 90upx;
+	position: relative;
+}
+.inbox-sort .index-sort-i .unreadNum{
+	position: absolute;
+	top:-16upx;
+	right: -16upx;
+	font-size: 24upx;
+	line-height: 34upx;
+	display: block;
+	text-align: center;
+	padding: 0 10upx;
+	height: 34upx;
+	border-radius: 50%;
+}
 .index-sort-text{
 	font-size: 26upx;
 }
@@ -431,6 +452,18 @@ page{
 	padding: 0upx 12upx;
 }
 .metaList .nav .cu-item.cur{
+	border:none;
+	color: #000;
+	border-bottom: #0081ff 4upx solid;
+	/* font-size: 32upx; */
+	font-weight: bold;
+}
+.nav.forumTop .cu-item{
+	height: 90upx;
+	line-height: 90upx;
+	padding: 0upx 12upx;
+}
+.nav.forumTop .cu-item.cur{
 	border:none;
 	color: #000;
 	border-bottom: #0081ff 4upx solid;
@@ -2333,6 +2366,9 @@ page{
 .header .search-form{
 	border-radius: 30upx !important;
 }
+.search-form-text{
+	color: #999;
+}
 .cu-avatar .home-noLogin{
 	font-size: 24upx;
 	color: #0081ff;
@@ -3249,8 +3285,8 @@ page{
 .about-tips{
 	font-size:24upx;
 	padding: 30upx;
+	line-height: 36upx;
 	opacity: 0.7;
-	text-align: center;
 }
 .app-ver{
 	font-size:24upx;
@@ -3682,3 +3718,4 @@ page{
 	font-size: 42upx;
 	text-shadow: 0px 0px 4upx #000;
 }
+

@@ -569,7 +569,7 @@ export default {
 				dataType: 'json',
 				success: function(res) {
 					if(res.data.code==1){
-						var noticeSum = res.data.data;
+						var noticeSum = res.data.data.total;
 						localStorage.setItem('noticeSum',noticeSum);
 					}
 				},

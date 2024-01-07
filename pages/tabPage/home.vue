@@ -26,7 +26,7 @@
 				</view>
 				<view class="action header-btn">
 					
-					<text class="cuIcon-notice" @tap="toLink('/pages/user/inbox')">
+					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
 						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
 					</text>
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->

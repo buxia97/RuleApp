@@ -205,6 +205,18 @@
 		},
 		// #endif
 		{
+			"path": "pages/inbox/home",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/inbox/message",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/contents/comments",
 			"style": {}
 		},
@@ -462,7 +474,6 @@
 			}
 		},
 		{
-			"path": "pages/space/post",
 			"style": {}
 		},
 		{
