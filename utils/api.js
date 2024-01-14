@@ -593,6 +593,9 @@ module.exports = {
 	msgList:function(){
 		return API_URL + 'typechoChat/msgList';
 	},
+	msgSetRead:function(){
+		return API_URL + 'typechoChat/msgSetRead';
+	},
 	deleteChat:function(){
 		return API_URL + 'typechoChat/deleteChat';
 	},

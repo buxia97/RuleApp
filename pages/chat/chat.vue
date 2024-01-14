@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -248,10 +248,15 @@
 			//到底部后，重新变成第一页，开始加载数据
 			that.page = 1;
 		},
-		onHide() {
+		onBackPress() {
 			var that = this
 			clearInterval(that.msgLoading);
-			that.msgLoading = null
+			that.msgLoading = null;
+		},
+		onUnload() {
+			var that = this
+			clearInterval(that.msgLoading);
+			that.msgLoading = null;
 		},
 		onLoad(res) {
 			var that = this;
@@ -261,6 +266,7 @@
 			if(res.chatid){
 				that.chatid = res.chatid;
 				that.getMsgList();
+				that.setRead();
 				that.msgLoading = setInterval(() => {
 				 that.getMsgList(false);
 				}, 3000);
@@ -324,9 +330,45 @@
 				}
 			},
 			back(){
+				var that = this;
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			setRead() {
+				var that = this;
+				var token = ""
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}
+				that.$Net.request({
+					
+					url: that.$API.msgSetRead(),
+					data:{
+						"token":token,
+						"chatid":that.chatid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 			formatDate(datetime) {
 				var datetime = new Date(parseInt(datetime * 1000));
