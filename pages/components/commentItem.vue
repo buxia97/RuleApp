@@ -27,7 +27,7 @@
 						<block v-if="isHead">
 							<!--  #ifdef H5 || APP-PLUS -->
 							<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
-							<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+							<!-- <text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text> -->
 							
 							<!--  #endif -->
 							<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>

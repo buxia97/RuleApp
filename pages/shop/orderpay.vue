@@ -30,7 +30,7 @@
 
 						<text class="text-red text-bold text-lg margin-right-xs">
 							<block v-if="isvip==1">
-								{{parseInt(shopinfo.price * shopinfo.vipDiscount)}} {{currencyName}}
+								{{parseInt(shopinfo.price * shopinfo.vipDiscount)}}
 							</block>
 							<block v-else>
 							{{shopinfo.price}}
@@ -54,7 +54,7 @@
 					<view class="action">
 						<text class="text-blue text-bold text-lg margin-right-xs">
 							{{assets}}
-						</text>
+						</text>{{currencyName}}
 					</view>
 				</view>
 

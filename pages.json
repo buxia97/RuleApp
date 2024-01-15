@@ -218,7 +218,9 @@
 		},
 		{
 			"path": "pages/contents/comments",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/contents/commentsadd",

@@ -48,7 +48,8 @@
 									{{userInfo.name}}
 								</block>
 								<!--  #ifdef H5 || APP-PLUS -->
-								<text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text>
+								<text class="userlv" :style="getLvStyle(userInfo.experience)">{{getLv(userInfo.experience)}}</text>
+								<!-- <text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text> -->
 								<!--  #endif -->
 								<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
 								<!--  #ifdef H5 || APP-PLUS -->
@@ -1940,6 +1941,25 @@
 				uni.navigateTo({
 				    url: '/pages/contents/rewardLog?id='+id
 				});
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return userlvStyle;
 			},
 		}
 	}

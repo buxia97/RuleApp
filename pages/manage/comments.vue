@@ -43,7 +43,8 @@
 									<view class="content">
 										<view class="text-grey">{{item.author}}
 										<!--  #ifdef H5 || APP-PLUS -->
-										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
+										<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
+										<!-- <text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text> -->
 										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 										</view>
@@ -453,7 +454,26 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return userlvStyle;
+			},
 		}
 	}
 </script>

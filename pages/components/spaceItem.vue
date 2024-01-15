@@ -15,8 +15,7 @@
 								<view>{{item.userJson.name}}
 								<block v-if="item.userJson.uid!=0">
 									<!--  #ifdef H5 || APP-PLUS -->
-									<!-- <text class="userlv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</text> -->
-									<text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text>
+									<!-- <text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text> -->
 									
 									<!--  #endif -->
 									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>

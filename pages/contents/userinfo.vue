@@ -58,7 +58,8 @@
 								</text>
 								<!-- <view class="userinfo-lv"> -->
 									<!--  #ifdef H5 || APP-PLUS -->
-								<text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text>
+								<!-- <text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text> -->
+								<text class="userlv" :style="getLvStyle(experience)">{{getLv(experience)}}</text>
 								<!--  #endif -->
 								<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
 								
@@ -232,7 +233,7 @@
 				avatar:"",
 				name:"",
 				customize:"",
-				lv:"",
+				experience:"",
 				vip:"",
 				isvip:"",
 				introduce:"",
@@ -380,7 +381,7 @@
 							that.local = res.data.data.local;
 							that.vip = res.data.data.vip;
 							that.isvip = res.data.data.isvip;
-							that.lv = res.data.data.lv;
+							that.experience = res.data.data.experience;
 							that.avatar = res.data.data.avatar;
 							that.customize = res.data.data.customize;
 							that.introduce = res.data.data.introduce;
@@ -933,6 +934,25 @@
 						}, 300)
 					}
 				})
+			},
+			getLv(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var leverList = that.$API.GetLeverList();
+				return leverList[lv];
+			},
+			getLvStyle(i){
+				var that = this;
+				if(!i){
+					var i = 0;
+				}
+				var lv  = that.$API.getLever(i);
+				var rankStyle = that.$API.GetRankStyle();
+				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
+				return userlvStyle;
 			},
 		}
 	}
