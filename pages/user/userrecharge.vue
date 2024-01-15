@@ -110,6 +110,24 @@
 				</view>
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='Epay'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">易支付确认</view>
+					<view class="action" @tap="hideModal">
+						<text class="text-red">关闭</text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<image :src="ePayCodeImg"></image>
+					<text>如无法跳转，可点击复制链接后，前往浏览器打开。</text>
+				</view>
+				<view class="text-center padding-xl">
+					<button class="cu-btn line-blue text-blue" @tap="ToCopy(ePayUrl)">复制链接</button>
+					<button class="cu-btn bg-blue margin-left"  @tap="goPayUrl(ePayUrl)">立即跳转</button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -138,9 +156,15 @@
 				alipayUrl:"",
 				wxpayUrl:"",
 				
+				ePayUrl:"",
+				ePayCodeImg:"",
+				
 				vipDiscount:0,
 				vipPrice:0,
-				scale:0
+				scale:0,
+				
+				
+				modalName: null,
 				
 				
 			}
@@ -179,6 +203,12 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			toPayType(i){
 				var that = this;
@@ -543,12 +573,9 @@
 								payurl = res.data.data.qrcode;
 							}
 							
-							// #ifdef APP-PLUS
-							plus.runtime.openURL(payurl) 
-							// #endif
-							// #ifdef H5
-							window.open(payurl)
-							// #endif
+							that.ePayCodeImg = that.$API.qrCode()+"?codeContent="+payurl;
+							that.ePayUrl = payurl;
+							that.modalName="Epay";
 							
 						}else{
 							uni.showToast({
@@ -586,7 +613,43 @@
 				if(text=="qqpay"){
 					return "QQ钱包"
 				}
-			}
+			},
+			goPayUrl(text){
+				var that = this;
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(text) 
+				// #endif
+				// #ifdef H5
+				window.open(text)
+				// #endif
+			},
+			ToCopy(text) {
+				var that = this;
+				// #ifdef APP-PLUS
+				uni.setClipboardData({
+					data: text,
+					success: () => { //复制成功的回调函数
+						uni.showToast({ //提示
+							title: "复制成功"
+						})
+					}
+				});
+				// #endif
+				// #ifdef H5 
+				let textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.readOnly = "readOnly";
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, text.length) ;
+				uni.showToast({ //提示
+					title: "复制成功"
+				})
+				var result = document.execCommand("copy") 
+				textarea.remove();
+				
+				// #endif
+			},
 
 		},
 		components: {
