@@ -68,7 +68,7 @@
 								{{name}}
 							</block>
 							
-							<text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text>
+							<!-- <text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text> -->
 							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
 
 						</view>
