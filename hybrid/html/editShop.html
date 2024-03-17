@@ -1052,38 +1052,54 @@ var wu = new Wu()
 			that.vipDiscountShow = false;
 		},
 		//上传的相关方法
+		//上传的相关方法
 		chooseImage() {
-		  var that = this;
-		  if (this.inputElement) {
-			// 如果 inputElement 已存在，移除之前的元素
-			this.inputElement.remove();
-		  }
-	
-		  this.inputElement = document.createElement('input');
-		  this.inputElement.type = 'file';
-		  this.inputElement.accept = 'image/*'; // 只接受图片文件
-		  
-		  this.inputElement.addEventListener('change', (event) => {
-			const file = event.target.files[0];
-			if (this.isImageFile(file)) {
-			  this.file = file;
-			  that.uploadFile("image");
-			} else {
-			  // 非图片文件，进行错误处理
-			  wu.showToast({
-			      title: '请选择图片文件',
-			      mask: false,
-			      icon: 'icon-error',
-			      duration: 3000
-			  });
-			}
-	
-			// 选择文件后销毁 inputElement
-			this.inputElement.remove();
-			this.inputElement = null;
-		  });
-		  
-		  this.inputElement.click();
+		    var that = this;
+		    if (this.inputElement) {
+		        // 如果 inputElement 已存在，移除之前的元素
+		        this.inputElement.remove();
+		    }
+		
+		    this.inputElement = document.createElement('input');
+		    this.inputElement.type = 'file';
+		    this.inputElement.accept = 'image/*'; // 只接受图片文件
+		    this.inputElement.multiple = true; // 允许选择多个文件
+		    this.inputElement.addEventListener('change', (event) => {
+		        if (event.target.files.length > 9) {
+		            // 如果选择的文件超过9个，显示错误消息
+		            wu.showToast({
+		                title: '最多只能选择9张图片',
+		                mask: false,
+		                icon: 'icon-error',
+		                duration: 3000
+		            });
+		            return; // 不继续执行后面的代码
+		        }
+		
+		        // 循环处理每个选中的文件
+		        Array.from(event.target.files).forEach((file) => {
+		            if (this.isImageFile(file)) {
+		                // 处理每个图片文件的上传
+		                // 注意：您需要根据实际逻辑调整这里的上传方法
+		                this.file = file;
+		                that.uploadFile("image");
+		            } else {
+		                // 非图片文件，进行错误处理
+		                wu.showToast({
+		                    title: '所有文件必须是图片',
+		                    mask: false,
+		                    icon: 'icon-error',
+		                    duration: 3000
+		                });
+		            }
+		        });
+		
+		        // 选择文件后销毁 inputElement
+		        this.inputElement.remove();
+		        this.inputElement = null;
+		    });
+		
+		    this.inputElement.click();
 		},
 		uploadImg() {
 		  var that = this;

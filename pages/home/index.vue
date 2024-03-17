@@ -168,8 +168,19 @@ export default {
 			},
 			isStart:false,
 			backButtonPress:0,
+			unreadNumLoading:null,
+			
+			pageShow:false,
         };
     },
+	onHide() {
+		var that = this;
+		that.pageShow = false;
+	},
+	onUnload() {
+		var that = this;
+		that.pageShow = false;
+	},
 	onBackPress(){
 		// #ifdef APP-PLUS
 		this.backButtonPress++;
@@ -193,6 +204,7 @@ export default {
 	},
 	onShow() {
 		var that = this;
+		that.pageShow = true;
 		setTimeout(function() {
 			uni.$emit('onShow', that.curPage);
 		}, 200); 
@@ -253,6 +265,7 @@ export default {
 	// #endif
     onLoad() {
         let that = this;
+		that.pageShow = true;
 		let platform=uni.getSystemInfoSync().platform;
 		localStorage.setItem('app_platform',platform);
         uni.getSystemInfo({
@@ -280,7 +293,11 @@ export default {
 		// #ifdef APP-PLUS
 		 that.appStartImg();
 		 //#endif
-		 that.unreadNum();
+		that.unreadNumLoading = setInterval(() => {
+			if(that.pageShow){
+				that.unreadNum();
+			}
+		}, 5000);
 		 
 		 // setTimeout(function() {
 		 // 	uni.$emit('onShow', 0);

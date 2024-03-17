@@ -149,7 +149,7 @@
 								</view>
 							</block>
 							<block v-else>
-								<view class="user-post-info" @tap="goShopInfo(item.shopJson.id)">
+								<view class="user-post-info" @tap="goShopInfo(item.shopJson)">
 									<view class="user-post-pic">
 										<image :src="item.shopJson.imgurl" mode="widthFix"></image>
 									</view>
@@ -579,8 +579,17 @@
 				});
 			},
 			
-			goShopInfo(sid){
+			goShopInfo(data){
 				var that = this;
+				var sid = data.id;
+				var status = data.status;
+				if(status!=1){
+					uni.showToast({
+						title: "商品未通过审核",
+						icon: 'none'
+					})
+					return false;
+				}
 				uni.navigateTo({
 				    url: '/pages/shop/shopinfo?sid='+sid
 				});

@@ -403,12 +403,12 @@
 				if(localStorage.getItem('recommendList')){
 					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
 				}
-				if(localStorage.getItem('find_metaList')){
-					that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
-				}
-				if(localStorage.getItem('find_tagList')){
-					that.tagList = JSON.parse(localStorage.getItem('find_tagList'));
-				}
+				// if(localStorage.getItem('find_metaList')){
+				// 	that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
+				// }
+				// if(localStorage.getItem('find_tagList')){
+				// 	that.tagList = JSON.parse(localStorage.getItem('find_tagList'));
+				// }
 				var timer = setTimeout(function() {
 					that.isLoading=1;
 					clearTimeout('timer')
