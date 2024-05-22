@@ -483,6 +483,21 @@
 	  	  <img src="loading.gif"/>
 	  </div>
   </div>
+  <div class="importDocx" v-if="isDocx==1">
+  	  <div class="importDocx-box">
+  		  <div class="importDocx-box-title">
+  			  Docx文档导入
+  		  </div>
+  		  <div class="importDocx-box-form">
+  			<input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="parseWordDocxFile(this)">
+  			选择文档
+  		  </div>
+  		  <div class="importDocx-box-text">
+  		  	目前仅支持上传Docx文档，上传完成后，文章内容将显示在编辑器页面，请确认排版和内容正确性后再进行提交。
+  		  </div>
+  	  </div>
+  	  
+  </div>
 </div>
 
 
@@ -492,6 +507,7 @@
 <script  type="text/javascript"src="uni.webview.1.5.4.js"></script>
 <script type="text/javascript" src="wuui/wu-ui/wu-ui.js"></script>
 <script type="text/javascript" src="qs.js"></script>
+<script type="text/javascript" src="mammoth.browser.js"></script>
 <script>
 const request = axios.create({
   headers: {
@@ -558,6 +574,8 @@ var wu = new Wu()
 	  verifyCode:"",
 	  kaptchaUrl:'',
 	  isVerify:false,
+	  
+	  isDocx:0,
     },
 	created() {
 		var that = this;
@@ -580,6 +598,7 @@ var wu = new Wu()
 			that.token = data.token;
 			that.type = data.type;
 			that.env =  data.env;
+			that.isDocx = data.isDocx,
 			that.verifyLevel = data.verifyLevel,
 			that.kaptchaUrl = data.apiUrl+"typechoUsers/getKaptcha"
 		}
@@ -1744,6 +1763,51 @@ var wu = new Wu()
   	  
   	  app.shopSelectionIndex = selection.index;
   });
+  
+  function parseWordDocxFile(inputElement) {
+    var files = inputElement.files || [];
+    if (!files.length) return;
+    var file = files[0];
+  	var fileName = file.name;
+  	if (!fileName.endsWith('.docx')) {
+  		wu.showToast({
+  		    title: '请上传Docx格式的文档！',
+  		    mask: false,
+  		    icon: 'icon-info',
+  		    duration: 3000
+  		});
+  		return false;
+  	}
+    
+    console.time();
+    var reader = new FileReader();
+    reader.onloadend = function(event) {
+  	var arrayBuffer = reader.result;
+  	// debugger
+  	
+    
+  	mammoth.convertToHtml({arrayBuffer: arrayBuffer}).then(function (resultObject) {
+  	  // result1.innerHTML = resultObject.value
+  	  var text = resultObject.value;
+  	  var delta= quill.clipboard.convert(text);
+  	  quill.setContents(delta);
+  	  app.isDocx = 0;
+  	})
+  	console.timeEnd();
+    
+  	//解析为html
+  	// mammoth.extractRawText({arrayBuffer: arrayBuffer}).then(function (resultObject) {
+  	//   // result2.innerHTML = resultObject.value
+  	//   console.log(resultObject.value)
+  	// })
+    //解析为markdown
+  	// mammoth.convertToMarkdown({arrayBuffer: arrayBuffer}).then(function (resultObject) {
+  	//   // result3.innerHTML = resultObject.value
+  	//   console.log(resultObject.value)
+  	// })
+    };
+    reader.readAsArrayBuffer(file);
+  }
 </script>
 </body>
 </html>

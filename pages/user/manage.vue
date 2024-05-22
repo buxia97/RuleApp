@@ -109,6 +109,12 @@
 						</view>
 						
 					</view>
+					<view class="user-data-box" v-if="allData.selfDelete!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/selfDelete')">
+							<view class="user-data-value">{{allData.selfDelete}}</view>
+							<view class="user-data-title">申请注销</view>
+						</view>
+					</view>
 				</view>
 			</view>
 			
@@ -203,6 +209,18 @@
 							</view>
 							<view class="index-sort-text">
 								解除异常
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/selfDelete')">
+							<view class="index-sort-i" style="background-color: #7a0000;">
+								<text class="cuIcon-repairfill"></text>
+							</view>
+							<view class="index-sort-text">
+								注销审核
 							</view>
 						</view>
 					</waves>

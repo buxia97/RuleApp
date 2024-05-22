@@ -112,7 +112,14 @@
 			"path": "pages/user/foget"
 		},
 		{
-			"path": "pages/user/register"
+			"path": "pages/user/register",
+			"style": {
+				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path": "pages/user/switchAccounts",
+			"style": {}
 		},
 		{
 			"path": "pages/user/setup",
@@ -209,6 +216,10 @@
 			"style": {
 				"enablePullDownRefresh":true
 			}
+		},
+		{
+			"path": "pages/user/rebate",
+			"style": {}
 		},
 		{
 			"path": "pages/inbox/message",
@@ -441,6 +452,12 @@
 			}
 		},
 		{
+			"path": "pages/manage/selfDelete",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/ads/home"
 		},
 		{
@@ -489,6 +506,9 @@
 		},
 		{
 			"path": "pages/edit/articlePost"
+		},
+		{
+			"path": "pages/edit/articleNew"
 		}
 		// #endif
 		

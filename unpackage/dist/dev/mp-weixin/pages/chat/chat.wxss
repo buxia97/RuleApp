@@ -1,0 +1,8 @@
+
+page{
+  padding-bottom: 100rpx;
+}
+.cu-bar.foot{
+	z-index: 998;
+}
+

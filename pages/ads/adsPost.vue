@@ -67,11 +67,11 @@
 					<view class="title">购买天数</view>
 					<input placeholder="输入购买天数" type="number" name="input" v-model="day" @input="day = limit(day,0)"  :adjust-position="false" :focus="false"></input>
 					<view class="action">
-						<text class="text-red">{{price}}积分/天</text>
+						<text class="text-red">{{price}}{{currencyName}}/天</text>
 					</view>
 				</view>
 				<view class="form-tips">
-					预计金额：<text class="text-blue">{{total(day,price)}}</text> 积分
+					预计金额：<text class="text-blue">{{total(day,price)}}</text> {{currencyName}}
 				</view>
 			</block>
 		</form>
@@ -155,6 +155,8 @@ export default {
 			
 			isLoading:0,
 			
+			currencyName:"",
+			
 		}
 	},
 	onPullDownRefresh(){
@@ -188,6 +190,7 @@ export default {
 			}
 		}
 		that.getAdsConfig();
+		that.currencyName = that.$API.getCurrencyName();
 	},
 	methods: {
 		total(days,price){

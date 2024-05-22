@@ -3719,3 +3719,116 @@ page{
 	text-shadow: 0px 0px 4upx #000;
 }
 
+.upload-bg{
+	padding: 30upx;
+}
+.upload-bg-no{
+	background: #ddd;
+	width: 100%;
+	height: 380upx;
+	border-radius: 8upx;
+	text-align: center;
+	font-size: 36upx;
+	color: #666;
+	line-height: 360upx;
+}
+.upload-bg-box{
+	position: relative;
+	width: 100%;
+	height: 380upx;
+	border-radius: 8upx;
+	overflow: hidden;
+	text-align: center;
+}
+.upload-bg-box image{
+	width: 100%;
+}
+.reload-btn{
+	position: absolute;
+	top: 42%;
+	z-index: 5;
+	width: 100%;
+	color: #fff;
+	font-weight: bold;
+	font-size: 42upx;
+	text-shadow: 0px 0px 4upx #000;
+}
+.articleNew-box{
+	padding: 10upx 20upx;
+	margin-top: 10upx;
+}
+.articleNew-main{
+	background: #fff;
+	box-shadow: 0px 0px 8upx rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	border-radius: 10upx;
+	padding: 20upx;
+}
+.articleNew-ico{
+	width: 150upx;
+	height: 150upx;
+	line-height: 150upx;
+	text-align: center;
+	font-size: 60upx;
+	color: rgba(255, 255, 255, 0.8);
+	border-radius: 10upx;
+	float: left;
+	opacity: 0.8;
+}
+.articleNew-mian-info{
+	width: calc(100% - 190upx);
+	float: left;
+	padding-left: 20upx;
+	padding-top: 16upx;
+}
+.articleNew-mian-title{
+	font-size: 36upx;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 20upx;
+}
+.articleNew-mian-intro{
+	font-size: 24upx;
+	color: #999;
+}
+.articleNew-right{
+	width: 40upx;
+	float: left;
+	line-height: 150upx;
+	text-align: right;
+	font-size: 40upx;
+	color: #999;
+}
+.cu-list.menu-avatar>.cu-item:after, .cu-list.menu>.cu-item:after{
+	border-bottom: 0.5px solid #f3f3f3;
+}
+.addAccount{
+	margin-top: 20upx;
+	padding: 0px 20upx;
+}
+.addAccount-main{
+	width: 100%;
+	overflow: hidden;
+	background: #fff;
+	padding: 20upx;
+	border-radius: 20upx;
+}
+.addAccount-i{
+	width: 80upx;
+	height: 80upx;
+	background: #f3f3f3;
+	text-align: center;
+	line-height: 80upx;
+	border-radius: 50%;
+	float: left;
+}
+.addAccount-i text{
+	font-size: 40upx;
+}
+.addAccount-text{
+	float: left;
+	padding-left: 20upx;
+	line-height: 80upx;
+	font-weight: bold;
+	width: calc(100% - 80upx);
+}

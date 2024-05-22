@@ -9,7 +9,7 @@
 					解除异常
 				</view>
 				<view class="action" @tap="submit">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">提交</button>
 				</view>
 			</view>
 		</view>

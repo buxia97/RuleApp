@@ -28,7 +28,7 @@
 							剩余：<text class="text-blue">{{pushAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{pushAdsPrice || 0}}积分</text>/天
+							<text class="text-red">{{pushAdsPrice || 0}}{{currencyName}}</text>/天
 						</view>
 						<view class="ads-btn" @tap="goAdsBuy(pushAdsPrice,pushAdsNum,0)">
 							<text class="text-green">立即购买</text>
@@ -49,7 +49,7 @@
 							剩余：<text class="text-blue">{{bannerAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{bannerAdsPrice || 0}}积分</text>/天
+							<text class="text-red">{{bannerAdsPrice || 0}}{{currencyName}}</text>/天
 						</view>
 						<view class="ads-btn" @tap="goAdsBuy(bannerAdsPrice,bannerAdsNum,1)">
 							<text class="text-green">立即购买</text>
@@ -70,7 +70,7 @@
 							剩余：<text class="text-blue">{{startAdsNum || 0}}</text>
 						</view>
 						<view class="ads-price">
-							<text class="text-red">{{startAdsPrice || 0}}积分</text>/天
+							<text class="text-red">{{startAdsPrice || 0}}{{currencyName}}</text>/天
 						</view>
 						<view class="ads-btn" @tap="goAdsBuy(startAdsPrice,startAdsNum,2)">
 							<text class="text-green">立即购买</text>
@@ -114,6 +114,7 @@ export default {
 			userData:{
 				assets:0,
 			},
+			currencyName:""
 		}
 	},
 	onPullDownRefresh(){
@@ -138,7 +139,7 @@ export default {
 		// #ifdef APP-PLUS || MP
 		that.NavBar = this.CustomBar;
 		// #endif
-		
+		that.currencyName = that.$API.getCurrencyName();
 	},
 	methods: {
 		back(){

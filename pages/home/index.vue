@@ -9,7 +9,7 @@
 			<view class="tabbar-operate" :class="isPost?'show':''" :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
 				<view class="tabbar-operate-main grid col-3">
 					<view class="index-sort-box">
-						<view class="index-sort-main"  @tap="toLink('../edit/articlePost?type=add')">
+						<view class="index-sort-main"  @tap="toLink('../edit/articleNew')">
 							<view class="index-sort-i" style="background: rgba(30, 134, 231, 0.2);">
 								<text class="cuIcon-writefill" style="color:  #1e86e7;"></text>
 							</view>

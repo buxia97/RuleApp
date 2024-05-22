@@ -44,9 +44,9 @@
 			<view class="vip-box">
 				<view class="vip-maim">
 					<view class="bg-gradual-orange padding radius text-center shadow-blur">
-						<view class="text-lg text-bold">永久VIP<text class="text-black margin-left">{{vipPrice*500}}积分</text></view>
+						<view class="text-lg text-bold">永久VIP<text class="text-black margin-left">{{vipPrice*vipDay}}积分</text></view>
 						<view class="margin-top-sm text-Abc">享受永久VIP特权，并获取高亮VIP头衔</view>
-						<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="toBuyVip(500)">立即购买</view>
+						<view class="cu-btn radius margin-top bg-black  shadow-blur" @tap="toBuyVip(vipDay)">立即购买</view>
 					</view>
 				</view>
 			</view>
@@ -73,7 +73,8 @@
 				isLoading:0,
 				vipDiscount:0,
 				vipPrice:0,
-				scale:0
+				scale:0,
+				vipDay:0
 			}
 		},
 		onShow(){
@@ -111,6 +112,7 @@
 							that.vipDiscount=res.data.data.vipDiscount;
 							that.vipPrice=res.data.data.vipPrice;
 							that.scale=res.data.data.scale;
+							that.vipDay = res.data.data.vipDay;
 						}
 						var timer = setTimeout(function() {
 							that.isLoading=1;

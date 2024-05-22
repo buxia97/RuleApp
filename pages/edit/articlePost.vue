@@ -64,6 +64,7 @@
 				//页面状态
 				type:"add",
 				cid:0,
+				isDocx:0,
 				
 				weburl:'/hybrid/html/edit.html?data=',
 				lenght:0,
@@ -100,6 +101,9 @@
 			if(res.type){
 				that.type = res.type;
 			}
+			if(res.isDocx){
+				that.isDocx = res.isDocx;
+			}
 			var id = 0;
 			if(that.type!='add'){
 				if(!res.cid){
@@ -130,6 +134,7 @@
 				"uid":that.uid,
 				"token":that.token,
 				"type":that.type,
+				"isDocx":that.isDocx,
 				"env":Env
 			}
 			that.weburl+=encodeURIComponent(JSON.stringify(data));

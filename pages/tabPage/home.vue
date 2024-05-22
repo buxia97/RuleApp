@@ -22,7 +22,7 @@
 				</view>
 				<view class="search-form radius"  @tap="toSearch">
 					<text class="cuIcon-search"></text>
-					<input type="text" placeholder="搜索内容、评论、用户" confirm-type="search" disabled="disabled" ></input>
+					<view class="search-form-text">搜索内容、评论、用户</view>
 				</view>
 				<view class="action header-btn">
 					

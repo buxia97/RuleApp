@@ -13,10 +13,11 @@
 			</view>
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="cu-list menu margin-top">
+		<view class="cu-list menu  card-menu margin-top">
 			<block v-if="token!=''">
 				<view class="cu-item">
 					<view class="content">
+						<text class="cuIcon-btn"></text>
 						<text>账号状态<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="Modal"></text></text>
 					</view>
 					<view class="action">
@@ -26,6 +27,9 @@
 						<block v-if="systemBan==1">
 							<text class="text-red">功能限制</text>
 						</block>
+						<block v-if="systemBan==2">
+							<text class="text-red">注销中</text>
+						</block>
 						<block v-if="systemBan==0">
 							<text class="text-green">正常</text>
 						</block>
@@ -33,6 +37,7 @@
 				</view>
 				<view class="cu-item">
 					<view class="content">
+						<text class="cuIcon-profilefill"></text>
 						<text>注销账户<text class="cuIcon-question margin-left-xs" @tap="showModal" data-target="deleteTips"></text></text>
 					</view>
 					<view class="action">
@@ -43,6 +48,7 @@
 			
 			<view class="cu-item" @tap="rmlocal">
 				<view class="content">
+					<text class="cuIcon-backwardfill"></text>
 					<text>清除缓存</text>
 				</view>
 				<view class="action">
@@ -51,11 +57,26 @@
 			</view>
 			
 		</view>
-		<view class="logout" v-if="token!=''" @tap="logout">
-			<view class="logout-main">
-				<text class="text-red">退出登录</text>
-			</view>
+		<view class="cu-list menu  card-menu margin-top">
 			
+			<view class="cu-item" v-if="token!=''" @tap="switchAccounts">
+				<view class="content">
+					<text class="cuIcon-roundaddfill"></text>
+					<text>切换账号</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right text-black"></text>
+				</view>
+			</view>
+			<view class="cu-item" v-if="token!=''" @tap="logout">
+				<view class="content">
+					<text class="cuIcon-playfill"></text>
+					<text>退出登录</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right text-black"></text>
+				</view>
+			</view>
 		</view>
 		
 		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
@@ -87,7 +108,7 @@
 		<view class="cu-modal bottom-modal" :class="modalName=='deleteUser'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white">
-					<view class="action">注销账户</view>
+					<view class="action">申请注销账户</view>
 					<view class="action text-blue" @tap="hideModal">取消</view>
 					
 					
@@ -100,7 +121,7 @@
 						</view>
 						<view class="all-btn">
 							<view class="user-btn flex flex-direction">
-								<button class="cu-btn bg-blue margin-tb-sm lg" @tap="selfDelete()">确认注销</button>
+								<button class="cu-btn bg-blue margin-tb-sm lg" @tap="selfDelete()">提交申请</button>
 								
 							</view>
 						</view>
@@ -154,7 +175,7 @@
 			
 			//plus.navigator.setStatusBarStyle("dark")
 			
-			
+			that.getUserData();
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				
@@ -178,6 +199,65 @@
 			that.getUserData();
 		},
 		methods: {
+			switchAccounts(){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				
+				//获取当前缓存
+				var userinfo  = null;
+				try{
+					if(localStorage.getItem('userinfo')){
+						userinfo = JSON.parse(localStorage.getItem('userinfo'));
+					}
+				}catch(e){
+					console.log(JSON.stringify(e));
+				}
+				
+				
+				//把当前用户载入本地缓存
+				var localAccounts = [];
+				try{
+					if(localStorage.getItem('localAccounts')){
+						localAccounts = JSON.parse(localStorage.getItem('localAccounts'));
+					}
+				}catch(e){
+					console.log(JSON.stringify(e));
+				}
+				if(localAccounts.length>0){
+					
+					var isHave = 0
+					for(var i in localAccounts){
+						if(localAccounts[i].uid==userinfo.uid){
+							isHave = 1;
+							localAccounts[i] = userinfo;
+						}
+					}
+					if(isHave==0){
+						if(userinfo!=null){
+							localAccounts.push(userinfo);
+						}
+						
+					}
+					
+				}else{
+					if(userinfo!=null){
+						localAccounts.push(userinfo);
+						
+					}
+				}
+				localStorage.setItem('localAccounts',JSON.stringify(localAccounts));
+				
+				uni.navigateTo({
+				    url: '/pages/user/switchAccounts'
+				});
+				
+			},
 			back(){
 				uni.navigateBack({
 					delta: 1
@@ -297,8 +377,8 @@
 											position:'bottom',
 										});
 										var timer = setTimeout(function() {
-											uni.reLaunch({
-												url: '/pages/home/home'
+											uni.redirectTo({
+												url: '/pages/home/index'
 											})
 											clearTimeout('timer')
 										}, 1000)
@@ -366,11 +446,12 @@
 				            			icon: 'none'
 				            		})
 				            		if(res.data.code==1){
-										localStorage.removeItem('userinfo');
-										localStorage.removeItem('token');
+										// localStorage.removeItem('userinfo');
+										// localStorage.removeItem('token');
 										var timer = setTimeout(function() {
-											uni.reLaunch({
-												url: '/pages/home/home'
+											that.getUserData();
+											uni.redirectTo({
+												url: '/pages/home/index'
 											})
 											clearTimeout('timer')
 										}, 1000)

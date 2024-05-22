@@ -278,6 +278,17 @@
 					</view>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="cu-item" @tap="toRebate" v-if="userInfo!=null">
+					<view class="content">
+						<text class="cuIcon-attentionfavorfill text-green"></text>
+						<text>获取{{currencyName}}</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
+				<!--  #endif -->
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="cu-item" @tap="toMedia">
 					<view class="content">
 						<text class="cuIcon-newfill text-blue"></text>

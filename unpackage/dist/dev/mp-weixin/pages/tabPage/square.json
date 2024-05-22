@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "waves": "/components/xxley-waves/waves"
+  },
+  "component": true
+}

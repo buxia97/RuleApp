@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>编辑器</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="language" content="english">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" type="text/css" href="font/iconfont.css" />
+<link rel="stylesheet" href="katex/katex.min.css" />
+<link rel="stylesheet" href="highlight/styles/monokai-sublime.min.css" />
+<link rel="stylesheet" href="Quill/quill.snow.css" />
+<link rel="stylesheet" type="text/css" href="wuui/wu-ui/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="wuui/wu-ui/wu-ui.css" />
+<link rel="stylesheet" href="editStyle.css" />
+
+<style>
+  body > #standalone-container {
+    margin: 0px auto;
+    max-width: 720px;
+  }
+</style>
+
+
+</head>
+<body>
+  
+<div id="app" :style="editTopStyle">
+  <div class="form" >
+	  <div class="form-box">
+	  	  <div class="form-label">
+	  	  	  文章标题
+	  	  </div>
+		  <div class="form-input">
+		  	  <input placeholder="输入文章标题" type="text" v-model="title" />
+		  </div>
+	  </div>
+  </div>
+  <div id="standalone-container">
+	  <div id="toolbar-container">
+		<!-- <span class="ql-formats">
+		  <select class="ql-font"></select>
+		  <select class="ql-size"></select>
+		</span> -->
+		<span class="ql-formats">
+		  <button class="ql-bold"></button>
+		  <button class="ql-italic"></button>
+		  <button class="ql-underline"></button>
+		  <button class="ql-strike"></button>
+		  <select class="ql-color"></select>
+		  <select class="ql-background"></select>
+		</span>
+		
+		<span class="ql-formats">
+		  <button class="ql-header" value="1"></button>
+		  <button class="ql-header" value="2"></button>
+		  <button class="ql-blockquote"></button>
+		  <button class="ql-code-block"></button>
+		</span>
+		<span class="ql-formats">
+		  <button class="ql-clean"></button>
+		</span>
+		
+		<span class="ql-formats">
+		  <button class="ql-list" value="ordered"></button>
+		  <button class="ql-list" value="bullet"></button>
+		  <button class="ql-indent" value="-1"></button>
+		  <button class="ql-indent" value="+1"></button>
+		  <button class="ql-direction" value="rtl"></button>
+		  <select class="ql-align"></select>
+		</span>
+		<!-- <span class="ql-formats">
+		  <button class="ql-link"></button>
+		  <button class="ql-formula"></button>
+		  <button class="ql-script" value="sub"></button>
+		  <button class="ql-script" value="super"></button>
+		</span> -->
+		<span class="ql-formats rule-tool">
+		  <button @click="uploadPicShow=true,editType=1"><i class="iconfont icon-image"></i></button>
+		  <button @click="uploadVideoShow=true,editType=1"><i class="iconfont icon-arrow-right-drop-circle"></i></button>
+		  <button @click="uploadMusicShow=true,editType=1"><i class="iconfont icon-itunes"></i></button>
+		  <button @click="uploadFileShow=true,editType=1"><i class="iconfont icon-attachment"></i></button>
+		  <button @click="shopShow=true,editType=1" :class="shopID!=0?'active':''" v-if="!isPaid"><i class="iconfont icon-medical-bag"></i></button>
+		  <button @click="expandShow=true,editType=1"><i class="iconfont icon-puzzle"></i></button>
+		</span>
+		
+	  </div>
+	  
+  </div>
+  <div id="editor-container"></div>
+  <div class="form" >
+	  
+	  <div class="form-box" v-if="shopID==0">
+		  <div class="form-label">
+			  付费阅读
+		  </div>
+		  <div class="form-action">
+			<div class="form-switch" :class="isPaid?'active':''" @click="isPaid=!isPaid">
+				<div class="form-item"></div>
+			</div>
+		  </div>
+	  </div>
+  </div>
+  <div class="standalone-isPaid" :class="isPaid?'editShow':''">
+  	<div class="standalone-container">
+  		  <div id="shop-toolbar">
+  			<span class="ql-formats">
+  			  <button class="ql-bold"></button>
+  			  <button class="ql-italic"></button>
+  			  <button class="ql-underline"></button>
+  			  <button class="ql-strike"></button>
+  			  <select class="ql-color"></select>
+  			  <select class="ql-background"></select>
+  			</span>
+  			
+  			<span class="ql-formats">
+  			  <button class="ql-header" value="1"></button>
+  			  <button class="ql-header" value="2"></button>
+  			  <button class="ql-blockquote"></button>
+  			  <button class="ql-code-block"></button>
+  			</span>
+  			<span class="ql-formats">
+  			  <button class="ql-clean"></button>
+  			</span>
+  			<span class="ql-formats">
+  			  <button class="ql-list" value="ordered"></button>
+  			  <button class="ql-list" value="bullet"></button>
+  			  <button class="ql-indent" value="-1"></button>
+  			  <button class="ql-indent" value="+1"></button>
+  			  <button class="ql-direction" value="rtl"></button>
+  			  <select class="ql-align"></select>
+  			</span>
+  			<span class="ql-formats rule-tool">
+  			  <button @click="uploadPicShow=true,editType=2"><i class="iconfont icon-image"></i></button>
+  			  <button @click="uploadVideoShow=true,editType=2"><i class="iconfont icon-arrow-right-drop-circle"></i></button>
+  			  <button @click="uploadMusicShow=true,editType=2"><i class="iconfont icon-itunes"></i></button>
+  			  <button @click="uploadFileShow=true,editType=2"><i class="iconfont icon-attachment"></i></button>
+  			</span>
+  			
+  			
+  		  </div>
+  		  
+  	</div>
+  	<div id="shop-container"></div>
+  </div>
+  <div class="form" >
+	  
+	  <div class="form-box" v-if="isPaid">
+	  	  <div class="form-label">
+	  	  	  付费价格
+	  	  </div>
+		  <div class="form-input">
+			  <input placeholder="输入价格(整数)" type="number" v-model="shopPice"/>
+		  </div>
+	  </div>
+	  <div class="form-box" v-if="isPaid">
+	  	  <div class="form-label">
+	  	  	  VIP折扣
+	  	  </div>
+		  <div class="form-input">
+			  <input placeholder="输入VIP折扣,必须包含小数点" type="text" v-model="shopDiscount" @input="formatInput" />
+		  </div>
+	  </div>
+	  <div class="form-box" :class="isPaid?'':'border-top'">
+	  	  <div class="form-label">
+	  	  	  文章分类
+	  	  </div>
+	  		  <div class="form-action">
+	  			  <template v-if="curCategory==''">
+	  				<button type="button" @click="categoryShow=true">选择分类</button>
+	  			  </template>
+	  			  <template v-else>
+	  				<button type="button" class="text-blue" @click="categoryShow=true">已选择</button>
+	  			  </template>
+	  		  </div>
+	  </div>
+	  <div class="form-box">
+	  	  <div class="form-label">
+	  	  	  选择标签
+	  	  </div>
+	  		  <div class="form-action" @click="tagsShow=true">
+	  			 <div class="form-tag">
+	  				<template v-if="curTag.length==0">
+	  				 <div class="form-tag-box">
+	  					暂无标签
+	  				 </div>	
+	  				</template>
+	  				<template v-else>
+	  					<div class="form-tag-box" v-for="(item,index) in curTag">
+	  						#{{item.name}}
+	  					</div>			 
+	  				</template>
+	  				
+	  			 </div>
+	  		  </div>
+	  </div>
+	  <div class="form-box" >
+	  	  <div class="form-label">
+	  	  	  是否同步到动态
+	  	  </div>
+		  <div class="form-action">
+			<div class="form-switch" :class="isSpace?'active':''" @click="isSpace=!isSpace">
+				<div class="form-item"></div>
+			</div>
+		  </div>
+	  </div>
+	  <div class="form-box">
+		  <div class="form-label">
+			  保存为草稿
+		  </div>
+		  <div class="form-action">
+			<div class="form-switch" :class="isDraft?'active':''" @click="isDraft=!isDraft">
+				<div class="form-item"></div>
+			</div>
+		  </div>
+	  </div>
+	  <div class="form-box submit">
+		  <template v-if="type=='add'">
+			  <button type="button" class="form-btn" @click="contentsAdd">发布文章</button>
+		  </template>
+		  <template v-else>
+		  	<button type="button" class="form-btn" @click="contentsUpdate">保存文章</button>
+		  </template>
+	  </div>
+  </div>
+  <!-- <button onclick="send()">传送</button> -->
+  <div class="modal categoryBox" :class="categoryShow?'show':''">
+  	<div class="modal-bg" @click="categoryShow=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			选择分类
+  			<a href="javascript:;"  @click="categoryShow=false">关闭</a>
+  		</div>
+		<!-- <div class="modal-search">
+			<input placeholder="输入关键词" type="text" v-model="searchText" @input="searchCategory()"/>
+			<button type="button"><i class="iconfont icon-magnify"></i></button>
+		</div> -->
+  		<div class="modal-concent">
+  			<div class="category-list">
+  				<!-- <div class="category-box" v-for="(item,index) in categoryList" :class="item.active==1?'action':''" @click="toCategoryContents(item.name,item.mid,index)">
+  					<div class="category-main">
+  						{{item.name}}
+  					</div>
+  				</div> -->
+				<div class="category-item" v-for="(item,index) in categoryList"  :key="index">
+					<div class="category-item-title"  @click="toCategoryContents(item)">
+						{{item.name}}
+						<span class="text-blue" v-if="item.subList.length==0&&item.active==0">选择</span>
+						<span class="text-blue" v-if="item.active==1">已选择</span>
+						
+					</div>
+					<div class="category-content grid col-2"  v-if="item.subList.length>0">
+						<div class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @click="toCategoryContents(data)">
+							<div class="category-main">
+								{{data.name}}
+							</div>
+						</div>
+					</div>
+				</div>
+
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal hasSearch" :class="tagsShow?'show':''">
+  	<div class="modal-bg" @click="tagsShow=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			选择标签
+  			<a href="javascript:;"  @click="tagsShow=false">关闭</a>
+  		</div>
+  		<div class="modal-search">
+  			<input placeholder="输入关键词" type="text" v-model="tagsText" @input="searchTags()"/>
+  			<button type="button"><i class="iconfont icon-magnify"></i></button>
+  		</div>
+  		<div class="modal-concent">
+  			<div class="tag-list">
+  				<div class="tag-box" v-for="(item,index) in tagList" :class="item.active==1?'action':''" @click="toTagContents(item.name,item.mid,index)">
+  					#{{item.name}}
+  				</div>
+  			
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal" :class="uploadPicShow?'show':''">
+  	<div class="modal-bg" @click="uploadPicShow=false,linkUrl='',isLink=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			插入图片
+  			<a href="javascript:;"  @click="uploadPicShow=false,linkUrl='',isLink=false">关闭</a>
+  		</div>
+  		<div class="modal-concent">
+  			<div class="upload-tool">
+				<template v-if="isLink">
+					<div class="form" >
+						  <div class="form-box">
+							  <div class="form-input">
+							  	  <input placeholder="输入图片地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+						  </div>
+						  <button type="button" style="background:#f57070" @click="setFileLink('image')">插入图片</button>
+					</div>
+					
+				</template>
+				<template v-if="!isLink">
+					<button type="button" style="background:#0081ff" @click="chooseImage()">本地上传</button>
+					<button type="button" style="background:#f57070" @click="isLink=true">远程链接</button>
+				</template>
+			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal" :class="uploadVideoShow?'show':''">
+  	<div class="modal-bg" @click="uploadVideoShow=false,linkUrl='',isLink=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			插入视频
+  			<a href="javascript:;"  @click="uploadVideoShow=false,linkUrl='',isLink=false">关闭</a>
+  		</div>
+  		<div class="modal-concent">
+  			<div class="upload-tool">
+				<template v-if="isLink">
+					<div class="form" >
+						  <div class="form-box">
+							  <div class="form-input">
+							  	  <input placeholder="输入视频地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+						  </div>
+						  <button type="button" style="background:#f57070" @click="setFileLink('video')">插入视频</button>
+					</div>
+					
+				</template>
+				<template v-if="!isLink">
+					<button type="button" style="background:#0081ff" @click="chooseVideo()">本地上传</button>
+					<button type="button" style="background:#f57070"  @click="isLink=true">远程链接</button>
+				</template>
+  				
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal" :class="uploadMusicShow?'show':''">
+  	<div class="modal-bg" @click="uploadMusicShow=false,linkUrl='',isLink=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			插入音乐
+  			<a href="javascript:;"  @click="uploadMusicShow=false,linkUrl='',isLink=false">关闭</a>
+  		</div>
+  		<div class="modal-concent">
+			
+  			<div class="upload-tool">
+				<template v-if="isLink">
+					<div class="form" >
+						  <div class="form-box">
+							  <div class="form-input">
+							  	  <input placeholder="输入音频地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+						  </div>
+						  <button type="button" style="background:#f57070" @click="setFileLink('audio')">插入音频</button>
+					</div>
+					
+				</template>
+				<template v-if="!isLink">
+					<button type="button" style="background:#0081ff" @click="chooseAudio()">本地上传</button>
+					<button type="button" style="background:#f57070" @click="isLink=true">远程链接</button>
+				</template>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal" :class="uploadFileShow?'show':''">
+  	<div class="modal-bg" @click="uploadFileShow=false,linkName='',linkUrl='',isLink=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			插入文档
+  			<a href="javascript:;"  @click="uploadFileShow=false,linkName='',linkUrl='',isLink=false">关闭</a>
+  		</div>
+  		<div class="modal-concent">
+  			
+  			<div class="upload-tool">
+				<template v-if="isLink">
+					<div class="form" >
+						  <div class="form-box">
+							  <div class="form-input">
+							  	  <input placeholder="输入超链接地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+							</div>
+							<div class="form-box">
+							
+							  <div class="form-input">
+							  	  <input placeholder="超链接名称" type="text" v-model="linkName" />
+							  </div>
+						  </div>
+						  <button type="button" style="background:#f57070" @click="setFileLink('link')">插入链接</button>
+					</div>
+					
+				</template>
+				<template v-if="!isLink">
+					<button type="button" style="background:#0081ff" @click="chooseFile()">文档&压缩包本地上传</button>
+					<button type="button" style="background:#f57070" @click="isLink=true">插入超链接</button>
+				</template>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal hasSearch" :class="shopShow?'show':''">
+  	<div class="modal-bg" @click="shopShow=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			插入商品
+			<a href="javascript:;" class="addShop" @click="addShop()">新增</a>
+  			<a href="javascript:;"  @click="shopShow=false">关闭</a>
+  		</div>
+  		<div class="modal-search">
+  			<input placeholder="输入关键词" type="text" v-model="shopsText" @input="searchShop()"/>
+  			<button type="button"><i class="iconfont icon-magnify"></i></button>
+  		</div>
+  		<div class="modal-concent">
+  			<div class="shop-list">
+  				<div class="shop-box" v-for="(item,index) in shopList" @click="setShop(item.id)">
+					<div class="shop-pic">
+						<img :src="item.imgurl">
+					</div>
+					<div class="shop-concent">
+						<div class="shop-title">
+							{{item.title}}
+						</div>
+						<div class="shop-date">
+							{{formatDate(item.created)}}
+						</div>
+					</div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="modal" :class="expandShow?'show':''">
+  	<div class="modal-bg" @click="expandShow=false">
+  	</div>
+  	<div class="modal-main">
+  		<div class="modal-title">
+  			扩展功能
+  			<a href="javascript:;"  @click="expandShow=false">关闭</a>
+  		</div>
+  		<div class="modal-concent">
+  			
+  			<div class="upload-tool">
+  				<button type="button" style="background:#0081ff" @click="expandInsert('hide')">回复可见</button>
+  				<button type="button" style="background:#f57070" @click="expandInsert('vip')">VIP可见</button>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <div class="alertTips" v-if="isVerify">
+	  <div class="alertTips-bg" @click="isVerify=false,verifyCode = ''"></div>
+	  <div class="alertTips-box">
+		  <div class="alertTips-main">
+		  		<div class="alertTips-title">
+		  			图片验证
+		  		</div>
+				<div class="alertTips-concent">
+					<div class="alertTips-concent-pic">
+						<img :src="kaptchaUrl" @click="reloadCode()"/>
+					</div>
+					<div class="alertTips-concent-input">
+						<input  type="text" v-model="verifyCode" placeholder="输入验证码"/>
+						<button type="button" @click="submit()">验证</button>
+					</div>
+				</div>
+		  </div>
+	  </div>
+  </div>
+  <div class="editLoading" v-if="!loading">
+	  <div class="editLoading-main">
+	  	  <img src="loading.gif"/>
+	  </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript" src="axios.js"></script>
+<script  type="text/javascript"src="uni.webview.1.5.4.js"></script>
+<script type="text/javascript" src="wuui/wu-ui/wu-ui.js"></script>
+<script type="text/javascript" src="qs.js"></script>
+<script>
+const request = axios.create({
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+});
+var quill;
+var wu = new Wu()
+  function getQuery(name) {
+	  let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	  let r = window.location.search.substr(1).match(reg);
+	  if (r != null) {
+		return decodeURIComponent(r[2]);
+	  }
+	  return null;
+	}
+  var app = new Vue({
+    el: '#app',
+    data: {
+	  editType:0,
+	  loading:false,
+	  title:"",
+	  categoryShow:false,
+	  tagsShow:false,
+	  type:"add",
+	  cid:0,
+	  uid:"",
+	  token:"",
+	  apiUrl:"http://127.0.0.4/",
+	  isPaid:false,
+	  isSpace:false,
+	  isDraft:false,
+	  categoryList:[],
+	  tagList:[],
+	  curNum:0,
+	  shopList:[],
+	  curTagNum:0,
+	  curCategory:"",
+	  curTag:[],
+	  shopPice:'',
+	  shopDiscount:"1.0",
+	  searchText:"",
+	  tagsText:"",
+	  shopsText:"",
+	  shopID:0,
+	  uploadPicShow:false,
+	  uploadVideoShow:false,
+	  uploadMusicShow:false,
+	  uploadFileShow:false,
+	  expandShow:false,
+	  shopShow:false,
+	  isLink:false,
+	  linkUrl:"",
+	  linkName:"",
+	  
+	  file: null,
+	  inputElement: null,
+	  
+	  editTopStyle:"",
+	  env:"H5",
+	  selectionIndex:0,
+	  
+	  verifyLevel:0,
+	  verifyCode:"",
+	  kaptchaUrl:'',
+	  isVerify:false,
+    },
+	created() {
+		var that = this;
+		console.log("VUE载入完成");
+	},
+	destroyed() {
+		var that = this;
+	},
+	mounted() {
+		var that = this;
+		var timer = setTimeout(function() {
+			that.loading = true;
+		}, 500)
+		console.log("传入数据："+getQuery('data'))
+		var  data= JSON.parse(getQuery('data'));
+		if(data!=null){
+			that.apiUrl = data.apiUrl;
+			that.cid = data.id;
+			that.uid = data.uid;
+			that.token = data.token;
+			that.type = data.type;
+			that.env =  data.env;
+			that.verifyLevel = data.verifyLevel,
+			that.kaptchaUrl = data.apiUrl+"typechoUsers/getKaptcha"
+		}
+		if(that.type=='edit'){
+			that.getInfo();
+			that.getPaid();
+		}else{
+			that.getCategorylist();
+			
+		}
+		if(that.env=='H5'){
+			that.editTopStyle = "padding-top:44px"
+		}
+		that.getTaglist();
+		that.getShoplist();
+		
+		
+	},
+	methods:{
+		qs(json){
+			json = window.Qs.stringify(json);
+			return json;
+		},
+		back(){
+			var that = this;
+			if(that.env=='H5'){
+			  localStorage.setItem('goBack',"1");
+			}else{
+			  var params = {
+				  "type":"back",
+				  "data":1
+			   }
+			   //如果是APP则调用外部的存储
+			  uni.postMessage({
+				data:params
+			  });
+			}
+		},
+		reloadCode(){
+			var that = this;
+			var kaptchaUrl = that.apiUrl+"typechoUsers/getKaptcha";
+			var num=Math.ceil(Math.random()*10);
+			kaptchaUrl += "?"+num;
+			that.kaptchaUrl = kaptchaUrl;
+		},
+		formatInput() {
+		  // 移除非数字和非小数点字符
+		  this.shopDiscount = this.shopDiscount.replace(/[^\d.]/g, "");
+	
+		  // 仅保留一个小数点
+		  const parts = this.shopDiscount.split('.');
+		  if (parts.length > 2) {
+			parts.pop();
+		  }
+	
+		  // 限制小数点后一位
+		  if (parts[1] && parts[1].length > 1) {
+			parts[1] = parts[1].slice(0, 1);
+		  }
+	
+		  this.shopDiscount = parts.join('.');
+		},
+		removeObjectEmptyKey(json) {
+		    var value;
+		    for (var key in json) {
+		        if (json.hasOwnProperty(key)) {
+		            value = json[key];
+		            if (value === undefined || value === '' || value === null) {
+		                delete json[key]
+		            }
+		        }
+		    }
+		    return json;
+		},
+		
+		searchTags(){
+			var that = this;
+			var tagList = that.tagList;
+			for(var i in tagList){
+				tagList[i].active = 0;
+			}
+			that.tagList = tagList;
+			that.getTaglist();
+		},
+		getTaglist(){
+			var that = this;
+			var params = {
+				"type":"tag"
+			}
+			var data = {
+				"searchParams":JSON.stringify(params),
+				"limit":100,
+				"page":1,
+				"order":"order",
+				"searchKey":that.tagsText,
+			}
+			var url = that.apiUrl+'typechoMetas/metasList';
+			
+			//console.log(JSON.stringify(url));
+			request.post(url,that.qs(data)).then(function(res){
+				if(res.data.code==1){
+					var tagList = res.data.data;
+					for(var i in tagList){
+						tagList[i].active = 0;
+					}
+					that.tagList = tagList;
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+			});
+		},
+		searchCategory(){
+			var that = this;
+			var categoryList = that.categoryList;
+			for(var i in categoryList){
+				categoryList[i].active = 0;
+			}
+			that.categoryList = categoryList;
+			that.getCategorylist();
+		},
+		getCategorylist(){
+			var that = this;
+			var params = {
+				"type":"category"
+			}
+			var data = {
+				"searchParams":JSON.stringify(params),
+				"limit":100,
+				"page":1,
+				"order":"order",
+				"searchKey":that.searchText,
+			}
+			var url = that.apiUrl+'typechoMetas/metasList';
+			
+			//console.log(JSON.stringify(url));
+			request.post(url,that.qs(data)).then(function(res){
+				if(res.data.code==1){
+					var list = res.data.data;
+					
+					if(list.length>0){
+						//处理之前的分类选中
+						if(that.curCategory!=""){
+							var category = that.curCategory.split(",");
+						}
+						var parentList = [];
+						for(var i in list){
+						  if(list[i].parent==0){
+						    list[i].show = false;
+							list[i].active = 0;
+							for(var c in  category){
+								if(list[i].mid==category[c]){
+									list[i].active = 1;
+								}
+							}
+						    parentList.push(list[i]);
+						  }
+						}
+						for(var o in parentList){
+						  var subList = [];
+						  for(var s in list){
+						    if(list[s].parent==parentList[o].mid){
+							  list[s].active = 0;
+							  for(var c in  category){
+							  	if(list[s].mid==category[c]){
+							  		list[s].active = 1;
+							  	}
+							  }
+						      subList.push(list[s]);
+						    }
+						  }
+						  parentList[o].subList = subList;
+						}
+						that.categoryList = parentList;
+					}
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+			});
+		},
+		
+		// toCategoryContents(title,id,index){
+		// 	var that = this;
+				
+		// 	if(that.categoryList[index].active==1){
+		// 		that.curTagNum--;
+		// 		that.categoryList[index].active=0;
+		// 	}else{
+		// 		if(that.curTagNum>1){
+		// 			// uni.showToast({
+		// 			// 	title: "最多选择三个分类",
+		// 			// 	icon: 'none'
+		// 			// });
+		// 			wu.showToast({
+		// 			    title: '最多选择两个分类',
+		// 			    mask: false,
+		// 			    icon: 'icon-info',
+		// 			    duration: 3000
+		// 			});
+		// 			return false;
+		// 		}
+		// 		that.curTagNum++;
+		// 		that.categoryList[index].active=1;
+		// 	}
+		// 	var curCategory = [];
+		// 	var categoryList = that.categoryList;
+		// 	for(var i in categoryList){
+		// 		if(categoryList[i].active==1){
+		// 			curCategory.push(categoryList[i]);
+		// 		}
+		// 	}
+		// 	that.curCategory = curCategory;
+			
+		// },
+		toCategoryContents(data){
+			var that = this;
+			//清除所有的选中
+			var oldMetaList = that.categoryList;
+			for(var i in oldMetaList){
+				oldMetaList[i].active = 0;
+				
+				if(oldMetaList[i].subList.length>0){
+					var subList =  oldMetaList[i].subList;
+					for(var o in subList){
+						subList[o].active = 0;
+					}
+					oldMetaList[i].subList = subList;
+				}
+			}
+			that.categoryList = oldMetaList;
+			//判断是否为大类
+			if(data.parent==0){
+				var metaList = that.categoryList;
+				for(var i in metaList){
+					if(metaList[i].mid==data.mid){
+						//只有不存在任何小类的大类可以被直接选中
+						if(data.subList.length==0){
+							if(metaList[i].active==0){
+								metaList[i].active=1;
+							}
+						}
+					}
+				}
+				that.categoryList = metaList;
+			}else{
+				//开始新选择小类
+				var metaList = that.categoryList;
+				var parent = data.parent;
+				
+				for(var i in metaList){
+					if(metaList[i].mid==parent){
+						var subList =  metaList[i].subList;
+						var isActive = 0;
+						if(subList.length>0){
+							//点击的是小类，则给小类添加选中状态
+							for(var o in subList){
+								if(subList[o].mid == data.mid){
+									
+									if(data.active == 0){
+										subList[o].active = 1;
+										isActive = 1;
+									}
+								}
+								
+							}
+							metaList[i].subList = subList;
+						}
+						metaList[i].active = isActive;
+					}
+				}
+				that.categoryList = metaList;
+			}
+			
+			//添加进字段
+			var clist ="";
+			var list = that.categoryList;
+			for(var i in list){
+				if(list[i].active==1){
+					clist += ","+list[i].mid;
+					if(list[i].subList.length>0){
+						var subList =  list[i].subList;
+						for(var o in subList){
+							if(subList[o].active == 1){
+								clist += ","+subList[o].mid;
+							}
+						}
+					}
+				}
+			}
+			that.curCategory = clist;
+		},
+		toTagContents(title,id,index){
+			var that = this;
+				
+			if(that.tagList[index].active==1){
+				that.curNum--;
+				that.tagList[index].active=0;
+			}else{
+				if(that.curNum>4){
+					wu.showToast({
+					    title: '最多选择五个标签',
+					    mask: false,
+					    icon: 'icon-info',
+					    duration: 3000
+					});
+					return false;
+				}
+				that.curNum++;
+				that.tagList[index].active=1;
+			}
+			var curTag = [];
+			var tagList = that.tagList;
+			for(var i in tagList){
+				if(tagList[i].active==1){
+					curTag.push(tagList[i]);
+				}
+			}
+			that.curTag = curTag;
+			
+		},
+		contentsAdd() {
+			var that = this;
+			if (that.title == "") {
+				wu.showToast({
+				    title: '请输入正确的参数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if (that.curCategory=="") {
+				wu.showToast({
+				    title: '请选择分类',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			var isSpace = 0;
+			if(that.isSpace){
+				isSpace = 1;
+			}
+			var tag ="";
+			if(that.curTag.length>0){
+				var curTag = that.curTag;
+				for(var i in curTag){
+					if(curTag[i].active==1){
+						tag += ","+curTag[i].mid;
+					}
+				}
+			}
+			var params = {
+				'title':that.title,
+				'category':that.curCategory,
+				'tag':tag,
+				'sid':that.shopID
+			}
+			var text = quill.root.innerHTML;
+			
+			
+			
+			
+			var isDraft = 0;
+			if(that.isDraft){
+				isDraft = 1;
+			}
+			
+			if(that.verifyLevel > 1){
+				if (that.verifyCode == "") {
+					that.isVerify = true;
+					return false
+				}
+			}
+			var data = {
+				"params":JSON.stringify(that.removeObjectEmptyKey(params)),
+				"token":that.token,
+				'text':text,
+				"isSpace":isSpace,
+				"isDraft":isDraft,
+				"isMd":0,
+				'verifyCode':that.verifyCode
+			}
+			//付费阅读支持
+			var isPaid = 0;
+			if(that.isPaid){
+				isPaid = 1;
+				var shopText = shopQuill.root.innerHTML;
+				if (that.shopPice == "") {
+					wu.showToast({
+					    title: '请输入付费阅读价格',
+					    mask: false,
+					    icon: 'icon-info',
+					    duration: 3000
+					});
+					return false
+				}
+				data.isPaid = isPaid;
+				data.shopText = shopText;
+				data.shopPice = that.shopPice;
+				data.shopDiscount = that.shopDiscount;
+			}
+			
+			wu.showLoading();
+			var url = that.apiUrl+'typechoContents/contentsAdd';
+			request.post(url,that.qs(data)).then(function(res){
+				that.isVerify = false;
+				that.verifyCode = "";
+				setTimeout(function () {
+					wu.hideToast();
+				}, 1000);
+				if(res.data.code==1){
+					wu.showToast({
+					    title: res.data.msg,
+					    mask: false,
+					    icon: 'icon-success',
+					    duration: 3000
+					});
+					setTimeout(function() {
+						that.back();
+					}, 1000)
+				}else{
+					wu.showToast({
+					    title: res.data.msg,
+					    mask: false,
+					    icon: 'icon-error',
+					    duration: 3000
+					});
+				}
+					
+			}).catch(function (error) {
+				setTimeout(function () {
+					wu.hideToast();
+				}, 1000);
+				wu.showToast({
+				    title: '网络开小差了哦',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+			});
+		},
+		replaceAll(string, search, replace) {
+		  return string.split(search).join(replace);
+		},
+		isString(obj) {
+		  return typeof obj === 'string';
+		},
+		getInfo(){
+			var that = this;
+			var token = "";
+			var data = {
+				"key":that.cid,
+				"token":that.token,
+			}
+			var url = that.apiUrl+'typechoContents/contentsInfo';
+			request.post(url,that.qs(data)).then(function(res){
+				if(res.data.title){
+					
+					that.title = res.data.title;
+					if(res.data.category.length>0){
+						// var curCategory = res.data.category;
+						// for(var i in curCategory){
+						// 	curCategory[i].active = 1;
+						// }
+						// that.curCategory = curCategory;
+						var clist ="";
+						var list = res.data.category;
+						for(var i in list){
+							clist += ","+list[i].mid;
+						}
+						that.curCategory = clist;
+						that.getCategorylist();
+					}
+					if(res.data.tag.length>0){
+						var curTag = res.data.tag;
+						for(var t in curTag){
+							curTag[t].active = 1;
+						}
+						that.curTag = curTag;
+					}
+					var text = res.data.text;
+					
+					var delta= quill.clipboard.convert(text);
+					var ops = delta.ops;
+					//去除多余的换行
+					for(var o in ops){
+						if(that.isString(ops[o].insert)){
+							ops[o].insert = that.replaceAll(ops[o].insert,"\n\n","\n");
+						}
+						
+					}
+					delta.ops = ops;
+					
+					quill.setContents(delta);
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+				wu.showToast({
+				    title: '网络开小差了哦',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+			});
+
+		},
+		contentsUpdate(){
+			var that = this;
+			if (that.title == "") {
+				wu.showToast({
+				    title: '请输入正确的参数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if (that.curCategory=="") {
+				wu.showToast({
+				    title: '请选择分类',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			var isSpace = 0;
+			if(that.isSpace){
+				isSpace = 1;
+			}
+			// var category ="";
+			// var curCategory = that.curCategory;
+			// for(var i in curCategory){
+			// 	if(curCategory[i].active==1){
+			// 		category += ","+curCategory[i].mid;
+			// 	}
+			// }
+			var tag ="";
+			if(that.curTag.length>0){
+				var curTag = that.curTag;
+				for(var i in curTag){
+					if(curTag[i].active==1){
+						tag += ","+curTag[i].mid;
+					}
+				}
+			}
+			var params = {
+				'cid':that.cid,
+				'title':that.title,
+				'category':that.curCategory,
+				'tag':tag,
+				'sid':that.shopID
+			}
+			
+			var text = quill.root.innerHTML;
+			var isDraft = 0;
+			if(that.isDraft){
+				isDraft = 1;
+			}
+			var data = {
+				"params":JSON.stringify(that.removeObjectEmptyKey(params)),
+				"token":that.token,
+				'text':text,
+				"isSpace":isSpace,
+				"isMd":0,
+				"isDraft":isDraft,
+			}
+			//付费阅读支持
+			var isPaid = 0;
+			if(that.isPaid){
+				isPaid = 1;
+				var shopText = shopQuill.root.innerHTML;
+				if (that.shopPice == "") {
+					wu.showToast({
+					    title: '请输入付费阅读价格',
+					    mask: false,
+					    icon: 'icon-info',
+					    duration: 3000
+					});
+					return false
+				}
+				data.isPaid = isPaid;
+				data.shopText = shopText;
+				data.shopPice = that.shopPice;
+				data.shopDiscount = that.shopDiscount;
+			}
+			wu.showLoading();
+			var url = that.apiUrl+'typechoContents/contentsUpdate';
+			request.post(url,that.qs(data)).then(function(res){
+				setTimeout(function () {
+					wu.hideToast();
+				}, 1000);
+				
+				if(res.data.code==1){
+					wu.showToast({
+					    title: res.data.msg,
+					    mask: false,
+					    icon: 'icon-success',
+					    duration: 3000
+					});
+					setTimeout(function() {
+						that.back();
+					}, 1000)
+				}else{
+					wu.showToast({
+					    title: res.data.msg,
+					    mask: false,
+					    icon: 'icon-error',
+					    duration: 3000
+					});
+					
+				}
+					
+			}).catch(function (error) {
+				setTimeout(function () {
+					wu.hideToast();
+				}, 1000);
+				wu.showToast({
+				    title: '网络开小差了哦',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+			});
+		},
+		getShoplist(){
+			var that = this;
+			var searchParams = {
+				"uid":that.uid,
+				"status":1,
+				"searchKey":that.shopsText
+			}
+			var data = {
+				"searchParams":JSON.stringify(that.removeObjectEmptyKey(searchParams)),
+			}
+			var url = that.apiUrl+'typechoShop/shopList';
+			
+			//console.log(JSON.stringify(url));
+			request.post(url,that.qs(data)).then(function(res){
+				
+				if(res.data.code==1){
+					that.shopList = res.data.data;
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+			});
+		},
+		getPaid(){
+			var that = this;
+			var searchParams = {
+				"cid":that.cid,
+				"uid":that.uid,
+				"status":1,
+				"type":4,
+			}
+			var data = {
+				"searchParams":JSON.stringify(that.removeObjectEmptyKey(searchParams)),
+				"token":that.token
+			}
+			var url = that.apiUrl+'typechoShop/shopList';
+			
+			request.post(url,that.qs(data)).then(function(res){
+				//console.log(JSON.stringify(res))
+				if(res.data.code==1){
+					var list = res.data.data;
+					if(list.length>0){
+						that.isPaid = true;
+						var paidInfo = list[0];
+						that.shopID = paidInfo.id;
+						if(paidInfo.value){
+							var text = paidInfo.value;
+							var delta= shopQuill.clipboard.convert(text);
+							var ops = delta.ops;
+							//去除多余的换行
+							for(var o in ops){
+								if(that.isString(ops[o].insert)){
+									ops[o].insert = that.replaceAll(ops[o].insert,"\n\n","\n");
+								}
+								
+							}
+							delta.ops = ops;
+							
+							shopQuill.setContents(delta);
+						}
+						that.shopPice = paidInfo.price;
+						that.shopDiscount = paidInfo.vipDiscount;
+						
+					}
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+			});
+		},
+		searchShop(){
+			var that = this;
+			that.getShoplist();
+		},
+		setShop(id){
+			var that = this;
+			that.shopID = id;
+			that.shopShow = false;
+			wu.showToast({
+			    title: "已添加该商品",
+			    mask: false,
+			    icon: 'icon-success',
+			    duration: 3000
+			});
+		},
+		formatDate(datetime) {
+			var datetime = new Date(parseInt(datetime * 1000));
+			var year = datetime.getFullYear(),
+				month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+				date = ("0" + datetime.getDate()).slice(-2),
+				hour = ("0" + datetime.getHours()).slice(-2),
+				minute = ("0" + datetime.getMinutes()).slice(-2);
+			var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+			return result;
+		},
+		submit(){
+			var that = this;
+			that.isVerify = false;
+			if (that.verifyCode == "") {
+				wu.showToast({
+				    title: '请完成图片验证',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			that.contentsAdd()
+		},
+		
+		//上传的相关方法
+		//上传的相关方法
+		chooseImage() {
+		    var that = this;
+		    if (this.inputElement) {
+		        // 如果 inputElement 已存在，移除之前的元素
+		        this.inputElement.remove();
+		    }
+		
+		    this.inputElement = document.createElement('input');
+		    this.inputElement.type = 'file';
+		    this.inputElement.accept = 'image/*'; // 只接受图片文件
+		    this.inputElement.multiple = true; // 允许选择多个文件
+		    this.inputElement.addEventListener('change', (event) => {
+		        if (event.target.files.length > 9) {
+		            // 如果选择的文件超过9个，显示错误消息
+		            wu.showToast({
+		                title: '最多只能选择9张图片',
+		                mask: false,
+		                icon: 'icon-error',
+		                duration: 3000
+		            });
+		            return; // 不继续执行后面的代码
+		        }
+		
+		        // 循环处理每个选中的文件
+		        Array.from(event.target.files).forEach((file) => {
+		            if (this.isImageFile(file)) {
+		                // 处理每个图片文件的上传
+		                // 注意：您需要根据实际逻辑调整这里的上传方法
+		                this.file = file;
+		                that.uploadFile("image");
+		            } else {
+		                // 非图片文件，进行错误处理
+		                wu.showToast({
+		                    title: '所有文件必须是图片',
+		                    mask: false,
+		                    icon: 'icon-error',
+		                    duration: 3000
+		                });
+		            }
+		        });
+		
+		        // 选择文件后销毁 inputElement
+		        this.inputElement.remove();
+		        this.inputElement = null;
+		    });
+		
+		    this.inputElement.click();
+		},
+		chooseVideo() {
+		  var that = this;
+		  if (this.inputElement) {
+			this.inputElement.remove();
+		  }
+	
+		  this.inputElement = document.createElement('input');
+		  this.inputElement.type = 'file';
+		  this.inputElement.accept = 'video/*'; // 只接受视频文件
+		  
+		  this.inputElement.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			if (this.isVideoFile(file)) {
+			  this.file = file;
+			  that.uploadFile("video");
+			} else {
+			  wu.showToast({
+			      title: '请选择MP4视频文件',
+			      mask: false,
+			      icon: 'icon-error',
+			      duration: 3000
+			  });
+			}
+	
+			this.inputElement.remove();
+			this.inputElement = null;
+		  });
+		  
+		  this.inputElement.click();
+		},
+		chooseAudio() {
+		  var that = this;
+		  if (this.inputElement) {
+			this.inputElement.remove();
+		  }
+	
+		  this.inputElement = document.createElement('input');
+		  this.inputElement.type = 'file';
+		  this.inputElement.accept = 'audio/*'; // 只接受音频文件
+		  
+		  this.inputElement.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			if (this.isAudioFile(file)) {
+			  this.file = file;
+			  that.uploadFile("audio");
+			} else {
+			  wu.showToast({
+			      title: '请选择音频文件',
+			      mask: false,
+			      icon: 'icon-error',
+			      duration: 3000
+			  });
+			}
+	
+			this.inputElement.remove();
+			this.inputElement = null;
+		  });
+		  
+		  this.inputElement.click();
+		},
+		chooseFile() {
+		  var that = this;
+		  if (this.inputElement) {
+			this.inputElement.remove();
+		  }
+	
+		  this.inputElement = document.createElement('input');
+		  this.inputElement.type = 'file';
+			this.inputElement.accept = '.zip,.rar,.ipa,.apk,.txt,.pdf,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation';
+
+		  
+		  this.inputElement.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			if (this.isDocumentFile(file)) {
+			  this.file = file;
+			  that.uploadFile("file");
+			} else {
+			  wu.showToast({
+			      title: '请选择文档文件',
+			      mask: false,
+			      icon: 'icon-error',
+			      duration: 3000
+			  });
+			}
+	
+			this.inputElement.remove();
+			this.inputElement = null;
+		  });
+		  
+		  this.inputElement.click();
+		},
+		uploadFile(type) {
+		  var that = this;
+		  if (that.file) {
+			// 上传文件到服务器
+			const fileName = that.file.name;
+			const formData = new FormData();
+			
+			formData.append('file', that.file);
+			formData.append('token', that.token);
+			var url = that.apiUrl+'upload/full';
+			wu.showLoading();
+			//console.log(JSON.stringify(url));
+			request.post(url,formData).then(function(res){
+				setTimeout(function () {
+					wu.hideToast();
+				}, 1000);
+				if(res.data.code==1){
+					var url = res.data.data.url;
+					var selectionIndex = that.selectionIndex;
+					var curQuill = quill;
+					if(that.editType==2){
+						curQuill = shopQuill;
+						selectionIndex = that.shopSelectionIndex;
+					}
+					if(type=="image"){
+						
+						curQuill.insertEmbed(selectionIndex, "image", url);
+					}
+					if(type=="video"){
+						//调用自定义的方法
+						curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
+						  url,
+						  controls: 'controls',
+						  width: '100%',
+						  height: 'auto'
+						})
+					}
+					if(type=="audio"){
+						//调用自定义的方法
+						curQuill.insertEmbed(selectionIndex, "audio", { url: url });
+					}
+					if(type=="file"){
+						//调用自定义的方法
+						curQuill.insertEmbed(selectionIndex,'link', { href: url, innerText: fileName }, "api")
+					}
+					wu.showToast({
+					    title: "上传成功",
+					    mask: false,
+					    icon: 'icon-success',
+					    duration: 3000
+					});
+					
+				}else{
+					wu.showToast({
+					    title: '上传失败，请检测网络或接口配置',
+					    mask: false,
+					    icon: 'icon-error',
+					    duration: 3000
+					});
+				}
+					
+			}).catch(function (error) {
+				console.log(error);
+				wu.showToast({
+				    title: '上传失败，请检测网络',
+				    mask: false,
+				    icon: 'icon-error',
+				    duration: 3000
+				});
+			});
+		  } else {
+			wu.showToast({
+			    title: '请选择文件',
+			    mask: false,
+			    icon: 'icon-error',
+			    duration: 3000
+			});
+		  }
+		},
+		isImageFile(file) {
+		  const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+		  return acceptedImageTypes.includes(file.type);
+		},
+		isVideoFile(file) {
+		  const acceptedVideoTypes = ['video/mp4'];
+		  return acceptedVideoTypes.includes(file.type);
+		},
+		isAudioFile(file) {
+		  const acceptedAudioTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+		  return acceptedAudioTypes.includes(file.type);
+		},
+		isDocumentFile(file) {
+		  const acceptedTypes = [
+		    'text/plain',
+		    'application/pdf',
+		    'application/msword',
+		    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		    'application/vnd.ms-excel',
+		    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		    'application/vnd.ms-powerpoint',
+		    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		    'application/zip',
+		    'application/x-rar-compressed',
+		    'application/vnd.android.package-archive' // 添加 .apk 文件类型
+		  ];
+		
+		  // 获取文件名的后缀
+		  const fileExtension = file.name.split('.').pop();
+		  if (fileExtension === 'ipa' || fileExtension === 'rar') {
+		      return true;
+		  }
+		
+		  return acceptedTypes.includes(file.type);
+		},
+		setFileLink(type){
+			var that = this;
+			if(that.linkUrl==''){
+				wu.showToast({
+				    title: '请输入链接',
+				    mask: false,
+				    icon: 'icon-error',
+				    duration: 3000
+				});
+			}
+			if(type == "link"){
+				
+				if(that.linkName==''){
+					wu.showToast({
+					    title: '请输入超链接名称',
+					    mask: false,
+					    icon: 'icon-error',
+					    duration: 3000
+					});
+				}
+			}
+			var url = that.linkUrl;
+			var selectionIndex = that.selectionIndex;
+			var curQuill = quill;
+			if(that.editType==2){
+				curQuill = shopQuill;
+				selectionIndex = that.shopSelectionIndex;
+			}
+			if(type=="image"){
+				
+				curQuill.insertEmbed(selectionIndex, "image", url);
+			}
+			if(type=="video"){
+				//调用自定义的方法
+				// quill.insertEmbed(length, "video", url);
+				curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
+				  url,
+				  controls: 'controls',
+				  width: '100%',
+				  height: 'auto'
+				})
+			}
+			if(type=="audio"){
+				//调用自定义的方法
+				curQuill.insertEmbed(selectionIndex, "audio", { url: url });
+			}
+			if(type=="link"){
+				curQuill.insertEmbed(selectionIndex,'link', { href: url, innerText: that.linkName }, "api")
+			}
+			
+		},
+		expandInsert(type){
+			var that = this;
+			var selectionIndex = that.selectionIndex;
+			if(type=='hide'){
+				quill.insertText(selectionIndex, '[hide]回复可见的内容[/hide]');
+			}
+			if(type=='vip'){
+				quill.insertText(selectionIndex, '[vip]VIP用户可见的内容[/vip]');
+			}
+			that.expandShow = false;
+		},
+		addShop(){
+			var that = this;
+			uni.navigateTo({
+				url: '/pages/edit/addshop'
+			});
+		}
+	}
+  })
+</script>
+<script src="katex/katex.min.js"></script>
+<script src="highlight/highlight.min.js"></script>
+<script src="Quill/quill.min.js"></script>
+<script>
+
+  //视频自定义
+  const BlockEmbed = Quill.import('blots/block/embed')
+  class VideoBlot extends BlockEmbed {
+    static create (value) {
+      let node = super.create()
+      node.setAttribute('src', value.url)
+      node.setAttribute('controls', value.controls)
+      node.setAttribute('width', value.width)
+      node.setAttribute('height', value.height)
+      node.setAttribute('webkit-playsinline', true)
+      node.setAttribute('playsinline', true)
+      node.setAttribute('x5-playsinline', true)
+      return node;
+    }
+   
+    static value (node) {
+      return {
+        url: node.getAttribute('src'),
+        controls: node.getAttribute('controls'),
+        width: node.getAttribute('width'),
+        height: node.getAttribute('height')
+      };
+    }
+  }
+  VideoBlot.blotName = 'simpleVideo'
+  VideoBlot.tagName = 'video'
+  Quill.register(VideoBlot);
+  //音频自定义
+  class AudioBlot extends BlockEmbed {
+  	static create(value) {
+  		let node = super.create();
+  		node.setAttribute('src', value.url);   //设置audio的src属性
+  		node.setAttribute('controls', true);   //设置audio的controls，否则他将不会显示
+  		node.setAttribute('controlsList', 'nodownload');   //设置audio的下载功能为不能下载
+  		node.setAttribute('id', 'voice');     //设置一个id
+  		return node;
+  	}
+  }
+  AudioBlot.blotName = 'audio';
+  AudioBlot.tagName = 'audio';
+  Quill.register(AudioBlot);
+  
+  const Link = Quill.import("formats/link");
+  // 自定义a链接
+  class FileBlot extends Link {
+    // 继承Link Blot
+    static create (value) {
+      let node = undefined;
+      if (value && !value.href) {
+        // 适应原本的Link Blot
+        node = super.create(value)
+      } else {
+        // 自定义Link Blot
+        node = super.create(value.href)
+        node.href = value.href
+        node.innerText = value.innerText
+        // node.setAttribute('download', value.innerText);  // 左键点击即下载
+      }
+      return node;
+    }
+  }
+  FileBlot.blotName = "link" // 这里不用改，如果需要也可以保留原来的，这里用个新的blot
+  FileBlot.tagName = "A"
+  Quill.register(FileBlot) // 注册link
+	//vue渲染完后再开启编辑器渲染
+	quill = new Quill('#editor-container', {
+		modules: {
+		formula: true,
+		syntax: true,
+		toolbar: '#toolbar-container'
+		},
+		placeholder: '请输入内容',
+		theme: 'snow'
+	});
+  quill.on('text-change', function(delta, oldDelta, source) {
+	  //实时获取光标位置
+	  let selection = quill.getSelection(true);
+	  app.selectionIndex = selection.index;
+  });
+  shopQuill = new Quill('#shop-container', {
+  	modules: {
+  	formula: true,
+  	syntax: true,
+  	toolbar: '#shop-toolbar'
+  	},
+  	placeholder: '请输入文章付费内容',
+  	theme: 'snow'
+  });
+  shopQuill.on('text-change', function(delta, oldDelta, source) {
+  	  //实时获取光标位置
+  	  let selection = shopQuill.getSelection(true);
+  	  
+  	  app.shopSelectionIndex = selection.index;
+  });
+</script>
+</body>
+</html>

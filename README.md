@@ -2,8 +2,6 @@
 
 RuleApp，一款功能全面，用户交互良好的文章内容社区程序，兼容安卓苹果端，H5网页，微信小程序等。同时是集成数据本地缓存，邮箱验证，在线投稿（内置Mardown编辑器和富文本编辑器二选一），社会化登录，点赞打赏，积分商城，付费阅读，VIP会员、私聊群聊等一系列功能的自媒体博客资讯APP。
 
-UI框架使用ColorUI，感谢社区有如此优秀的开源框架！
-
 本程序不包含任何按收费项目，功能全部开放且完全开源免费（包括后端接口）。开源不易，需要赞助提供动力【手动狗头】。
 
 
@@ -58,23 +56,31 @@ RuleApp依赖后端接口RuleApi运行，不过不用担心，我已经提供了
 
 [访问H5演示](https://www.ruletree.club/h5)
 
-在安装使用过程遇到的一切问题，BUG的反馈，以及演示版本的下载，都可以加QQ群讨论：692117682。
+在安装使用过程遇到的一切问题，BUG的反馈，以及演示版本的下载，都可以加QQ群讨论：776176904。
 
-或者访问我的网站浏览更多信息：[规则之树](https://www.ruletree.club/archives/2649/)
+或者访问语雀教程浏览更多信息：[RuleProject社区应用帮助文档](https://www.yuque.com/buxia97/ruleproject)
 
 ## 旧版存档
 
 1.4.0版本开始，代码复杂和功能都有所提高，如需要下载1.3.2旧版用于二次开发或者小程序发布，可加群获取。
 
 
-## 配套会员中心
+## 其它相关应用
 
-目前RuleApp配套的网页端界面已经正式出炉，界面美观，性能优异，不依赖任何UI框架，原创的js页面渲染模式，感兴趣的可以通过下方链接了解。
+Sulo网页端：
 
-它可以配合APP完成扫码登录哦~
+[Sulo，一套优雅的网页端代码](https://www.yuque.com/buxia97/ruleproject/srh04hgb07uacw92)
 
-[Typecho独立会员中心，前后端分离，充值付费功能集成，APP扫码登录](https://www.ruletree.club/archives/2979/)
+后端Api：
+
+[RuleApi，开始您的自由社区](https://www.yuque.com/buxia97/ruleproject/fa8twrdfqawesuyg)
+
+网页会员中心【开源，已停止维护】
+
+[RuleUser，简约美观的会员中心](https://www.yuque.com/buxia97/ruleproject/lg82p72mawqmst1e)
+
 
 ## 协议及申明
 
 [许可协议 / 免责声明](https://www.yuque.com/buxia97/ruleproject/gm1pzr6h0e1eqvvc)
+

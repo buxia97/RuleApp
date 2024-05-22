@@ -508,3 +508,48 @@ button{
 .ql-snow .ql-editor img{
 	max-width: 60%;
 }
+.importDocx{
+	position: fixed;
+	z-index: 10;
+	width: 100%;
+	height: 100vh;
+	top: 0;
+	background: #fff;
+	text-align: center;
+	left: 0;
+}
+.importDocx-box{
+	position: absolute;
+	width: 100%;
+	top: 22%;
+	left: 0;
+	padding: 0px 15px;
+	box-sizing: border-box;
+}
+.importDocx-box-title{
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+.importDocx-box-text{
+	text-align: left;
+	font-size: 13px;
+	color: #999;
+	margin-top: 15px;
+}
+.importDocx-box-form{
+	position: relative;
+	background: #f3f3f3;
+	border: #eee solid 1px;
+	height: 70px;
+	line-height: 70px;
+}
+.importDocx-box-form input{
+	display: block;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
