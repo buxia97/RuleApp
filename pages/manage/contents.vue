@@ -67,7 +67,8 @@
 							<text class="text-grey radius" v-else  @tap="rmTop(item.cid)">取消置顶</text>
 							<text class="text-green radius" v-if="item.isswiper==0"  @tap="addSwiper(item.cid)">轮播</text>
 							<text class="text-grey radius" v-else  @tap="rmSwiper(item.cid)">取消轮播</text>
-							<text class="text-blue radius" @tap="setFields(item.cid,item.abcimg)">图文类型</text>
+							<text class="text-blue radius" @tap="setFields(item.cid,item.abcimg)">样式</text>
+							<text class="text-orange radius" @tap="getDocx(item.cid)">导出</text>
 						</block>
 						
 						<text class="text-blue radius" @tap="toEdit(item.cid)">编辑</text>
@@ -978,6 +979,29 @@
 					}
 				})
 			},
+			getDocx(cid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var url = that.$API.getDocx()+"?cid="+cid+"&token="+token;
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
+			}
 			
 		}
 	}
