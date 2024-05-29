@@ -1,0 +1,16 @@
+{
+    "id": "qiqb-share",
+    "name": "简单的分享海报",
+    "displayName": "简单的分享海报",
+    "version": "1.0.0",
+    "description": "简单封装了制作海报的常用方法，稍微看下并修改源码就可以制作满足不同布局需求的分享海报！",
+    "keywords": [
+        "分享海报"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

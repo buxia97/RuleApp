@@ -1,0 +1,86 @@
+{
+  "id": "4112314",
+  "name": "ruleedit",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1445152",
+      "name": "puzzle",
+      "font_class": "puzzle",
+      "unicode": "e865",
+      "unicode_decimal": 59493
+    },
+    {
+      "icon_id": "1444752",
+      "name": "image",
+      "font_class": "image",
+      "unicode": "e7ac",
+      "unicode_decimal": 59308
+    },
+    {
+      "icon_id": "1444781",
+      "name": "itunes",
+      "font_class": "itunes",
+      "unicode": "e7bb",
+      "unicode_decimal": 59323
+    },
+    {
+      "icon_id": "1444891",
+      "name": "medical-bag",
+      "font_class": "medical-bag",
+      "unicode": "e7e8",
+      "unicode_decimal": 59368
+    },
+    {
+      "icon_id": "1443410",
+      "name": "arrow-right-drop-circle-outline",
+      "font_class": "arrow-right-drop-circle-outline",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "1443593",
+      "name": "attachment",
+      "font_class": "attachment",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "1444870",
+      "name": "magnify",
+      "font_class": "magnify",
+      "unicode": "e7e0",
+      "unicode_decimal": 59360
+    },
+    {
+      "icon_id": "1445276",
+      "name": "shopping",
+      "font_class": "shopping",
+      "unicode": "e89d",
+      "unicode_decimal": 59549
+    },
+    {
+      "icon_id": "1441771",
+      "name": "arrow-left-drop-circle",
+      "font_class": "arrow-left-drop-circle",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "1441772",
+      "name": "arrow-left-drop-circle-outline",
+      "font_class": "arrow-left-drop-circle-outline",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "1443409",
+      "name": "arrow-right-drop-circle",
+      "font_class": "arrow-right-drop-circle",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    }
+  ]
+}

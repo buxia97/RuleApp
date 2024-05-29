@@ -299,14 +299,24 @@
 		<!--  #ifdef H5 || APP-PLUS -->
 		<view class="info-operate-bg" :class="isShare?'show':''" @tap="isShare=false"></view>
 		<view class="info-operate" :class="isShare?'show':''">
-			<view class="info-operate-main grid col-2">
+			<view class="info-operate-main grid col-3">
 				<view class="index-sort-box">
 					<view class="index-sort-main" @tap="toLink('../space/post?type=1&toid='+cid)">
 						<view class="index-sort-i" style="background: rgba(21, 159, 44, 0.2);">
 							<text class="cuIcon-creativefill" style="color:  #159f2c;"></text>
 						</view>
 						<view class="index-sort-text">
-							分享到我的动态
+							分享到动态
+						</view>
+					</view>
+				</view>
+				<view class="index-sort-box" @tap="goImgShare">
+					<view class="index-sort-main">
+						<view class="index-sort-i" style="background: rgba(255, 51, 51, 0.2);">
+							<text class="cuIcon-picfill" style="color:  #ff3333"></text>
+						</view>
+						<view class="index-sort-text">
+							分享海报
 						</view>
 					</view>
 				</view>
@@ -342,6 +352,17 @@
 			</view>
 		</view>
 		<!--  #endif -->
+<!-- 		name: String,
+		title: String,
+		intro:String,
+		time: String,
+		imgUrl:String,
+		href: String,
+		webName: String, -->
+		<template v-if="isImgShare">
+			<Share :name="imgShare.name" :title="imgShare.title" :intro="imgShare.intro" :time="imgShare.time" :href="imgShare.href" :imgUrl="imgShare.imgUrl" :webName="imgShare.webName" @closeImgShare="closeImgShare"/>
+		</template>
+		
 	</view>
 </template>
 <script>
@@ -463,6 +484,17 @@
 				currencyName:"",
 				
 				isShare:false,
+				
+				isImgShare:false,
+				imgShare:{
+					name: "",
+					title: "",
+					intro:"",
+					time: "",
+					imgUrl:"",
+					href: "",
+					webName: "",
+				},
 				
 				rewardLog:[],
 				rewardTotal:0
@@ -1354,6 +1386,45 @@
 				that.ToCopy(url);
 				// #endif
 			},
+			
+			closeImgShare(){
+				var that = this;
+				that.isImgShare = false;
+			},
+			goImgShare(){
+				var that = this;
+				var linkRule = that.$API.GetLinkRule();
+				
+				
+				var url = linkRule.replace("{cid}",that.cid);
+				if(linkRule.indexOf("{category}")!=-1){
+					var category = that.category[0].slug;
+					url = url.replace("{category}",category);
+				}
+				//console.log(url);
+				if(that.type!="post"){
+					var pageRule = that.$API.GetPageRule();
+					url = pageRule.replace("{slug}",that.slug);
+				}
+				that.imgShare.href = url;
+				that.imgShare.title = that.title;
+				
+				var name = that.userInfo.name;
+				if(that.userInfo.screenName){
+					name = that.userInfo.screenName;
+				}
+				that.imgShare.name = name;
+				
+				if(that.images.length>0){
+					that.imgShare.imgUrl = that.images[0];
+				}
+				that.imgShare.time = that.formatDate(that.created);
+				that.imgShare.webName = that.$API.GetAppName();
+				that.imgShare.intro = that.subIntroText(that.html);
+				that.isShare = false;
+				that.isImgShare = true;
+				
+			},
 			formatNumber(num) {
 			    return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 			},
@@ -1678,6 +1749,26 @@
 					    url: '/pages/shop/shoptext?sid='+id
 					});
 				}
+			},
+			subIntroText(text, num) {
+			    var that = this;
+			    // 检查 text 是否为 undefined 或 null，若是则赋值为空字符串
+			    if (typeof text !== 'string') {
+			        text = '';
+			    }
+			    
+			    // 去除 HTML 标签
+			    text = text.replace(/<\/?[^>]+(>|$)/g, "");
+			    
+			    // 替换特殊字符
+			    text = that.replaceSpecialChar(text);
+			    
+			    // 截断字符串并添加省略号
+			    if (text.length > num) {
+			        return text.substring(0, num) + "……";
+			    } else {
+			        return text;
+			    }
 			},
 			subText(text,num){
 				if(text){

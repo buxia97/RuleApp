@@ -3832,3 +3832,52 @@ page{
 	font-weight: bold;
 	width: calc(100% - 80upx);
 }
+.Share{
+	position: fixed;
+	z-index: 999;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	padding:120upx 50upx 50upx 50upx;
+}
+.Share-bg{
+	position: fixed;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 5;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+}
+.lime-painter{
+	position: relative;
+	z-index: 10;
+}
+.share-btn{
+	width: 500upx;
+	margin: 40upx auto 0upx auto;
+	font-size: 50upx;
+	color: #333;
+	position: relative;
+	z-index: 10;
+}
+.share-btn text{
+	background: #fff;
+	display: inline-block;
+	width: 100upx;
+	height: 100upx;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 100upx;
+}
+.share-tips{
+	margin-top: 40upx;
+	color: #fff;
+	position: relative;
+	z-index: 10;
+	font-size: 30upx;
+}
+.Share .loading{
+	background: none;
+}

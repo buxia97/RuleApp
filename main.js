@@ -40,6 +40,9 @@ Vue.component('spaceItem',spaceItem)
 import shopItem from './pages/components/shopItem.vue'
 Vue.component('shopItem',shopItem)
 
+import Share from './pages/components/Share.vue'
+Vue.component('Share',Share)
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

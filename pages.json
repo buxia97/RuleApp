@@ -16,6 +16,9 @@
 			}
 		},
 		{
+			"path": "pages/home/test"
+		},
+		{
 			"path": "pages/home/tool",
 			"style": {
 				"enablePullDownRefresh":true

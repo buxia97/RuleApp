@@ -327,30 +327,7 @@
 			
 			</view>
 		</view>
-		<view class="cu-modal" :class="modalName=='changeStyle'?'show':''">
-			<view class="cu-dialog">
-				<view class="cu-bar bg-white justify-end">
-					<view class="content">切换到圈子风格</view>
-					<view class="action" @tap="hideModal">
-						<text class="cuIcon-close text-red"></text>
-					</view>
-				</view>
-				<view class="padding-xl">
-					<block v-if="curFullStyle=='index'">
-						通过此操作可以进入圈子内容为主的首页模式，此页面仅供预览，重启APP后将还原。
-					</block>
-					<block v-else>
-						通过此入口可重新回到文章为主的首页模式，也可以通过重启APP回归。
-					</block>
-				</view>
-				<view class="cu-bar bg-white justify-end">
-					<view class="action">
-						<button class="cu-btn bg-purple" @tap="changeStyle">确认切换</button>
 		
-					</view>
-				</view>
-			</view>
-		</view>
 		<view style="width: 100%; height: 100upx;"></view>
 	</view>
 </template>
