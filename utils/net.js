@@ -40,6 +40,9 @@ var requestHandler = {
 		requestHandler.fail();
 		return false;
 	}
+	if(localStorage.getItem('token')){
+		data.token = localStorage.getItem('token');
+	}
     uni.request({
       url: url,
       data: data,

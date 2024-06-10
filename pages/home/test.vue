@@ -86,6 +86,11 @@
 			},
 			// 保存图征
 			saveImage() {
+				// #ifdef H5
+					window.open(this.picture2);
+				// #endif
+				
+				// #endif
 				// #ifndef H5
 				uni.saveImageToPhotosAlbum({
 					filePath: this.picture,

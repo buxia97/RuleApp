@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="Share-bg" @tap="close()"></view>
-		<l-painter css="width: 650rpx;" 
+		<l-painter css="width: 650rpx;"
 				@fail="fail"
 				@done="done"
 				pathType="url"
@@ -44,6 +44,7 @@
 				</l-painter-view>
 			</l-painter-view>
 		</l-painter>
+		
 		<!--  #ifdef APP-PLUS -->
 		<view class="share-btn grid col-2 text-center" v-if="isLoading==1">
 			<view class="share-btn-box" @tap="share">
@@ -55,8 +56,13 @@
 		</view>
 		<!--  #endif -->
 		<!--  #ifdef H5 -->
-		<view class="share-tips text-center" v-if="isLoading==1">
+		<!-- <view class="share-tips text-center" v-if="isLoading==1">
 			长按或右键保存图片
+		</view> -->
+		<view class="share-btn grid col-1 text-center" v-if="isLoading==1">
+			<view class="share-btn-box" @tap="save">
+				<text class="cuIcon-down" style="background: #d9ecff;color: #0081ff;"></text>
+			</view>
 		</view>
 		<!--  #endif -->
 		<!-- <button type="default" @click="save">保存图片</button> -->
@@ -125,7 +131,6 @@
 				})
 			},
 			save() {
-				// #ifndef H5
 				this.$refs.poster.canvasToTempFilePathSync({
 					fileType: 'jpg',
 					quality: 1,
@@ -138,14 +143,16 @@
 						console.log('???????????',e)
 					}
 				})
-				// #endif
 				
 			},
 			// 保存图征
 			saveImage() {
+				// #ifdef H5
+					window.open(this.picture2);
+				// #endif
 				// #ifndef H5
 				uni.saveImageToPhotosAlbum({
-					filePath: this.picture,
+					filePath: this.picture2,
 					success(res) {
 						uni.showToast({
 							title: '已保存到相册',

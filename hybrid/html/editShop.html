@@ -141,7 +141,7 @@
 			  	  商品价格
 			  </div>
 			  <div class="form-input">
-				  <input placeholder="输入商品价格" type="number"  v-model="price"/>
+				  <input placeholder="输入商品价格(必须为整数)" type="number"  v-model="price"/>
 			  </div>
 		</div>
 		<div class="form-box">
@@ -149,7 +149,7 @@
 			  	  商品数量
 			  </div>
 			  <div class="form-input">
-				  <input placeholder="输入商品数量" type="number"  v-model="num"/>
+				  <input placeholder="输入商品数量(必须为整数)" type="number"  v-model="num"/>
 			  </div>
 		</div>
 		<div class="form-box border-top">
@@ -712,11 +712,33 @@ var wu = new Wu()
 			}
 			that.addShop()
 		},
+		isPositiveInteger(value) {
+		    const regex = /^[1-9]\d*$/;
+		    return regex.test(value);
+		},
 		addShop() {
 			var that = this;
 			if (that.title == ""||that.category == 0) {
 				wu.showToast({
 				    title: '请输入正确的参数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if(!that.addShop(that.price)){
+				wu.showToast({
+				    title: '价格必须为正整数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if(!that.addShop(that.num)){
+				wu.showToast({
+				    title: '数量必须为正整数',
 				    mask: false,
 				    icon: 'icon-info',
 				    duration: 3000
@@ -881,6 +903,24 @@ var wu = new Wu()
 			if (that.title == ""||that.category == 0) {
 				wu.showToast({
 				    title: '请输入正确的参数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if(!that.addShop(that.price)){
+				wu.showToast({
+				    title: '价格必须为正整数',
+				    mask: false,
+				    icon: 'icon-info',
+				    duration: 3000
+				});
+				return false
+			}
+			if(!that.addShop(that.num)){
+				wu.showToast({
+				    title: '数量必须为正整数',
 				    mask: false,
 				    icon: 'icon-info',
 				    duration: 3000
@@ -1417,6 +1457,28 @@ var wu = new Wu()
   AudioBlot.blotName = 'audio';
   AudioBlot.tagName = 'audio';
   Quill.register(AudioBlot);
+  const Link = Quill.import("formats/link");
+  // 自定义a链接
+  class FileBlot extends Link {
+    // 继承Link Blot
+    static create (value) {
+      let node = undefined;
+      if (value && !value.href) {
+        // 适应原本的Link Blot
+        node = super.create(value)
+      } else {
+        // 自定义Link Blot
+        node = super.create(value.href)
+        node.href = value.href
+        node.innerText = value.innerText
+        // node.setAttribute('download', value.innerText);  // 左键点击即下载
+      }
+      return node;
+    }
+  }
+  FileBlot.blotName = "link" // 这里不用改，如果需要也可以保留原来的，这里用个新的blot
+  FileBlot.tagName = "A"
+  Quill.register(FileBlot) // 注册link
 	//vue渲染完后再开启编辑器渲染
 	quill = new Quill('#editor-container', {
 		modules: {
