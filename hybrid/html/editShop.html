@@ -991,7 +991,10 @@ var wu = new Wu()
 		},
 		getShopTypelist(){
 			var that = this;
-			var data = {}
+			var data = {
+				"limit":100,
+				"token":that.token
+			}
 			var url = that.apiUrl+'typechoShop/shopTypeList';
 			
 			//console.log(JSON.stringify(url));

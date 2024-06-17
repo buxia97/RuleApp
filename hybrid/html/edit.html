@@ -693,6 +693,7 @@ var wu = new Wu()
 				"limit":100,
 				"page":1,
 				"order":"order",
+				"token":that.token,
 				"searchKey":that.tagsText,
 			}
 			var url = that.apiUrl+'typechoMetas/metasList';
@@ -730,6 +731,7 @@ var wu = new Wu()
 				"limit":100,
 				"page":1,
 				"order":"order",
+				"token":that.token,
 				"searchKey":that.searchText,
 			}
 			var url = that.apiUrl+'typechoMetas/metasList';
@@ -1234,9 +1236,11 @@ var wu = new Wu()
 				"uid":that.uid,
 				"status":1,
 				"searchKey":that.shopsText
+				
 			}
 			var data = {
 				"searchParams":JSON.stringify(that.removeObjectEmptyKey(searchParams)),
+				"token":that.token
 			}
 			var url = that.apiUrl+'typechoShop/shopList';
 			

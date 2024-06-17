@@ -27,7 +27,7 @@ var requestHandler = {
   }
    
   function request(requestHandler) {
-    var data = requestHandler.data;
+    var data = requestHandler.data || {};
     var url = requestHandler.url;
     var method = requestHandler.method;
 	var header = {
