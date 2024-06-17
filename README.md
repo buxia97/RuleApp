@@ -60,6 +60,12 @@ RuleApp依赖后端接口RuleApi运行，不过不用担心，我已经提供了
 
 或者访问语雀教程浏览更多信息：[RuleProject社区应用帮助文档](https://www.yuque.com/buxia97/ruleproject)
 
+
+## 升级至PRO版
+
+目前开源的版本已经集成了所有的收费体系功能，完全可以进行商业化运营，但如果你仍然觉得功能太少，想进一步拓展，欢迎选择功能进一步升级的PRO版本。
+[升级至PRO](https://www.yuque.com/buxia97/ruleproject/xychnh7yxu2o4ere)
+
 ## 旧版存档
 
 1.4.0版本开始，代码复杂和功能都有所提高，如需要下载1.3.2旧版用于二次开发或者小程序发布，可加群获取。
