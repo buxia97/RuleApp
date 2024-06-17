@@ -1,5 +1,5 @@
 var API = require('../utils/api');
-
+import { localStorage } from '../js_sdk/mp-storage/mp-storage/index.js'
 
 var isVPN = 0;
 
