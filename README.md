@@ -52,6 +52,10 @@ RuleApp依赖后端接口RuleApi运行，不过不用担心，我已经提供了
 
 [使用Safari浏览器访问](https://www.ruletree.club/h5/ruletree.mobileconfig)
 
+### Windows桌面版演示
+
+Windows桌面版本是我自己另外打包的，需要的话可以来官方群找我帮忙。
+
 ### h5网页端演示
 
 [访问H5演示](https://www.ruletree.club/h5)

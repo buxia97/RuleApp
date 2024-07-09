@@ -727,7 +727,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if(!that.addShop(that.price)){
+			if(!that.isPositiveInteger(that.price)){
 				wu.showToast({
 				    title: '价格必须为正整数',
 				    mask: false,
@@ -736,7 +736,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if(!that.addShop(that.num)){
+			if(!that.isPositiveInteger(that.num)){
 				wu.showToast({
 				    title: '数量必须为正整数',
 				    mask: false,
@@ -909,7 +909,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if(!that.addShop(that.price)){
+			if(!that.isPositiveInteger(that.price)){
 				wu.showToast({
 				    title: '价格必须为正整数',
 				    mask: false,
@@ -918,7 +918,7 @@ var wu = new Wu()
 				});
 				return false
 			}
-			if(!that.addShop(that.num)){
+			if(!that.isPositiveInteger(that.num)){
 				wu.showToast({
 				    title: '数量必须为正整数',
 				    mask: false,
