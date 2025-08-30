@@ -24,6 +24,9 @@
 				<!-- <text class="cu-btn bg-blue radius" @tap="showModal" data-target="DialogModal1">设置头像</text> -->
 				<text class="cu-btn bg-gradual-blue radius" @tap="toAvatar" >设置头像</text>
 				<!--  #endif -->
+				<!-- #ifdef MP-WEIXIN -->
+				<button class="cu-btn bg-gradual-blue radius" open-type="chooseAvatar" @chooseavatar="avatarUpload"></button>
+				<!-- #endif -->
 			</view>
 			<view class="cu-form-group">
 				<view class="title">用户名</view>
@@ -444,65 +447,72 @@
 				  });
 				// #endif
 			},
-			avatarUpload(base64){
-				
+			uploadAvatarToSever(path) {
+				const uploadTask = uni.uploadFile({
+					url: that.$API.upload(),
+					filePath: path,
+					//  header: {
+					// "Content-Type": "multipart/form-data",
+					// },
+					name: 'file',
+					formData: {
+						'token': token
+					},
+					success: function(uploadFileRes) {
+						setTimeout(function() {
+							uni.hideLoading();
+						}, 1000);
+
+						var data = JSON.parse(uploadFileRes.data);
+						//var data = uploadFileRes.data;
+
+
+						if (data.code == 1) {
+							// uni.showToast({
+							// 	title: data.msg,
+							// 	icon: 'none'
+							// })
+							that.avatar = data.data.url;
+							that.avatarNew = data.data.url;
+							localStorage.removeItem('toAvatar');
+							that.userEdit();
+							//console.log(that.avatar)
+
+						} else {
+							uni.showToast({
+								title: "头像上传失败，请检查接口",
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						setTimeout(function() {
+							uni.hideLoading();
+						}, 1000);
+					}
+				})
+			},
+			avatarUpload(data) {
 				var that = this;
 				var token = "";
-				if(localStorage.getItem('userinfo')){
+				if (localStorage.getItem('userinfo')) {
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
+					token = userInfo.token;
 				}
-				base64ToPath(base64)
-				  .then(path => {
-					var file = path;
-					const uploadTask = uni.uploadFile({
-					  url : that.$API.upload(),
-					  filePath:file,
-					 //  header: {
-						// "Content-Type": "multipart/form-data",
-					 // },
-					  name: 'file',
-					  formData: {
-					   'token': token
-					  },
-					  success: function (uploadFileRes) {
-						  setTimeout(function () {
-						  	uni.hideLoading();
-						  }, 1000);
-						  
-							var data = JSON.parse(uploadFileRes.data);
-							//var data = uploadFileRes.data;
-							
-							
-							if(data.code==1){
-								// uni.showToast({
-								// 	title: data.msg,
-								// 	icon: 'none'
-								// })
-								that.avatar = data.data.url;
-								that.avatarNew = data.data.url;
-								localStorage.removeItem('toAvatar');
-								that.userEdit();
-								//console.log(that.avatar)
-								
-							}else{
-								uni.showToast({
-									title: "头像上传失败，请检查接口",
-									icon: 'none'
-								})
-							}
-						},fail:function(){
-							setTimeout(function () {
-								uni.hideLoading();
-							}, 1000);
-						}
-						
-					   
-					});
-				  })
-				  .catch(error => {
-					console.error("失败"+error)
-				  })
+				
+				// #ifdef APP-PLUS || H5
+				base64ToPath(data)
+					.then(path => {
+						that.uploadAvatarToSever(path)
+					})
+					.catch(error => {
+						console.error("失败" + error)
+					})
+				// #endif
+				// #ifdef MP-WEIXIN
+				const path = data.detail.avatarUrl
+				that.uploadAvatarToSever(path)
+				// #endif
 			},
 			isValidString(str) {
 			  return /\s/g.test(str);
