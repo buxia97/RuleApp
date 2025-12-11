@@ -803,53 +803,53 @@
 					}
 				})
 			},
-			// uploadVideo(){
-			// 	var that = this;
+			uploadVideo(){
+				var that = this;
 				
-			// 	uni.chooseVideo({
-			// 		sourceType: ['camera', 'album'],
-			// 		compressed:false,
-			// 		success: (responent) => {
-			// 			uni.showLoading({
-			// 				title: "加载中"
-			// 			});
-			// 			let videoFile = responent.tempFilePath;
-			// 			const uploadTask = uni.uploadFile({
-			// 			  url : that.$API.upload(),
-			// 			  filePath:videoFile,
-			// 			  name: 'file',
-			// 			  formData: {
-			// 			   'token': that.token
-			// 			  },
-			// 			  success: function (uploadFileRes) {
-			// 				  setTimeout(function () {
-			// 				  	uni.hideLoading();
-			// 				  }, 1000);
-			// 					var data = JSON.parse(uploadFileRes.data);
-			// 					//var data = uploadFileRes.data;
-			// 					uni.showToast({
-			// 						title: data.msg,
-			// 						icon: 'none'
-			// 					})
-			// 					if(data.code==1){
-			// 					   var url = data.data.url;
-			// 					   that.pic = url;
-			// 					}
-			// 				},fail:function(){
-			// 					uni.showToast({
-			// 						title: "网络异常，上传失败！",
-			// 						icon: 'none'
-			// 					})
-			// 					setTimeout(function () {
-			// 						uni.hideLoading();
-			// 					}, 1000);
-			// 				}
+				uni.chooseVideo({
+					sourceType: ['camera', 'album'],
+					compressed:false,
+					success: (responent) => {
+						uni.showLoading({
+							title: "加载中"
+						});
+						let videoFile = responent.tempFilePath;
+						const uploadTask = uni.uploadFile({
+						  url : that.$API.upload(),
+						  filePath:videoFile,
+						  name: 'file',
+						  formData: {
+						   'token': that.token
+						  },
+						  success: function (uploadFileRes) {
+							  setTimeout(function () {
+							  	uni.hideLoading();
+							  }, 1000);
+								var data = JSON.parse(uploadFileRes.data);
+								//var data = uploadFileRes.data;
+								uni.showToast({
+									title: data.msg,
+									icon: 'none'
+								})
+								if(data.code==1){
+								   var url = data.data.url;
+								   that.pic = url;
+								}
+							},fail:function(){
+								uni.showToast({
+									title: "网络异常，上传失败！",
+									icon: 'none'
+								})
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+							}
 							
 						   
-			// 			});
-			// 		}
-			// 	})
-			// },
+						});
+					}
+				})
+			},
 			
 			picClose(item){
 				var that = this;
@@ -862,165 +862,165 @@
 				}
 				that.picList = list;
 			},
-			// 入口方法
-			uploadVideo() {
-			  let that = this;
+			// // 入口方法
+			// uploadVideo() {
+			//   let that = this;
 			
-			  if (process.env.UNI_PLATFORM === 'h5') {
-			    // H5 平台
-			    const fileInput = document.createElement('input');
-			    fileInput.type = 'file';
-			    fileInput.accept = 'video/*';
-			    fileInput.onchange = async (e) => {
-			      const file = e.target.files[0];
-			      if (!file) return;
+			//   if (process.env.UNI_PLATFORM === 'h5') {
+			//     // H5 平台
+			//     const fileInput = document.createElement('input');
+			//     fileInput.type = 'file';
+			//     fileInput.accept = 'video/*';
+			//     fileInput.onchange = async (e) => {
+			//       const file = e.target.files[0];
+			//       if (!file) return;
 			
-			      uni.showLoading({ title: "分片上传中…" });
-			      try {
-			        const url = await that.uploadLargeVideoH5(file);
-			        uni.hideLoading();
-			        uni.showToast({ title: "上传成功", icon: "none" });
-			        that.pic = url;
-			      } catch (err) {
-			        console.error(err);
-			        uni.hideLoading();
-			        uni.showToast({ title: "上传失败", icon: "none" });
-			      }
-			    };
-			    fileInput.click();
-			    return;
-			  }
+			//       uni.showLoading({ title: "分片上传中…" });
+			//       try {
+			//         const url = await that.uploadLargeVideoH5(file);
+			//         uni.hideLoading();
+			//         uni.showToast({ title: "上传成功", icon: "none" });
+			//         that.pic = url;
+			//       } catch (err) {
+			//         console.error(err);
+			//         uni.hideLoading();
+			//         uni.showToast({ title: "上传失败", icon: "none" });
+			//       }
+			//     };
+			//     fileInput.click();
+			//     return;
+			//   }
 			
-			  // App / 小程序
-			  uni.chooseVideo({
-			    sourceType: ['camera', 'album'],
-			    compressed: false,
-			    success: async (res) => {
-			      const filePath = res.tempFilePath;
-			      const fs = uni.getFileSystemManager();
-			      const stat = fs.statSync(filePath);
-			      const size = stat.size;
+			//   // App / 小程序
+			//   uni.chooseVideo({
+			//     sourceType: ['camera', 'album'],
+			//     compressed: false,
+			//     success: async (res) => {
+			//       const filePath = res.tempFilePath;
+			//       const fs = uni.getFileSystemManager();
+			//       const stat = fs.statSync(filePath);
+			//       const size = stat.size;
 			
-			      if (size < 5 * 1024 * 1024) {
-			        return that.directUpload(filePath);
-			      }
+			//       if (size < 5 * 1024 * 1024) {
+			//         return that.directUpload(filePath);
+			//       }
 			
-			      uni.showLoading({ title: "分片上传中…" });
-			      try {
-			        const url = await that.uploadLargeVideoApp(filePath);
-			        uni.hideLoading();
-			        uni.showToast({ title: "上传成功", icon: "none" });
-			        that.pic = url;
-			      } catch (e) {
-			        console.error(e);
-			        uni.hideLoading();
-			        uni.showToast({ title: "上传失败", icon: "none" });
-			      }
-			    }
-			  });
-			},
+			//       uni.showLoading({ title: "分片上传中…" });
+			//       try {
+			//         const url = await that.uploadLargeVideoApp(filePath);
+			//         uni.hideLoading();
+			//         uni.showToast({ title: "上传成功", icon: "none" });
+			//         that.pic = url;
+			//       } catch (e) {
+			//         console.error(e);
+			//         uni.hideLoading();
+			//         uni.showToast({ title: "上传失败", icon: "none" });
+			//       }
+			//     }
+			//   });
+			// },
 			
-			// ========================
-			// H5 分片上传
-			// ========================
-			async uploadLargeVideoH5(file) {
-			  const chunkSize = 2 * 1024 * 1024;
-			  const totalChunks = Math.ceil(file.size / chunkSize);
-			  const uploadId = Date.now() + "_" + Math.random().toString(36).substr(2);
+			// // ========================
+			// // H5 分片上传
+			// // ========================
+			// async uploadLargeVideoH5(file) {
+			//   const chunkSize = 2 * 1024 * 1024;
+			//   const totalChunks = Math.ceil(file.size / chunkSize);
+			//   const uploadId = Date.now() + "_" + Math.random().toString(36).substr(2);
 			
-			  for (let index = 0; index < totalChunks; index++) {
-			    const start = index * chunkSize;
-			    const end = Math.min(start + chunkSize, file.size);
-			    const chunk = file.slice(start, end);
+			//   for (let index = 0; index < totalChunks; index++) {
+			//     const start = index * chunkSize;
+			//     const end = Math.min(start + chunkSize, file.size);
+			//     const chunk = file.slice(start, end);
 			
-			    await this.uploadSingleChunkH5(uploadId, index, totalChunks, chunk);
-			  }
+			//     await this.uploadSingleChunkH5(uploadId, index, totalChunks, chunk);
+			//   }
 			
-			  const mergeRes = await this.mergeChunks(uploadId, file.name, totalChunks);
-			  return mergeRes.data.url;
-			},
+			//   const mergeRes = await this.mergeChunks(uploadId, file.name, totalChunks);
+			//   return mergeRes.data.url;
+			// },
 			
-			uploadSingleChunkH5(uploadId, index, total, chunk) {
-			  const formData = new FormData();
-			  formData.append('file', chunk);
-			  formData.append('uploadId', uploadId);
-			  formData.append('index', index);
-			  formData.append('total', total);
-			  formData.append('token', this.token);
+			// uploadSingleChunkH5(uploadId, index, total, chunk) {
+			//   const formData = new FormData();
+			//   formData.append('file', chunk);
+			//   formData.append('uploadId', uploadId);
+			//   formData.append('index', index);
+			//   formData.append('total', total);
+			//   formData.append('token', this.token);
 			
-			  return fetch(this.$API.uploadChunk(), {
-			    method: 'POST',
-			    body: formData
-			  }).then(res => res.json())
-			    .catch(() => new Promise((resolve, reject) => {
-			      setTimeout(() => {
-			        this.uploadSingleChunkH5(uploadId, index, total, chunk).then(resolve).catch(reject);
-			      }, 1500);
-			    }));
-			},
+			//   return fetch(this.$API.uploadChunk(), {
+			//     method: 'POST',
+			//     body: formData
+			//   }).then(res => res.json())
+			//     .catch(() => new Promise((resolve, reject) => {
+			//       setTimeout(() => {
+			//         this.uploadSingleChunkH5(uploadId, index, total, chunk).then(resolve).catch(reject);
+			//       }, 1500);
+			//     }));
+			// },
 			
-			// ========================
-			// App / 小程序分片上传
-			// ========================
-			async uploadLargeVideoApp(filePath) {
-			  const fs = uni.getFileSystemManager();
-			  const stat = fs.statSync(filePath);
-			  const chunkSize = 2 * 1024 * 1024;
-			  const totalChunks = Math.ceil(stat.size / chunkSize);
-			  const uploadId = Date.now() + "_" + Math.random().toString(36).substr(2);
+			// // ========================
+			// // App / 小程序分片上传
+			// // ========================
+			// async uploadLargeVideoApp(filePath) {
+			//   const fs = uni.getFileSystemManager();
+			//   const stat = fs.statSync(filePath);
+			//   const chunkSize = 2 * 1024 * 1024;
+			//   const totalChunks = Math.ceil(stat.size / chunkSize);
+			//   const uploadId = Date.now() + "_" + Math.random().toString(36).substr(2);
 			
-			  for (let index = 0; index < totalChunks; index++) {
-			    const start = index * chunkSize;
-			    const end = Math.min(start + chunkSize, stat.size);
-			    const chunkPath = filePath; // uni.uploadFile 会自动读取 filePath 指定文件，可以按偏移读取完整文件
+			//   for (let index = 0; index < totalChunks; index++) {
+			//     const start = index * chunkSize;
+			//     const end = Math.min(start + chunkSize, stat.size);
+			//     const chunkPath = filePath; // uni.uploadFile 会自动读取 filePath 指定文件，可以按偏移读取完整文件
 			
-			    await new Promise((resolve, reject) => {
-			      uni.uploadFile({
-			        url: this.$API.uploadChunk(),
-			        filePath: chunkPath,
-			        name: 'file',
-			        formData: {
-			          uploadId,
-			          index,
-			          total: totalChunks,
-			          token: this.token
-			        },
-			        success: res => resolve(res),
-			        fail: err => reject(err)
-			      });
-			    });
-			  }
+			//     await new Promise((resolve, reject) => {
+			//       uni.uploadFile({
+			//         url: this.$API.uploadChunk(),
+			//         filePath: chunkPath,
+			//         name: 'file',
+			//         formData: {
+			//           uploadId,
+			//           index,
+			//           total: totalChunks,
+			//           token: this.token
+			//         },
+			//         success: res => resolve(res),
+			//         fail: err => reject(err)
+			//       });
+			//     });
+			//   }
 			
-			  // 合并
-			  const mergeRes = await this.mergeChunks(uploadId, filePath.split('/').pop(), totalChunks);
-			  return mergeRes.data.url;
-			},
+			//   // 合并
+			//   const mergeRes = await this.mergeChunks(uploadId, filePath.split('/').pop(), totalChunks);
+			//   return mergeRes.data.url;
+			// },
 			
-			// ========================
-			// 合并分片 (H5 / App / 小程序)
-			// ========================
-			mergeChunks(uploadId, filename, total) {
-			  const formData = new FormData();
-			  formData.append('uploadId', uploadId);
-			  formData.append('filename', filename);
-			  formData.append('total', total);
-			  formData.append('token', this.token);
+			// // ========================
+			// // 合并分片 (H5 / App / 小程序)
+			// // ========================
+			// mergeChunks(uploadId, filename, total) {
+			//   const formData = new FormData();
+			//   formData.append('uploadId', uploadId);
+			//   formData.append('filename', filename);
+			//   formData.append('total', total);
+			//   formData.append('token', this.token);
 			
-			  if (process.env.UNI_PLATFORM === 'h5') {
-			    return fetch(this.$API.uploadMerge(), { method: 'POST', body: formData }).then(res => res.json());
-			  } else {
-			    return new Promise((resolve, reject) => {
-			      uni.request({
-			        url: this.$API.uploadMerge(),
-			        method: 'POST',
-			        header: { 'Content-Type': 'multipart/form-data' },
-			        formData: { uploadId, filename, total, token: this.token },
-			        success: res => resolve(res.data),
-			        fail: reject
-			      });
-			    });
-			  }
-			}
+			//   if (process.env.UNI_PLATFORM === 'h5') {
+			//     return fetch(this.$API.uploadMerge(), { method: 'POST', body: formData }).then(res => res.json());
+			//   } else {
+			//     return new Promise((resolve, reject) => {
+			//       uni.request({
+			//         url: this.$API.uploadMerge(),
+			//         method: 'POST',
+			//         header: { 'Content-Type': 'multipart/form-data' },
+			//         formData: { uploadId, filename, total, token: this.token },
+			//         success: res => resolve(res.data),
+			//         fail: reject
+			//       });
+			//     });
+			//   }
+			// }
 
 
 			
