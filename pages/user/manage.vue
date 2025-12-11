@@ -26,7 +26,7 @@
 				<view class="manage-dataLoad" v-if="allData==null">
 					<image src="../../static/loading.gif" mode="widthFix"></image>
 				</view>
-				<view class="user-data grid col-3" v-if="allData!=null">
+				<view class="user-data grid col-4" v-if="allData!=null">
 					<view class="user-data-box">
 						<view class="user-data-value">{{allData.allContents}}</view>
 						<view class="user-data-title">文章总计</view>
@@ -109,12 +109,33 @@
 						</view>
 						
 					</view>
+					<view class="user-data-box" v-if="allData.upcomingIdentifyConsumer!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/consumer')">
+							<view class="user-data-value">{{allData.upcomingIdentifyConsumer}}</view>
+							<view class="user-data-title">个人认证</view>
+						</view>
+						
+					</view>
+					<view class="user-data-box" v-if="allData.upcomingIdentifyCompany!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/company')">
+							<view class="user-data-value">{{allData.upcomingIdentifyCompany}}</view>
+							<view class="user-data-title">机构认证</view>
+						</view>
+					</view>
 					<view class="user-data-box" v-if="allData.selfDelete!=0">
 						<view class="user-data-main" @tap="toLink('/pages/manage/selfDelete')">
 							<view class="user-data-value">{{allData.selfDelete}}</view>
 							<view class="user-data-title">申请注销</view>
 						</view>
 					</view>
+					<view class="user-data-box" v-if="allData.report!=0">
+						<view class="user-data-main" @tap="toLink('/pages/manage/report')">
+							<view class="user-data-value">{{allData.report}}</view>
+							<view class="user-data-title">举报</view>
+						</view>
+					</view>
+					
+					
 				</view>
 			</view>
 			
@@ -215,6 +236,30 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/consumer')">
+							<view class="index-sort-i" style="background-color: #ff5356;">
+								<text class="cuIcon-profilefill"></text>
+							</view>
+							<view class="index-sort-text">
+								个人认证审核
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/company')">
+							<view class="index-sort-i" style="background-color: #0852ff;">
+								<text class="cuIcon-profilefill"></text>
+							</view>
+							<view class="index-sort-text">
+								机构认证审核
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/selfDelete')">
 							<view class="index-sort-i" style="background-color: #7a0000;">
 								<text class="cuIcon-repairfill"></text>
@@ -225,6 +270,20 @@
 						</view>
 					</waves>
 				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/report')">
+							<view class="index-sort-i" style="background-color: #00aa7f;">
+								<text class="cuIcon-flashbuyfill"></text>
+							</view>
+							<view class="index-sort-text">
+								举报列表
+							</view>
+						</view>
+					</waves>
+				</view>
+				
+				
 			</view>
 		</view>
 		<view class="data-box" v-if="group=='administrator'||group=='editor'">
@@ -311,6 +370,102 @@
 				</view>
 			</view>
 		</view>
+		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>圈子模块
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="index-sort grid col-4">
+				<view class="index-sort-box" v-if="myPurview == 5">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/section')">
+							<view class="index-sort-i">
+								<text class="cuIcon-skin"></text>
+							</view>
+							<view class="index-sort-text">
+								版块管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/postReview')">
+							<view class="index-sort-i" style="background-color: #e72323;">
+								<text class="cuIcon-text"></text>
+							</view>
+							<view class="index-sort-text">
+								帖子审核
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="myPurview == 5">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/postComment')">
+							<view class="index-sort-i" style="background-color: #0ca471;">
+								<text class="cuIcon-commentfill"></text>
+							</view>
+							<view class="index-sort-text">
+								帖子评论
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="group=='administrator'||group=='editor'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/moderator')">
+							<view class="index-sort-i">
+								<text class="cuIcon-selection"></text>
+							</view>
+							<view class="index-sort-text">
+								版主管理
+							</view>
+						</view>
+					</waves>
+				</view>
+			</view>
+		</view>
+		<view class="data-box" v-if="group=='administrator'">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text>AI模块
+				</view>
+				<view class="action more">
+					
+				</view>
+			</view>
+			<view class="index-sort grid col-4">
+				<view class="index-sort-box" >
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/gpt')">
+							<view class="index-sort-i" style="background-color: #148ce7;">
+								<text class="cuIcon-vipcard"></text>
+							</view>
+							<view class="index-sort-text">
+								大模型管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" >
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/gptchat')">
+							<view class="index-sort-i" style="background-color: #f45da6;">
+								<text class="cuIcon-vipcard"></text>
+							</view>
+							<view class="index-sort-text">
+								AI消息管理
+							</view>
+						</view>
+					</waves>
+				</view>
+			</view>
+		</view>
 		<view class="data-box" v-if="group=='administrator'">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
@@ -365,6 +520,18 @@
 							</view>
 							<view class="index-sort-text">
 								卡密管理
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" v-if="group=='administrator'">
+					<waves itemClass="butclass">
+						<view class="index-sort-main" @tap="toLink('/pages/manage/giftVIP')">
+							<view class="index-sort-i">
+								<text class="cuIcon-emojifill"></text>
+							</view>
+							<view class="index-sort-text">
+								VIP赠送
 							</view>
 						</view>
 					</waves>
@@ -432,6 +599,10 @@
 				
 				group:"",
 				
+				myPurviewList:[],
+				isModerator:false,
+				myPurview:0,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -458,6 +629,7 @@
 			}
 			
 			that.getInfo();
+			that.userPurview();
 		},
 		onLoad() {
 			var that = this;
@@ -502,7 +674,7 @@
 						if(res.data.code==1){
 							that.allData = res.data.data;
 							var data = res.data.data;
-							that.upcomingTotal = Number(data.upcomingContents)+Number(data.upcomingComments)+Number(data.upcomingShop)+Number(data.upcomingSpace)+Number(data.upcomingAds)+Number(data.upcomingWithdraw);
+							that.upcomingTotal = Number(data.upcomingContents)+Number(data.upcomingComments)+Number(data.upcomingShop)+Number(data.upcomingSpace)+Number(data.upcomingPost)+Number(data.upcomingAds)+Number(data.upcomingWithdraw);
 						}
 					},
 					fail: function(res) {
@@ -556,13 +728,59 @@
 				// #endif
 			},
 			toWord(){
-				var url = "https://www.yuque.com/buxia97/ruleproject";
+				var url = "https://www.ruletree.club/tag/RuleApp/";
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
 				// #endif
 				// #ifdef H5
 				window.open(url)
 				// #endif
+			},
+			userPurview(){
+				var that = this;
+				var uid = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					uid=userInfo.uid;
+				}
+				var data = {
+					"uid":uid,
+				}
+				that.$Net.request({
+					url: that.$API.userPurview(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						
+						if(res.data.code==1){
+							that.myPurviewList = res.data.data;
+							var list = res.data.data;
+							for(var i in list){
+								//获取到大版主权限
+								if(list[i].purview==5){
+									that.myPurview = list[i].purview;
+								}
+								
+							}
+							var myInfo = JSON.parse(localStorage.getItem('userinfo'));
+							if(myInfo.group=='administrator'||myInfo.group=='editor'){
+								that.myPurview = 5;
+							}
+							if(that.myPurviewList.length>0){
+								that.isModerator = true;
+							}
+						}
+					},
+					fail: function(res) {
+						
+					}
+				})
+				
 			},
 		},
 		components: {

@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -43,8 +43,7 @@
 									<view class="content">
 										<view class="text-grey">{{item.author}}
 										<!--  #ifdef H5 || APP-PLUS -->
-										<text class="userlv" :style="getLvStyle(item.experience)">{{getLv(item.experience)}}</text>
-										<!-- <text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text> -->
+										<text class="userlv" :style="getUserLvStyle(item.lv)">{{getUserLv(item.lv)}}</text>
 										<!--  #endif -->
 										<text class="userlv customize" v-if="item.customize&&item.customize!=''">{{item.customize}}</text>
 										</view>
@@ -64,8 +63,8 @@
 											</view>
 										</view>
 									</view>
-									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'" :class="group=='editor'?'editorStyle':''">审核</text>
-									<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)">删除</text>
+									<text class="cu-btn text-blue comment-audit"  @tap="toAudit(item.coid)" v-if="item.status=='waiting'">审核</text>
+																		<text class="cu-btn text-red comment-delete"  @tap="toDelete(item.coid)">删除</text>
 								</view>
 					
 								
@@ -145,7 +144,7 @@
 			that.page = 1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				
@@ -237,6 +236,12 @@
 			},
 			getCommentsList(isPage){
 				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
 				var data = {
 					"type":"comment",
 					"status":that.status
@@ -252,6 +257,7 @@
 						"limit":5,
 						"page":page,
 						"searchKey":that.searchText,
+						'token':token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -454,26 +460,7 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			},
-			getLv(i){
-				var that = this;
-				if(!i){
-					var i = 0;
-				}
-				var lv  = that.$API.getLever(i);
-				var leverList = that.$API.GetLeverList();
-				return leverList[lv];
-			},
-			getLvStyle(i){
-				var that = this;
-				if(!i){
-					var i = 0;
-				}
-				var lv  = that.$API.getLever(i);
-				var rankStyle = that.$API.GetRankStyle();
-				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
-				return userlvStyle;
-			},
+			}
 		}
 	}
 </script>

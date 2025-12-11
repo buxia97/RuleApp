@@ -147,6 +147,7 @@
 							<block v-if="ban==uid">
 								<button class="cu-btn bg-red margin-left" @tap="toBan(0)">解除屏蔽</button>
 							</block>
+							<button class="cu-btn bg-blue margin-left" @tap="goHistory()">消息记录</button>
 						</block>
 						
 						<block v-if="type==1">
@@ -749,6 +750,12 @@
 				
 				
 				
+			},
+			goHistory(){
+				var that = this;
+				uni.redirectTo({
+				    url: '/pages/chat/history?id='+that.chatid
+				});
 			},
 			ToCopy(text) {
 				var that = this;

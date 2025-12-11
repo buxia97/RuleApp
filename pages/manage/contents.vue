@@ -13,7 +13,7 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
 			<view class="fullpost-btn">
-				<text class="cu-btn bg-blue" @tap="toMetas" v-if="group=='administrator'">分类标签</text>
+				<text class="cu-btn bg-blue radius" @tap="toMetas" v-if="group=='administrator'">分类标签</text>
 			</view>
 			<view class="cu-bar bg-white search">
 				<view class="search-form round">
@@ -71,7 +71,7 @@
 							<text class="text-orange radius" @tap="getDocx(item.cid)">导出</text>
 						</block>
 						
-						<text class="text-blue radius" @tap="toEdit(item.cid)">编辑</text>
+						<text class="text-blue radius" @tap="toEdit(item)">编辑</text>
 						<text class="text-red radius"  @tap="toDelete(item.cid)" v-if="group=='administrator'">删除</text>
 						
 						<text class="text-gray radius" style="float: right;">{{item.authorInfo.name}}</text>
@@ -197,7 +197,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.page = 1;
 			if(localStorage.getItem('token')){
@@ -302,7 +302,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;
@@ -361,12 +361,22 @@
 					url: '/pages/user/post'
 				});
 			},
-			toEdit(cid){
+			toEdit(data){
 				var that = this;
+				var cid = data.cid;
+				var markdown =  data.markdown;
+				if(markdown==1){
+					//MarkDown编辑器
+					uni.navigateTo({
+						url: '/pages/user/post?type=edit'+'&cid='+cid
+					});
+				}else{
+					//富文本编辑器
+					uni.navigateTo({
+						url: '/pages/edit/articlePost?type=edit'+'&cid='+cid
+					});
+				}
 				
-				uni.navigateTo({
-					url: '/pages/user/post?type=edit'+'&cid='+cid
-				});
 			},
 			subText(text,num){
 				if(text.length < null){
@@ -429,7 +439,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -443,7 +453,9 @@
 				            			that.page=1;
 				            			that.moreText="加载更多";
 				            			that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 									that.reason="";
 									that.curCid=0;
@@ -491,7 +503,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -505,7 +517,9 @@
 				            			that.page=1;
 				            			that.moreText="加载更多";
 				            			that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 				            		
 				            	},
@@ -552,7 +566,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -613,7 +627,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -627,7 +641,10 @@
 										that.page=1;
 										that.moreText="加载更多";
 										that.isLoad=0;
-				            			that.getContentsList();
+				            			
+										setTimeout(function() {
+											that.getContentsList();
+										}, 1000)
 				            		}
 				            		
 				            	},
@@ -674,7 +691,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -688,7 +705,9 @@
 										that.page=1;
 										that.moreText="加载更多";
 										that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 				            		
 				            	},
@@ -735,7 +754,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -749,7 +768,9 @@
 										that.page=1;
 										that.moreText="加载更多";
 										that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 				            		
 				            	},
@@ -796,7 +817,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -810,7 +831,9 @@
 										that.page=1;
 										that.moreText="加载更多";
 										that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 				            		
 				            	},
@@ -857,7 +880,7 @@
 				            	header:{
 				            		'Content-Type':'application/x-www-form-urlencoded'
 				            	},
-				            	method: "post",
+				            	method: "get",
 				            	dataType: 'json',
 				            	success: function(res) {
 				            		setTimeout(function () {
@@ -871,7 +894,9 @@
 										that.page=1;
 										that.moreText="加载更多";
 										that.isLoad=0;
-				            			that.getContentsList();
+				            			setTimeout(function() {
+				            				that.getContentsList();
+				            			}, 1000)
 				            		}
 				            		
 				            	},
@@ -944,7 +969,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.modalName =  null;
@@ -961,7 +986,9 @@
 							that.page=1;
 							that.moreText="加载更多";
 							that.isLoad=0;
-							that.getContentsList();
+							setTimeout(function() {
+								that.getContentsList();
+							}, 1000)
 						}
 						
 					},

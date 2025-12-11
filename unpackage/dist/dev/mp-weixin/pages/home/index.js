@@ -1,9 +1,9 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages/home/index"],{
 
 /***/ 44:
-/*!*******************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/main.js?{"page":"pages%2Fhome%2Findex"} ***!
-  \*******************************************************************/
+/*!*************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/main.js?{"page":"pages%2Fhome%2Findex"} ***!
+  \*************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23,9 +23,9 @@ createPage(_index.default);
 /***/ }),
 
 /***/ 45:
-/*!************************************************!*\
-  !*** E:/APPpro/voss/规则之树/pages/home/index.vue ***!
-  \************************************************/
+/*!******************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/pages/home/index.vue ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -62,9 +62,9 @@ component.options.__file = "pages/home/index.vue"
 /***/ }),
 
 /***/ 46:
-/*!*******************************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/pages/home/index.vue?vue&type=template&id=71e217db& ***!
-  \*******************************************************************************/
+/*!*************************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/pages/home/index.vue?vue&type=template&id=71e217db& ***!
+  \*************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -84,9 +84,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 47:
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/规则之树/pages/home/index.vue?vue&type=template&id=71e217db& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--17-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/RuleAppRro/pages/home/index.vue?vue&type=template&id=71e217db& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -125,9 +125,9 @@ render._withStripped = true
 /***/ }),
 
 /***/ 48:
-/*!*************************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/pages/home/index.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************/
+/*!*******************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/pages/home/index.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -141,9 +141,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 49:
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/规则之树/pages/home/index.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/RuleAppRro/pages/home/index.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -275,6 +275,16 @@ var _index = __webpack_require__(/*! ../../js_sdk/mp-storage/mp-storage/index.js
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: function data() {
     return {
@@ -285,23 +295,23 @@ var _default = {
         text: '首页',
         icon: '/static/tabbar/home.png',
         //未选中图标
-        icon_a: '/static/tabbar/home_cur',
+        icon_a: '/static/tabbar/home_',
         //选中图片
         type: "home"
       }, {
         text: '发现',
         icon: '/static/tabbar/find.png',
-        icon_a: '/static/tabbar/find_cur',
+        icon_a: '/static/tabbar/find_',
         type: "find"
       }, {
         text: '广场',
         icon: '/static/tabbar/square.png',
-        icon_a: '/static/tabbar/square_cur',
+        icon_a: '/static/tabbar/square_',
         type: 'square'
       }, {
         text: '我的',
         icon: '/static/tabbar/user.png',
-        icon_a: '/static/tabbar/user_cur',
+        icon_a: '/static/tabbar/user_',
         type: "user"
       }],
       curType: "home",
@@ -381,6 +391,30 @@ var _default = {
         });
       }
     });
+    if (_index.localStorage.getItem('appStyle')) {
+      var appStyle = _index.localStorage.getItem('appStyle');
+      var curStyle = "blue";
+      that.curStyle = "blue";
+      if (appStyle.indexOf("blue") != -1) {
+        curStyle = "blue";
+        that.curStyle = "blue";
+      }
+      if (appStyle.indexOf("pink") != -1) {
+        curStyle = "pink";
+        that.curStyle = "pink";
+      }
+      if (appStyle.indexOf("orange") != -1) {
+        curStyle = "orange";
+        that.curStyle = "orange";
+      }
+      if (appStyle.indexOf("green") != -1) {
+        curStyle = "green";
+        that.curStyle = "green";
+      }
+      // that.$store.state.AppStyle = that.appStyle;
+      that.$store.commit('setStyle', appStyle);
+      console.log(that.$store.state.AppStyle);
+    }
     that.getAnnouncement();
     setTimeout(function () {
       that.isStart = true;
@@ -390,9 +424,6 @@ var _default = {
     // setTimeout(function() {
     // 	uni.$emit('onShow', 0);
     // }, 200); 
-    uni.$on('goUser', function (data) {
-      that.tabbarChange("user", 3);
-    });
   },
   onReady: function onReady() {
     setTimeout(function () {

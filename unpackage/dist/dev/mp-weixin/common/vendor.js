@@ -978,8 +978,8 @@ function populateParameters(result) {
   var parameters = {
     appId: "__UNI__8D6C809",
     appName: "规则之树",
-    appVersion: "RuleTree App 1.4.3",
-    appVersionCode: "38",
+    appVersion: "RuleTree App 1.4.4-rc1",
+    appVersionCode: "39",
     appLanguage: getAppLanguage(hostLanguage),
     uniCompileVersion: "3.8.7",
     uniRuntimeVersion: "3.8.7",
@@ -1077,8 +1077,8 @@ var getAppBaseInfo = {
     result = sortObject(Object.assign(result, {
       appId: "__UNI__8D6C809",
       appName: "规则之树",
-      appVersion: "RuleTree App 1.4.3",
-      appVersionCode: "38",
+      appVersion: "RuleTree App 1.4.4-rc1",
+      appVersionCode: "39",
       appLanguage: getAppLanguage(hostLanguage),
       hostVersion: version,
       hostLanguage: hostLanguage,
@@ -1758,7 +1758,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -8801,7 +8801,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -8822,14 +8822,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -8925,7 +8925,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_DARK_MODE":"false","VUE_APP_NAME":"规则之树","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -9345,9 +9345,9 @@ internalMixin(Vue);
 /***/ }),
 
 /***/ 26:
-/*!**************************************!*\
-  !*** E:/APPpro/voss/规则之树/pages.json ***!
-  \**************************************/
+/*!********************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/pages.json ***!
+  \********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -10920,58 +10920,10 @@ module.exports = _possibleConstructorReturn, module.exports.__esModule = true, m
 
 /***/ }),
 
-/***/ 3:
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 30:
-/*!**********************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-  return self;
-}
-module.exports = _assertThisInitialized, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 306:
-/*!********************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/parser.js ***!
-  \********************************************************/
+/***/ 290:
+/*!**************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/parser.js ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12187,10 +12139,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 307:
-/*!****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/index.js ***!
-  \****************************************************************/
+/***/ 291:
+/*!**********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/markdown/index.js ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12202,7 +12154,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _marked = _interopRequireDefault(__webpack_require__(/*! ./marked.min */ 308));
+var _marked = _interopRequireDefault(__webpack_require__(/*! ./marked.min */ 292));
 /**
  * @fileoverview markdown 插件
  * Include marked (https://github.com/markedjs/marked)
@@ -12237,10 +12189,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 308:
-/*!*********************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/markdown/marked.min.js ***!
-  \*********************************************************************/
+/***/ 292:
+/*!***************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/markdown/marked.min.js ***!
+  \***************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13365,10 +13317,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 309:
-/*!*************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/index.js ***!
-  \*************************************************************/
+/***/ 293:
+/*!*******************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/audio/index.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13380,7 +13332,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _context = _interopRequireDefault(__webpack_require__(/*! ./context */ 310));
+var _context = _interopRequireDefault(__webpack_require__(/*! ./context */ 294));
 /**
  * @fileoverview audio 插件
  */
@@ -13415,27 +13367,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 31:
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/getPrototypeOf.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _getPrototypeOf(o) {
-  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  return _getPrototypeOf(o);
-}
-module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ 310:
-/*!***************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/audio/context.js ***!
-  \***************************************************************/
+/***/ 294:
+/*!*********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/audio/context.js ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13462,10 +13397,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 311:
-/*!*************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/emoji/index.js ***!
-  \*************************************************************/
+/***/ 295:
+/*!*******************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/emoji/index.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13677,10 +13612,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 312:
-/*!*****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/index.js ***!
-  \*****************************************************************/
+/***/ 296:
+/*!***********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/highlight/index.js ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13692,9 +13627,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _prism = _interopRequireDefault(__webpack_require__(/*! ./prism.min */ 313));
-var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 314));
-var _parser = _interopRequireDefault(__webpack_require__(/*! ../parser */ 306));
+var _prism = _interopRequireDefault(__webpack_require__(/*! ./prism.min */ 297));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 298));
+var _parser = _interopRequireDefault(__webpack_require__(/*! ../parser */ 290));
 /**
  * @fileoverview highlight 插件
  * Include prismjs (https://prismjs.com)
@@ -13791,10 +13726,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 313:
-/*!*********************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/prism.min.js ***!
-  \*********************************************************************/
+/***/ 297:
+/*!***************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/highlight/prism.min.js ***!
+  \***************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14395,10 +14330,10 @@ Prism.languages.javascript = Prism.languages.extend("clike", {
 
 /***/ }),
 
-/***/ 314:
-/*!******************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/highlight/config.js ***!
-  \******************************************************************/
+/***/ 298:
+/*!************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/highlight/config.js ***!
+  \************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14420,10 +14355,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 315:
-/*!**************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/search/index.js ***!
-  \**************************************************************/
+/***/ 299:
+/*!********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/search/index.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14567,10 +14502,58 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 316:
-/*!*************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/style/index.js ***!
-  \*************************************************************/
+/***/ 3:
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ 30:
+/*!**********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self;
+}
+module.exports = _assertThisInitialized, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 300:
+/*!*******************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/style/index.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14582,7 +14565,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _parser = _interopRequireDefault(__webpack_require__(/*! ./parser */ 317));
+var _parser = _interopRequireDefault(__webpack_require__(/*! ./parser */ 301));
 /**
  * @fileoverview style 插件
  */
@@ -14712,10 +14695,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 317:
-/*!**************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/style/parser.js ***!
-  \**************************************************************/
+/***/ 301:
+/*!********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/style/parser.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14899,10 +14882,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 318:
-/*!*****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/img-cache/index.js ***!
-  \*****************************************************************/
+/***/ 302:
+/*!***********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/img-cache/index.js ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14914,8 +14897,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 319));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 321));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 303));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 305));
 var data = {
   name: 'imgcache',
   prefix: 'imgcache_'
@@ -14992,7 +14975,7 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 319:
+/***/ 303:
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -15001,96 +14984,12 @@ exports.default = _default;
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 320)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 304)();
 module.exports = runtime;
 
 /***/ }),
 
-/***/ 32:
-/*!*******************************************************!*\
-  !*** E:/APPpro/voss/规则之树/pages.json?{"type":"style"} ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  "pages": {
-    "pages/home/index": {
-      "enablePullDownRefresh": true
-    },
-    "pages/home/tool": {
-      "enablePullDownRefresh": true
-    },
-    "pages/home/about": {},
-    "pages/user/userlist": {
-      "enablePullDownRefresh": true
-    },
-    "pages/user/fanList": {
-      "enablePullDownRefresh": true
-    },
-    "pages/user/followList": {
-      "enablePullDownRefresh": true
-    },
-    "pages/user/useredit": {},
-    "pages/user/mailedit": {},
-    "pages/user/media": {},
-    "pages/user/scan": {},
-    "pages/user/inbox": {},
-    "pages/user/login": {},
-    "pages/user/foget": {},
-    "pages/user/register": {},
-    "pages/user/setup": {},
-    "pages/user/usermark": {},
-    "pages/user/agreement": {},
-    "pages/contents/comments": {},
-    "pages/contents/commentsadd": {},
-    "pages/contents/contentlist": {},
-    "pages/contents/imagetoday": {
-      "enablePullDownRefresh": true
-    },
-    "pages/contents/info": {
-      "enablePullDownRefresh": true
-    },
-    "pages/contents/alltag": {},
-    "pages/contents/randlist": {},
-    "pages/contents/allcategory": {},
-    "pages/contents/metas": {},
-    "pages/contents/recommend": {},
-    "pages/contents/search": {
-      "enablePullDownRefresh": true
-    },
-    "pages/contents/userinfo": {
-      "enablePullDownRefresh": true
-    },
-    "pages/contents/blackhouse": {
-      "enablePullDownRefresh": true
-    },
-    "pages/chat/chat": {},
-    "pages/space/info": {
-      "enablePullDownRefresh": true
-    },
-    "pages/space/post": {},
-    "pages/space/reply": {}
-  },
-  "globalStyle": {
-    "navigationBarBackgroundColor": "#0081ff",
-    "navigationBarTitleText": "规则之树",
-    "navigationStyle": "custom",
-    "navigationBarTextStyle": "black"
-  }
-};
-exports.default = _default;
-
-/***/ }),
-
-/***/ 320:
+/***/ 304:
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -15412,7 +15311,7 @@ module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.e
 
 /***/ }),
 
-/***/ 321:
+/***/ 305:
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -15453,10 +15352,10 @@ module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exp
 
 /***/ }),
 
-/***/ 322:
-/*!****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/editable/index.js ***!
-  \****************************************************************/
+/***/ 306:
+/*!**********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/editable/index.js ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15468,8 +15367,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 323));
-var _parser = _interopRequireDefault(__webpack_require__(/*! ../parser */ 306));
+var _config = _interopRequireDefault(__webpack_require__(/*! ./config */ 307));
+var _parser = _interopRequireDefault(__webpack_require__(/*! ../parser */ 290));
 /**
  * @fileoverview editable 插件
  */
@@ -16004,10 +15903,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 323:
-/*!*****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/components/mp-html/editable/config.js ***!
-  \*****************************************************************/
+/***/ 307:
+/*!***********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/components/mp-html/editable/config.js ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16028,6 +15927,124 @@ var _default = {
   link: ['更换链接', '上移', '下移', '删除'],
   // 音视频的菜单项
   media: ['封面', '循环', '自动播放', '上移', '下移', '删除']
+};
+exports.default = _default;
+
+/***/ }),
+
+/***/ 31:
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/getPrototypeOf.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
+  return _getPrototypeOf(o);
+}
+module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ 32:
+/*!*************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/pages.json?{"type":"style"} ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  "pages": {
+    "pages/home/index": {
+      "enablePullDownRefresh": true
+    },
+    "pages/home/index2": {
+      "enablePullDownRefresh": true
+    },
+    "pages/home/tool": {
+      "enablePullDownRefresh": true
+    },
+    "pages/home/about": {},
+    "pages/user/userlist": {
+      "enablePullDownRefresh": true
+    },
+    "pages/user/fanList": {
+      "enablePullDownRefresh": true
+    },
+    "pages/user/followList": {
+      "enablePullDownRefresh": true
+    },
+    "pages/user/useredit": {},
+    "pages/user/phoneedit": {},
+    "pages/user/mailedit": {},
+    "pages/user/media": {},
+    "pages/user/scan": {},
+    "pages/user/inbox": {},
+    "pages/user/login": {},
+    "pages/user/foget": {
+      "softinputMode": "adjustResize"
+    },
+    "pages/user/register": {
+      "softinputMode": "adjustResize"
+    },
+    "pages/user/setup": {},
+    "pages/user/usermark": {},
+    "pages/user/agreement": {},
+    "pages/contents/comments": {},
+    "pages/contents/commentsadd": {},
+    "pages/contents/contentlist": {},
+    "pages/contents/imagetoday": {
+      "enablePullDownRefresh": true
+    },
+    "pages/contents/info": {
+      "enablePullDownRefresh": true
+    },
+    "pages/contents/alltag": {},
+    "pages/contents/randlist": {},
+    "pages/contents/allcategory": {},
+    "pages/contents/metas": {},
+    "pages/contents/recommend": {},
+    "pages/contents/search": {
+      "enablePullDownRefresh": true
+    },
+    "pages/contents/userinfo": {
+      "enablePullDownRefresh": true
+    },
+    "pages/contents/blackhouse": {
+      "enablePullDownRefresh": true
+    },
+    "pages/chat/chat": {},
+    "pages/space/info": {
+      "enablePullDownRefresh": true
+    },
+    "pages/space/post": {},
+    "pages/space/reply": {},
+    "pages/forum/home": {
+      "enablePullDownRefresh": true
+    },
+    "pages/forum/info": {},
+    "pages/forum/section": {},
+    "pages/forum/addPost": {},
+    "pages/forum/reply": {},
+    "pages/forum/rewardLog": {},
+    "pages/forum/moderators": {}
+  },
+  "globalStyle": {
+    "navigationBarBackgroundColor": "#0081ff",
+    "navigationBarTitleText": "规则之树",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black"
+  }
 };
 exports.default = _default;
 
@@ -16166,9 +16183,9 @@ function normalizeComponent (
 /***/ }),
 
 /***/ 39:
-/*!******************************************!*\
-  !*** E:/APPpro/voss/规则之树/store/index.js ***!
-  \******************************************/
+/*!************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/store/index.js ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17473,35 +17490,35 @@ module.exports = index_cjs;
 /***/ }),
 
 /***/ 41:
-/*!****************************************!*\
-  !*** E:/APPpro/voss/规则之树/utils/api.js ***!
-  \****************************************/
+/*!**********************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/utils/api.js ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 var _index = __webpack_require__(/*! @/js_sdk/mp-storage/mp-storage/index.js */ 42);
-var _module$exports;
-//RuleApp是一套开源免费的客户端代码，如果您通过任何收费渠道下载到了此代码，则可以认为你被忽悠了。
-//正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
-//github内测版地址：https://github.com/buxia97/RuleApp
-//var API_URL = 'https://api.ruletree.club/';
-var API_URL = 'https://api.ruletree.club/';
-//在API配置中心创建的应用Key
-var appKey = "Yc9AQDnN";
-//web网站地址
-var WEB_URL = '';
+//RuleApp Pro是RuleApp的增强版，提供更加强大的社区服务。
+// var API_URL = 'https://api.ruletree.club/';
+// //在API配置中心创建的应用Key
+// var appKey = "Yc9AQDnN";
+var API_URL = 'http://192.168.0.183/';
+var appKey = "dSY0uo0H";
+
+// var API_URL = 'https://api.ad0921.com/';
+// var appKey = "uaRV5WZI";
+
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
+var WEB_URL = '';
 
 //是否禁止网络代理，为1时开启（可以在安卓和苹果APP中防止抓包，但同时也会禁止VPN环境使用APP）
 //由于uniapp官方的问题，只能拦截部分条件
 var banVPN = 0;
 //全局数据调用部分【重要】
+
 //评论等级头衔
 var rankList = ["小水友", "资深水友", "灌水大师", "小龙王", "大龙王", "深海巨妖", "水神", "至尊水神"];
 //经验等级头衔
@@ -17512,7 +17529,6 @@ var rankStyle = ["#6699CC", "#666699", "#009933", "#FF9900", "#ff007f", "#FF0033
 //链接规则(用于站内链接自动跳转和文章分享)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
 //{cid}对应文章id，{category}对应分类缩略名，{slug}对应独立页面名称，其实本质上就是页面拼接。
-
 if (_index.localStorage.getItem('AppInfo')) {
   try {
     var AppInfo = JSON.parse(_index.localStorage.getItem('AppInfo'));
@@ -17560,7 +17576,7 @@ uni.request({
     });
   }
 });
-module.exports = (_module$exports = {
+module.exports = {
   getBanVPN: function getBanVPN() {
     return banVPN;
   },
@@ -17574,6 +17590,18 @@ module.exports = (_module$exports = {
       currencyName = AppInfo.currencyName;
     }
     return currencyName;
+  },
+  GetIsComment: function GetIsComment() {
+    return isComment;
+  },
+  GetRankList: function GetRankList() {
+    return rankList;
+  },
+  GetLeverList: function GetLeverList() {
+    return leverList;
+  },
+  GetRankStyle: function GetRankStyle() {
+    return rankStyle;
   },
   GetAppName: function GetAppName() {
     var appName = "";
@@ -17591,6 +17619,14 @@ module.exports = (_module$exports = {
     }
     return appEmail;
   },
+  GetAdpid: function GetAdpid() {
+    var adpid = "";
+    if (_index.localStorage.getItem('AppInfo')) {
+      var AppInfo = JSON.parse(_index.localStorage.getItem('AppInfo'));
+      adpid = AppInfo.adpid;
+    }
+    return adpid;
+  },
   GetLogo: function GetLogo() {
     var logo = "";
     if (_index.localStorage.getItem('AppInfo')) {
@@ -17599,395 +17635,639 @@ module.exports = (_module$exports = {
     }
     return logo;
   },
+  GetLinkRule: function GetLinkRule() {
+    return linkRule;
+  },
+  GetPageRule: function GetPageRule() {
+    return pageRule;
+  },
+  GetRaiders: function GetRaiders() {
+    return raiders;
+  },
+  GetFeedback: function GetFeedback() {
+    return feedback;
+  },
+  GetAboutme: function GetAboutme() {
+    return aboutme;
+  },
+  GetFields: function GetFields() {
+    return fields;
+  },
+  GetGithubUrl: function GetGithubUrl() {
+    return GithubUrl;
+  },
+  GetWebUrl: function GetWebUrl() {
+    return WEB_URL;
+  },
+  GetGroupUrl: function GetGroupUrl() {
+    return GroupUrl;
+  },
   getApiUrl: function getApiUrl() {
     return API_URL;
   },
-  GetIsComment: function GetIsComment() {
-    return isComment;
+  userLogin: function userLogin() {
+    return API_URL + 'typechoUsers/userLogin';
   },
-  GetRankList: function GetRankList() {
-    return rankList;
+  phoneLogin: function phoneLogin() {
+    return API_URL + 'typechoUsers/phoneLogin';
   },
-  GetLeverList: function GetLeverList() {
-    return leverList;
+  RegSendCode: function RegSendCode() {
+    return API_URL + 'typechoUsers/RegSendCode';
   },
-  GetRankStyle: function GetRankStyle() {
-    return rankStyle;
-  }
-}, (0, _defineProperty2.default)(_module$exports, "GetAppName", function GetAppName() {
-  var appName = "";
-  if (_index.localStorage.getItem('AppInfo')) {
-    var AppInfo = JSON.parse(_index.localStorage.getItem('AppInfo'));
-    appName = AppInfo.name;
-  }
-  return appName;
-}), (0, _defineProperty2.default)(_module$exports, "GetAppEmail", function GetAppEmail() {
-  var appEmail = "";
-  if (_index.localStorage.getItem('AppInfo')) {
-    var AppInfo = JSON.parse(_index.localStorage.getItem('AppInfo'));
-    appEmail = AppInfo.mail;
-  }
-  return appEmail;
-}), (0, _defineProperty2.default)(_module$exports, "GetAdpid", function GetAdpid() {
-  var adpid = "";
-  if (_index.localStorage.getItem('AppInfo')) {
-    var AppInfo = JSON.parse(_index.localStorage.getItem('AppInfo'));
-    adpid = AppInfo.adpid;
-  }
-  return adpid;
-}), (0, _defineProperty2.default)(_module$exports, "GetLinkRule", function GetLinkRule() {
-  return linkRule;
-}), (0, _defineProperty2.default)(_module$exports, "GetPageRule", function GetPageRule() {
-  return pageRule;
-}), (0, _defineProperty2.default)(_module$exports, "GetRaiders", function GetRaiders() {
-  return raiders;
-}), (0, _defineProperty2.default)(_module$exports, "GetFeedback", function GetFeedback() {
-  return feedback;
-}), (0, _defineProperty2.default)(_module$exports, "GetAboutme", function GetAboutme() {
-  return aboutme;
-}), (0, _defineProperty2.default)(_module$exports, "GetFields", function GetFields() {
-  return fields;
-}), (0, _defineProperty2.default)(_module$exports, "GetUpdateUrl", function GetUpdateUrl() {
-  return WEB_URL + 'apiResult.php?update=1';
-}), (0, _defineProperty2.default)(_module$exports, "GetAds", function GetAds() {
-  return WEB_URL + 'apiResult.php?getAds=1';
-}), (0, _defineProperty2.default)(_module$exports, "GetAppStart", function GetAppStart() {
-  return WEB_URL + 'apiResult.php?appStart=1';
-}), (0, _defineProperty2.default)(_module$exports, "GetGithubUrl", function GetGithubUrl() {
-  return GithubUrl;
-}), (0, _defineProperty2.default)(_module$exports, "GetWebUrl", function GetWebUrl() {
-  return WEB_URL;
-}), (0, _defineProperty2.default)(_module$exports, "GetGroupUrl", function GetGroupUrl() {
-  return GroupUrl;
-}), (0, _defineProperty2.default)(_module$exports, "userLogin", function userLogin() {
-  return API_URL + 'typechoUsers/userLogin';
-}), (0, _defineProperty2.default)(_module$exports, "RegSendCode", function RegSendCode() {
-  return API_URL + 'typechoUsers/RegSendCode';
-}), (0, _defineProperty2.default)(_module$exports, "SendCode", function SendCode() {
-  return API_URL + 'typechoUsers/SendCode';
-}), (0, _defineProperty2.default)(_module$exports, "userApi", function userApi() {
-  return API_URL + 'typechoUsers/apiLogin';
-}), (0, _defineProperty2.default)(_module$exports, "userRegister", function userRegister() {
-  return API_URL + 'typechoUsers/userRegister';
-}), (0, _defineProperty2.default)(_module$exports, "userFoget", function userFoget() {
-  return API_URL + 'typechoUsers/userFoget';
-}), (0, _defineProperty2.default)(_module$exports, "getUserInfo", function getUserInfo() {
-  return API_URL + 'typechoUsers/userInfo';
-}), (0, _defineProperty2.default)(_module$exports, "getUserList", function getUserList() {
-  return API_URL + 'typechoUsers/userList';
-}), (0, _defineProperty2.default)(_module$exports, "userEdit", function userEdit() {
-  return API_URL + 'typechoUsers/userEdit';
-}), (0, _defineProperty2.default)(_module$exports, "getUserData", function getUserData() {
-  return API_URL + 'typechoUsers/userData';
-}), (0, _defineProperty2.default)(_module$exports, "userDelete", function userDelete() {
-  return API_URL + 'typechoUsers/userDelete';
-}), (0, _defineProperty2.default)(_module$exports, "userRecharge", function userRecharge() {
-  return API_URL + 'typechoUsers/userRecharge';
-}), (0, _defineProperty2.default)(_module$exports, "userWithdraw", function userWithdraw() {
-  return API_URL + 'typechoUsers/userWithdraw';
-}), (0, _defineProperty2.default)(_module$exports, "withdrawList", function withdrawList() {
-  return API_URL + 'typechoUsers/withdrawList';
-}), (0, _defineProperty2.default)(_module$exports, "withdrawStatus", function withdrawStatus() {
-  return API_URL + 'typechoUsers/withdrawStatus';
-}), (0, _defineProperty2.default)(_module$exports, "manageUserEdit", function manageUserEdit() {
-  return API_URL + 'typechoUsers/manageUserEdit';
-}), (0, _defineProperty2.default)(_module$exports, "apiBind", function apiBind() {
-  return API_URL + 'typechoUsers/apiBind';
-}), (0, _defineProperty2.default)(_module$exports, "userBindStatus", function userBindStatus() {
-  return API_URL + 'typechoUsers/userBindStatus';
-}), (0, _defineProperty2.default)(_module$exports, "setScan", function setScan() {
-  return API_URL + 'typechoUsers/setScan';
-}), (0, _defineProperty2.default)(_module$exports, "userStatus", function userStatus() {
-  return API_URL + 'typechoUsers/userStatus';
-}), (0, _defineProperty2.default)(_module$exports, "regConfig", function regConfig() {
-  return API_URL + 'typechoUsers/regConfig';
-}), (0, _defineProperty2.default)(_module$exports, "signOut", function signOut() {
-  return API_URL + 'typechoUsers/signOut';
-}), (0, _defineProperty2.default)(_module$exports, "madeInvitation", function madeInvitation() {
-  return API_URL + 'typechoUsers/madeInvitation';
-}), (0, _defineProperty2.default)(_module$exports, "invitationList", function invitationList() {
-  return API_URL + 'typechoUsers/invitationList';
-}), (0, _defineProperty2.default)(_module$exports, "invitationExcel", function invitationExcel() {
-  return API_URL + 'typechoUsers/invitationExcel';
-}), (0, _defineProperty2.default)(_module$exports, "setClientId", function setClientId() {
-  return API_URL + 'typechoUsers/setClientId';
-}), (0, _defineProperty2.default)(_module$exports, "getInbox", function getInbox() {
-  return API_URL + 'typechoUsers/inbox';
-}), (0, _defineProperty2.default)(_module$exports, "unreadNum", function unreadNum() {
-  return API_URL + 'typechoUsers/unreadNum';
-}), (0, _defineProperty2.default)(_module$exports, "setRead", function setRead() {
-  return API_URL + 'typechoUsers/setRead';
-}), (0, _defineProperty2.default)(_module$exports, "sendUser", function sendUser() {
-  return API_URL + 'typechoUsers/sendUser';
-}), (0, _defineProperty2.default)(_module$exports, "follow", function follow() {
-  return API_URL + 'typechoUsers/follow';
-}), (0, _defineProperty2.default)(_module$exports, "isFollow", function isFollow() {
-  return API_URL + 'typechoUsers/isFollow';
-}), (0, _defineProperty2.default)(_module$exports, "followList", function followList() {
-  return API_URL + 'typechoUsers/followList';
-}), (0, _defineProperty2.default)(_module$exports, "fanList", function fanList() {
-  return API_URL + 'typechoUsers/fanList';
-}), (0, _defineProperty2.default)(_module$exports, "selfDelete", function selfDelete() {
-  return API_URL + 'typechoUsers/selfDelete';
-}), (0, _defineProperty2.default)(_module$exports, "banUser", function banUser() {
-  return API_URL + 'typechoUsers/banUser';
-}), (0, _defineProperty2.default)(_module$exports, "unblockUser", function unblockUser() {
-  return API_URL + 'typechoUsers/unblockUser';
-}), (0, _defineProperty2.default)(_module$exports, "violationList", function violationList() {
-  return API_URL + 'typechoUsers/violationList';
-}), (0, _defineProperty2.default)(_module$exports, "userClean", function userClean() {
-  return API_URL + 'typechoUsers/userClean';
-}), (0, _defineProperty2.default)(_module$exports, "restrict", function restrict() {
-  return API_URL + 'typechoUsers/restrict';
-}), (0, _defineProperty2.default)(_module$exports, "getMarkList", function getMarkList() {
-  return API_URL + 'typechoUserlog/markList';
-}), (0, _defineProperty2.default)(_module$exports, "getIsMark", function getIsMark() {
-  return API_URL + 'typechoUserlog/isMark';
-}), (0, _defineProperty2.default)(_module$exports, "addLog", function addLog() {
-  return API_URL + 'typechoUserlog/addLog';
-}), (0, _defineProperty2.default)(_module$exports, "removeLog", function removeLog() {
-  return API_URL + 'typechoUserlog/removeLog';
-}), (0, _defineProperty2.default)(_module$exports, "removeLog", function removeLog() {
-  return API_URL + 'typechoUserlog/removeLog';
-}), (0, _defineProperty2.default)(_module$exports, "dataClean", function dataClean() {
-  return API_URL + 'typechoUserlog/dataClean';
-}), (0, _defineProperty2.default)(_module$exports, "adsGift", function adsGift() {
-  return API_URL + 'typechoUserlog/adsGift';
-}), (0, _defineProperty2.default)(_module$exports, "adsGiftNotify", function adsGiftNotify() {
-  return API_URL + 'typechoUserlog/adsGiftNotify';
-}), (0, _defineProperty2.default)(_module$exports, "getCommentsList", function getCommentsList() {
-  return API_URL + 'typechoComments/commentsList';
-}), (0, _defineProperty2.default)(_module$exports, "setComments", function setComments() {
-  return API_URL + 'typechoComments/commentsAdd';
-}), (0, _defineProperty2.default)(_module$exports, "commentsDelete", function commentsDelete() {
-  return API_URL + 'typechoComments/commentsDelete';
-}), (0, _defineProperty2.default)(_module$exports, "commentsAudit", function commentsAudit() {
-  return API_URL + 'typechoComments/commentsAudit';
-}), (0, _defineProperty2.default)(_module$exports, "getMetaContents", function getMetaContents() {
-  return API_URL + 'typechoMetas/selectContents';
-}), (0, _defineProperty2.default)(_module$exports, "getMetasList", function getMetasList() {
-  return API_URL + 'typechoMetas/metasList';
-}), (0, _defineProperty2.default)(_module$exports, "geMetaInfo", function geMetaInfo() {
-  return API_URL + 'typechoMetas/metaInfo';
-}), (0, _defineProperty2.default)(_module$exports, "editMeta", function editMeta() {
-  return API_URL + 'typechoMetas/editMeta';
-}), (0, _defineProperty2.default)(_module$exports, "addMeta", function addMeta() {
-  return API_URL + 'typechoMetas/addMeta';
-}), (0, _defineProperty2.default)(_module$exports, "getContentsList", function getContentsList() {
-  return API_URL + 'typechoContents/contentsList';
-}), (0, _defineProperty2.default)(_module$exports, "getContentsInfo", function getContentsInfo() {
-  return API_URL + 'typechoContents/contentsInfo';
-}), (0, _defineProperty2.default)(_module$exports, "contentsAdd", function contentsAdd() {
-  return API_URL + 'typechoContents/contentsAdd';
-}), (0, _defineProperty2.default)(_module$exports, "contentsUpdate", function contentsUpdate() {
-  return API_URL + 'typechoContents/contentsUpdate';
-}), (0, _defineProperty2.default)(_module$exports, "contentsImage", function contentsImage() {
-  return API_URL + 'typechoContents/ImagePexels';
-}), (0, _defineProperty2.default)(_module$exports, "allData", function allData() {
-  return API_URL + 'typechoContents/allData';
-}), (0, _defineProperty2.default)(_module$exports, "contentsDelete", function contentsDelete() {
-  return API_URL + 'typechoContents/contentsDelete';
-}), (0, _defineProperty2.default)(_module$exports, "contentsAudit", function contentsAudit() {
-  return API_URL + 'typechoContents/contentsAudit';
-}), (0, _defineProperty2.default)(_module$exports, "getForeverblog", function getForeverblog() {
-  return API_URL + 'typechoContents/foreverblog';
-}), (0, _defineProperty2.default)(_module$exports, "isCommnet", function isCommnet() {
-  return API_URL + 'typechoContents/isCommnet';
-}), (0, _defineProperty2.default)(_module$exports, "toRecommend", function toRecommend() {
-  return API_URL + 'typechoContents/toRecommend';
-}), (0, _defineProperty2.default)(_module$exports, "toTop", function toTop() {
-  return API_URL + 'typechoContents/addTop';
-}), (0, _defineProperty2.default)(_module$exports, "toSwiper", function toSwiper() {
-  return API_URL + 'typechoContents/addSwiper';
-}), (0, _defineProperty2.default)(_module$exports, "setFields", function setFields() {
-  return API_URL + 'typechoContents/setFields';
-}), (0, _defineProperty2.default)(_module$exports, "contentConfig", function contentConfig() {
-  return API_URL + 'typechoContents/contentConfig';
-}), (0, _defineProperty2.default)(_module$exports, "rewardList", function rewardList() {
-  return API_URL + 'typechoContents/rewardList';
-}), (0, _defineProperty2.default)(_module$exports, "upload", function upload() {
-  return API_URL + 'upload/full';
-}), (0, _defineProperty2.default)(_module$exports, "shopList", function shopList() {
-  return API_URL + 'typechoShop/shopList';
-}), (0, _defineProperty2.default)(_module$exports, "shopInfo", function shopInfo() {
-  return API_URL + 'typechoShop/shopInfo';
-}), (0, _defineProperty2.default)(_module$exports, "addShop", function addShop() {
-  return API_URL + 'typechoShop/addShop';
-}), (0, _defineProperty2.default)(_module$exports, "editShop", function editShop() {
-  return API_URL + 'typechoShop/editShop';
-}), (0, _defineProperty2.default)(_module$exports, "deleteShop", function deleteShop() {
-  return API_URL + 'typechoShop/deleteShop';
-}), (0, _defineProperty2.default)(_module$exports, "deleteShopType", function deleteShopType() {
-  return API_URL + 'typechoShop/deleteShopType';
-}), (0, _defineProperty2.default)(_module$exports, "shopTypeInfo", function shopTypeInfo() {
-  return API_URL + 'typechoShop/shopTypeInfo';
-}), (0, _defineProperty2.default)(_module$exports, "editShopType", function editShopType() {
-  return API_URL + 'typechoShop/editShopType';
-}), (0, _defineProperty2.default)(_module$exports, "addShopType", function addShopType() {
-  return API_URL + 'typechoShop/addShopType';
-}), (0, _defineProperty2.default)(_module$exports, "shopTypeList", function shopTypeList() {
-  return API_URL + 'typechoShop/shopTypeList';
-}), (0, _defineProperty2.default)(_module$exports, "buyShop", function buyShop() {
-  return API_URL + 'typechoShop/buyShop';
-}), (0, _defineProperty2.default)(_module$exports, "isBuyShop", function isBuyShop() {
-  return API_URL + 'typechoShop/isBuyShop';
-}), (0, _defineProperty2.default)(_module$exports, "auditShop", function auditShop() {
-  return API_URL + 'typechoShop/auditShop';
-}), (0, _defineProperty2.default)(_module$exports, "getVipInfo", function getVipInfo() {
-  return API_URL + 'typechoShop/vipInfo';
-}), (0, _defineProperty2.default)(_module$exports, "buyVIP", function buyVIP() {
-  return API_URL + 'typechoShop/buyVIP';
-}), (0, _defineProperty2.default)(_module$exports, "buyVIPpackage", function buyVIPpackage() {
-  return API_URL + 'typechoShop/buyVIPpackage';
-}), (0, _defineProperty2.default)(_module$exports, "orderList", function orderList() {
-  return API_URL + 'typechoUserlog/orderList';
-}), (0, _defineProperty2.default)(_module$exports, "orderSellList", function orderSellList() {
-  return API_URL + 'typechoUserlog/orderSellList';
-}), (0, _defineProperty2.default)(_module$exports, "mountShop", function mountShop() {
-  return API_URL + 'typechoShop/mountShop';
-}), (0, _defineProperty2.default)(_module$exports, "scancodePay", function scancodePay() {
-  return API_URL + 'pay/scancodePay';
-}), (0, _defineProperty2.default)(_module$exports, "wxPay", function wxPay() {
-  return API_URL + 'pay/WxPay';
-}), (0, _defineProperty2.default)(_module$exports, "tokenPay", function tokenPay() {
-  return API_URL + 'pay/tokenPay';
-}), (0, _defineProperty2.default)(_module$exports, "EPay", function EPay() {
-  return API_URL + 'pay/EPay';
-}), (0, _defineProperty2.default)(_module$exports, "qrCode", function qrCode() {
-  return API_URL + 'pay/qrCode';
-}), (0, _defineProperty2.default)(_module$exports, "payLogList", function payLogList() {
-  return API_URL + 'pay/payLogList';
-}), (0, _defineProperty2.default)(_module$exports, "tokenPayList", function tokenPayList() {
-  return API_URL + 'pay/tokenPayList';
-}), (0, _defineProperty2.default)(_module$exports, "tokenPayExcel", function tokenPayExcel() {
-  return API_URL + 'pay/tokenPayExcel';
-}), (0, _defineProperty2.default)(_module$exports, "madetoken", function madetoken() {
-  return API_URL + 'pay/madetoken';
-}), (0, _defineProperty2.default)(_module$exports, "financeList", function financeList() {
-  return API_URL + 'pay/financeList';
-}), (0, _defineProperty2.default)(_module$exports, "financeTotal", function financeTotal() {
-  return API_URL + 'pay/financeTotal';
-}), (0, _defineProperty2.default)(_module$exports, "adsConfig", function adsConfig() {
-  return API_URL + 'typechoAds/adsConfig';
-}), (0, _defineProperty2.default)(_module$exports, "adsInfo", function adsInfo() {
-  return API_URL + 'typechoAds/adsInfo';
-}), (0, _defineProperty2.default)(_module$exports, "addAds", function addAds() {
-  return API_URL + 'typechoAds/addAds';
-}), (0, _defineProperty2.default)(_module$exports, "adsList", function adsList() {
-  return API_URL + 'typechoAds/adsList';
-}), (0, _defineProperty2.default)(_module$exports, "editAds", function editAds() {
-  return API_URL + 'typechoAds/editAds';
-}), (0, _defineProperty2.default)(_module$exports, "deleteAds", function deleteAds() {
-  return API_URL + 'typechoAds/deleteAds';
-}), (0, _defineProperty2.default)(_module$exports, "auditAds", function auditAds() {
-  return API_URL + 'typechoAds/auditAds';
-}), (0, _defineProperty2.default)(_module$exports, "renewalAds", function renewalAds() {
-  return API_URL + 'typechoAds/renewalAds';
-}), (0, _defineProperty2.default)(_module$exports, "renewalAds", function renewalAds() {
-  return API_URL + 'typechoAds/renewalAds';
-}), (0, _defineProperty2.default)(_module$exports, "getPrivateChat", function getPrivateChat() {
-  return API_URL + 'typechoChat/getPrivateChat';
-}), (0, _defineProperty2.default)(_module$exports, "sendMsg", function sendMsg() {
-  return API_URL + 'typechoChat/sendMsg';
-}), (0, _defineProperty2.default)(_module$exports, "myChat", function myChat() {
-  return API_URL + 'typechoChat/myChat';
-}), (0, _defineProperty2.default)(_module$exports, "msgList", function msgList() {
-  return API_URL + 'typechoChat/msgList';
-}), (0, _defineProperty2.default)(_module$exports, "deleteChat", function deleteChat() {
-  return API_URL + 'typechoChat/deleteChat';
-}), (0, _defineProperty2.default)(_module$exports, "deleteMsg", function deleteMsg() {
-  return API_URL + 'typechoChat/deleteMsg';
-}), (0, _defineProperty2.default)(_module$exports, "createGroup", function createGroup() {
-  return API_URL + 'typechoChat/createGroup';
-}), (0, _defineProperty2.default)(_module$exports, "editGroup", function editGroup() {
-  return API_URL + 'typechoChat/editGroup';
-}), (0, _defineProperty2.default)(_module$exports, "allChat", function allChat() {
-  return API_URL + 'typechoChat/allChat';
-}), (0, _defineProperty2.default)(_module$exports, "banChat", function banChat() {
-  return API_URL + 'typechoChat/banChat';
-}), (0, _defineProperty2.default)(_module$exports, "groupInfo", function groupInfo() {
-  return API_URL + 'typechoChat/groupInfo';
-}), (0, _defineProperty2.default)(_module$exports, "addSpace", function addSpace() {
-  return API_URL + 'typechoSpace/addSpace';
-}), (0, _defineProperty2.default)(_module$exports, "editSpace", function editSpace() {
-  return API_URL + 'typechoSpace/editSpace';
-}), (0, _defineProperty2.default)(_module$exports, "spaceInfo", function spaceInfo() {
-  return API_URL + 'typechoSpace/spaceInfo';
-}), (0, _defineProperty2.default)(_module$exports, "spaceList", function spaceList() {
-  return API_URL + 'typechoSpace/spaceList';
-}), (0, _defineProperty2.default)(_module$exports, "myFollowSpace", function myFollowSpace() {
-  return API_URL + 'typechoSpace/myFollowSpace';
-}), (0, _defineProperty2.default)(_module$exports, "spaceDelete", function spaceDelete() {
-  return API_URL + 'typechoSpace/spaceDelete';
-}), (0, _defineProperty2.default)(_module$exports, "spaceLikes", function spaceLikes() {
-  return API_URL + 'typechoSpace/spaceLikes';
-}), (0, _defineProperty2.default)(_module$exports, "spaceReview", function spaceReview() {
-  return API_URL + 'typechoSpace/spaceReview';
-}), (0, _defineProperty2.default)(_module$exports, "spaceLock", function spaceLock() {
-  return API_URL + 'typechoSpace/spaceLock';
-}), (0, _defineProperty2.default)(_module$exports, "IsNull", function IsNull(obj) {
-  return obj != null && obj != undefined;
-}), (0, _defineProperty2.default)(_module$exports, "randomHexColor", function randomHexColor() {
-  //随机生成十六进制颜色
-  var hex = Math.floor(Math.random() * 16777216).toString(16); //生成ffffff以内16进制数
-  while (hex.length < 6) {
-    //while循环判断hex位数，少于6位前面加0凑够6位
-    hex = '0' + hex;
-  }
-  return '#' + hex; //返回‘#'开头16进制颜色
-}), (0, _defineProperty2.default)(_module$exports, "formatDate", function formatDate(datetime) {
-  var datetime = new Date(parseInt(datetime * 1000));
-  // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
-  var year = datetime.getFullYear(),
-    month = ("0" + (datetime.getMonth() + 1)).slice(-2),
-    date = ("0" + datetime.getDate()).slice(-2),
-    hour = ("0" + datetime.getHours()).slice(-2),
-    minute = ("0" + datetime.getMinutes()).slice(-2);
-  //second = ("0" + date.getSeconds()).slice(-2);
-  // 拼接
-  var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
-  // 返回
-  return result;
-}), (0, _defineProperty2.default)(_module$exports, "removeObjectEmptyKey", function removeObjectEmptyKey(json) {
-  var value;
-  for (var key in json) {
-    if (json.hasOwnProperty(key)) {
-      value = json[key];
-      if (value === undefined || value === '' || value === null) {
-        delete json[key];
+  sendSMS: function sendSMS() {
+    return API_URL + 'typechoUsers/sendSMS';
+  },
+  SendCode: function SendCode() {
+    return API_URL + 'typechoUsers/SendCode';
+  },
+  userApi: function userApi() {
+    return API_URL + 'typechoUsers/apiLogin';
+  },
+  userRegister: function userRegister() {
+    return API_URL + 'typechoUsers/userRegister';
+  },
+  userFoget: function userFoget() {
+    return API_URL + 'typechoUsers/userFoget';
+  },
+  getUserInfo: function getUserInfo() {
+    return API_URL + 'typechoUsers/userInfo';
+  },
+  getUserList: function getUserList() {
+    return API_URL + 'typechoUsers/userList';
+  },
+  userEdit: function userEdit() {
+    return API_URL + 'typechoUsers/userEdit';
+  },
+  getUserData: function getUserData() {
+    return API_URL + 'typechoUsers/userData';
+  },
+  userDelete: function userDelete() {
+    return API_URL + 'typechoUsers/userDelete';
+  },
+  userRecharge: function userRecharge() {
+    return API_URL + 'typechoUsers/userRecharge';
+  },
+  userWithdraw: function userWithdraw() {
+    return API_URL + 'typechoUsers/userWithdraw';
+  },
+  withdrawList: function withdrawList() {
+    return API_URL + 'typechoUsers/withdrawList';
+  },
+  withdrawStatus: function withdrawStatus() {
+    return API_URL + 'typechoUsers/withdrawStatus';
+  },
+  manageUserEdit: function manageUserEdit() {
+    return API_URL + 'typechoUsers/manageUserEdit';
+  },
+  apiBind: function apiBind() {
+    return API_URL + 'typechoUsers/apiBind';
+  },
+  userBindStatus: function userBindStatus() {
+    return API_URL + 'typechoUsers/userBindStatus';
+  },
+  setScan: function setScan() {
+    return API_URL + 'typechoUsers/setScan';
+  },
+  userStatus: function userStatus() {
+    return API_URL + 'typechoUsers/userStatus';
+  },
+  regConfig: function regConfig() {
+    return API_URL + 'typechoUsers/regConfig';
+  },
+  signOut: function signOut() {
+    return API_URL + 'typechoUsers/signOut';
+  },
+  //邀请码注册相关
+  madeInvitation: function madeInvitation() {
+    return API_URL + 'typechoUsers/madeInvitation';
+  },
+  invitationList: function invitationList() {
+    return API_URL + 'typechoUsers/invitationList';
+  },
+  invitationExcel: function invitationExcel() {
+    return API_URL + 'typechoUsers/invitationExcel';
+  },
+  setClientId: function setClientId() {
+    return API_URL + 'typechoUsers/setClientId';
+  },
+  //消息相关
+  getInbox: function getInbox() {
+    return API_URL + 'typechoUsers/inbox';
+  },
+  unreadNum: function unreadNum() {
+    return API_URL + 'typechoUsers/unreadNum';
+  },
+  setRead: function setRead() {
+    return API_URL + 'typechoUsers/setRead';
+  },
+  sendUser: function sendUser() {
+    return API_URL + 'typechoUsers/sendUser';
+  },
+  //关注
+  follow: function follow() {
+    return API_URL + 'typechoUsers/follow';
+  },
+  isFollow: function isFollow() {
+    return API_URL + 'typechoUsers/isFollow';
+  },
+  followList: function followList() {
+    return API_URL + 'typechoUsers/followList';
+  },
+  fanList: function fanList() {
+    return API_URL + 'typechoUsers/fanList';
+  },
+  selfDelete: function selfDelete() {
+    return API_URL + 'typechoUsers/selfDelete';
+  },
+  //封禁
+  banUser: function banUser() {
+    return API_URL + 'typechoUsers/banUser';
+  },
+  unblockUser: function unblockUser() {
+    return API_URL + 'typechoUsers/unblockUser';
+  },
+  violationList: function violationList() {
+    return API_URL + 'typechoUsers/violationList';
+  },
+  userClean: function userClean() {
+    return API_URL + 'typechoUsers/userClean';
+  },
+  restrict: function restrict() {
+    return API_URL + 'typechoUsers/restrict';
+  },
+  getKaptcha: function getKaptcha() {
+    return API_URL + 'typechoUsers/getKaptcha';
+  },
+  giftVIP: function giftVIP() {
+    return API_URL + 'typechoUsers/giftVIP';
+  },
+  getInvitationCode: function getInvitationCode() {
+    return API_URL + 'typechoUsers/getInvitationCode';
+  },
+  getMarkList: function getMarkList() {
+    return API_URL + 'typechoUserlog/markList';
+  },
+  getIsMark: function getIsMark() {
+    return API_URL + 'typechoUserlog/isMark';
+  },
+  addLog: function addLog() {
+    return API_URL + 'typechoUserlog/addLog';
+  },
+  removeLog: function removeLog() {
+    return API_URL + 'typechoUserlog/removeLog';
+  },
+  dataClean: function dataClean() {
+    return API_URL + 'typechoUserlog/dataClean';
+  },
+  adsGift: function adsGift() {
+    return API_URL + 'typechoUserlog/adsGift';
+  },
+  adsGiftNotify: function adsGiftNotify() {
+    return API_URL + 'typechoUserlog/adsGiftNotify';
+  },
+  getCommentsList: function getCommentsList() {
+    return API_URL + 'typechoComments/commentsList';
+  },
+  setComments: function setComments() {
+    return API_URL + 'typechoComments/commentsAdd';
+  },
+  commentsDelete: function commentsDelete() {
+    return API_URL + 'typechoComments/commentsDelete';
+  },
+  commentsAudit: function commentsAudit() {
+    return API_URL + 'typechoComments/commentsAudit';
+  },
+  //根据标签或者分类获取文章
+  getMetaContents: function getMetaContents() {
+    return API_URL + 'typechoMetas/selectContents';
+  },
+  getMetasList: function getMetasList() {
+    return API_URL + 'typechoMetas/metasList';
+  },
+  geMetaInfo: function geMetaInfo() {
+    return API_URL + 'typechoMetas/metaInfo';
+  },
+  editMeta: function editMeta() {
+    return API_URL + 'typechoMetas/editMeta';
+  },
+  deleteMeta: function deleteMeta() {
+    return API_URL + 'typechoMetas/deleteMeta';
+  },
+  addMeta: function addMeta() {
+    return API_URL + 'typechoMetas/addMeta';
+  },
+  getContentsList: function getContentsList() {
+    return API_URL + 'typechoContents/contentsList';
+  },
+  getContentsInfo: function getContentsInfo() {
+    return API_URL + 'typechoContents/contentsInfo';
+  },
+  contentsAdd: function contentsAdd() {
+    return API_URL + 'typechoContents/contentsAdd';
+  },
+  contentsUpdate: function contentsUpdate() {
+    return API_URL + 'typechoContents/contentsUpdate';
+  },
+  contentsImage: function contentsImage() {
+    return API_URL + 'typechoContents/ImagePexels';
+  },
+  allData: function allData() {
+    return API_URL + 'typechoContents/allData';
+  },
+  contentsDelete: function contentsDelete() {
+    return API_URL + 'typechoContents/contentsDelete';
+  },
+  contentsAudit: function contentsAudit() {
+    return API_URL + 'typechoContents/contentsAudit';
+  },
+  getForeverblog: function getForeverblog() {
+    return API_URL + 'typechoContents/foreverblog';
+  },
+  //文章是否评论过
+  isCommnet: function isCommnet() {
+    return API_URL + 'typechoContents/isCommnet';
+  },
+  //文章推荐
+  toRecommend: function toRecommend() {
+    return API_URL + 'typechoContents/toRecommend';
+  },
+  //文章置顶
+  toTop: function toTop() {
+    return API_URL + 'typechoContents/addTop';
+  },
+  //文章轮播
+  toSwiper: function toSwiper() {
+    return API_URL + 'typechoContents/addSwiper';
+  },
+  //设置自定义字段
+  setFields: function setFields() {
+    return API_URL + 'typechoContents/setFields';
+  },
+  contentConfig: function contentConfig() {
+    return API_URL + 'typechoContents/contentConfig';
+  },
+  rewardList: function rewardList() {
+    return API_URL + 'typechoContents/rewardList';
+  },
+  //下面这个方法涉及图片上传，根据上方的uploadType进行调整
+  upload: function upload() {
+    return API_URL + 'upload/full';
+  },
+  shopList: function shopList() {
+    return API_URL + 'typechoShop/shopList';
+  },
+  shopInfo: function shopInfo() {
+    return API_URL + 'typechoShop/shopInfo';
+  },
+  addShop: function addShop() {
+    return API_URL + 'typechoShop/addShop';
+  },
+  editShop: function editShop() {
+    return API_URL + 'typechoShop/editShop';
+  },
+  deleteShop: function deleteShop() {
+    return API_URL + 'typechoShop/deleteShop';
+  },
+  deleteShopType: function deleteShopType() {
+    return API_URL + 'typechoShop/deleteShopType';
+  },
+  shopTypeInfo: function shopTypeInfo() {
+    return API_URL + 'typechoShop/shopTypeInfo';
+  },
+  editShopType: function editShopType() {
+    return API_URL + 'typechoShop/editShopType';
+  },
+  addShopType: function addShopType() {
+    return API_URL + 'typechoShop/addShopType';
+  },
+  shopTypeList: function shopTypeList() {
+    return API_URL + 'typechoShop/shopTypeList';
+  },
+  buyShop: function buyShop() {
+    return API_URL + 'typechoShop/buyShop';
+  },
+  isBuyShop: function isBuyShop() {
+    return API_URL + 'typechoShop/isBuyShop';
+  },
+  auditShop: function auditShop() {
+    return API_URL + 'typechoShop/auditShop';
+  },
+  getVipInfo: function getVipInfo() {
+    return API_URL + 'typechoShop/vipInfo';
+  },
+  buyVIP: function buyVIP() {
+    return API_URL + 'typechoShop/buyVIP';
+  },
+  buyVIPpackage: function buyVIPpackage() {
+    return API_URL + 'typechoShop/buyVIPpackage';
+  },
+  orderList: function orderList() {
+    return API_URL + 'typechoUserlog/orderList';
+  },
+  orderSellList: function orderSellList() {
+    return API_URL + 'typechoUserlog/orderSellList';
+  },
+  //文章挂载商品
+  mountShop: function mountShop() {
+    return API_URL + 'typechoShop/mountShop';
+  },
+  //支付宝当面付
+  scancodePay: function scancodePay() {
+    return API_URL + 'pay/scancodePay';
+  },
+  //微信支付（官方）
+  wxPay: function wxPay() {
+    return API_URL + 'pay/WxPay';
+  },
+  //卡密充值
+  tokenPay: function tokenPay() {
+    return API_URL + 'pay/tokenPay';
+  },
+  //易支付
+  EPay: function EPay() {
+    return API_URL + 'pay/EPay';
+  },
+  //充值二维码生成
+  qrCode: function qrCode() {
+    return API_URL + 'pay/qrCode';
+  },
+  payLogList: function payLogList() {
+    return API_URL + 'pay/payLogList';
+  },
+  //卡密充值相关
+  tokenPayList: function tokenPayList() {
+    return API_URL + 'pay/tokenPayList';
+  },
+  tokenPayExcel: function tokenPayExcel() {
+    return API_URL + 'pay/tokenPayExcel';
+  },
+  //生成卡密
+  madetoken: function madetoken() {
+    return API_URL + 'pay/madetoken';
+  },
+  //财务记录
+  financeList: function financeList() {
+    return API_URL + 'pay/financeList';
+  },
+  financeTotal: function financeTotal() {
+    return API_URL + 'pay/financeTotal';
+  },
+  //付费广告
+  adsConfig: function adsConfig() {
+    return API_URL + 'typechoAds/adsConfig';
+  },
+  adsInfo: function adsInfo() {
+    return API_URL + 'typechoAds/adsInfo';
+  },
+  addAds: function addAds() {
+    return API_URL + 'typechoAds/addAds';
+  },
+  adsList: function adsList() {
+    return API_URL + 'typechoAds/adsList';
+  },
+  editAds: function editAds() {
+    return API_URL + 'typechoAds/editAds';
+  },
+  deleteAds: function deleteAds() {
+    return API_URL + 'typechoAds/deleteAds';
+  },
+  auditAds: function auditAds() {
+    return API_URL + 'typechoAds/auditAds';
+  },
+  renewalAds: function renewalAds() {
+    return API_URL + 'typechoAds/renewalAds';
+  },
+  //聊天
+  getPrivateChat: function getPrivateChat() {
+    return API_URL + 'typechoChat/getPrivateChat';
+  },
+  sendMsg: function sendMsg() {
+    return API_URL + 'typechoChat/sendMsg';
+  },
+  myChat: function myChat() {
+    return API_URL + 'typechoChat/myChat';
+  },
+  msgList: function msgList() {
+    return API_URL + 'typechoChat/msgList';
+  },
+  deleteChat: function deleteChat() {
+    return API_URL + 'typechoChat/deleteChat';
+  },
+  deleteMsg: function deleteMsg() {
+    return API_URL + 'typechoChat/deleteMsg';
+  },
+  createGroup: function createGroup() {
+    return API_URL + 'typechoChat/createGroup';
+  },
+  editGroup: function editGroup() {
+    return API_URL + 'typechoChat/editGroup';
+  },
+  allChat: function allChat() {
+    return API_URL + 'typechoChat/allChat';
+  },
+  banChat: function banChat() {
+    return API_URL + 'typechoChat/banChat';
+  },
+  groupInfo: function groupInfo() {
+    return API_URL + 'typechoChat/groupInfo';
+  },
+  //动态开始
+
+  addSpace: function addSpace() {
+    return API_URL + 'typechoSpace/addSpace';
+  },
+  editSpace: function editSpace() {
+    return API_URL + 'typechoSpace/editSpace';
+  },
+  spaceInfo: function spaceInfo() {
+    return API_URL + 'typechoSpace/spaceInfo';
+  },
+  spaceList: function spaceList() {
+    return API_URL + 'typechoSpace/spaceList';
+  },
+  myFollowSpace: function myFollowSpace() {
+    return API_URL + 'typechoSpace/myFollowSpace';
+  },
+  spaceDelete: function spaceDelete() {
+    return API_URL + 'typechoSpace/spaceDelete';
+  },
+  spaceLikes: function spaceLikes() {
+    return API_URL + 'typechoSpace/spaceLikes';
+  },
+  spaceReview: function spaceReview() {
+    return API_URL + 'typechoSpace/spaceReview';
+  },
+  spaceLock: function spaceLock() {
+    return API_URL + 'typechoSpace/spaceLock';
+  },
+  //圈子开始
+  addSection: function addSection() {
+    return API_URL + 'typechoForum/addSection';
+  },
+  editSection: function editSection() {
+    return API_URL + 'typechoForum/editSection';
+  },
+  sectionList: function sectionList() {
+    return API_URL + 'typechoForum/sectionList';
+  },
+  deleteSection: function deleteSection() {
+    return API_URL + 'typechoForum/deleteSection';
+  },
+  sectionInfo: function sectionInfo() {
+    return API_URL + 'typechoForum/sectionInfo';
+  },
+  sectionFollow: function sectionFollow() {
+    return API_URL + 'typechoForum/sectionFollow';
+  },
+  sectionClock: function sectionClock() {
+    return API_URL + 'typechoForum/sectionClock';
+  },
+  setModerator: function setModerator() {
+    return API_URL + 'typechoForum/setModerator';
+  },
+  deleteModerator: function deleteModerator() {
+    return API_URL + 'typechoForum/deleteModerator';
+  },
+  postForum: function postForum() {
+    return API_URL + 'typechoForum/post';
+  },
+  editForum: function editForum() {
+    return API_URL + 'typechoForum/edit';
+  },
+  postInfoForum: function postInfoForum() {
+    return API_URL + 'typechoForum/postInfo';
+  },
+  postList: function postList() {
+    return API_URL + 'typechoForum/postList';
+  },
+  postLikes: function postLikes() {
+    return API_URL + 'typechoForum/postLikes';
+  },
+  postLock: function postLock() {
+    return API_URL + 'typechoForum/postLock';
+  },
+  postReview: function postReview() {
+    return API_URL + 'typechoForum/postReview';
+  },
+  postTop: function postTop() {
+    return API_URL + 'typechoForum/postTop';
+  },
+  postRecommend: function postRecommend() {
+    return API_URL + 'typechoForum/postRecommend';
+  },
+  postSwiper: function postSwiper() {
+    return API_URL + 'typechoForum/postSwiper';
+  },
+  postDelete: function postDelete() {
+    return API_URL + 'typechoForum/postDelete';
+  },
+  sectionClockList: function sectionClockList() {
+    return API_URL + 'typechoForum/sectionClockList';
+  },
+  postComments: function postComments() {
+    return API_URL + 'typechoForum/postComments';
+  },
+  postCommentLike: function postCommentLike() {
+    return API_URL + 'typechoForum/postCommentLike';
+  },
+  postCommentDelete: function postCommentDelete() {
+    return API_URL + 'typechoForum/postCommentDelete';
+  },
+  postCommentList: function postCommentList() {
+    return API_URL + 'typechoForum/postCommentList';
+  },
+  userPurview: function userPurview() {
+    return API_URL + 'typechoForum/userPurview';
+  },
+  postMark: function postMark() {
+    return API_URL + 'typechoForum/postMark';
+  },
+  postMarkList: function postMarkList() {
+    return API_URL + 'typechoForum/postMarkList';
+  },
+  postReward: function postReward() {
+    return API_URL + 'typechoForum/postReward';
+  },
+  postRewardList: function postRewardList() {
+    return API_URL + 'typechoForum/postRewardList';
+  },
+  sectionRecommend: function sectionRecommend() {
+    return API_URL + 'typechoForum/sectionRecommend';
+  },
+  vipTypeList: function vipTypeList() {
+    return API_URL + 'system/vipTypeList';
+  },
+  IsNull: function IsNull(obj) {
+    return obj != null && obj != undefined;
+  },
+  randomHexColor: function randomHexColor() {
+    //随机生成十六进制颜色
+    var hex = Math.floor(Math.random() * 16777216).toString(16); //生成ffffff以内16进制数
+    while (hex.length < 6) {
+      //while循环判断hex位数，少于6位前面加0凑够6位
+      hex = '0' + hex;
+    }
+    return '#' + hex; //返回‘#'开头16进制颜色
+  },
+  //获取日期
+  formatDate: function formatDate(datetime) {
+    var datetime = new Date(parseInt(datetime * 1000));
+    // 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+    var year = datetime.getFullYear(),
+      month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+      date = ("0" + datetime.getDate()).slice(-2),
+      hour = ("0" + datetime.getHours()).slice(-2),
+      minute = ("0" + datetime.getMinutes()).slice(-2);
+    //second = ("0" + date.getSeconds()).slice(-2);
+    // 拼接
+    var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+    // 返回
+    return result;
+  },
+  //移除数据中的空对象
+  removeObjectEmptyKey: function removeObjectEmptyKey(json) {
+    var value;
+    for (var key in json) {
+      if (json.hasOwnProperty(key)) {
+        value = json[key];
+        if (value === undefined || value === '' || value === null) {
+          delete json[key];
+        }
       }
     }
+    return json;
+  },
+  //获取用户当前等级
+  getLever: function getLever(num) {
+    var lv = 0;
+    if (num < 10) {
+      lv = 0;
+    } else if (num >= 10 && num < 50) {
+      lv = 1;
+    } else if (num >= 50 && num < 200) {
+      lv = 2;
+    } else if (num >= 200 && num < 500) {
+      lv = 3;
+    } else if (num >= 500 && num < 1000) {
+      lv = 4;
+    } else if (num >= 1000 && num < 2000) {
+      lv = 5;
+    } else if (num >= 2000 && num < 5000) {
+      lv = 6;
+    } else if (num >= 5000) {
+      lv = 7;
+    }
+    return lv;
   }
-  return json;
-}), (0, _defineProperty2.default)(_module$exports, "getLever", function getLever(num) {
-  var lv = 0;
-  if (num < 10) {
-    lv = 0;
-  } else if (num >= 10 && num < 50) {
-    lv = 1;
-  } else if (num >= 50 && num < 200) {
-    lv = 2;
-  } else if (num >= 200 && num < 500) {
-    lv = 3;
-  } else if (num >= 500 && num < 1000) {
-    lv = 4;
-  } else if (num >= 1000 && num < 2000) {
-    lv = 5;
-  } else if (num >= 2000 && num < 5000) {
-    lv = 6;
-  } else if (num >= 5000) {
-    lv = 7;
-  }
-  return lv;
-}), _module$exports);
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
 
 /***/ 42:
-/*!*****************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/js_sdk/mp-storage/mp-storage/index.js ***!
-  \*****************************************************************/
+/*!***********************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/js_sdk/mp-storage/mp-storage/index.js ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18171,9 +18451,9 @@ if ((typeof window === "undefined" ? "undefined" : (0, _typeof2.default)(window)
 /***/ }),
 
 /***/ 43:
-/*!****************************************!*\
-  !*** E:/APPpro/voss/规则之树/utils/net.js ***!
-  \****************************************/
+/*!**********************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/utils/net.js ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

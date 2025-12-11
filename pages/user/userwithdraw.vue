@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -20,12 +20,12 @@
 				<button class="cu-btn bg-blue margin-tb-sm lg">提现记录</button>
 			</view>
 		</view>
-		<view class="cur-assets">当前积分：<text class="text-red">{{assets}}</text></view>
+		<view class="cur-assets">当前{{currencyName}}：<text class="text-red">{{assets}}</text></view>
 		<form>
 			
 			<view class="cu-form-group margin-top">
-				<view class="title">积分</view>
-				<input placeholder="请输入提现积分" name="input" type="number" v-model="num"></input>
+				<view class="title">{{currencyName}}</view>
+				<input :placeholder="'请输入提现'+currencyName" name="input" type="number" v-model="num"></input>
 			</view>
 		</form>
 		<view class="userrecharge-intro userwithdraw-box">
@@ -36,13 +36,13 @@
 				1.提现申请发起后，将会在<text class="text-red text-bold">24小时</text>内审核并打款到您设置的账户，所以在提现前，请<text class="text-blue" @tap="topay">设置</text>自己的收款信息。
 			</view>
 			<view class="userrecharge-intro-text">
-				2.提现金额与网站积分的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低提现<text class="text-red text-bold"> 5000 </text>积分，网站将收取<text class="text-red text-bold">5%</text>手续费。
+				2.提现金额与网站{{currencyName}}的比例为<text class="text-red text-bold"> 1:{{scale}} </text>，最低提现<text class="text-red text-bold"> 5000 </text>{{currencyName}}，网站将收取<text class="text-red text-bold">5%</text>手续费。
 			</view>
 			<view class="userrecharge-intro-text">
 				3.如果未收到提现款，请先查看提现记录中的数据，并立即反馈。
 			</view>
 			<view class="userrecharge-intro-text">
-				4.在提现处于审核状态时，不会扣除用户积分。
+				4.在提现处于审核状态时，不会扣除用户{{currencyName}}。
 			</view>
 		</view>
 		<!--  #ifdef MP -->
@@ -71,6 +71,7 @@
 				token:'',
 				assets:"",
 				scale:0,
+				currencyName:"",
 				
 			}
 		},
@@ -82,7 +83,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.userStatus();
 			that.getVipInfo();
@@ -92,6 +93,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.currencyName = that.$API.getCurrencyName();
 		},
 		methods: {
 			back(){
@@ -152,7 +154,7 @@
 				}
 				if(that.num< 5000){
 					uni.showToast({
-					    title:"最低提现5000积分",
+					    title:"最低提现5000"+that.currencyName,
 						icon:'none',
 						duration: 1000,
 						position:'bottom',

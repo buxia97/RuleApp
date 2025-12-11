@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -28,7 +28,7 @@
 								
 							</view>
 							<view class="order-btn">
-								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/scale}}</text>
+								<text class="text-red">{{item.num}} {{currencyName}} = ￥ {{item.num/scale}}</text>
 								<text class="text-blue order-status" v-if="item.cid==-1">审核中</text>
 								<text class="text-green order-status" v-if="item.cid==0">已成功</text>
 								<text class="text-red order-status" v-if="item.cid==-2">被拒绝</text>
@@ -85,7 +85,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.page=1;
 			that.getVipInfo();

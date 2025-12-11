@@ -1,5 +1,5 @@
 <template>
-	<view :class="AppStyle">
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -35,8 +35,8 @@
 					<view class="order-time">{{formatDate(item.created)}}</view>
 				</view>
 				<view class="order-btn" v-if="item.shopInfo">
-					<text class="text-red">{{item.shopInfo.price}} 积分</text>
-					<text class="text-green margin-left" @tap="toMerchant(item.merchantEmail)">联系商家</text>
+					<text class="text-red">{{item.shopInfo.price}} {{currencyName}}</text>
+					<text class="text-green margin-left" @tap="getUserInfo(item.shopInfo.uid)">联系商家</text>
 					<text class="text-blue" @tap="toInfo(item.shopInfo)">查看收费内容</text>
 				</view>
 			</view>
@@ -83,6 +83,7 @@
 				
 				modalName: null,
 				isLoading:0,
+				currencyName:""
 			}
 		},
 		onPullDownRefresh(){
@@ -96,7 +97,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				that.token=localStorage.getItem('token');
@@ -108,6 +109,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.currencyName = that.$API.getCurrencyName();
 			
 		},
 		methods: {
@@ -237,6 +239,101 @@
 				textarea.remove();
 				
 				// #endif
+			},
+			getUserInfo(touid){
+				var that = this;
+				that.$Net.request({
+					
+					url: that.$API.getUserInfo(),
+					data:{
+						"key":touid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var name = res.data.data.name;
+							if(res.data.data.screenName){
+								name = res.data.data.screenName;
+							}else{
+								name = res.data.data.name;
+							}
+						
+							that.getPrivateChat(touid,name)
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			getPrivateChat(touid,name){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title: "请先登录",
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
+					return false;
+				}
+				var data={
+					"touid":touid,
+					"token":token
+				}
+				uni.showLoading({
+					title: "加载中"
+				});
+				that.$Net.request({
+					
+					url: that.$API.getPrivateChat(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						//console.log(JSON.stringify(res));
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						
+						if(res.data.code==1){
+							var uid = that.uid;
+							var chatid = res.data.data
+							uni.redirectTo({
+							    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
+							});
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function(res) {
+						setTimeout(function () {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
 			},
 
 		}

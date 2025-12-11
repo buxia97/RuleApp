@@ -225,6 +225,7 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
+				that.getMyChat(false);
 				that.msgLoading = setInterval(() => {
 				 that.getMyChat(false);
 				}, 3000);

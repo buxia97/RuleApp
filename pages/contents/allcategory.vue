@@ -39,7 +39,7 @@
 						
 					</view>
 					<view class="category-content grid col-2"  v-if="item.subList.length>0">
-						<view class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @tap="toCategoryContents(data)">
+						<view class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @tap="toCategoryContents(data)" :key="i">
 							<view class="category-main">
 								{{data.name}}
 							</view>

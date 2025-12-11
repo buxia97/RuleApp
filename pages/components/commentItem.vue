@@ -1,14 +1,25 @@
 <template>
 	<view>
-		<view class="cu-item">
+		<view class="cu-item" v-if="!isBan">
 			<view class="cu-list menu-avatar comment">
-				<text class="copy-comment" @tap="ToCopy(item.text)">
-					复制
-				</text>
+				<view class="comment-header-more">
+					<text class="cuIcon-moreandroid" @tap="moreShow=!moreShow"></text>
+					<view class="info-more-links" :class="moreShow?'moreShow':''">
+						<view class="info-more-links-box"  @tap="ToCopy(item.text)">
+							<text class="cuIcon-copy"></text>复制
+						</view>
+						<view class="info-more-links-box" @tap="report(item.text,3)">
+							<text class="cuIcon-warn"></text>举报
+						</view>
+						<view class="info-more-links-box" @tap="goMyBan(item.authorId)">
+							<text class="cuIcon-attentionforbidfill"></text>拉黑Ta
+						</view>
+					</view>
+				</view>
 				<view class="cu-item">
 					<view class="cu-avatar round" @tap="toUserContents(item)" :style="item.style"></view>
 					<view class="content">
-						<view class="text-grey">
+						<view class="text-black">
 						<block v-if="item.isvip>0">
 							<block v-if="item.vip==1">
 								<text class="text-red">
@@ -50,7 +61,10 @@
 							</view>
 						</view>
 						<view class="margin-top-sm flex justify-between">
-							<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+							<view class="text-gray text-df">{{formatDate(item.created)}}
+							
+							<text class="margin-left-sm">{{getLocal(item.local)}}</text>
+							</view>
 							<view>
 								<text class="cuIcon-messagefill text-gray margin-left-sm" @tap="commentsAdd(item.author+'：'+item.text,item.coid,1,item.cid)"></text>
 							</view>
@@ -99,7 +113,9 @@
 			return {
 				owo:owo,
 				owoList:[],
-				group:""
+				group:"",
+				moreShow:false,
+				isBan:false,
 			};
 		},
 		created(){
@@ -254,6 +270,71 @@
 					url: '/pages/manage/banuser?uid='+uid
 				});
 			},
+			goMyBan(uid){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"id":uid,
+					"type":"banUser",
+					"token":token
+				}
+				uni.showModal({
+					title: '确定要拉黑评论发布者吗？拉黑后，评论也将不显示！',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.ban(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: "拉黑成功！",
+											icon: 'none'
+										})
+										that.isBan = true;
+										that.myBanLog();
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 			toDelete(id){
 				var that = this;
 				var token = "";
@@ -308,6 +389,21 @@
 					}
 				});
 			},
+			getLocal(local){
+				var that = this;
+				if(local&&local!=''){
+					var local_arr = local.split("|");
+					if(!local_arr[3]||local_arr[3]==0){
+						return local_arr[2];
+					}else{
+						return local_arr[3];
+					}
+					
+				}else{
+					return "未知"
+				}
+				
+			},
 			ToCopy(text) {
 				var that = this;
 				// #ifdef APP-PLUS
@@ -335,6 +431,55 @@
 				
 				// #endif
 			},
+			report(title,type){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/user/report?title='+title+"&type="+type
+				});
+			},
+			myBanLog(){
+				var that = this;
+				var token = ""
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}else{
+					return false;
+				}
+				that.$Net.request({
+					
+					url: that.$API.myBanLog(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var myBanLog = res.data.data;
+							localStorage.setItem('myBanLog',myBanLog);
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 		}
 	}
 </script>

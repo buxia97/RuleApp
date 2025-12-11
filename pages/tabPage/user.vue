@@ -10,20 +10,20 @@
 				</view>
 				<!--  #ifdef H5 -->
 				<view class="action header-btn">
-					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
-						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
-					</text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<!-- <text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum > 99?'99+':noticeSum}}</text>
+					</text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
 				</view>
 				<!--  #endif -->
 				<!--  #ifdef APP-PLUS -->
 				<view class="action header-btn">
-					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
-						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
-					</text>
+					<!-- <text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum > 99?'99+':noticeSum}}</text>
+					</text> -->
 					<text class="cuIcon-scan" @tap="toScan"></text>
-					<!-- <text class="cuIcon-clothes" @tap="goStyle"></text> -->
+					<text class="cuIcon-clothes" @tap="goStyle"></text>
 					
 				</view>
 				<!--  #endif -->
@@ -101,7 +101,7 @@
 						</view>
 						
 						<view class="user-data-box" @tap="toLink('/pages/user/assets')">
-							<view class="user-data-value">{{formatNumber(userData.assets)}}</view>
+							<view class="user-data-value text-yellow">{{formatNumber(userData.assets)}}</view>
 							<view class="user-data-title">{{currencyName}}</view>
 						</view>
 					</view>
@@ -206,7 +206,31 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box"  @tap="toPage('帮助与反馈',feedback)">
+				<view class="index-sort-box" @tap="toLink('/pages/forum/myPost')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #ff460e;">
+								<text class="cuIcon-discoverfill"></text>
+							</view>
+							<view class="index-sort-text">
+								我的帖子
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" @tap="toLink('/pages/user/identify')">
+					<waves itemClass="butclass">
+						<view class="index-sort-main">
+							<view class="index-sort-i" style="background-color: #ff5356;">
+								<text class="cuIcon-profilefill"></text>
+							</view>
+							<view class="index-sort-text">
+								实人认证
+							</view>
+						</view>
+					</waves>
+				</view>
+				<view class="index-sort-box" @tap="toLink('/pages/user/help')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i" style="background-color: #be5f00;">
@@ -261,22 +285,27 @@
 				</view>
 			</view>
 		</block>
-
+		<block v-if="group!='administrator'&&group!='editor'">
+			<view class="data-box" v-if="isModerator">
+				<view class="cu-list menu" @tap="toManage">
+					<view class="cu-item">
+						<view class="content">
+							<text class="cuIcon-colorlens text-red"></text>
+							<text>圈子管理中心 </text>
+						</view>
+						<view class="action">
+							<text class="text-sm text-gray">仅圈子管理成员可见</text>
+							<text class="cuIcon-right"></text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
 		
 		<!--  #endif -->
 		<view class="data-box">
 			
 			<view class="cu-list menu">
-
-				<view class="cu-item" @tap="toSetUp">
-					<view class="content">
-						<text class="cuIcon-settingsfill text-blue"></text>
-						<text>账户和设置</text>
-					</view>
-					<view class="action">
-						<text class="cuIcon-right"></text>
-					</view>
-				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="cu-item" @tap="toRebate" v-if="userInfo!=null">
 					<view class="content">
@@ -288,10 +317,37 @@
 					</view>
 				</view>
 				<!--  #endif -->
+				<view class="cu-item" @tap="changeStyle" v-else>
+					<view class="content">
+						<text class="cuIcon-explorefill text-purple"></text>
+						<text>切换到文章风格</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
+				<view class="cu-item" @tap="toUserList">
+					<view class="content">
+						<text class="cuIcon-location text-pink"></text>
+						<text>用户筛选</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
+				<view class="cu-item" @tap="toSetUp">
+					<view class="content">
+						<text class="cuIcon-settingsfill text-black"></text>
+						<text>账户和设置</text>
+					</view>
+					<view class="action">
+						<text class="cuIcon-right"></text>
+					</view>
+				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="cu-item" @tap="toMedia">
 					<view class="content">
-						<text class="cuIcon-newfill text-blue"></text>
+						<text class="cuIcon-newfill text-black"></text>
 						<text>社交媒体</text>
 					</view>
 					<view class="action">
@@ -301,13 +357,14 @@
 				<!--  #endif -->
 				<view class="cu-item" @tap="toAbout()">
 					<view class="content">
-						<text class="cuIcon-servicefill text-blue"></text>
+						<text class="cuIcon-servicefill text-black"></text>
 						<text>关于我们</text>
 					</view>
 					<view class="action">
 						<text class="cuIcon-right"></text>
 					</view>
 				</view>
+				<view style="width: 100%; height: 100upx;"></view>
 				
 			</view>
 		</view>
@@ -327,7 +384,30 @@
 			
 			</view>
 		</view>
+		<view class="cu-modal" :class="modalName=='changeStyle'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">切换到圈子风格</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<block v-if="curFullStyle=='index'">
+						通过此操作可以进入圈子内容为主的首页模式，此页面仅供预览，重启APP后将还原。
+					</block>
+					<block v-else>
+						通过此入口可重新回到文章为主的首页模式，也可以通过重启APP回归。
+					</block>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn bg-purple" @tap="changeStyle">确认切换</button>
 		
+					</view>
+				</view>
+			</view>
+		</view>
 		<view style="width: 100%; height: 100upx;"></view>
 	</view>
 </template>
@@ -358,11 +438,8 @@
 				group:"",
 				avatar:"",
 				
-				feedback:this.$API.GetFeedback(),
 				userlvStyle:"",
 				lvStyle:"",
-				
-				aboutme:this.$API.GetAboutme(),
 				
 				isLoginShow:false,
 				
@@ -409,6 +486,7 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
+				that.userPurview();
 				if(localStorage.getItem('curFullStyle')){
 					that.curFullStyle = localStorage.getItem('curFullStyle');
 				}
@@ -431,6 +509,7 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
+				that.userPurview();
 			});
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -542,6 +621,7 @@
 								// }
 								
 							}
+							//判断用户是否存在信息未配置
 							
 						}
 					},
@@ -830,6 +910,13 @@
 				    url: '/pages/user/fanList?uid='+uid
 				});
 			},
+			toUserList(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/userlist'
+				});
+			},
 			toUserContents(){
 				var that = this;
 				var name = that.name;
@@ -840,6 +927,57 @@
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
 				});
 			},
+			userPurview(){
+				var that = this;
+				var uid = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					uid=userInfo.uid;
+				}
+				var data = {
+					"uid":uid,
+				}
+				that.$Net.request({
+					url: that.$API.userPurview(),
+					data:data,
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								that.isModerator = true;
+							}
+						}
+					},
+					fail: function(res) {
+						
+					}
+				})
+				
+			},
+			changeStyle(){
+				var that = this;
+				if(that.modalName==null){
+					that.modalName = "changeStyle";
+					return false;
+				}
+				if(that.curFullStyle=="index"){
+					uni.redirectTo({
+						url: '/pages/home/index2'
+					})
+				}else{
+					uni.redirectTo({
+						url: '/pages/home/index'
+					})
+				}
+				
+			}
 		},
 		// #ifdef APP-PLUS
 		components: {

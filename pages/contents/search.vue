@@ -13,7 +13,7 @@
 				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="search-form radius" :style="[{top:StatusBar + 'px'}]">
 					<text class="cuIcon-search"></text>
-					<input v-model="searchText" :adjust-position="false" type="text" placeholder="搜索文章、评论、用户" confirm-type="search"></input>
+					<input v-model="searchText" :adjust-position="false" type="text" placeholder="搜索全平台内容" confirm-type="search"></input>
 					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
 				</view>
 				<view class="action">
@@ -33,16 +33,20 @@
 				</view>
 			</view>
 			<!--  #endif -->
-			<view class="search-type grid col-4">
+			<view class="search-type grid col-5">
 				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 					<text>文章</text>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
+				
 				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 					<text>评论</text>
 				</view>
 				<view class="search-type-box" @tap="toType(3)" :class="type==3?'active':''">
 					<text>动态</text>
+				</view>
+				<view class="search-type-box" @tap="toType(4)" :class="type==4?'active':''">
+					<text>帖子</text>
 				</view>
 				<!--  #endif -->
 				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
@@ -93,6 +97,19 @@
 			</view>
 			
 			<!--动态结束-->
+			<!--论坛帖子-->
+			<view class="forum-list-main" v-if="type==4">
+				<view class="no-data" v-if="postList.length==0">
+					<text class="cuIcon-text"></text>暂时没有数据
+				</view>
+				<block v-for="(item,index) in postList" :key="index">
+					<forumItem :item="item" :myPurview="0"></forumItem>
+				</block>
+				<view class="load-more" @tap="loadMore" v-if="postList.length>0">
+					<text>{{moreText}}</text>
+				</view>
+			</view>
+			<!--论坛帖子结束-->
 			<view class="cu-list menu-avatar userList" style="margin-top: 4upx;" v-if="type==2">
 				<view class="no-data" v-if="userList.length==0">
 					<text class="cuIcon-text"></text>
@@ -153,6 +170,8 @@
 				
 				spaceList:[],
 				
+				postList:[],
+				
 				searchText:"",
 				
 				type:0,
@@ -178,6 +197,8 @@
 				that.getCommentsList(false)
 			}else if(that.type==2){
 				that.getUserList(false)
+			}else if(that.type==4){
+				that.getPostList(false)
 			}else{
 				that.getSpaceList(false)
 			}
@@ -193,7 +214,7 @@
 			that.isLoad=0;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.getContentsList(false);
 			
@@ -227,6 +248,8 @@
 					that.getCommentsList(false)
 				}else if(i==2){
 					that.getUserList(false)
+				}else if(i==4){
+					that.getPostList(false)
 				}else{
 					that.getSpaceList(false)
 				}
@@ -246,6 +269,8 @@
 					that.getCommentsList(true)
 				}else if(that.type==2){
 					that.getUserList(true)
+				}else if(that.type==4){
+					that.getPostList(true)
 				}else{
 					that.getSpaceList(true)
 				}
@@ -254,13 +279,15 @@
 			reload(){
 				var that = this;
 				if(that.type==0){
-					that.getContentsList();
+					that.getContentsList(false);
 				}else if(that.type==1){
-					that.getCommentsList()
+					that.getCommentsList(false)
 				}else if(that.type==2){
-					that.getUserList()
+					that.getUserList(false)
+				}else if(that.type==4){
+					that.getPostList(false)
 				}else{
-					that.getSpaceList()
+					that.getSpaceList(false)
 				}
 				
 			},
@@ -270,13 +297,15 @@
 				var searchText = that.searchText;
 				that.page=1;
 				if(that.type==0){
-					that.getContentsList();
+					that.getContentsList(false);
 				}else if(that.type==1){
-					that.getCommentsList()
+					that.getCommentsList(false)
 				}else if(that.type==2){
-					that.getUserList()
+					that.getUserList(false)
+				}else if(that.type==4){
+					that.getPostList(false)
 				}else{
-					that.getSpaceList()
+					that.getSpaceList(false)
 				}
 
 			},
@@ -285,13 +314,15 @@
 				that.searchText = "";
 				that.page=1;
 				if(that.type==0){
-					that.getContentsList();
+					that.getContentsList(false);
 				}else if(that.type==1){
-					that.getCommentsList()
+					that.getCommentsList(false)
 				}else if(that.type==2){
-					that.getUserList()
+					that.getUserList(false)
+				}else if(that.type==4){
+					that.getPostList(false)
 				}else{
-					that.getSpaceList()
+					that.getSpaceList(false)
 				}
 			},
 			getContentsList(isPage){
@@ -303,6 +334,7 @@
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
+				
 				}
 				var page = that.page;
 				if(isPage){
@@ -321,7 +353,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.changeLoading = 1;
@@ -340,7 +372,81 @@
 								
 								
 							}else{
-								that.moreText="没有更多数据了";
+								if(isPage){
+									that.moreText="没有更多数据了";
+								}else{
+									that.contentsList = [];
+								}
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						that.changeLoading = 1;
+						that.moreText="加载更多";
+						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			getPostList(isPage){
+				var that = this;
+				var page = that.page;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				if(isPage){
+					page++;
+				}
+				var data = {
+					"status":"1",
+				}
+				that.$Net.request({
+					url: that.$API.postList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"searchKey":that.searchText,
+						"order":"created",
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "post",
+					dataType: 'json',
+					success: function(res) {
+						that.changeLoading = 1;
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								var postList = list;
+								for(var i in postList){
+									postList[i].isAds = 0;
+								}
+								if(isPage){
+									that.page++;
+									that.postList = that.postList.concat(postList);
+								}else{
+									that.postList = postList;
+								}
+							}else{
+								if(isPage){
+									that.moreText="没有更多数据了";
+								}else{
+									that.postList = [];
+								}
+								
 							}
 						}
 						var timer = setTimeout(function() {
@@ -487,6 +593,9 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
+				var data = {
+					"status":1
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -494,6 +603,7 @@
 				that.$Net.request({
 					url: that.$API.spaceList(),
 					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":10,
 						"page":page,
 						"order":"created",
@@ -513,6 +623,9 @@
 							var list = res.data.data;
 							var spaceList = [];
 							for(var i in list){
+								
+								list[i].banShow = false;
+								list[i].isBan = false;
 								if(list[i].type==0){
 									if(list[i].pic){
 										var pic = list[i].pic;

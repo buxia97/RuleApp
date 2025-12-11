@@ -11,12 +11,31 @@
 					</block>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toSearch" v-if="vid!=uid">
-					<text class="cuIcon-search"></text>
-				</view>
-				<view class="action" @tap="toEdit" v-else>
-					<text class="cuIcon-writefill"></text>
-				</view>
+				<block v-if="vid!=uid">
+					<view class="action info-btn">
+						<!--  #ifdef H5 || APP-PLUS -->
+						<text class="cuIcon-moreandroid" @tap="moreShow=!moreShow"></text>
+						<!--  #endif -->
+						<view class="info-more-links" :class="moreShow?'moreShow':''">
+							<view class="info-more-links-box"  @tap="toSearch">
+								<text class="cuIcon-search"></text>搜索
+							</view>
+							<view class="info-more-links-box" @tap="report(name,2)">
+								<text class="cuIcon-warn"></text>举报
+							</view>
+							<view class="info-more-links-box" @tap="goMyBan(uid)" v-if="isBan==0">
+								<text class="cuIcon-attentionforbidfill"></text>拉黑
+							</view>
+						</view>
+					</view>
+				</block>
+				<block v-else>
+					<view class="action" @tap="toEdit">
+						<text class="cuIcon-writefill"></text>
+					</view>
+				</block>
+				
+				
 				<!--  #endif -->
 			</view>
 		</view>
@@ -61,7 +80,12 @@
 								<!-- <text class="userlv" :style="getUserLvStyle(lv)">{{getUserLv(lv)}}</text> -->
 								<text class="userlv" :style="getLvStyle(experience)">{{getLv(experience)}}</text>
 								<!--  #endif -->
+								<block v-if="birthday&&birthday!=0">
+									<text class="age-ico bg-blue">{{getAge(birthday)}}岁</text>
+								</block>
 								<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
+								<text class="identifyLv bg-mauve cuIcon-selection" v-if="identifyConsumer==1"></text>
+								<text class="identifyLv bg-yellow cuIcon-selection" v-if="identifyCompany==1"></text>
 								
 								<!-- </view> -->
 								<view class="user-info-data">
@@ -77,6 +101,10 @@
 										<text class="user-data-num">{{commentsNum}}</text>
 										<text class="user-data-label">评论</text>
 									</text>
+								</view>
+								<view class="user-info-local">
+									<text>IP归属：{{getLocal(local)}} </text>
+									<text class="margin-left-sm" @click="toUserList(region)">所在地：<text class="text-blue">{{getRegion(region)}}</text> </text>
 								</view>
 							</view>
 							
@@ -95,73 +123,106 @@
 					
 				</view>
 			</view>
-			<!--  #ifdef H5 || APP-PLUS -->
-			<view class="search-type grid col-3">
-				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
-					<text>文章</text>
-				</view>
-				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
-					<text>动态</text>
-				</view>
-				<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
-					<text>评论</text>
-				</view>
-				
-			</view>
-			<!--  #endif -->
-			<!--  #ifdef MP -->
-			<view class="search-type grid col-2">
-				<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
-					<text>文章</text>
-				</view>
-				<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
-					<text>动态</text>
-				</view>
-			</view>
-			<!--  #endif -->
-			
-			<view class="cu-card article no-card" v-if="type==0">
-				<block v-for="(item,index) in contentsList" :key="index" v-if="type==0">
-					<articleItem :item="item"></articleItem>
-				</block>
-				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
-					<text>{{moreText}}</text>
-				</view>
-				<view class="no-data" v-if="contentsList.length==0">
-					<text class="cuIcon-text"></text>
-					暂时没有数据
-				</view>
-
-			</view>
-			<view class="search-space" v-if="type==2">
-				<view class="no-data" v-if="spaceList.length==0">
-					<text class="cuIcon-text"></text>
-					暂时没有动态
-				</view>
-				<spaceItem :spaceList="spaceList"></spaceItem>
-				<view class="load-more" @tap="loadMore" v-if="spaceList.length>0">
-					<text>{{moreText}}</text>
-				</view>
-			</view>
-			<!--评论-->
-			<view class="cu-list menu-avatar" v-if="type==1">
-				<view class="no-data" v-if="commentsList.length==0">
-					<text class="cuIcon-text"></text>
-					暂时没有评论
-				</view>
-				<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
-					<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
-						<commentItem :item="item" :isHead="false"></commentItem>
-					</block>
+			<template  v-if="isBan==0">
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="search-type grid col-4">
+					<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
+						<text>文章</text>
+					</view>
+					<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
+						<text>动态</text>
+					</view>
+					<view class="search-type-box" @tap="toType(3)" :class="type==3?'active':''">
+						<text>帖子</text>
+					</view>
+					<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
+						<text>评论</text>
+					</view>
 					
 				</view>
-				
-				<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
-					<text>{{moreText}}</text>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="search-type grid col-2">
+					<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
+						<text>文章</text>
+					</view>
+					<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
+						<text>动态</text>
+					</view>
 				</view>
-			</view>
-			<!--评论结束-->
+				<!--  #endif -->
+				
+				<view class="cu-card article no-card" v-if="type==0">
+					<block v-for="(item,index) in contentsList" :key="index" v-if="type==0">
+						<articleItem :item="item"></articleItem>
+					</block>
+					<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
+						<text>{{moreText}}</text>
+					</view>
+					<view class="no-data" v-if="contentsList.length==0">
+						<text class="cuIcon-text"></text>
+						暂时没有数据
+					</view>
+				
+				</view>
+				<view class="search-space" v-if="type==2">
+					<view class="no-data" v-if="spaceList.length==0">
+						<text class="cuIcon-text"></text>
+						暂时没有动态
+					</view>
+					<spaceItem :spaceList="spaceList"></spaceItem>
+					<view class="load-more" @tap="loadMore" v-if="spaceList.length>0">
+						<text>{{moreText}}</text>
+					</view>
+				</view>
+				<!--论坛帖子-->
+				<view class="forum-list-main" v-if="type==3">
+					<view class="no-data" v-if="postList.length==0">
+						<text class="cuIcon-text"></text>暂时没有帖子
+					</view>
+					<block v-for="(item,index) in postList" :key="index">
+						<forumItem :item="item" :myPurview="0"></forumItem>
+					</block>
+					<view class="load-more" @tap="loadMore" v-if="postList.length>0">
+						<text>{{moreText}}</text>
+					</view>
+				</view>
+				<!--论坛帖子结束-->
+				<!--评论-->
+				<view class="cu-list menu-avatar" v-if="type==1">
+					<view class="no-data" v-if="commentsList.length==0">
+						<text class="cuIcon-text"></text>
+						暂时没有评论
+					</view>
+					<view class="cu-card dynamic no-card" style="margin-top: 20upx;">
+						<block  v-for="(item,index) in commentsList" :key="index" v-if="commentsList.length>0">
+							<commentItem :item="item" :isHead="false"></commentItem>
+						</block>
+						
+					</view>
+					
+					<view class="load-more" @tap="loadMore" v-if="commentsList.length>0">
+						<text>{{moreText}}</text>
+					</view>
+				</view>
+				<!--评论结束-->
+			</template>
 			
+			<template v-else>
+				<view class="no-data" v-if="isBan>0">
+					<text class="cuIcon-text"></text>
+					<template v-if="isBan==2">
+						你已将对方拉黑，无法查看内容！
+						<view class="text-center margin-top-sm">
+							<text class="cu-btn bg-red" @tap="removeBan(uid)">解除拉黑</text>
+						</view>
+					</template>
+					<template v-if="isBan==1">
+						对方已将你拉黑，无法查看内容！
+					</template>
+					
+				</view>
+			</template>
 			<!--占位区域-->
 			<view style="width: 100%;height: 100upx; background-color: #f6f6f6;"></view>
 		</view>
@@ -214,6 +275,7 @@
 				
 				commentsList:[],
 				spaceList:[],
+				postList:[],
 				
 				userList:[],
 				owo:owo,
@@ -233,19 +295,31 @@
 				avatar:"",
 				name:"",
 				customize:"",
-				experience:"",
+				lv:"",
 				vip:"",
 				isvip:"",
 				introduce:"",
 				userBg:"",
+				region:"",
 				fanNum:0,
+				birthday:0,
 				contentsNum:0,
 				commentsNum:0,
+				isBan:0,
 				
 				scrollTop:0,
 				isFollow:0,
 				
 				vid:"",
+				
+				local:"",
+				
+				identifyCompany:0,
+				identifyConsumer:0,
+				
+				experience:0,
+				
+				moreShow:false
 				
 			}
 		},
@@ -286,6 +360,8 @@
 				that.getContentsList(false);
 			}else if(i==1){
 				that.getCommentsList(false)
+			}else if(i==3){
+				that.getPostList(false)
 			}else{
 				that.getSpaceList(false)
 			}
@@ -300,6 +376,7 @@
 			that.uid =  res.uid;
 			that.avatar =  res.avatar;
 			// that.name =  res.name;
+			that.identifyStatus();
 			that.getIsFollow();
 			that.getUserInfo();
 			that.getUserData();
@@ -315,6 +392,18 @@
 			
 		},
 		methods: {
+			getRegion(regionStr){
+				var that = this;
+				if (!regionStr || typeof regionStr !== 'string') return '未设置'; // 空值或非字符串返回空
+				// 按 || 分割
+				const parts = regionStr.split('||');
+				// 过滤空字符串，并去掉首尾空格
+				const filtered = parts.map(p => (p ? p.trim() : '')).filter(p => p);
+				// 拼接成一个字符串
+				var regionStr =  filtered.join('');
+				regionStr = regionStr.replace("市辖区","");
+				return regionStr;
+			},
 			toType(i){
 				var that = this;
 				that.type=i;
@@ -325,6 +414,8 @@
 					that.getContentsList(false);
 				}else if(i==1){
 					that.getCommentsList(false)
+				}else if(i==3){
+					that.getPostList(false)
 				}else{
 					that.getSpaceList(false)
 				}
@@ -358,6 +449,56 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
 			},
+			identifyStatus() {
+				var that = this;
+				that.$Net.request({
+					
+					url: that.$API.identifyStatus(),
+					data:{
+						"uid":that.uid
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						
+						if(res.data.code==1){
+							
+							that.identifyCompany = res.data.data.identifyCompany;
+							that.identifyConsumer = res.data.data.identifyConsumer;
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			toUserList(regionStr){
+				var that = this;
+				if (!regionStr || typeof regionStr !== 'string') return false; // 空值或非字符串返回空
+				// 按 || 分割
+				const parts = regionStr.split('||');
+				// 过滤空字符串，并去掉首尾空格
+				const filtered = parts.map(p => (p ? p.trim() : '')).filter(p => p);
+				// 拼接成一个字符串
+				var regionStr =  filtered[2];
+				uni.navigateTo({
+				    url: '/pages/user/userlist?searchText='+regionStr
+				});
+			},
 			getUserInfo(){
 				var that = this;
 				that.$Net.request({
@@ -381,11 +522,14 @@
 							that.local = res.data.data.local;
 							that.vip = res.data.data.vip;
 							that.isvip = res.data.data.isvip;
-							that.experience = res.data.data.experience;
+							that.lv = res.data.data.lv;
+							that.isBan =res.data.data.isBan;
 							that.avatar = res.data.data.avatar;
 							that.customize = res.data.data.customize;
 							that.introduce = res.data.data.introduce;
-							
+							that.experience = res.data.data.experience;
+							that.region = res.data.data.region;
+							that.birthday = res.data.data.birthday;
 							if(res.data.data.userBg){
 								that.userBg = res.data.data.userBg;
 							}
@@ -408,6 +552,8 @@
 					that.getContentsList(true);
 				}else if(that.type==1){
 					that.getCommentsList(true)
+				}else if(that.type==3){
+					that.getPostList(true)
 				}else{
 					that.getSpaceList(true)
 				}
@@ -419,6 +565,8 @@
 					that.getContentsList(false);
 				}else if(that.type==1){
 					that.getCommentsList(false)
+				}else if(that.type==3){
+					that.getPostList(false)
 				}else{
 					that.getSpaceList(false)
 				}
@@ -935,6 +1083,90 @@
 					}
 				})
 			},
+			getPostList(isPage){
+				var that = this;
+				var page = that.page;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				if(isPage){
+					page++;
+				}
+				var data = {
+					"status":"1",
+					"authorId":that.uid,
+				}
+				that.$Net.request({
+					url: that.$API.postList(),
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"order":that.orderKey,
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								var postList = list;
+								for(var i in postList){
+									postList[i].isAds = 0;
+								}
+								if(isPage){
+									that.page++;
+									that.postList = that.postList.concat(postList);
+								}else{
+									that.postList = postList;
+								}
+							}else{
+								if(isPage){
+									that.moreText="没有更多数据了";
+								}else{
+									that.postList = [];
+								}
+								
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						that.changeLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			getLocal(local){
+				var that = this;
+				if(local&&local!=''){
+					var local_arr = local.split("|");
+					if(!local_arr[3]||local_arr[3]==0){
+						return local_arr[2];
+					}else{
+						return local_arr[3];
+					}
+					
+				}else{
+					return "未知"
+				}
+				
+			},
 			getLv(i){
 				var that = this;
 				if(!i){
@@ -953,6 +1185,206 @@
 				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
+			},
+			report(title,type){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.redirectTo({
+				    url: '/pages/user/report?title='+title+"&type="+type
+				});
+			},
+			getAge(birthday) {
+				if (!birthday || isNaN(birthday)||birthday==0) return null;
+	
+				const birth = new Date(birthday * 1000); // 转成毫秒
+				const today = new Date();
+	
+				let age = today.getFullYear() - birth.getFullYear();
+				const m = today.getMonth() - birth.getMonth();
+				const d = today.getDate() - birth.getDate();
+	
+				if (m < 0 || (m === 0 && d < 0)) {
+				  age--;
+				}
+	
+				return age >= 0 ? age : 0; // 防止负数
+			},
+			goMyBan(uid){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"id":uid,
+					"type":"banUser",
+					"token":token
+				}
+				uni.showModal({
+					title: "确定要拉黑Ta吗？拉黑后，将屏蔽该用户所有发布内容！",
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.ban(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										that.isBan = 2;
+										that.myBanLog();
+									}else{
+										if(res.data.msg=="用户未登录或Token验证失败"){
+											uni.showToast({
+												title: "请先登录",
+												icon: 'none'
+											})
+											uni.navigateTo({
+												url: '/pages/user/login'
+											});
+										}else{
+											uni.showToast({
+												title: res.data.msg,
+												icon: 'none'
+											})
+										}
+										
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			myBanLog(){
+				var that = this;
+				var token = ""
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}else{
+					return false;
+				}
+				that.$Net.request({
+					
+					url: that.$API.myBanLog(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var myBanLog = res.data.data;
+							localStorage.setItem('myBanLog',myBanLog);
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			removeBan(id){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"key":id,
+					"token":token
+				}
+				uni.showModal({
+					title: '确定要解除拉黑吗',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.removeBan(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									
+									
+									if(res.data.code==1){
+										uni.showToast({
+											title: "操作成功！5分钟左右生效！",
+											icon: 'none'
+										})
+										that.getUserInfo();
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
 			},
 		}
 	}

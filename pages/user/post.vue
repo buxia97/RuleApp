@@ -1,5 +1,5 @@
 <template>
-	<view class="post" :class="AppStyle">
+	<view class="post" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'},{top:jpHeight + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -287,6 +287,9 @@
 				toImg:false,
 				isSpace:false,
 				
+				//数据提交拦截，防止重复提交
+				submitStatus:false,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -297,7 +300,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -740,6 +743,10 @@
 			},
 			contentsAdd() {
 				var that = this;
+				if(that.submitStatus){
+					return false;
+				}
+				that.submitStatus = true;
 				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
@@ -780,9 +787,10 @@
 					method: "post",
 					dataType: 'json',
 					success: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
-						}, 1000);
+						}, 500);
 						uni.showToast({
 							title: res.data.msg,
 							icon: 'none'
@@ -792,14 +800,15 @@
 							localStorage.removeItem('ctag');
 							var timer = setTimeout(function() {
 								that.back();
-							}, 1000)
+							}, 500)
 							
 						}
 					},
 					fail: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
-						}, 1000);
+						}, 500);
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'
@@ -810,6 +819,10 @@
 			},
 			contentsUpdate() {
 				var that = this;
+				if(that.submitStatus){
+					return false;
+				}
+				that.submitStatus = true;
 				if (that.title == ""||that.category == ""||that.text == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
@@ -846,6 +859,7 @@
 					method: "post",
 					dataType: 'json',
 					success: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -863,6 +877,7 @@
 						}
 					},
 					fail: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -969,7 +984,7 @@
 							url: '/pages/user/login'
 						});
 						clearTimeout('timer')
-					}, 1000)
+					}, 500)
 					return false
 				}
 				var data = {

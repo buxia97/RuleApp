@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -66,6 +66,25 @@
 			<!--  #endif -->
 			
 		</form>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="commentsadd">确定</view>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -104,6 +123,14 @@
 				owoList:[],
 				OwOtype:"paopao",
 				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
+				
+				//数据提交拦截，防止重复提交
+				submitStatus:false,
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -114,7 +141,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			//获取用户信息
 			if(localStorage.getItem('userinfo')){
@@ -137,6 +164,9 @@
 			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
+			
+			that.kaptchaUrl = that.$API.getKaptcha();
+			that.getConfig();
 		},
 		methods: {
 			PickerChange(e) {
@@ -147,8 +177,34 @@
 					delta: 1
 				});
 			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
+			getConfig() {
+				var that = this;
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.verifyLevel = AppInfo.verifyLevel;
+					}catch(e){
+						console.log(e);
+					}
+					
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
 			commentsadd(){
 				var that = this;
+				if(that.submitStatus){
+					return false;
+				}
+				that.submitStatus = true;
 				if(that.token==""){
 					uni.showToast({
 					    title:"请先登录",
@@ -184,6 +240,12 @@
 					"parent":coid,
 					
 				}
+				if(that.verifyLevel>1){
+					if (that.verifyCode == "") {
+						that.modalName = 'kaptcha'
+						return false
+					}
+				}
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -193,7 +255,8 @@
 					data:{
 						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"token":that.token,
-						"text":that.text
+						"text":that.text,
+						'verifyCode':that.verifyCode
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -201,9 +264,12 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.submitStatus = false;
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
-						}, 1000);
+						}, 500);
 						uni.showToast({
 							title: res.data.msg,
 							icon: 'none'
@@ -211,14 +277,15 @@
 						if(res.data.code==1){
 							var timer = setTimeout(function() {
 								that.back();
-							}, 1000)
+							}, 500)
 							
 						}
 					},
 					fail: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
-						}, 1000);
+						}, 500);
 						uni.showToast({
 							title: "网络开小差了哦",
 							icon: 'none'

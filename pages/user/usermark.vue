@@ -15,32 +15,53 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="all-box">
-			<view class="no-data" v-if="contentsList.length==0">
-				<text class="cuIcon-text"></text>暂时没有数据
+			<view class="search-type grid col-2">
+				<view class="search-type-box" @tap="toType('article')" :class="type=='article'?'active':''">
+					<text>文章</text>
+				</view>
+				<view class="search-type-box" @tap="toType('forum')" :class="type=='forum'?'active':''">
+					<text>帖子</text>
+				</view>
 			</view>
-			<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
-				<view class="cu-item shadow">
-					<view class="title">
-						<view class="text-cut">{{item.title}}</view>
-					</view>
-					<view class="content">
-						<image v-if="item.images.length>0" :src="item.images[0]"
-						 mode="aspectFill"></image>
-						<view class="desc">
-							<view class="text-content"> {{subText(item.text,80)}}</view>
-							<view>
-								<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
-								<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
-								<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
-								<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+			<block v-if="type=='article'">
+				<view class="no-data" v-if="contentsList.length==0">
+					<text class="cuIcon-text"></text>暂时没有数据
+				</view>
+				<view class="cu-card article no-card" v-for="(item,index) in contentsList" :key="index"  @tap="toInfo(item)">
+					<view class="cu-item shadow">
+						<view class="title">
+							<view class="text-cut">{{item.title}}</view>
+						</view>
+						<view class="content">
+							<image v-if="item.images.length>0" :src="item.images[0]"
+							 mode="aspectFill"></image>
+							<view class="desc">
+								<view class="text-content"> {{subText(item.text,80)}}</view>
+								<view>
+									<view class="cu-tag data-author"><text class="cuIcon-attentionfill"></text>{{formatNumber(item.views)}}</view>
+									<view class="cu-tag data-author"><text class="cuIcon-appreciatefill"></text>{{item.likes}}</view>
+									<view class="cu-tag data-author"><text class="cuIcon-messagefill"></text>{{item.commentsNum}}</view>
+									<view class="cu-tag data-time">{{formatDate(item.created)}}</view>
+								</view>
 							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
-				<text>{{moreText}}</text>
-			</view>
+				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
+					<text>{{moreText}}</text>
+				</view>
+			</block>
+			<block v-if="type=='forum'">
+				<view class="no-data" v-if="forumList.length==0">
+					<text class="cuIcon-text"></text>暂时没有数据
+				</view>
+				<block v-for="(item,index) in forumList" :key="index">
+					<forumItem :item="item" :myPurview="0"></forumItem>
+				</block>
+				<view class="load-more" @tap="loadMore" v-if="forumList.length>0">
+					<text>{{moreText}}</text>
+				</view>
+			</block>
 			
 			
 
@@ -63,7 +84,7 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				page:1,
 				moreText:"加载更多",
@@ -71,7 +92,9 @@
 				isLoad:0,
 				token:"",
 				contentsList:[],
+				forumList:[],
 				isLoading:0,
+				type:"article"
 			}
 		},
 		onPullDownRefresh(){
@@ -93,7 +116,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				that.token=localStorage.getItem('token');
@@ -119,7 +142,23 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				that.isLoad=1;
-				that.getContentsList(true);
+				if(that.type=='article'){
+					that.getContentsList(true);
+				}else{
+					that.getPostMarkList(true);
+				}
+			},
+			toType(type){
+				var that = this;
+				that.type = type;
+				that.page = 1;
+				that.moreText="加载更多";
+				if(that.type=='article'){
+					that.getContentsList(false);
+				}else{
+					that.getPostMarkList(false);
+				}
+				
 			},
 			getContentsList(isPage){
 				var that = this;
@@ -161,9 +200,69 @@
 								}else{
 									that.contentsList = list;
 								}
+							}else{
+								that.moreText="没有更多文章了";
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						that.moreText="加载更多";
+						that.isLoad=0;
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
+			},
+			getPostMarkList(isPage){
+				var that = this;
+				if(that.token==""){
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				that.$Net.request({
+					url: that.$API.postMarkList(),
+					data:{
+						"limit":8,
+						"page":page,
+						"token":that.token,
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoad=0;
+						//console.log(JSON.stringify(res))
+						that.moreText="加载更多";
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								for(var i in list){
+									list[i].isAds = 0;
+								}
+								if(isPage){
+									that.page++;
+									that.forumList = that.forumList.concat(list);
+								}else{
+									that.forumList = list;
+								}
 								
-								
-								localStorage.setItem('userContentsList',JSON.stringify(that.contentsList));
 							}else{
 								that.moreText="没有更多文章了";
 							}

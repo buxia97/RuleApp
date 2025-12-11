@@ -14,17 +14,57 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box userrecharge">
-			<view class="userrecharge-type">
-				<!--  #ifdef H5 || APP-PLUS -->
-				<text class="cu-btn text-blue radius" @tap="toPayType(0)" :class="payType=='0'?'active':''">支付宝</text>
-				<!--  #endif -->
-				<text class="cu-btn text-blue radius" @tap="toPayType(1)" :class="payType=='1'?'active':''">微信支付</text>
-				<text class="cu-btn text-blue radius" @tap="toPayType(2)" :class="payType=='2'?'active':''">卡密充值</text>
-				<text class="cu-btn text-blue radius" @tap="toPayType(3)" :class="payType=='3'?'active':''">易支付</text>
+			<view class="userrecharge-type" v-if="AppInfo!=null">
+				<view class="payPackage grid col-3" v-if="payType!=3&&payType!=2">
+					<view class="payPackage-box" v-for="(item,index) in payPackageList" :key="index" :class="item.id==curPackageId?'active':''" @tap="setPackage(item)">
+						<view class="payPackage-box-main" >
+							<view class="payPackage-box-title text-blue">
+								{{item.price}}元
+							</view>
+							<view class="payPackage-box-num">
+								{{item.gold}}{{currencyName}}
+							</view>
+							<view class="payPackage-box-integral" v-if="item.integral>0">
+								送{{item.integral}}积分
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="userrecharge-type-title">
+					选择支付方式
+				</view>
+				<view class="userrecharge-type-main grid col-3">
+					<!--  #ifdef H5 || APP-PLUS -->
+					<view class="userrecharge-type-box" @tap="toPayType(0)" :class="payType=='0'?'active':''" v-if="AppInfo.switchAlipay==1">
+						<view class="userrecharge-type-concent">
+							<image src="/static/pay/alipay.png"></image>
+							<view class="userrecharge-type-text">支付宝</view>
+						</view>
+					</view>
+					<!--  #endif -->
+					<view class="userrecharge-type-box" @tap="toPayType(1)" :class="payType=='1'?'active':''" v-if="AppInfo.switchWxpay==1">
+						<view class="userrecharge-type-concent">
+							<image src="/static/pay/wxpay.png"></image>
+							<view class="userrecharge-type-text">微信支付</view>
+						</view>
+					</view>
+					<view class="userrecharge-type-box" @tap="toPayType(2)" :class="payType=='2'?'active':''" v-if="AppInfo.switchTokenpay==1">
+						<view class="userrecharge-type-concent">
+							<image src="/static/pay/km.png"></image>
+							<view class="userrecharge-type-text">卡密充值</view>
+						</view>
+					</view>
+					<view class="userrecharge-type-box" @tap="toPayType(3)" :class="payType=='3'?'active':''" v-if="AppInfo.switchEpay==1">
+						<view class="userrecharge-type-concent">
+							<image src="/static/pay/yzf.png"></image>
+							<view class="userrecharge-type-text">易支付</view>
+						</view>
+					</view>
+				</view>
 			</view>
 			<block  v-if="payType==1||payType==0">
 				<block v-if="isToPay==0">
-					<view class="userrecharge-form">
+					<view class="userrecharge-form" v-if="payPackageList.length==0">
 						<input placeholder="请输入充值金额(￥),最低5元" type="number" name="input" v-model="num"></input>
 						<button class="cu-btn bg-yellow radius" @tap="pay">确定充值</button>
 					</view>
@@ -109,7 +149,14 @@
 					3.如果充值金额未到账，请查看账户中的充值记录，并立即反馈。
 				</view>
 			</view>
+			<view style="width: 100%; height: 150upx;"></view>
 		</view>
+		<template v-if="isToPay==0">
+			<view class="recharge-bottom-btn"  v-if="payType==1||payType==0">
+				<button class="cu-btn bg-blue " @tap="pay">立即充值{{num}}元</button>
+			</view>
+		</template>
+		
 		<view class="cu-modal" :class="modalName=='Epay'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
@@ -128,6 +175,22 @@
 				</view>
 			</view>
 		</view>
+		<view class="cu-modal"  :class="modalName=='payStatus'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">支付状态</view>
+					<view class="action" >
+						<text class="text-red" @tap="hideModal">关闭</text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<text>如您已经完成支付，系统将自动将充值款项转入账户，您也可以可点击如下按钮，校验支付状态。</text>
+				</view>
+				<view class="text-center padding-xl">
+					<button class="cu-btn bg-blue" @tap="payStatus()">校验支付</button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -140,16 +203,21 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				
 				userInfo:null,
+				AppInfo:null,
 				token:"",
 				
 				payType:0,
 				isToPay:0,
-				num:"",
+				num:"10",
 				ePayType:"alipay",
+				
+				payPackageList:[],
+				curPackage:null,
+				curPackageId:0,
 				toEpayType:false,
 				
 				codeImg:'',
@@ -163,8 +231,11 @@
 				vipPrice:0,
 				scale:0,
 				
+				logid:0,
+				
 				
 				modalName: null,
+				currencyName:"",
 				
 				
 			}
@@ -175,6 +246,7 @@
 		},
 		onShow(){
 			var that = this;
+			that.currencyName = that.$API.getCurrencyName();
 			// #ifdef APP-PLUS
 			
 			plus.navigator.setStatusBarStyle("dark")
@@ -191,12 +263,22 @@
 			}
 			
 			that.getVipInfo();
+			if(localStorage.getItem('AppInfo')){
+				try{
+					that.AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+				}catch(e){
+					console.log(e);
+				}
+				
+			}
+			that.getPayPackageList();
 		},
 		onLoad() {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			
 		},
 		methods: {
 			back(){
@@ -213,7 +295,7 @@
 			toPayType(i){
 				var that = this;
 				that.payType = i;
-				that.num="";
+				//that.num="";
 				that.isToPay=0;
 				that.codeImg = "";
 			},
@@ -231,9 +313,13 @@
 					});
 					return false;
 				}
-				if(that.num<1){
+				var minPayNum = 5;
+				if(that.AppInfo.minPayNum){
+					minPayNum = that.AppInfo.minPayNum
+				}
+				if(that.num<minPayNum){
 					uni.showToast({
-						title: "最低充值金额5元",
+						title: "最低充值金额"+minPayNum+"元",
 						icon: 'none'
 					});
 					return false;
@@ -268,6 +354,10 @@
 					"num":that.num,
 					"token":token
 				}
+				//走套餐支付
+				if(that.curPackageId>0){
+					data.packageId = that.curPackageId;
+				}
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -285,10 +375,13 @@
 						}, 1000);
 						if(res.data.code==1){
 							var url = res.data.data;
+							that.pid = res.data.data.pid;
 							that.alipayUrl = "alipays://platformapi/startapp?appId=20000067&url="+encodeURI(url);
 							that.codeImg = that.$API.qrCode()+"?codeContent="+url;
 							that.isToPay = 1;
+							that.modalName="payStatus";
 							that.toAlipay();
+							
 						}else{
 							uni.showToast({
 								title: "支付接口异常",
@@ -321,6 +414,10 @@
 					"price":that.num,
 					"token":token
 				}
+				//走套餐支付
+				if(that.curPackageId>0){
+					data.packageId = that.curPackageId;
+				}
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -339,10 +436,13 @@
 						}, 1000);
 						if(res.data.code==1){
 							var url = res.data.data.data;
+							that.pid = res.data.data.pid;
 							that.wxpayUrl = url;
 							that.codeImg = that.$API.qrCode()+"?codeContent="+url;
 							that.isToPay = 1;
+							that.modalName="payStatus";
 							that.toWxpay();
+							
 						}else{
 							uni.showToast({
 								title: "支付接口异常",
@@ -362,6 +462,43 @@
 						})
 					}
 				});
+			},
+			setPackage(data){
+				var that = this;
+				that.curPackageId = data.id;
+				that.curPackage = data;
+				that.num = data.price;
+			},
+			getPayPackageList(){
+				var that = this;
+				that.$Net.request({
+					url: that.$API.payPackageList(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.payPackageList=res.data.data;
+							if(that.payPackageList.length > 0){
+								that.curPackageId = that.payPackageList[0].id;
+								that.curPackage = that.payPackageList[0];
+								that.num = that.payPackageList[0].price;
+							}
+						}
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+					}
+				})
 			},
 			tokenPay(){
 				var that = this;
@@ -439,7 +576,7 @@
 				plus.runtime.openURL(url) 
 				// #endif
 				// #ifdef H5
-				window.open(url)
+				//window.open(url)
 				// #endif
 				// #ifdef MP
 				that.dtImg();
@@ -530,9 +667,13 @@
 					});
 					return false;
 				}
-				if(that.num<5){
+				var minPayNum = 5;
+				if(that.AppInfo.minPayNum){
+					minPayNum = that.AppInfo.minPayNum
+				}
+				if(that.num<minPayNum){
 					uni.showToast({
-						title: "最低充值金额5元",
+						title: "最低充值金额"+minPayNum+"元",
 						icon: 'none'
 					});
 					return false;
@@ -560,6 +701,7 @@
 						}, 1000);
 						if(res.data.code==1){
 							var payapi = res.data.payapi;
+							that.pid = res.data.data.pid;
 							var payurl="";
 							if(res.data.data.payurl){
 								payurl = res.data.data.payurl;
@@ -650,6 +792,38 @@
 				
 				// #endif
 			},
+			payStatus(){
+				var that = this;
+				var data = {
+					"pid":that.pid,
+				}
+				that.$Net.request({
+					url: that.$API.payStatus(),
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							that.hideModal();
+							uni.showToast({
+								title: "充值完成",
+								icon: 'none'
+							})
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+						
+					},
+					fail: function(res) {
+						
+					}
+				})
+			}
 
 		},
 		components: {

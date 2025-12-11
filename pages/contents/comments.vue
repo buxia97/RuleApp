@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -67,11 +67,6 @@
 		},
 		onPullDownRefresh(){
 			var that = this;
-			that.page=1;
-			that.getCommentsList(false);
-			var timer = setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 1000);
 			
 		},
 		onReachBottom() {
@@ -85,7 +80,7 @@
 			that.getCommentsList(false);
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
@@ -126,18 +121,12 @@
 				if(isPage){
 					page++;
 				}
-				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token = userInfo.token;
-				}
 				that.$Net.request({
 					url: that.$API.getCommentsList(),
 					data:{
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'

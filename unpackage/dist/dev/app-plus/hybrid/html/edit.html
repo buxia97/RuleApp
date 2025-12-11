@@ -251,7 +251,7 @@
 						
 					</div>
 					<div class="category-content grid col-2"  v-if="item.subList.length>0">
-						<div class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @click="toCategoryContents(data)">
+						<div class="category-box"  :class="data.active==1?'active':''"  v-for="(data,i) in item.subList" @click="toCategoryContents(data)" :key="i">
 							<div class="category-main">
 								{{data.name}}
 							</div>
@@ -326,9 +326,18 @@
   			<div class="upload-tool">
 				<template v-if="isLink">
 					<div class="form" >
+						<div class="form-box">
+							<div class="form-input form-input-type">
+								<span :class="videoType=='link'?'act':''" @click="videoType='link',linkUrl=''">普通链</span>
+								<span :class="videoType=='bilibili'?'act':''" @click="videoType='bilibili',linkUrl=''">B站</span>
+							</div>
+						</div>
 						  <div class="form-box">
-							  <div class="form-input">
+							  <div class="form-input"  v-if="videoType=='link'">
 							  	  <input placeholder="输入视频地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+							  <div class="form-input"  v-if="videoType=='bilibili'">
+							  	  <input placeholder="输入B站外链代码地址" type="text" v-model="linkUrl" />
 							  </div>
 						  </div>
 						  <button type="button" style="background:#f57070" @click="setFileLink('video')">插入视频</button>
@@ -357,9 +366,20 @@
   			<div class="upload-tool">
 				<template v-if="isLink">
 					<div class="form" >
+							<div class="form-box">
+								<div class="form-input form-input-type">
+									<span :class="musicType=='link'?'act':''" @click="musicType='link',linkUrl=''">普通链</span>
+									<span :class="musicType=='163'?'act':''" @click="musicType='163',linkUrl=''">网易云</span>
+									<span :class="musicType=='qq'?'act':''" @click="musicType='qq',linkUrl=''">QQ音乐</span>
+								</div>
+							</div>
 						  <div class="form-box">
-							  <div class="form-input">
+							  
+							  <div class="form-input" v-if="musicType=='link'">
 							  	  <input placeholder="输入音频地址(需要http请求头)" type="text" v-model="linkUrl" />
+							  </div>
+							  <div class="form-input" v-else>
+							  	  <input placeholder="输入音乐ID（从分享链接获取）" type="text" v-model="linkUrl" />
 							  </div>
 						  </div>
 						  <button type="button" style="background:#f57070" @click="setFileLink('audio')">插入音频</button>
@@ -555,7 +575,9 @@ var wu = new Wu()
 	  shopID:0,
 	  uploadPicShow:false,
 	  uploadVideoShow:false,
+	  videoType:"link",
 	  uploadMusicShow:false,
+	  musicType:"link",
 	  uploadFileShow:false,
 	  expandShow:false,
 	  shopShow:false,
@@ -693,6 +715,7 @@ var wu = new Wu()
 				"limit":100,
 				"page":1,
 				"order":"order",
+				"token":that.token,
 				"searchKey":that.tagsText,
 			}
 			var url = that.apiUrl+'typechoMetas/metasList';
@@ -730,6 +753,7 @@ var wu = new Wu()
 				"limit":100,
 				"page":1,
 				"order":"order",
+				"token":that.token,
 				"searchKey":that.searchText,
 			}
 			var url = that.apiUrl+'typechoMetas/metasList';
@@ -1234,9 +1258,11 @@ var wu = new Wu()
 				"uid":that.uid,
 				"status":1,
 				"searchKey":that.shopsText
+				
 			}
 			var data = {
 				"searchParams":JSON.stringify(that.removeObjectEmptyKey(searchParams)),
+				"token":that.token,
 			}
 			var url = that.apiUrl+'typechoShop/shopList';
 			
@@ -1339,7 +1365,6 @@ var wu = new Wu()
 		},
 		
 		//上传的相关方法
-		//上传的相关方法
 		chooseImage() {
 		    var that = this;
 		    if (this.inputElement) {
@@ -1388,6 +1413,7 @@ var wu = new Wu()
 		
 		    this.inputElement.click();
 		},
+
 		chooseVideo() {
 		  var that = this;
 		  if (this.inputElement) {
@@ -1628,16 +1654,31 @@ var wu = new Wu()
 			if(type=="video"){
 				//调用自定义的方法
 				// quill.insertEmbed(length, "video", url);
-				curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
-				  url,
-				  controls: 'controls',
-				  width: '100%',
-				  height: 'auto'
-				})
+				if(that.videoType=='link'){
+					curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
+					  url,
+					  controls: 'controls',
+					  width: '100%',
+					  height: 'auto'
+					})
+				}
+				if(that.videoType=='bilibili'){
+					curQuill.insertText(selectionIndex, '[video bilibili]'+url+'[/video bilibili]');
+				}
 			}
 			if(type=="audio"){
 				//调用自定义的方法
-				curQuill.insertEmbed(selectionIndex, "audio", { url: url });
+				if(that.musicType=='link'){
+					curQuill.insertEmbed(selectionIndex, "audio", { url: url });
+				}
+				if(that.musicType=='163'){
+					curQuill.insertText(selectionIndex, '[music 163]'+url+'[/music 163]');
+				}
+				
+				if(that.musicType=='qq'){
+					curQuill.insertText(selectionIndex, '[music qq]'+url+'[/music qq]');
+				}
+				
 			}
 			if(type=="link"){
 				curQuill.insertEmbed(selectionIndex,'link', { href: url, innerText: that.linkName }, "api")

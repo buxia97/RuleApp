@@ -1,5 +1,5 @@
 <template>
-	<view :class="AppStyle">
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -61,7 +61,7 @@
 				</view>
 				<view class="padding-xl">
 					<input placeholder="充值码数量,一次最大100" type="number" v-model="num"/>
-					<input placeholder="充值码等同积分" type="number"  v-model="price"/>
+					<input :placeholder="'充值码等同'+currencyName" type="number"  v-model="price"/>
 				</view>
 				
 				<view class="cu-bar bg-white justify-end">
@@ -131,6 +131,7 @@
 				
 				modalName:"",
 				tokenNum:"",
+				currencyName:""
 			}
 		},
 		onPullDownRefresh(){
@@ -149,7 +150,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.getTokenList();
 		},
@@ -158,6 +159,8 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.currencyName = that.$API.getCurrencyName();
+			
 		},
 		methods: {
 			back(){

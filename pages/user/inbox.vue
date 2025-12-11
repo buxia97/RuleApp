@@ -1,5 +1,5 @@
 <template>
-	<view :class="AppStyle">
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -15,15 +15,21 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box data-inbox">
-			<view class="search-type grid col-2">
-				<view class="search-type-box" @tap="toType('inbox')" :class="type=='inbox'?'active':''">
-					<text>平台消息</text>
+			<view class="search-type grid col-4">
+				<view class="search-type-box" @tap="toType('comment')" :class="type=='comment'?'active':''">
+					<text>评论</text>
+				</view>
+				<view class="search-type-box" @tap="toType('system')" :class="type=='system'?'active':''">
+					<text>平台通知</text>
+				</view>
+				<view class="search-type-box" @tap="toType('finance')" :class="type=='finance'?'active':''">
+					<text>财务消息</text>
 				</view>
 				<view class="search-type-box" @tap="toType('chat')" :class="type=='chat'?'active':''">
-					<text>用户消息</text>
+					<text>聊天消息</text>
 				</view>
 			</view>
-			<block v-if="type=='inbox'">
+			<block v-if="type!='chat'">
 				<view class="cu-card dynamic no-card">
 					<view class="cu-item">
 						<view class="cu-list menu-avatar comment">
@@ -64,6 +70,12 @@
 												<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='comment'">
 													<view class="flex">
 														<view>{{item.contenTitle}}</view>
+														
+													</view>
+												</view>
+												<view class="bg-grey light padding-sm radius margin-top-sm  text-sm" v-if="item.type=='postComment'">
+													<view class="flex">
+														<view>{{item.postTitle}}</view>
 														
 													</view>
 												</view>
@@ -194,7 +206,7 @@
 				chatList:[],
 				oldChatList:[],
 				uid:0,
-				type:"inbox",
+				type:"comment",
 				
 				moreText:"加载更多",
 				page:1,
@@ -206,7 +218,7 @@
 				owo:owo,
 				owoList:[],
 				
-				chatLoading:null,
+				msgLoading:null,
 				
 			}
 		},
@@ -216,8 +228,8 @@
 		},
 		onHide() {
 			var that = this
-			clearInterval(that.chatLoading);
-			that.chatLoading = null
+			clearInterval(that.msgLoading);
+			that.msgLoading = null
 		},
 		onReachBottom() {
 		    //触底后执行的方法，比如无限加载之类的
@@ -229,7 +241,7 @@
 			that.page=1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				
@@ -268,8 +280,8 @@
 		methods:{
 			back(){
 				var that = this;
-				clearInterval(that.chatLoading);
-				that.chatLoading = null
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				uni.navigateBack({
 					delta: 1
 				});
@@ -278,7 +290,7 @@
 				var that = this;
 				
 				if(that.isLoad==0){
-					if(that.type=="inbox"){
+					if(that.type!="chat"){
 						that.moreText="正在加载中...";
 						that.getInboxList(true);
 					}
@@ -301,10 +313,16 @@
 			},
 			toInfo(cid,title){
 				var that = this;
-				clearInterval(that.chatLoading);
-				that.chatLoading = null
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				uni.navigateTo({
 				    url: '/pages/contents/info?cid='+cid+"&title="+title
+				});
+			},
+			goPostInfo(id){
+				var that = this;
+				uni.navigateTo({
+					url: '/pages/forum/info?id='+id
 				});
 			},
 			goInbox(data){
@@ -313,14 +331,17 @@
 					that.toInfo(data.contentsInfo.cid,data.contenTitle);
 				}
 				if(data.type=="finance"){
-					clearInterval(that.chatLoading);
-					that.chatLoading = null
+					clearInterval(that.msgLoading);
+					that.msgLoading = null
 					uni.navigateTo({
 					    url: '/pages/user/assets'
 					});
 				}
 				if(data.type=="system"){
 					return false;
+				}
+				if(data.type=="postComment"){
+					that.goPostInfo(data.postJson.id);
 				}
 				
 			},
@@ -347,9 +368,10 @@
 				that.page=1;
 				that.moreText="加载更多";
 				that.isLoad=0;
-				if(i=="inbox"){
-					clearInterval(that.chatLoading);
-					that.chatLoading = null
+				that.inboxList = [];
+				if(i!="chat"){
+					clearInterval(that.msgLoading);
+					that.msgLoading = null
 					that.getInboxList(false);
 				}else{
 					that.getMyChat(false);
@@ -378,6 +400,7 @@
 				that.$Net.request({
 					url: that.$API.getInbox(),
 					data:{
+						"type":that.type,
 						"token":that.token,
 						"limit":8,
 						"page":page,
@@ -385,7 +408,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "get",
+					method: "post",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;
@@ -654,8 +677,8 @@
 			},
 			goChat(data){
 				var that = this;
-				clearInterval(that.chatLoading);
-				that.chatLoading = null
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				var chatid = data.id;
 				//去除未读标志
 				var chatList = that.chatList;
@@ -672,8 +695,8 @@
 				var name = data.userJson.name;
 				var uid = data.userJson.uid;
 				
-				clearInterval(that.chatLoading);
-				that.chatLoading = null
+				clearInterval(that.msgLoading);
+				that.msgLoading = null
 				uni.navigateTo({
 				    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid
 				});

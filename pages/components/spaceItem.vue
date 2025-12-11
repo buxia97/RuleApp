@@ -1,9 +1,26 @@
 <template>
 	<view>
+		
 		<view class="cu-card dynamic no-card square-list">
-			
 			<block  v-for="(item,index) in spaceList" :key="index" v-if="spaceList.length>0">
-				<view class="cu-item">
+				<view class="cu-item content-list-box"  @longtap="item.banShow=true"  v-if="!item.isBan" :class="item.banShow?'banShow':''">
+					
+					<view class="ban">
+						<view class="ban-close" @tap="item.banShow=false">
+							<text class="cuIcon-close"></text>
+						</view>
+						<view class="ban-concent">
+							<text class="ban-btn" @tap="report(item.text,4)">
+								<text class="cuIcon-warn"></text>举报
+							</text>
+							<text class="ban-btn" @tap="goMyBan(item,'banSpace')">
+								<text class="cuIcon-roundclosefill"></text>不喜欢
+							</text>
+							<text class="ban-btn" @tap="goMyBan(item,'banUser')">
+								<text class="cuIcon-attentionforbidfill"></text>拉黑作者
+							</text>
+						</view>
+					</view>
 					<view class="cu-list menu-avatar">
 						<view class="cu-item">
 							<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'" @tap="toUserContents(item.userJson)">
@@ -15,6 +32,7 @@
 								<view>{{item.userJson.name}}
 								<block v-if="item.userJson.uid!=0">
 									<!--  #ifdef H5 || APP-PLUS -->
+									<!-- <text class="userlv" :style="getLvStyle(item.userJson.lv)">{{getLv(item.userJson.experience)}}</text> -->
 									<!-- <text class="userlv" :style="getUserLvStyle(item.userJson.lv)">{{getUserLv(item.userJson.lv)}}</text> -->
 									
 									<!--  #endif -->
@@ -24,6 +42,8 @@
 								</view>
 								<view class="text-gray text-sm flex">
 									{{formatDate(item.created)}}
+									{{getLocal(item.userJson.local)}}
+									
 									<block v-if="group=='administrator'||group=='editor'">
 										<text class="text-blue margin-left-sm" @tap="edit(item.id)">编辑</text>
 										<text class="text-black margin-left-sm" @tap="toBan(item.userJson.uid)">封禁</text>
@@ -37,19 +57,22 @@
 										
 									</block>
 								</view>
+								<view class="text-gray text-sm flex">
+									
+								</view>
 							</view>
 							<view class="action space-follow">
-								<view class="cu-btn bg-red" v-if="item.isFollow==0" @tap="follow(1,item.userJson.uid,index)">
+								<view class="cu-btn text-red" v-if="item.isFollow==0" @tap="follow(1,item.userJson.uid,index)">
 									<text class="cuIcon-add"></text>关注
 								</view>
-								<view class="cu-btn text-red isFollow" v-if="item.isFollow==1" @tap="follow(0,item.userJson.uid,index)">
+								<view class="cu-btn bg-red isFollow" v-if="item.isFollow==1" @tap="follow(0,item.userJson.uid,index)">
 									已关注
 								</view>
 							</view>
 						</view>
 					</view>
 					<view class="text-content break-all" @tap="toInfo(item.id)">
-						<rich-text :nodes="markHtml(item.text)"></rich-text>
+						<text class="text-orange text-sm" v-if="item.onlyMe==1">[私密]</text><rich-text :nodes="markHtml(item.text)"></rich-text>
 					</view>
 					<block  v-if="item.type==0">
 						
@@ -84,6 +107,38 @@
 										</view>
 										<view class="user-post-intro">
 											{{item.contentJson.text}}
+										</view>
+									</view>
+								</view>
+							</block>
+							
+						</view>
+					</block>
+					<block  v-if="item.type==6">
+						<view class="grid flex-sub padding-lr">
+							<block v-if="item.postJson.id==0">
+								<view class="user-post-info">
+									<view class="user-post-text">
+										<view class="user-post-title">
+											帖子不存在
+										</view>
+										<view class="user-post-intro">
+											帖子已被删除或数据缺失！
+										</view>
+									</view>
+								</view>
+							</block>
+							<block v-else>
+								<view class="user-post-info" @tap="goPostInfo(item.postJson.id)">
+									<view class="user-post-pic" v-if="item.postJson.images.length>0">
+										<image :src="item.postJson.images[0]" mode="widthFix"></image>
+									</view>
+									<view class="user-post-text">
+										<view class="user-post-title">
+											{{replaceSpecialChar(item.postJson.title)}}
+										</view>
+										<view class="user-post-intro">
+											{{item.postJson.text}}
 										</view>
 									</view>
 								</view>
@@ -247,6 +302,7 @@
 				uid:0,
 				isPlay:false,
 				curVideo:"",
+				
 			};
 		},
 		created(){
@@ -266,6 +322,29 @@
 			}
 			that.owoList = owoList;
 			// #endif
+			var that = this;
+			if(localStorage.getItem('userinfo')){
+				if(localStorage.getItem('myBanLog')){
+					var myBanLog = JSON.parse(localStorage.getItem('myBanLog'));
+					var banSpaceList = myBanLog.banSpaceList;
+					var banUserList = myBanLog.banUserList;
+					var spaceList = that.spaceList;
+					for(var i in spaceList){
+						for(var j in banUserList){
+							if(spaceList[i].uid == banUserList[j].num){
+								that.isBan = true;
+							}
+						}
+						for(var o in banSpaceList){
+							if(spaceList[i].id == banSpaceList[o].num){
+								that.isBan = true;
+							}
+						}
+					}
+					that.spaceList = spaceList;
+					
+				}
+			}
 		},
 		methods: {
 			previewImage(imageList,image) {
@@ -594,6 +673,12 @@
 				    url: '/pages/shop/shopinfo?sid='+sid
 				});
 			},
+			goPostInfo(id){
+				var that = this;
+				uni.navigateTo({
+					url: '/pages/forum/info?id='+id
+				});
+			},
 			toUserContents(data){
 				var that = this;
 				var name = data.name;
@@ -682,6 +767,165 @@
 				var that = this;
 				that.curVideo =url;
 				that.isPlay=true;
+			},
+			getLocal(local){
+				var that = this;
+				if(local&&local!=''){
+					var local_arr = local.split("|");
+					if(!local_arr[3]||local_arr[3]==0){
+						return local_arr[2];
+					}else{
+						return local_arr[3];
+					}
+					
+				}else{
+					return "未知"
+				}
+				
+			},
+			goMyBan(item,type){
+				var that = this;
+				var token = "";
+				var id = 0;
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var title = "";
+				if(type=="banUser"){
+					id = item.uid;
+					title = '确定要拉黑作者吗？拉黑后，将屏蔽该用户所有发布内容！'
+				}
+				if(type=="banSpace"){
+					id = item.id;
+					title = '确定要屏蔽该动态吗！'
+				}
+				var data = {
+					"id":id,
+					"type":type,
+					"token":token
+				}
+				uni.showModal({
+					title: title,
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.ban(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: "操作成功！",
+											icon: 'none'
+										})
+										that.myBanLog();
+										var curId = item.id;
+										var spaceList = that.spaceList;
+										for(var i in spaceList){
+											if(spaceList[i].id == curId){
+												spaceList[i].isBan = true;
+											}
+											if(type=="banUser"){
+												if(spaceList[i].uid == id){
+													spaceList[i].isBan = true;
+												}
+											}
+										}
+									}else{
+										if(res.data.msg=="用户未登录或Token验证失败"){
+											uni.showToast({
+												title: "请先登录",
+												icon: 'none'
+											})
+											uni.navigateTo({
+												url: '/pages/user/login'
+											});
+										}else{
+											uni.showToast({
+												title: res.data.msg,
+												icon: 'none'
+											})
+										}
+										
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			myBanLog(){
+				var that = this;
+				var token = ""
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}else{
+					return false;
+				}
+				that.$Net.request({
+					
+					url: that.$API.myBanLog(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						if(res.data.code==1){
+							var myBanLog = res.data.data;
+							localStorage.setItem('myBanLog',myBanLog);
+						}
+					},
+					fail: function(res) {
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			report(title,type){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.navigateTo({
+				    url: '/pages/user/report?title='+title+"&type="+type
+				});
 			}
 		}
 	}

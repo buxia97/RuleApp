@@ -152,6 +152,14 @@
 				  <input placeholder="输入商品数量(必须为整数)" type="number"  v-model="num"/>
 			  </div>
 		</div>
+		<div class="form-box">
+			  <div class="form-label">
+			  	  积分抵扣
+			  </div>
+			  <div class="form-input">
+				  <input placeholder="抵扣积分数量,为0则禁止抵扣" type="number"  v-model="integral"/>
+			  </div>
+		</div>
 		<div class="form-box border-top">
 		  <div class="form-label">
 			  VIP折扣
@@ -307,7 +315,7 @@
     		</div>
     		<div class="modal-concent">
     			<div class="category-list">
-    				<div class="category-box" v-for="(item,index) in subtypeList" :class="item.id==subtype?'action':''" @click="setSubtype(item)">
+    				<div class="category-box" v-for="(item,index) in subtypeList" :key="index" :class="item.id==subtype?'action':''" @click="setSubtype(item)">
     					<div class="category-main">
     						{{item.name}}
     					</div>
@@ -508,6 +516,7 @@ var wu = new Wu()
 	  num:"",
 	  value:"",
 	  uid:"",
+	  integral:"",
 	  
 	  shopTypelist:[],
 	  sortShow:false,
@@ -759,6 +768,7 @@ var wu = new Wu()
 				'price':that.price,
 				'num':that.num,
 				'value':value,
+				'integral':that.integral,
 				'sort':that.sort,
 				'subtype':that.subtype,
 				'vipDiscount':that.vipDiscount,
@@ -849,7 +859,8 @@ var wu = new Wu()
 					that.imgurl = res.data.imgurl;
 					that.price = res.data.price;
 					that.num = res.data.num;
-				
+					
+					that.integral = res.data.integral;
 					that.value = res.data.value;
 					that.vipDiscount = res.data.vipDiscount;
 					
@@ -942,6 +953,7 @@ var wu = new Wu()
 				'value':value,
 				'vipDiscount':that.vipDiscount,
 				'sort':that.sort,
+				'integral':that.integral,
 				'subtype':that.subtype,
 			}
 			var data = {
@@ -993,7 +1005,7 @@ var wu = new Wu()
 			var that = this;
 			var data = {
 				"limit":100,
-				"token":that.token
+				"token":that.token,
 			}
 			var url = that.apiUrl+'typechoShop/shopTypeList';
 			
@@ -1268,82 +1280,82 @@ var wu = new Wu()
 		  
 		  this.inputElement.click();
 		},
-		uploadFile(type) {
-		  var that = this;
-		  if (that.file) {
-			// 上传文件到服务器
-			const formData = new FormData();
-			formData.append('file', that.file);
-			formData.append('token', that.token);
-			var url = that.apiUrl+'upload/full';
-			wu.showLoading();
-			//console.log(JSON.stringify(url));
-			request.post(url,formData).then(function(res){
-				setTimeout(function () {
-					wu.hideToast();
-				}, 1000);
-				if(res.data.code==1){
-					var url = res.data.data.url;
-					var selectionIndex = that.selectionIndex;
-					var curQuill = quill;
-					if(that.editType==2){
-						curQuill = shopQuill;
-						selectionIndex = that.shopSelectionIndex;
-					}
-					if(type=="image"){
+		// uploadFile(type) {
+		//   var that = this;
+		//   if (that.file) {
+		// 	// 上传文件到服务器
+		// 	const formData = new FormData();
+		// 	formData.append('file', that.file);
+		// 	formData.append('token', that.token);
+		// 	var url = that.apiUrl+'upload/full';
+		// 	wu.showLoading();
+		// 	//console.log(JSON.stringify(url));
+		// 	request.post(url,formData).then(function(res){
+		// 		setTimeout(function () {
+		// 			wu.hideToast();
+		// 		}, 1000);
+		// 		if(res.data.code==1){
+		// 			var url = res.data.data.url;
+		// 			var selectionIndex = that.selectionIndex;
+		// 			var curQuill = quill;
+		// 			if(that.editType==2){
+		// 				curQuill = shopQuill;
+		// 				selectionIndex = that.shopSelectionIndex;
+		// 			}
+		// 			if(type=="image"){
 						
-						curQuill.insertEmbed(selectionIndex, "image", url);
-					}
-					if(type == "thumbnail"){
-						that.imgurl = url;
-					}
-					if(type=="video"){
-						//调用自定义的方法
-						curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
-						  url,
-						  controls: 'controls',
-						  width: '100%',
-						  height: 'auto'
-						})
-					}
-					if(type=="audio"){
-						//调用自定义的方法
-						curQuill.insertEmbed(selectionIndex, "audio", { url: url });
-					}
-					wu.showToast({
-					    title: "上传成功",
-					    mask: false,
-					    icon: 'icon-success',
-					    duration: 3000
-					});
+		// 				curQuill.insertEmbed(selectionIndex, "image", url);
+		// 			}
+		// 			if(type == "thumbnail"){
+		// 				that.imgurl = url;
+		// 			}
+		// 			if(type=="video"){
+		// 				//调用自定义的方法
+		// 				curQuill.insertEmbed(selectionIndex, 'simpleVideo', {
+		// 				  url,
+		// 				  controls: 'controls',
+		// 				  width: '100%',
+		// 				  height: 'auto'
+		// 				})
+		// 			}
+		// 			if(type=="audio"){
+		// 				//调用自定义的方法
+		// 				curQuill.insertEmbed(selectionIndex, "audio", { url: url });
+		// 			}
+		// 			wu.showToast({
+		// 			    title: "上传成功",
+		// 			    mask: false,
+		// 			    icon: 'icon-success',
+		// 			    duration: 3000
+		// 			});
 					
-				}else{
-					wu.showToast({
-					    title: '上传失败，请检测网络或接口配置',
-					    mask: false,
-					    icon: 'icon-error',
-					    duration: 3000
-					});
-				}
+		// 		}else{
+		// 			wu.showToast({
+		// 			    title: '上传失败，请检测网络或接口配置',
+		// 			    mask: false,
+		// 			    icon: 'icon-error',
+		// 			    duration: 3000
+		// 			});
+		// 		}
 					
-			}).catch(function (error) {
-				console.log(error);
-				wu.showToast({
-				    title: '上传失败，请检测网络',
-				    mask: false,
-				    icon: 'icon-error',
-				    duration: 3000
-				});
-			});
-		  } else {
-			wu.showToast({
-			    title: '请选择文件',
-			    mask: false,
-			    icon: 'icon-error',
-			    duration: 3000
-			});
-		  }
-		},
+		// 	}).catch(function (error) {
+		// 		console.log(error);
+		// 		wu.showToast({
+		// 		    title: '上传失败，请检测网络',
+		// 		    mask: false,
+		// 		    icon: 'icon-error',
+		// 		    duration: 3000
+		// 		});
+		// 	});
+		//   } else {
+		// 	wu.showToast({
+		// 	    title: '请选择文件',
+		// 	    mask: false,
+		// 	    icon: 'icon-error',
+		// 	    duration: 3000
+		// 	});
+		//   }
+		// },
 		isImageFile(file) {
 		  const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
 		  return acceptedImageTypes.includes(file.type);
@@ -1411,6 +1423,143 @@ var wu = new Wu()
 			}
 			
 		},
+		// ==========================
+		// 分片上传主方法
+		// ==========================
+		async uploadFile(type) {
+		  var that = this;
+		
+		  if (!that.file) {
+		    return wu.showToast({
+		      title: '请选择文件',
+		      icon: 'icon-error'
+		    });
+		  }
+		
+		  const file = that.file;
+		
+		  // 小文件走原接口
+		  console.log("文件大小"+file.size);
+		  if (file.size < 5 * 1024 * 1024) {
+		    return that.directUploadWeb(type);
+		  }
+		
+		  // 大文件 → 分片上传
+		  wu.showLoading("分片上传…");
+		
+		  try {
+		    const url = await that.uploadLargeWeb(file);
+		    await that.insertToQuill(type, url, file.name);
+		
+		    wu.hideToast();
+		    wu.showToast({ title: "上传成功", icon: 'icon-success' });
+		
+		  } catch (e) {
+		    console.error(e);
+		    wu.hideToast();
+		    wu.showToast({ title: "上传失败", icon: 'icon-error' });
+		  }
+		},
+		
+		// ==========================
+		// 小文件直接上传（原接口）
+		// ==========================
+		directUploadWeb(type) {
+		  var that = this;
+		  const file = that.file;
+		
+		  const form = new FormData();
+		  form.append("file", file);
+		  form.append("token", that.token);
+		
+		  wu.showLoading("上传中…");
+		
+		  return request.post(that.apiUrl + "upload/full", form)
+		    .then(res => {
+		      wu.hideToast();
+		
+		      if (res.data.code == 1) {
+		        const url = res.data.data.url;
+		        return that.insertToQuill(type, url, file.name);
+		      }
+		
+		      wu.showToast({ title: "上传失败", icon: "icon-error" });
+		    });
+		},
+		
+		// ==========================
+		// 分片上传主逻辑
+		// ==========================
+		async uploadLargeWeb(file) {
+		  const chunkSize = 2 * 1024 * 1024; // 2MB
+		  const totalChunks = Math.ceil(file.size / chunkSize);
+		  const uploadId = Date.now() + "_" + Math.random().toString(36).substr(2);
+		
+		  for (let index = 0; index < totalChunks; index++) {
+		    const start = index * chunkSize;
+		    const end = Math.min(start + chunkSize, file.size);
+		    const chunkBlob = file.slice(start, end);
+		
+		    const fd = new FormData();
+		    fd.append("uploadId", uploadId);
+		    fd.append("index", index);
+		    fd.append("total", totalChunks);
+		    fd.append("file", chunkBlob);
+		    fd.append("token", this.token); // 可选
+		
+		    // ⚠️ 每个分片加 try/catch
+		    try {
+		      await request.post(this.apiUrl + "upload/chunk", fd);
+		    } catch (err) {
+		      console.error(`分片 ${index} 上传失败`, err);
+		      throw err;
+		    }
+		  }
+		
+		  // ==========================
+		  // 合并分片
+		  // ==========================
+		  const mergeFd = new FormData();
+		  mergeFd.append("uploadId", uploadId);
+		  mergeFd.append("filename", file.name);
+		  mergeFd.append("total", totalChunks);
+		  mergeFd.append("token", this.token);
+		
+		  const mergeRes = await request.post(this.apiUrl + "upload/merge", mergeFd);
+		
+		  if (mergeRes.data.code !== 1) {
+		    throw new Error("合并失败：" + mergeRes.data.msg);
+		  }
+		
+		  return mergeRes.data.data.url;
+		},
+		
+		// ==========================
+		// 插入 Quill 编辑器
+		// ==========================
+		insertToQuill(type, url, filename) {
+		  var that = this;
+		
+		  var editor = that.editType == 2 ? shopQuill : quill;
+		  var index = that.editType == 2 ? that.shopSelectionIndex : that.selectionIndex;
+		
+		  switch (type) {
+		    case "image":
+		      editor.insertEmbed(index, "image", url);
+		      break;
+		    case "video":
+		      editor.insertEmbed(index, "simpleVideo", { url });
+		      break;
+		    case "audio":
+		      editor.insertEmbed(index, "audio", { url });
+		      break;
+		    case "file":
+		      editor.insertEmbed(index, "link", { href: url, innerText: filename });
+		      break;
+		  }
+		
+		  return true;
+		}
 	}
   })
 </script>

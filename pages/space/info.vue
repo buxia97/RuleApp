@@ -1,10 +1,18 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+				<!--  #ifdef H5 || APP-PLUS -->
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
+				<!--  #endif -->
+				<!--  #ifdef MP -->
+				<view class="action" @tap="backHome">
+					<text class="cuIcon-home"></text>
+				</view>
+				<!--  #endif -->
+				
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					<block v-if="replyType==0">
 						动态详情
@@ -14,8 +22,25 @@
 					</block>
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
+				<view class="action info-btn">
+					<!--  #ifdef H5 || APP-PLUS -->
+					<text class="cuIcon-moreandroid" @tap="moreShow=!moreShow"></text>
+					<!--  #endif -->
+					<view class="info-more-links" :class="moreShow?'moreShow':''">
+						<view class="info-more-links-box"  @tap="toSearch">
+							<text class="cuIcon-search"></text>搜索
+						</view>
+						<view class="info-more-links-box" @tap="report(spaceInfo.text,5)">
+							<text class="cuIcon-warn"></text>举报
+						</view>
+						<view class="info-more-links-box" @tap="goMyBan(id,'banSpace')">
+							<text class="cuIcon-roundclosefill"></text>屏蔽动态
+						</view>
+						<view class="info-more-links-box" @tap="goMyBan(userJson.uid,'banUser')">
+							<text class="cuIcon-attentionforbidfill"></text>拉黑作者
+						</view>
+					</view>
+					
 				</view>
 				<!--  #endif -->
 			</view>
@@ -40,7 +65,9 @@
 							<text class="userlv customize" v-if="spaceInfo.userJson.customize&&spaceInfo.userJson.customize!=''">{{spaceInfo.userJson.customize}}</text>
 							</view>
 							<view class="text-gray text-sm">
-								{{formatDate(spaceInfo.created)}} <text class="margin-left-sm" v-if="spaceInfo.created!=spaceInfo.modified">已编辑</text>
+								{{formatDate(spaceInfo.created)}} 
+								{{getLocal(spaceInfo.userJson.local)}}
+								<text class="margin-left-sm" v-if="spaceInfo.created!=spaceInfo.modified">已编辑</text>
 							</view>
 						</view>
 						<view class="action space-follow">
@@ -68,8 +95,9 @@
 				<block  v-if="spaceInfo.type==1">
 					<view class="grid flex-sub padding-lr">
 						<view class="user-post-info" @tap="goContentInfo(spaceInfo)">
-							<view class="user-post-pic" v-if="spaceInfo.contentJson.images.length>0">
-								<image :src="spaceInfo.contentJson.images[0]" mode="widthFix"></image>
+							<view class="user-post-pic"
+							      v-if="spaceInfo.contentJson && spaceInfo.contentJson.images && spaceInfo.contentJson.images.length > 0">
+							    <image :src="spaceInfo.contentJson.images[0]" mode="widthFix"></image>
 							</view>
 							<view class="user-post-text">
 								<view class="user-post-title">
@@ -144,7 +172,7 @@
 									{{item.userJson.name}}
 									
 									<!--  #ifdef H5 || APP-PLUS -->
-									<text class="userlv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</text>			
+									<text class="userlv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</text>
 									<!--  #endif -->
 									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
@@ -155,7 +183,10 @@
 									<text class="text-blue">共{{item.reply}}条回复<text class="cuIcon-right margin-left-xs"></text></text>
 								</view>
 								<view class="margin-top-sm flex justify-between">
-									<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+									<view class="text-gray text-df">
+									{{formatDate(item.created)}}
+									{{getLocal(item.userJson.local)}}								
+									</view>
 									<view>
 										<text class="cuIcon-forward text-gray" @tap="forward(item.id)">
 											{{formatNumber(item.forward) || ''}}
@@ -186,7 +217,6 @@
 						</view>
 					</view>
 					<view class="no-data" v-if="replyList.length==0">
-						
 						<text class="cuIcon-text"></text>
 						
 						暂时没有消息
@@ -212,6 +242,7 @@
 									
 									<!--  #ifdef H5 || APP-PLUS -->
 									<text class="userlv" :style="getLvStyle(item.userJson.experience)">{{getLv(item.userJson.experience)}}</text>
+									
 									<!--  #endif -->
 									<text class="userlv customize" v-if="item.userJson.customize&&item.userJson.customize!=''">{{item.userJson.customize}}</text>
 								</view>
@@ -219,7 +250,10 @@
 									<rich-text :nodes="markHtml(item.text)"></rich-text>
 								</view>
 								<view class="margin-top-sm flex justify-between">
-									<view class="text-gray text-df">{{formatDate(item.created)}}</view>
+									<view class="text-gray text-df">
+									{{formatDate(item.created)}}
+									{{getLocal(item.userJson.local)}}
+									</view>
 									<view>
 										<text class="cuIcon-forward text-gray" @tap="forward(item.id)">
 											{{formatNumber(item.forward) || ''}}
@@ -250,7 +284,7 @@
 			</block>
 			
 		</view>
-		<view class="space-footer grid " :class="replyType==0?'col-3':'col-2'" v-if="spaceInfo.status==1">
+		<view class="space-footer grid " :class="replyType==0?'col-3':'col-2'">
 			<view class="space-footer-box" @tap="forward(spaceInfo.id)" v-if="replyType==0">
 				<text class="cuIcon-forward"></text>
 				转发
@@ -327,6 +361,8 @@
 				infoType:0,
 				group:"",
 				uid:0,
+				
+				moreShow:false
 			}
 		},
 		onPullDownRefresh(){
@@ -353,7 +389,7 @@
 			// #ifdef APP-PLUS
 			that.isLoad=0;
 			that.page=1;
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				
@@ -402,14 +438,20 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				if(that.isLoad==0){
-					that.getReplyList(true);
+					
 					if(that.infoType==0){
 						that.getReplyList(false)
-					}
-					if(that.infoType==1){
+					}else if(that.infoType==1){
 						that.getForwardList(false);
+					}else{
+						that.getReplyList(true);
 					}
 				}
+			},
+			backHome(){
+				uni.redirectTo({
+					url: '/pages/home/index'
+				});
 			},
 			back(){
 				uni.navigateBack({
@@ -451,6 +493,7 @@
 									that.spaceInfo.forwardJson.picList = [];
 								}
 							}
+							
 						}
 					},
 					fail: function(res) {
@@ -1094,6 +1137,99 @@
 											title: res.data.msg+"，刷新数据后生效",
 											icon: 'none'
 										})
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			getLocal(local){
+				var that = this;
+				if(local&&local!=''){
+					var local_arr = local.split("|");
+					return local_arr[4];
+				}else{
+					return "未知"
+				}
+			},
+			report(title,type){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.redirectTo({
+				    url: '/pages/user/report?title='+title+"&type="+type
+				});
+			},
+			goMyBan(uid,type){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var title = "";
+				if(type=="banUser"){
+					title = '确定要拉黑作者吗？拉黑后，将屏蔽该用户所有发布内容！'
+				}
+				if(type=="banSpace"){
+					title = '确定要屏蔽该动态吗！'
+				}
+				var data = {
+					"id":uid,
+					"type":type,
+					"token":token
+				}
+				uni.showModal({
+					title: title,
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.ban(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: "拉黑成功！",
+											icon: 'none'
+										})
+										that.back();
 									}else{
 										uni.showToast({
 											title: res.data.msg,

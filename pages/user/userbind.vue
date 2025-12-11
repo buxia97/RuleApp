@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -17,9 +17,9 @@
 				<view class="content">
 					<image src="../../static/icon_qq.png"></image><text>QQ绑定</text>
 				</view>
-				<view class="action" @tap="toQQBind">
-					<text class="text-gray" v-if="userBind.qqBind==0">未绑定</text>
-					<text class="text-blue" v-else>已绑定</text>
+				<view class="action">
+					<text class="text-gray" v-if="userBind.qqBind==0"  @tap="toQQBind">未绑定</text>
+					<text class="text-red" @tap="toBindDelete('qq')" v-else>撤销绑定</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -28,9 +28,9 @@
 					<image src="../../static/icon_weixin.png"></image>
 					<text>微信绑定</text>
 				</view>
-				<view class="action" @tap="toWexinBind">
-					<text class="text-gray" v-if="userBind.weixinBind==0">未绑定</text>
-					<text class="text-blue" v-else>已绑定</text>
+				<view class="action">
+					<text class="text-gray" v-if="userBind.weixinBind==0" @tap="toWexinBind">未绑定</text>
+					<text class="text-red" @tap="toBindDelete('weixin')" v-else>撤销绑定</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -39,9 +39,20 @@
 					<image src="../../static/icon_weibo.png"></image>
 					<text>微博绑定</text>
 				</view>
-				<view class="action" @tap="toWeiboBind">
-					<text class="text-gray" v-if="userBind.weiboBind==0">未绑定</text>
-					<text class="text-blue" v-else>已绑定</text>
+				<view class="action">
+					<text class="text-gray" v-if="userBind.weiboBind==0"  @tap="toWeiboBind">未绑定</text>
+					<text class="text-red" @tap="toBindDelete('sinaweibo')" v-else>撤销绑定</text>
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
+			<view class="cu-item">
+				<view class="content">
+					<image src="../../static/icon_apple.png"></image>
+					<text>Apple绑定</text>
+				</view>
+				<view class="action">
+					<text class="text-gray" v-if="userBind.appleBind==0"  @tap="toAppleBind">未绑定</text>
+					<text class="text-red" @tap="toBindDelete('sinaweibo')" v-else>撤销绑定</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -68,6 +79,7 @@
 					"qqBind":0,
 					"weixinBind":0,
 					"weiboBind":0,
+					"appleBind":0
 				}
 			}
 		},
@@ -79,7 +91,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('token')){
 				
@@ -224,10 +236,59 @@
 				
 				uni.login({
 					provider: 'weixin',
+					onlyAuthorize:true,
 					success: res => {
 						var js_code = res.code;
+						// #ifdef APP-PLUS
+						let formdata = {
+							appLoginType:"weixin",
+							js_code:js_code
+						};
+						formdata.type = "app";
+						uni.showLoading({
+							title: "加载中"
+						});
+						that.$Net.request({
+							
+							url: that.$API.apiBind(),
+							data:{
+								"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata)),
+								"token":that.token
+							},
+							header:{
+								'Content-Type':'application/x-www-form-urlencoded'
+							},
+							method: "get",
+							dataType: 'json',
+							success: function(res) {
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+								uni.showToast({
+									title: res.data.msg,
+									icon: 'none'
+								})
+								if(res.data.code==1){
+									that.userBindStatus();
+									
+								}
+							},
+							fail: function(res) {
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+								uni.showToast({
+									title: "网络开小差了哦",
+									icon: 'none'
+								})
+								uni.stopPullDownRefresh()
+							}
+						})
+						// #endif
+						// #ifdef MP-WEIXIN
 						uni.getUserInfo({
 							provider: 'weixin',
+							onlyAuthorize:true,
 							success: function(infoRes) {
 								let formdata = {
 									nickName: infoRes.userInfo.nickName,
@@ -237,15 +298,8 @@
 									// openId: infoRes.userInfo.openId,
 									// accessToken: infoRes.userInfo.unionId,
 								};
-								// #ifdef APP-PLUS
-								formdata.openId=infoRes.userInfo.openId;
-								formdata.accessToken=infoRes.userInfo.unionId,
-								formdata.type = "app";
-								// #endif
-								// #ifdef MP-WEIXIN
 								formdata.type = "applets";
 								formdata.js_code = js_code;
-								// #endif
 								uni.showLoading({
 									title: "加载中"
 								});
@@ -288,6 +342,7 @@
 								
 							}
 						});
+						// #endif
 					},
 					fail: err => {
 						uni.showToast({
@@ -336,7 +391,7 @@
 									header:{
 										'Content-Type':'application/x-www-form-urlencoded'
 									},
-									method: "get",
+									method: "post",
 									dataType: 'json',
 									success: function(res) {
 										setTimeout(function () {
@@ -375,6 +430,125 @@
 							title: "加载中"
 						});
 					}
+				});
+			},
+			toAppleBind(){
+				var that = this;
+				//微博登陆
+				uni.login({
+				    provider: 'apple',
+				    success: function (loginRes) {
+				        uni.getUserInfo({
+				            provider: 'apple',
+				            success: function(info) {
+							var formdata = {
+							    appLoginType: "apple",
+							    // 苹果用户唯一标识（Apple ID Sub）
+							    openId: info.userInfo.openId || '',
+							    // 身份令牌（JWT）
+							    accessToken: info.userInfo.identityToken || '',
+								
+							};
+							  uni.showLoading({
+							  	title: "加载中"
+							  });
+							  that.$Net.request({
+							  	
+							  	url: that.$API.apiBind(),
+							  	data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(formdata))},
+							  	header:{
+							  		'Content-Type':'application/x-www-form-urlencoded'
+							  	},
+							  	method: "post",
+							  	dataType: 'json',
+							  	success: function(res) {
+							  		setTimeout(function () {
+							  			uni.hideLoading();
+							  		}, 1000);
+							  		uni.showToast({
+							  			title: res.data.msg,
+							  			icon: 'none'
+							  		})
+							  		if(res.data.code==1){
+							  			that.userBindStatus();
+							  			
+							  		}
+							  	},
+							  	fail: function(res) {
+							  		setTimeout(function () {
+							  			uni.hideLoading();
+							  		}, 1000);
+							  		uni.showToast({
+							  			title: "网络开小差了哦",
+							  			icon: 'none'
+							  		})
+							  		uni.stopPullDownRefresh()
+							  	}
+							  })
+				            }
+				        })
+				    },
+				    fail: function (err) {
+				        // 登录授权失败
+				        // err.code错误码参考`授权失败错误码(code)说明`
+				    }
+				});
+			},
+			toBindDelete(type){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var data = {
+					"appLoginType":type,
+					"token":token
+				}
+				uni.showModal({
+				    title: '确定要撤销绑定吗',
+				    success: function (res) {
+				        if (res.confirm) {
+				            uni.showLoading({
+				            	title: "加载中"
+				            });
+				            
+				            that.$Net.request({
+				            	url: that.$API.apiBindDelete(),
+				            	data:data,
+				            	header:{
+				            		'Content-Type':'application/x-www-form-urlencoded'
+				            	},
+				            	method: "get",
+				            	dataType: 'json',
+				            	success: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: res.data.msg,
+				            			icon: 'none'
+				            		})
+				            		if(res.data.code==1){
+										that.userBindStatus();
+				            		}
+				            		
+				            	},
+				            	fail: function(res) {
+				            		setTimeout(function () {
+				            			uni.hideLoading();
+				            		}, 1000);
+				            		uni.showToast({
+				            			title: "网络开小差了哦",
+				            			icon: 'none'
+				            		})
+				            	}
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
 				});
 			}
 		}

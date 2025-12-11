@@ -12,7 +12,7 @@
 				<view class="action header-btn">
 					
 					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
-						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum > 99?'99+':noticeSum}}</text>
 					</text>
 				</view>
 				<!--  #endif -->
@@ -51,6 +51,7 @@
 				</view>
 			</view>
 		</view>
+		
 		<view class="data-box">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
@@ -95,7 +96,7 @@
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
 							<view class="index-sort-text">
-								积分商城
+								商城
 							</view>
 						</view>
 					</waves>
@@ -127,6 +128,27 @@
 					</waves>
 				</view>
 			</view>
+		</view>
+		<view class="data-box">
+			<view class="cu-bar bg-white">
+				<view class="action data-box-title">
+					<text class="cuIcon-titles text-rule"></text> AI大模型
+				</view>
+				
+				
+			</view>
+			<view class="find-gpt">
+				<view class="find-gpt-mian"  @tap="goPage('/pages/gpt/home')">
+					<view class="find-gpt-ico">
+						<image src="../../static/gpt.png" mode="widthFix"></image>
+					</view>
+					<view class="find-gpt-intro">
+						<view class="find-gpt-intro-title">体验大模型，开启新时代</view>
+						<text class="cu-btn sm bg-black">即刻出发</text>
+					</view>
+				</view>
+			</view>
+			
 		</view>
 		<view class="ads-banner" v-if="bannerAdsInfo!=null">
 			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
@@ -204,7 +226,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="data-box">
+		<view class="data-box" style="display: none;">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 标签云
@@ -215,7 +237,7 @@
 			</view>
 			<view class="tags">
 				
-				<text class="tags-box" v-for="(item,index) in tagList" @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
+				<text class="tags-box" v-for="(item,index) in tagList" :key="index" @tap='toCategoryContents("#"+item.name+"#",item.mid)'>
 					# {{item.name}}
 				</text>
 				
@@ -304,6 +326,7 @@
 				
 				noticeSum:0,
 				token:"",
+				isvip:0,
 				
 				noLogin:false
 				
@@ -318,12 +341,19 @@
 				}
 				
 				console.log("触发Tab-"+data+"||页面下标"+that.curPage);
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					that.isvip = userInfo.isvip;
+				}
 				if(localStorage.getItem('token')){
 					
 					that.token = localStorage.getItem('token');
 				}
 				that.loading();
-				that.getAdsCache();
+				if(that.isvip==0){
+					that.getAdsCache();
+				}
+				
 				that.allCache();
 				if(localStorage.getItem('token')){
 					
@@ -403,12 +433,12 @@
 				if(localStorage.getItem('recommendList')){
 					that.recommendList = JSON.parse(localStorage.getItem('recommendList'));
 				}
-				// if(localStorage.getItem('find_metaList')){
-				// 	that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
-				// }
-				// if(localStorage.getItem('find_tagList')){
-				// 	that.tagList = JSON.parse(localStorage.getItem('find_tagList'));
-				// }
+				if(localStorage.getItem('find_metaList')){
+					that.metaList = JSON.parse(localStorage.getItem('find_metaList'));
+				}
+				if(localStorage.getItem('find_tagList')){
+					that.tagList = JSON.parse(localStorage.getItem('find_tagList'));
+				}
 				var timer = setTimeout(function() {
 					that.isLoading=1;
 					clearTimeout('timer')

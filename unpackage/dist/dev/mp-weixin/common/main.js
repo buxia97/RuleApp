@@ -1,9 +1,9 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["common/main"],{
 
 /***/ 0:
-/*!***********************************!*\
-  !*** E:/APPpro/voss/规则之树/main.js ***!
-  \***********************************/
+/*!*****************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/main.js ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37,51 +37,85 @@ _vue.default.prototype.$Net = _net.default;
 //文章为主风格
 var find = function find() {
   __webpack_require__.e(/*! require.ensure | pages/tabPage/find */ "pages/tabPage/find").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/tabPage/find.vue */ 261));
+    return resolve(__webpack_require__(/*! ./pages/tabPage/find.vue */ 342));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('find', find);
 var home = function home() {
   __webpack_require__.e(/*! require.ensure | pages/tabPage/home */ "pages/tabPage/home").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/tabPage/home.vue */ 266));
+    return resolve(__webpack_require__(/*! ./pages/tabPage/home.vue */ 347));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('home', home);
 var square = function square() {
   __webpack_require__.e(/*! require.ensure | pages/tabPage/square */ "pages/tabPage/square").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/tabPage/square.vue */ 271));
+    return resolve(__webpack_require__(/*! ./pages/tabPage/square.vue */ 352));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('square', square);
+
+//帖子为主风格
+var forumHome = function forumHome() {
+  __webpack_require__.e(/*! require.ensure | pages/tabPage/forumHome */ "pages/tabPage/forumHome").then((function () {
+    return resolve(__webpack_require__(/*! ./pages/tabPage/forumHome.vue */ 357));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+_vue.default.component('forumHome', forumHome);
+var allSection = function allSection() {
+  __webpack_require__.e(/*! require.ensure | pages/tabPage/allSection */ "pages/tabPage/allSection").then((function () {
+    return resolve(__webpack_require__(/*! ./pages/tabPage/allSection.vue */ 427));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+_vue.default.component('allSection', allSection);
+
+//通用
 var user = function user() {
   __webpack_require__.e(/*! require.ensure | pages/tabPage/user */ "pages/tabPage/user").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/tabPage/user.vue */ 276));
+    return resolve(__webpack_require__(/*! ./pages/tabPage/user.vue */ 362));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('user', user);
 
-//通用
+//下面是列表和模块组件
+var forumIndex = function forumIndex() {
+  __webpack_require__.e(/*! require.ensure | pages/components/forumIndex */ "pages/components/forumIndex").then((function () {
+    return resolve(__webpack_require__(/*! ./pages/components/forumIndex.vue */ 367));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+_vue.default.component('forumIndex', forumIndex);
 var articleItem = function articleItem() {
   __webpack_require__.e(/*! require.ensure | pages/components/articleItem */ "pages/components/articleItem").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/components/articleItem.vue */ 281));
+    return resolve(__webpack_require__(/*! ./pages/components/articleItem.vue */ 372));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('articleItem', articleItem);
 var commentItem = function commentItem() {
   __webpack_require__.e(/*! require.ensure | pages/components/commentItem */ "pages/components/commentItem").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/components/commentItem.vue */ 286));
+    return resolve(__webpack_require__(/*! ./pages/components/commentItem.vue */ 377));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('commentItem', commentItem);
+var postCommentItem = function postCommentItem() {
+  __webpack_require__.e(/*! require.ensure | pages/components/postCommentItem */ "pages/components/postCommentItem").then((function () {
+    return resolve(__webpack_require__(/*! ./pages/components/postCommentItem.vue */ 382));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+_vue.default.component('postCommentItem', postCommentItem);
 var spaceItem = function spaceItem() {
   __webpack_require__.e(/*! require.ensure | pages/components/spaceItem */ "pages/components/spaceItem").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/components/spaceItem.vue */ 291));
+    return resolve(__webpack_require__(/*! ./pages/components/spaceItem.vue */ 387));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('spaceItem', spaceItem);
+var forumItem = function forumItem() {
+  __webpack_require__.e(/*! require.ensure | pages/components/forumItem */ "pages/components/forumItem").then((function () {
+    return resolve(__webpack_require__(/*! ./pages/components/forumItem.vue */ 392));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
+_vue.default.component('forumItem', forumItem);
 var shopItem = function shopItem() {
   __webpack_require__.e(/*! require.ensure | pages/components/shopItem */ "pages/components/shopItem").then((function () {
-    return resolve(__webpack_require__(/*! ./pages/components/shopItem.vue */ 296));
+    return resolve(__webpack_require__(/*! ./pages/components/shopItem.vue */ 397));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 _vue.default.component('shopItem', shopItem);
@@ -96,9 +130,9 @@ createApp(app).$mount();
 /***/ }),
 
 /***/ 33:
-/*!***********************************!*\
-  !*** E:/APPpro/voss/规则之树/App.vue ***!
-  \***********************************/
+/*!*****************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/App.vue ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -136,9 +170,9 @@ component.options.__file = "App.vue"
 /***/ }),
 
 /***/ 34:
-/*!************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/App.vue?vue&type=script&lang=js& ***!
-  \************************************************************/
+/*!******************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/App.vue?vue&type=script&lang=js& ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -152,9 +186,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 35:
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/规则之树/App.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--13-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/RuleAppRro/App.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -239,6 +273,9 @@ var _default = {
       color: '#ffffff'
     }];
   },
+  onError: function onError(res) {
+    console.log(JSON.stringify(res));
+  },
   onShow: function onShow() {
     console.log('App Show');
   },
@@ -252,9 +289,9 @@ exports.default = _default;
 /***/ }),
 
 /***/ 36:
-/*!********************************************************************!*\
-  !*** E:/APPpro/voss/规则之树/App.vue?vue&type=style&index=0&lang=css& ***!
-  \********************************************************************/
+/*!**************************************************************************!*\
+  !*** E:/APPpro/voss/RuleAppRro/App.vue?vue&type=style&index=0&lang=css& ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -268,9 +305,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 37:
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--6-oneOf-1-0!./node_modules/css-loader/dist/cjs.js??ref--6-oneOf-1-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--6-oneOf-1-2!./node_modules/postcss-loader/src??ref--6-oneOf-1-3!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/规则之树/App.vue?vue&type=style&index=0&lang=css& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--6-oneOf-1-0!./node_modules/css-loader/dist/cjs.js??ref--6-oneOf-1-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--6-oneOf-1-2!./node_modules/postcss-loader/src??ref--6-oneOf-1-3!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/APPpro/voss/RuleAppRro/App.vue?vue&type=style&index=0&lang=css& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

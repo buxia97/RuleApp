@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -9,7 +9,7 @@
 					用户封禁<block v-if="pageType==1">{{toid}}</block>
 				</view>
 				<view class="action" @tap="userBan">
-					<text class="cuIcon-upload"></text>
+					<button class="cu-btn round bg-blue">确认</button>
 				</view>
 			</view>
 		</view>
@@ -149,7 +149,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			if(localStorage.getItem('getuid')){

@@ -39,12 +39,54 @@
 				<view class="text-blue" @tap="toEmail">修改</view>
 			</view>
 			<view class="cu-form-group">
+				<view class="title">手机号</view>
+				<input placeholder="未设置" disabled="disabled" name="input" :value="phone"></input>
+				<view class="text-blue" @tap="toPhone">修改</view>
+			</view>
+			<view class="cu-form-group">
 				<view class="title">网址</view>
 				<input placeholder="请输入网址" name="input" v-model="url"></input>
 			</view>
+			
 			<view class="cu-form-group align-start">
 				<view class="title">个人简介</view>
 				<textarea v-model="introduce"  placeholder="输入个人简介"></textarea>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">性别</view>
+				<radio-group v-model="gender"  @change="onChange">
+				  <radio class="blue radio" color="#000000" :checked="gender=='0'?true:false" value="0">保密</radio>
+				  <radio class="blue radio margin-left-sm" color="#007AFF"  :checked="gender=='1'?true:false" value="1">男性</radio>
+				  <radio class="blue radio margin-left-sm" color="#ff2c80"  :checked="gender=='2'?true:false" value="2">女性</radio>
+				</radio-group>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">生日</view>
+				<picker mode="date" :value="birthday" start="1900-01-01" end="2050-01-01" @change="DateChange">
+					<view class="picker">
+						<template v-if="birthday==null">
+							还未设置
+						</template>
+						<template v-else>
+							{{birthday}}
+						</template>
+						
+					</view>
+				</picker>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">所在地</view>
+				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
+					<view class="picker">
+						<template v-if="region==0||region==''">
+							请选择地区
+						</template>
+						<template v-else>
+							{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}
+						</template>
+						
+					</view>
+				</picker>
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">密码</view>
@@ -124,13 +166,15 @@
 	// #ifdef H5 || APP-PLUS 
 	import { pathToBase64, base64ToPath } from '../../js_sdk/mmmm-image-tools/index.js'
 	// #endif
+	
+	import regionData from '../../utils/pca-code.json';
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				NavBar:this.StatusBar +  this.CustomBar,
-			AppStyle:this.$store.state.AppStyle,
+				AppStyle:this.$store.state.AppStyle,
 				
 				uid:0,
 				name:'',
@@ -142,12 +186,20 @@
 				url:'',
 				avatar:"",
 				avatarNew:"",
+				regionData:regionData,
 				introduce:"",
+				gender: '0',
+				birthday: null,
 				
 				modalName: null,
 				
 				token:'',
 				styleIndex:"",
+				
+				multiArray: [],
+				objectMultiArray: [],
+				multiIndex: [0, 0, 0],
+				region:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -176,12 +228,28 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.styleIndex = that.$API.GetStyleIndex();
+			
+			//获取默认地址数据
+			that.getRegionList();
+			
+			
 		},
 		methods: {
+			
+			
+
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			onChange(e) {
+				console.log('选中变化:', e.detail.value)
+				this.gender = e.detail.value
+			},
+			DateChange(e) {
+				this.birthday = e.detail.value
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
@@ -193,7 +261,13 @@
 			  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,}$/;
 			  return regex.test(password);
 			},
-
+			timestampToDate(timestamp) {
+				const date = new Date(timestamp * 1000);
+				const Y = date.getFullYear();
+				const M = (date.getMonth() + 1).toString().padStart(2, '0');
+				const D = date.getDate().toString().padStart(2, '0');
+				return `${Y}-${M}-${D}`;
+			  },
 			userStatus() {
 				var that = this;
 				var token = "";
@@ -223,6 +297,16 @@
 							that.avatar=res.data.data.avatar;
 							that.introduce = res.data.data.introduce;
 							that.phone = res.data.data.phone;
+							if(res.data.data.birthday&&res.data.data.birthday!=0){
+								let birthday = res.data.data.birthday;
+								that.birthday = that.timestampToDate(birthday);
+							}
+							
+							that.region = res.data.data.region;
+							that.gender = res.data.data.gender+'';
+							if (that.region) {
+								that.setRegionFromString();
+							}
 							if(localStorage.getItem('userinfo')){
 								
 								var userInfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -311,6 +395,17 @@
 					});
 					return false
 				}
+				if(that.region==0||that.region==''){
+					uni.showToast({
+					    title:"请选择地区",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				const birthday = that.birthday;
+				const timeStampBirthday = Math.floor(new Date(birthday.replace(/-/g, '/')).getTime() / 1000);
 				var data = {
 					uid:that.uid,
 					name:that.name,
@@ -318,6 +413,9 @@
 					password:that.password,
 					introduce:that.introduce,
 					url:that.url,
+					region:that.region,
+					gender:that.gender,
+					birthday:timeStampBirthday
 				}
 				if(that.avatarNew!=''){
 					data.avatar = that.avatarNew;
@@ -390,6 +488,13 @@
 				
 				uni.navigateTo({
 				    url: '/pages/user/mailedit'
+				});
+			},
+			toPhone(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/phoneedit'
 				});
 			},
 			toAddress(){
@@ -506,7 +611,121 @@
 			},
 			isValidString(str) {
 			  return /\s/g.test(str);
+			},
+			getRegionList() {
+			  let regionData = this.regionData;
+			  if (!regionData || !regionData.length) return;
+			
+			  // 一级（省）
+			  const list1 = regionData.map(e => ({ id: e.code, name: e.name }));
+			  const sort1 = list1.map(e => e.name);
+			
+			  // 二级（默认选第一个省）
+			  const children1 = regionData[0].children || [];
+			  const list2 = children1.map(e => ({ id: e.code, name: e.name }));
+			  const sort2 = list2.map(e => e.name);
+			
+			  // 三级（默认选第一个市）
+			  const children2 = children1[0]?.children || [];
+			  const list3 = children2.map(e => ({ id: e.code, name: e.name }));
+			  const sort3 = list3.map(e => e.name);
+			
+			  this.multiArray = [sort1, sort2, sort3];
+			  this.objectMultiArray = [list1, list2, list3];
+			  this.multiIndex = [0, 0, 0];
+			},
+			MultiChange(e) {
+			  this.multiIndex = e.detail.value;
+			
+			  const provinceIndex = this.multiIndex[0];
+			  const cityIndex = this.multiIndex[1];
+			  const districtIndex = this.multiIndex[2];
+			
+			  const province = this.multiArray[0][provinceIndex] || '';
+			  const city = this.multiArray[1][cityIndex] || '';
+			  const district = this.multiArray[2][districtIndex] || '';
+			
+			  this.region = `${province}||${city}||${district}`;
+			},
+			setRegionFromString() {
+			  if (!this.region || !this.region.includes('||')) return;
+			  const [provinceName, cityName, districtName] = this.region.split('||');
+			
+			  const provinceIndex = this.regionData.findIndex(p => p.name === provinceName);
+			  if (provinceIndex === -1) return;
+			
+			  const province = this.regionData[provinceIndex];
+			  const cityList = province.children || [];
+			  const cityIndex = cityList.findIndex(c => c.name === cityName);
+			  const city = cityList[cityIndex] || {};
+			
+			  const districtList = city.children || [];
+			  const districtIndex = districtList.findIndex(d => d.name === districtName);
+			
+			  // 更新 multiArray
+			  const list1 = this.regionData.map(e => e.name);
+			  const list2 = cityList.map(e => e.name);
+			  const list3 = districtList.map(e => e.name);
+			
+			  this.multiArray = [list1, list2, list3];
+			  this.multiIndex = [
+			    provinceIndex >= 0 ? provinceIndex : 0,
+			    cityIndex >= 0 ? cityIndex : 0,
+			    districtIndex >= 0 ? districtIndex : 0
+			  ];
+			
+			  // 同步 objectMultiArray 方便取 ID 等
+			  this.objectMultiArray = [
+			    this.regionData.map(e => ({ id: e.code, name: e.name })),
+			    cityList.map(e => ({ id: e.code, name: e.name })),
+			    districtList.map(e => ({ id: e.code, name: e.name }))
+			  ];
+			},
+
+			MultiColumnChange(e) {
+			  const column = e.detail.column;
+			  const value = e.detail.value;
+			  const data = {
+			    multiArray: this.multiArray,
+			    multiIndex: this.multiIndex,
+			  };
+			
+			  data.multiIndex[column] = value;
+			
+			  // 更新联动数据
+			  switch (column) {
+			    case 0: {
+			      // 改变了省份 -> 重新加载城市、区
+			      const cityList = this.regionData[value].children || [];
+			      data.multiArray[1] = cityList.map(e => e.name);
+			      data.multiIndex[1] = 0;
+			
+			      const districtList = cityList[0]?.children || [];
+			      data.multiArray[2] = districtList.map(e => e.name);
+			      data.multiIndex[2] = 0;
+			      break;
+			    }
+			
+			    case 1: {
+			      // 改变了城市 -> 重新加载区县
+			      const provinceIndex = data.multiIndex[0];
+			      const cityList = this.regionData[provinceIndex].children || [];
+			      const districtList = cityList[value]?.children || [];
+			      data.multiArray[2] = districtList.map(e => e.name);
+			      data.multiIndex[2] = 0;
+			      break;
+			    }
+			
+			    case 2:
+			      // 改变区县，不需要动数据结构
+			      break;
+			  }
+			
+			  this.multiArray = data.multiArray;
+			  this.multiIndex = data.multiIndex;
 			}
+
+
 		}
 	}
 </script>

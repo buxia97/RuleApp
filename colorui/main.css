@@ -1485,6 +1485,9 @@ button.cuIcon.lg {
 	position: relative;
 	align-items: center;
 	min-height: 100upx;
+	/*  #ifdef  H5  */
+	min-height: 90upx;
+	/*  #endif  */
 	justify-content: space-between;
 }
 

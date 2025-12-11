@@ -9,8 +9,8 @@
 					我的商品
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="action" @tap="toShop">
-					<text class="cuIcon-add"></text>
+				<view class="action">
+					<button class="cu-btn round bg-gradual-orange" @tap="toShop()">发布</button>
 				</view>
 				<!--  #endif -->
 			</view>
@@ -24,7 +24,7 @@
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="toShop">发布商品</button>
 					
 					<!--  #endif -->
-					<button class="cu-btn bg-yellow margin-tb-sm lg" @tap="sellOrder">已售出订单</button>
+					<button class="cu-btn bg-gradual-orange margin-tb-sm lg" @tap="sellOrder">已售出订单</button>
 				</view>
 			</view>
 			<view class="no-data" v-if="shopList.length==0">
@@ -33,7 +33,7 @@
 			<view class="shop-list">
 				
 				<block v-for="(item,index) in shopList" :key="index">
-					<shopItem :item="item" :isAdmin="true"></shopItem>
+					<shopItem :item="item" :isAdmin="false"></shopItem>
 				</block>
 
 				

@@ -1,12 +1,12 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					全站用户
+					用户筛选
 				</view>
 				<view class="action">
 					
@@ -16,16 +16,24 @@
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		
 		<view class="cu-list menu-avatar userList" style="margin-top: 20upx;">
+			<view class="cu-bar bg-white search">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input type="text" placeholder="输入用户ID/名称/手机号/所在地区" v-model="searchText"  @input="searchTag"></input>
+					<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
+				</view>
+			</view>
 			<view class="no-data" v-if="userList.length==0">
 				<text class="cuIcon-text"></text>暂时没有数据
 			</view>
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
-					<view class="text-grey">
+					<view class="text-black">
 						<block  v-if="item.screenName">{{item.screenName}}</block>
 						<block  v-else>{{item.name}}</block>
-						<text v-if="item.groupKey=='contributor'||item.groupKey=='administrator'" class="cuIcon-lightfill"></text>
+						<text v-if="item.gender==1" class="gender-ico cuIcon-male"></text>
+						<text v-if="item.gender==2" class="gender-ico cuIcon-female"></text>
 						<!--  #ifdef H5 || APP-PLUS -->
 						<block v-if="item.isvip>0">
 							<block v-if="item.vip==1">
@@ -36,6 +44,9 @@
 							</block>
 						</block>
 						<!--  #endif -->
+						<block v-if="item.birthday&&item.birthday!=0">
+							<text class="age-ico bg-blue">{{getAge(item.birthday)}}岁</text>
+						</block>
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
@@ -72,6 +83,7 @@
 				NavBar:this.StatusBar +  this.CustomBar,
 			AppStyle:this.$store.state.AppStyle,
 				
+				searchText:"",
 				userList:[],
 				
 				page:1,
@@ -101,15 +113,18 @@
 			that.page=1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(res.searchText){
+				that.searchText = res.searchText;
+			}
 			that.getUserList(false);
 		},
 		methods:{
@@ -145,11 +160,30 @@
 				that.getUserList(true);
 				
 			},
+			searchTag(){
+				var that = this;
+				var searchText = that.searchText;
+				that.page=1;
+				that.getUserList()
+			
+			},
+			searchClose(){
+				var that = this;
+				that.searchText = "";
+				that.page = 1;
+				that.getUserList(false);
+			},
 			getUserList(isPage){
 				var that = this;
 				var page = that.page;
 				if(isPage){
 					page++;
+				}
+				var token = ""
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
 				}
 				that.$Net.request({
 					url: that.$API.getUserList(),
@@ -157,7 +191,9 @@
 						"searchParams":"",
 						"limit":10,
 						"page":page,
-						"order":"created"
+						"searchKey":that.searchText,
+						"order":"created",
+						"token":token
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
@@ -227,7 +263,23 @@
 				}else{
 					return "Ta还没有个人介绍哦"
 				}
+			},
+			getAge(birthday) {
+			if (!birthday || isNaN(birthday)||birthday==0) return null;
+
+			const birth = new Date(birthday * 1000); // 转成毫秒
+			const today = new Date();
+
+			let age = today.getFullYear() - birth.getFullYear();
+			const m = today.getMonth() - birth.getMonth();
+			const d = today.getDate() - birth.getDate();
+
+			if (m < 0 || (m === 0 && d < 0)) {
+			  age--;
 			}
+
+			return age >= 0 ? age : 0; // 防止负数
+		  }
 		}
 	}
 	

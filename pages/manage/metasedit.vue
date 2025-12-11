@@ -6,12 +6,12 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					<block v-if="type=='add'">
+					<template v-if="type=='add'">
 						添加分类标签
-					</block>
-					<block v-else>
+					</template>	
+					<template v-else>
 						分类标签编辑
-					</block>
+					</template>
 					
 				</view>
 				<!--  #ifdef H5 || APP-PLUS -->
@@ -83,7 +83,7 @@
 		
 		<view class="cu-modal" :class="modalName=='parentList'?'show':''" @tap="hideModal">
 			<view class="cu-dialog" @tap.stop="">
-				<radio-group class="block" @change="midRadioChange">
+				<radio-group class="template" @change="midRadioChange">
 					<view class="cu-list menu text-left">
 						<view class="cu-item" v-for="(item,index) in parentList" :key="index">
 							<label class="flex justify-between align-center flex-sub" @tap="setMid(item.mid)">
@@ -122,6 +122,9 @@
 				curName:"",
 				parentList:[],
 				modalName: null,
+				
+				//数据提交拦截，防止重复提交
+				submitStatus:false,
 				
 			}
 		},
@@ -253,6 +256,10 @@
 			},
 			metaEdit() {
 				var that = this;
+				if(that.submitStatus){
+					return false;
+				}
+				that.submitStatus = true;
 				if (that.name == "") {
 					uni.showToast({
 						title:"请输入名称",
@@ -296,6 +303,7 @@
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -312,6 +320,7 @@
 						}
 					},
 					fail: function(res) {
+						that.submitStatus = false;
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);

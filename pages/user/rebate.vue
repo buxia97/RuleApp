@@ -9,7 +9,7 @@
 					获取{{currencyName}}
 				</view>
 				<view class="action">
-				
+					<text class="text-blue"  @tap="toLink('/pages/user/inviteList')">邀请记录</text>
 				</view>
 			</view>
 		</view>
@@ -62,6 +62,28 @@
 					</view>
 				</view>
 			</view>
+		</view>
+		<view class="data-box">
+			<view class="invite">
+				<view class="invite-title">邀请好友，获得{{currencyName}}</view>
+				<view class="invite-main">
+					<view class="invite-pic">
+						<image :src="codeImg" mode="widthFix"></image>
+					</view>
+					<view class="invite-text  text-blue">
+						{{invitationCode}}
+					</view>
+				</view>
+				<view class="invite-btn">
+					<text class="cu-btn bg-red radius" @tap="dtImg">下载图片</text>
+					<text class="cu-btn bg-blue radius margin-left" @tap="copy(invitationCode)">复制邀请码</text>
+				</view>
+			</view>
+			<view class="padding">
+				<view class="margin-bottom-sm">1.可通过保存邀请码，并让被邀请者使用本平台应用进行扫码，即可开始邀请注册。</view>
+				<view class="margin-bottom-sm">2.被邀请者注册后，可获得固定奖励，或消费分成奖励，以实际信息为准。</view>
+			</view>
+			
 		</view>
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
@@ -155,6 +177,7 @@
 			if(localStorage.getItem('token')){
 				
 				that.token = localStorage.getItem('token');
+				that.getInvitationCode();
 			}
 		},
 		onLoad() {
@@ -169,7 +192,6 @@
 				that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.urlCallback.userId = that.userInfo.uid;
 			}
-			that.isLoading =1;
 		},
 		methods: {
 			back(){
@@ -326,6 +348,7 @@
 			},
 			adsGiftNotify(){
 				var that = this;
+				console.log("进来了")
 
 				that.$Net.request({
 					
@@ -390,8 +413,94 @@
 					textarea.remove()    
 				// #endif
 			},
-			
-		
+			getInvitationCode() {
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}
+				that.$Net.request({
+					
+					url: that.$API.getInvitationCode(),
+					data:{
+						"token":token
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+						if(res.data.code==1){
+							that.invitationCode = res.data.data;
+							var inviteJson = {
+								"type":"Invite",
+								"code":that.invitationCode
+							}
+							
+							that.codeImg = that.$API.qrCode()+"?codeContent="+encodeURIComponent(JSON.stringify(inviteJson));
+						}
+					},
+					fail: function(res) {
+						var timer = setTimeout(function() {
+							that.isLoading=1;
+							clearTimeout('timer')
+						}, 300)
+						uni.showToast({
+							title: "网络开小差了哦",
+							icon: 'none'
+						})
+					}
+				})
+			},
+			dtImg(){
+				var that = this;
+				var url = that.codeImg;
+				// #ifdef APP-PLUS
+				uni.downloadFile({
+					url: url,
+					success: (res) =>{
+						if (res.statusCode === 200){
+							uni.saveImageToPhotosAlbum({
+								filePath: res.tempFilePath,
+								success: function() {
+									if(that.payType==1){
+										uni.showToast({
+											title: "图片已保存，微信不支持相册识别支付，请通过正常扫码完成。",
+											icon: "none"
+										});
+									}else{
+										uni.showToast({
+											title: "保存成功",
+											icon: "none"
+										});
+									}
+									
+								},
+								fail: function() {
+									uni.showToast({
+										title: "保存失败，请稍后重试",
+										icon: "none"
+									});
+								}
+							});
+						}
+					}
+				})
+				// #endif
+				// #ifdef H5
+				uni.showToast({
+					title: "请长按二维码图片保存",
+					icon: "none"
+				});
+				// #endif
+			},
 			onadRewardedLoad() {
 				console.log('激励视频广告数据加载成功');
 			},

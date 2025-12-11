@@ -66,9 +66,9 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
-			that.getContentsList(false);
+			
 			
 			
 		},
@@ -85,7 +85,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
-			
+			that.getContentsList(false);
 		},
 		methods: {
 			back(){
@@ -107,14 +107,14 @@
 			},
 			getContentsList(isPage){
 				var that = this;
-				var data = {
-					"type":"post",
-					"isrecommend":1
-				}
 				var token = "";
 				if(localStorage.getItem('userinfo')){
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
+				}
+				var data = {
+					"type":"post",
+					"isrecommend":1
 				}
 				var page = that.page;
 				if(isPage){
@@ -132,7 +132,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						that.isLoad=0;

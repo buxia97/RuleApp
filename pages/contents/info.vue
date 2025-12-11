@@ -17,9 +17,23 @@
 				</view>
 				<view class="action info-btn">
 					<!--  #ifdef H5 || APP-PLUS -->
-					
-					<text class="cuIcon-search"  @tap="toSearch"></text>
+					<text class="cuIcon-moreandroid" @tap="moreShow=!moreShow"></text>
 					<!--  #endif -->
+					<view class="info-more-links" :class="moreShow?'moreShow':''">
+						<view class="info-more-links-box"  @tap="toSearch">
+							<text class="cuIcon-search"></text>搜索
+						</view>
+						<view class="info-more-links-box" @tap="report(title,1)">
+							<text class="cuIcon-warn"></text>举报
+						</view>
+						<view class="info-more-links-box" @tap="goMyBan(cid,'banContent')">
+							<text class="cuIcon-roundclosefill"></text>屏蔽文章
+						</view>
+						<view class="info-more-links-box" @tap="goMyBan(authorId,'banUser')">
+							<text class="cuIcon-attentionforbidfill"></text>拉黑作者
+						</view>
+					</view>
+					
 				</view>
 			</view>
 		</view>
@@ -40,7 +54,7 @@
 					<view class="cu-item">
 						<view class="cu-avatar round lg" :style="userInfo.style"  @tap="toUserInfo(userInfo)"></view>
 						<view class="content">
-							<view class="text-grey">
+							<view class="text-black">
 								<block v-if="userInfo.screenName">
 									{{userInfo.screenName}}
 								</block>
@@ -48,8 +62,8 @@
 									{{userInfo.name}}
 								</block>
 								<!--  #ifdef H5 || APP-PLUS -->
-								<text class="userlv" :style="getLvStyle(userInfo.experience)">{{getLv(userInfo.experience)}}</text>
 								<!-- <text class="userlv" :style="getUserLvStyle(userInfo.lv)">{{getUserLv(userInfo.lv)}}</text> -->
+								<text class="userlv" :style="getLvStyle(userInfo.experience)">{{getLv(userInfo.experience)}}</text>
 								<!--  #endif -->
 								<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
 								<!--  #ifdef H5 || APP-PLUS -->
@@ -228,7 +242,7 @@
 							+{{rewardTotal}}
 						</view>
 					</view>
-					<view class="reward-log-box" v-for="(item,index) in rewardLog">
+					<view class="reward-log-box" v-for="(item,index) in rewardLog" :key="index">
 						<view class="reward-log-i">
 							<image :src="item.userJson.avatar"></image>
 						</view>
@@ -352,17 +366,9 @@
 			</view>
 		</view>
 		<!--  #endif -->
-<!-- 		name: String,
-		title: String,
-		intro:String,
-		time: String,
-		imgUrl:String,
-		href: String,
-		webName: String, -->
 		<template v-if="isImgShare">
 			<Share :name="imgShare.name" :title="imgShare.title" :intro="imgShare.intro" :time="imgShare.time" :href="imgShare.href" :imgUrl="imgShare.imgUrl" :webName="imgShare.webName" @closeImgShare="closeImgShare"/>
 		</template>
-		
 	</view>
 </template>
 <script>
@@ -426,37 +432,37 @@
 				modalName: null,
 				checkbox: [{
 					value: 0,
-					name: '5积分',
+					name: '5金币',
 					num:5,
 					checked: false,
 					hot: false,
 				}, {
 					value: 1,
-					name: '10积分',
+					name: '10金币',
 					num:10,
 					checked: false,
 					hot: false,
 				}, {
 					value: 2,
-					name: '30积分',
+					name: '30金币',
 					num:30,
 					checked: false,
 					hot: false,
 				}, {
 					value: 3,
-					name: '50积分',
+					name: '50金币',
 					num:50,
 					checked: false,
 					hot: false,
 				}, {
 					value: 4,
-					name: '100积分',
+					name: '100金币',
 					num:100,
 					checked: false,
 					hot: false,
 				}, {
 					value: 5,
-					name: '200积分',
+					name: '200金币',
 					num:200,
 					checked: false,
 					hot: false,
@@ -484,7 +490,6 @@
 				currencyName:"",
 				
 				isShare:false,
-				
 				isImgShare:false,
 				imgShare:{
 					name: "",
@@ -497,7 +502,11 @@
 				},
 				
 				rewardLog:[],
-				rewardTotal:0
+				rewardTotal:0,
+				
+				isvip:0,
+				
+				moreShow:false
 				
 			}
 		},
@@ -549,13 +558,16 @@
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.uid = userInfo.uid;
 				that.group = userInfo.group;
+				that.isvip = userInfo.isvip;
 			}
 			// #ifdef MP-BAIDU
 			//预留百度小程序TDK
 
 			// #endif
+			if(that.isvip==0){
+				that.getAdsCache();
+			}
 			
-			that.getAdsCache();
 			// #ifdef H5 || APP-PLUS
 			that.isComment=1;
 			// #endif
@@ -715,6 +727,17 @@
 			},
 			markExpand(text){
 				var that = this;
+				//处理音频和视频标签
+				//网易云音乐
+				text = that.replaceAll(text,'[music 163]','<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=')
+				text = that.replaceAll(text,"[/music 163]",'&auto=1&height=66"></iframe>');
+				//QQ音乐
+				text = that.replaceAll(text,'[music qq]','<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://i.y.qq.com/n2/m/outchain/player/index.html?songid=')
+				text = that.replaceAll(text,"[/music qq]",'"></iframe>');
+				
+				//B站
+				text = that.replaceAll(text,'[video bilibili]','<iframe src="')
+				text = that.replaceAll(text,"[/video bilibili]",'" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>');
 				//评论可见
 				if(that.isCommnet==1){
 					text = that.replaceAll(text,"[hide]","<div style='width:100%;padding:15px 15px;background:#dff0d8;color:#3c763d;border:solid 1px #d6e9c6;box-sizing: border-box;border-radius: 5px;word-break:break-all;'>");
@@ -1386,7 +1409,6 @@
 				that.ToCopy(url);
 				// #endif
 			},
-			
 			closeImgShare(){
 				var that = this;
 				that.isImgShare = false;
@@ -1538,6 +1560,7 @@
 				    url: '/pages/contents/search'
 				});
 			},
+			
 			toAds(url){
 				// #ifdef APP-PLUS
 				plus.runtime.openURL(url) 
@@ -2052,6 +2075,91 @@
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[lv];
 				return userlvStyle;
 			},
+			report(title,type){
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.showToast({
+						title: "请先登录哦",
+						icon: 'none'
+					})
+					return false;
+				}
+				uni.redirectTo({
+				    url: '/pages/user/report?title='+title+"&type="+type
+				});
+			},
+			goMyBan(uid,type){
+				var that = this;
+				var token = "";
+				
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				var title = "";
+				if(type=="banUser"){
+					title = '确定要拉黑作者吗？拉黑后，将屏蔽该用户所有发布内容！'
+				}
+				if(type=="banContent"){
+					title = '确定要屏蔽该文章吗！'
+				}
+				var data = {
+					"id":uid,
+					"type":type,
+					"token":token
+				}
+				uni.showModal({
+					title: title,
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: "加载中"
+							});
+							
+							that.$Net.request({
+								url: that.$API.ban(),
+								data:data,
+								header:{
+									'Content-Type':'application/x-www-form-urlencoded'
+								},
+								method: "get",
+								dataType: 'json',
+								success: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									if(res.data.code==1){
+										uni.showToast({
+											title: "拉黑成功！",
+											icon: 'none'
+										})
+										that.back();
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+									
+								},
+								fail: function(res) {
+									setTimeout(function () {
+										uni.hideLoading();
+									}, 1000);
+									uni.showToast({
+										title: "网络开小差了哦",
+										icon: 'none'
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			
 		}
 	}
 </script>

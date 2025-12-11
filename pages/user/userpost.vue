@@ -17,15 +17,18 @@
 		</view>
 		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
 		<view class="data-box">
-			<view class="search-type grid col-3">
-				<view class="search-type-box" @tap="toType('waiting')" :class="type=='waiting'?'active':''">
-					<text>待审核</text>
-				</view>
+			<view class="search-type grid col-4">
 				<view class="search-type-box" @tap="toType('publish')" :class="type=='publish'?'active':''">
 					<text>已发布</text>
 				</view>
+				<view class="search-type-box" @tap="toType('waiting')" :class="type=='waiting'?'active':''">
+					<text>待审核</text>
+				</view>
 				<view class="search-type-box" @tap="toType('reject')" :class="type=='reject'?'active':''">
 					<text>已拒绝</text>
+				</view>
+				<view class="search-type-box" @tap="toType('post_draft')" :class="type=='post_draft'?'active':''">
+					<text>草稿箱</text>
 				</view>
 			</view>
 			<view class="cu-card article no-card">
@@ -53,9 +56,10 @@
 							</view>
 						</view>
 					</view>
-					<view class="manage-btn" style="text-align: right;">
-						<text class="text-red radius"  @tap="toDelete(item.cid)" v-if="allowDelete==1">删除</text>
-						
+					<view class="manage-btn">
+						<text class="text-blue radius cu-btn sm"  @tap="toEdit(item)">修改文章</text>
+						<text class="text-red  radius cu-btn sm"  @tap="toDelete(item.cid)" v-if="allowDelete==1">删除文章</text>
+						<text class="text-black radius cu-btn sm"  @tap="getDocx(item.cid)">导出Docx</text>
 					</view>
 				</view>
 				<view class="load-more" @tap="loadMore" v-if="contentsList.length>0">
@@ -92,7 +96,7 @@
 				contentsList:[],
 				
 				isLoading:0,
-				type:"waiting",
+				type:"publish",
 				
 				allowDelete:0,
 			}
@@ -166,6 +170,12 @@
 					"authorId":authorId,
 					"status":that.type
 				}
+				if(that.type=="post_draft"){
+					data = {
+						"type":"post_draft",
+						"authorId":authorId
+					}
+				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -219,6 +229,29 @@
 						that.isLoad=0;
 					}
 				})
+			},
+			getDocx(cid){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}else{
+					uni.showToast({
+						title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				var url = that.$API.getDocx()+"?cid="+cid+"&token="+token;
+				// #ifdef APP-PLUS
+				plus.runtime.openURL(url) 
+				// #endif
+				// #ifdef H5
+				window.open(url)
+				// #endif
 			},
 			contentConfig(){
 				var that = this;

@@ -3,11 +3,11 @@ const aspectRatio = 1 / 1;
 // 自动裁剪区域, 默认为 50%
 const autoCropAre = 0.5;
 // 裁剪宽度
-const croppedWidth = 200;
+const croppedWidth = 400;
 // 裁剪高度
 const croppedHeight = croppedWidth * aspectRatio;
 // 是否裁剪为圆形
-const roundedCrop = true;
+const roundedCrop = false;
 
 
 const fileUploadBox = document.querySelector(".file-upload-box");
@@ -156,6 +156,7 @@ function getRoundedCanvas(sourceCanvas) {
   context.drawImage(sourceCanvas, 0, 0, width, height);
   context.globalCompositeOperation = "destination-in";
   context.beginPath();
+  //圆圈
   context.arc(
     width / 2,
     height / 2,

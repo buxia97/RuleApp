@@ -59,7 +59,7 @@
 				</view>
 
 				<view class="shop-order-btn padding flex flex-direction">
-					<button class="cu-btn bg-green lg" @tap="shopBuy()">确认购买</button>
+					<button class="cu-btn bg-gradual-orange lg" @tap="shopBuy()">确认购买</button>
 				</view>
 			</view>
 		</view>
@@ -99,7 +99,7 @@
 				currencyName:"",
 				
 				isLoading:0,
-				
+				isIOS: 0,
 				assets:0,
 				
 				
@@ -139,6 +139,11 @@
 				that.sid = res.sid;
 				that.getInfo(that.sid);
 			}
+			// #ifdef APP-PLUS
+			const platform = uni.getSystemInfoSync().platform;
+			this.isIOS = (platform === 'ios') ? 1 : 0;
+			console.log('当前平台：', platform, 'isIOS=', this.isIOS);
+			// #endif
 			
 		},
 		methods:{
@@ -361,6 +366,16 @@
 									});
 									clearTimeout('timer')
 								}, 1000)
+							}
+							if(res.data.msg=="当前资产不足，请充值"){
+								
+								var url = "/pages/user/userrecharge";
+								if(that.isIOS == 1){
+									url = "/pages/user/applePay";
+								}
+								uni.navigateTo({
+								    url: url
+								});
 							}
 						}
 			

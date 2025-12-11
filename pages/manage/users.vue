@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -71,7 +71,7 @@
 					</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							UID:{{item.uid}}&nbsp;&nbsp;积分:<text class="text-blue">{{item.assets}}</text>
+							UID:{{item.uid}}&nbsp;&nbsp;{{currencyName}}:<text class="text-blue">{{item.assets}}</text>
 						</view>
 					</view>
 				</view>
@@ -141,6 +141,7 @@
 				dataType:"all",
 				group:"",
 				token:"",
+				currencyName:""
 				
 			}
 		},
@@ -175,7 +176,7 @@
 			that.page=1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
@@ -188,6 +189,7 @@
 				that.type = res.type;
 			}
 			that.getUserList(false);
+			that.currencyName = that.$API.getCurrencyName();
 		},
 		methods:{
 			allCache(){

@@ -1,12 +1,14 @@
 {
   "pages": [
     "pages/home/index",
+    "pages/home/index2",
     "pages/home/tool",
     "pages/home/about",
     "pages/user/userlist",
     "pages/user/fanList",
     "pages/user/followList",
     "pages/user/useredit",
+    "pages/user/phoneedit",
     "pages/user/mailedit",
     "pages/user/media",
     "pages/user/scan",
@@ -33,7 +35,14 @@
     "pages/chat/chat",
     "pages/space/info",
     "pages/space/post",
-    "pages/space/reply"
+    "pages/space/reply",
+    "pages/forum/home",
+    "pages/forum/info",
+    "pages/forum/section",
+    "pages/forum/addPost",
+    "pages/forum/reply",
+    "pages/forum/rewardLog",
+    "pages/forum/moderators"
   ],
   "subPackages": [],
   "window": {
@@ -46,10 +55,15 @@
     "find": "/pages/tabPage/find",
     "home": "/pages/tabPage/home",
     "square": "/pages/tabPage/square",
+    "forum-home": "/pages/tabPage/forumHome",
+    "all-section": "/pages/tabPage/allSection",
     "user": "/pages/tabPage/user",
+    "forum-index": "/pages/components/forumIndex",
     "article-item": "/pages/components/articleItem",
     "comment-item": "/pages/components/commentItem",
+    "post-comment-item": "/pages/components/postCommentItem",
     "space-item": "/pages/components/spaceItem",
+    "forum-item": "/pages/components/forumItem",
     "shop-item": "/pages/components/shopItem"
   }
 }

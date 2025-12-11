@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -39,7 +39,7 @@
 								<text class="order-type">UID：{{item.uid}}</text>
 							</view>
 							<view class="order-btn">
-								<text class="text-red">{{item.num}} 积分 = ￥ {{item.num/scale}}</text>
+								<text class="text-red">{{item.num}} {{currencyName}} = ￥ {{item.num/scale}}</text>
 								<text class="text-blue order-status" @tap="showUserPay(item.pay)">用户收款信息</text>
 							</view>
 							<view class="order-kill" v-if="item.cid==-1">
@@ -114,6 +114,8 @@
 				scale:0,
 				modalName: null,
 				curPay:[],
+				
+				currencyName:"",
 			}
 		},
 		onPullDownRefresh(){
@@ -134,7 +136,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.page=1;
 			that.getVipInfo();
@@ -146,6 +148,7 @@
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getWithdrawList(false);
+			that.currencyName = that.$API.getCurrencyName();
 		},
 		methods:{
 			hideModal(e) {

@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -17,23 +17,48 @@
 		<view class="user-form">
 			<form>
 				<view class="cu-form-group">
-					<input name="input" v-model="name" placeholder="请输入用户名(必填)"></input>
+					<input name="input" v-model="name" placeholder="请输入用户名或者邮箱"></input>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" v-model="code" placeholder="请输入验证码"></input>
+					<input name="input" v-model="code" placeholder="请输入邮箱验证码"></input>
 					<view class="sendcode text-blue" v-if="show" @tap="SendCode">发送</view>
 					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" v-model="password" type="password" placeholder="输入新密码"></input>
+					<input name="input" placeholder="请输入新密码" type="password" v-if="!pwdShow" v-model="password"></input>
+					<input name="input" placeholder="请输入新密码" type="text" v-if="pwdShow" v-model="password"></input>
+					<text class="active cuIcon-attentionfill text-black" @tap="pwdShow=!pwdShow" v-if="password!=''&&pwdShow"></text>
+					<text class="active cuIcon-attentionfill text-gray" @tap="pwdShow=!pwdShow" v-if="password!=''&&!pwdShow"></text>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
+					<input name="input" placeholder="请再次输入新密码" type="password" v-if="!rePwdShow" v-model="repassword"></input>
+					<input name="input" placeholder="请再次输入新密码" type="text" v-if="rePwdShow" v-model="repassword"></input>
+					<text class="active cuIcon-attentionfill text-black" @tap="rePwdShow=!rePwdShow" v-if="repassword!=''&&rePwdShow"></text>
+					<text class="active cuIcon-attentionfill text-gray" @tap="rePwdShow=!rePwdShow" v-if="repassword!=''&&!rePwdShow"></text>
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="userFoget">确认修改</button>
 				</view>
 			</form>
+		</view>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="SendCode">确定</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -56,6 +81,14 @@
 				password:"",
 				repassword:"",
 				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
+				
+				pwdShow:false,
+				rePwdShow:false
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -66,7 +99,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
@@ -75,12 +108,36 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.kaptchaUrl = that.$API.getKaptcha();
+			that.getConfig();
 		},
 		methods: {
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
+			getConfig() {
+				var that = this;
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.verifyLevel = AppInfo.verifyLevel;
+					}catch(e){
+						console.log(e);
+					}
+					
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			PickerChange(e) {
 				this.index = e.detail.value
@@ -170,8 +227,15 @@
 					});
 					return false
 				}
+				if(that.verifyLevel>0){
+					if (that.verifyCode == "") {
+						that.modalName = 'kaptcha'
+						return false
+					}
+				}
 				var data = {
-					'name':that.name
+					'name':that.name,
+					
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -179,13 +243,18 @@
 				that.$Net.request({
 					
 					url: that.$API.SendCode(),
-					data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(data))},
+					data:{
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						'verifyCode':that.verifyCode
+					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);

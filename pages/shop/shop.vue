@@ -46,7 +46,7 @@
 					<view class="shop-sort-list-box" :class="sort == 0?'text-blue':''" @tap="setSort(null)">
 						全部
 					</view>
-					<view class="shop-sort-list-box" v-for="(item,index) in sortList" :class="item.id == sort?'text-blue':''"  @tap="setSort(item)">
+					<view class="shop-sort-list-box" v-for="(item,index) in sortList" :class="item.id == sort?'text-blue':''"  @tap="setSort(item)" :key="index">
 						{{item.name}}
 					</view>
 				</view>
@@ -54,7 +54,7 @@
 					<view class="shop-sort-list-box" :class="subtype == 0?'text-blue':''" @tap="setSubtype(null)">
 						全部
 					</view>
-					<view class="shop-sort-list-box" v-for="(item,index) in subtypeList" :class="item.id == subtype?'text-blue':''"  @tap="setSubtype(item)">
+					<view class="shop-sort-list-box" v-for="(item,index) in subtypeList" :class="item.id == subtype?'text-blue':''"  @tap="setSubtype(item)" :key="index">
 						{{item.name}}
 					</view>
 				</view>

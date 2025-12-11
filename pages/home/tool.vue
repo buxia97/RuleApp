@@ -119,7 +119,7 @@
 								<text class="cuIcon-taoxiaopu"></text>
 							</view>
 							<view class="index-sort-text">
-								积分商城
+								商城
 							</view>
 						</view>
 					</waves>
@@ -127,7 +127,7 @@
 				<!--  #endif -->
 			</view>
 		</view>
-		<view class="data-box">
+		<view class="data-box" style="display: none;">
 			<view class="cu-bar bg-white">
 				<view class="action data-box-title">
 					<text class="cuIcon-titles text-rule"></text> 创意区
@@ -149,7 +149,7 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box">
+				<!-- <view class="index-sort-box">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
 							<view class="index-sort-i" style="background-color: #1db837;">
@@ -161,7 +161,7 @@
 						</view>
 					</waves>
 					
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<!--加载遮罩-->

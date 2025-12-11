@@ -2,8 +2,8 @@
     "name" : "规则之树",
     "appid" : "__UNI__8D6C809",
     "description" : "规则之树手机客户端",
-    "versionName" : "RuleTree App 1.4.7",
-    "versionCode" : 42,
+    "versionName" : "RuleTree App 2.0.3",
+    "versionCode" : 53,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -14,7 +14,8 @@
             "Push" : {},
             "Camera" : {},
             "Barcode" : {},
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Payment" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -74,7 +75,12 @@
                         "appkey" : "1656619711",
                         "redirect_uri" : "https://www.ruletree.club/tepass/wb_login",
                         "UniversalLinks" : ""
-                    }
+                    },
+                    "weixin" : {
+                        "appid" : "wx75b095c2a1c8066a",
+                        "UniversalLinks" : ""
+                    },
+                    "apple" : {}
                 },
                 "payment" : {},
                 "statics" : {}
@@ -151,5 +157,6 @@
         "template" : "template.h5.html"
     },
     "fallbackLocale" : "zh-Hans",
-    "locale" : "auto"
+    "locale" : "zh-Hans",
+    "vueVersion" : "2"
 }

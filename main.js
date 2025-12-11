@@ -24,10 +24,18 @@ Vue.component('home',home)
 import square from './pages/tabPage/square.vue'
 Vue.component('square',square)
 
+import inbox from './pages/tabPage/inbox.vue'
+Vue.component('inbox',inbox)
+
+//通用
+
 import user from './pages/tabPage/user.vue'
 Vue.component('user',user)
 
-//通用
+
+
+//下面是列表和模块组件
+
 import articleItem from './pages/components/articleItem.vue'
 Vue.component('articleItem',articleItem)
 

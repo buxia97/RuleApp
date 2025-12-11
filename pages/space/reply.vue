@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -61,6 +61,25 @@
 			<!--  #endif -->
 			
 		</form>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="reply">确定</view>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -95,6 +114,12 @@
 				owoList:[],
 				OwOtype:"paopao",
 				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
+				
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -105,7 +130,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			//获取用户信息
 			if(localStorage.getItem('userinfo')){
@@ -125,6 +150,9 @@
 			// #ifdef APP-PLUS || H5
 			that.owoList = that.owo.data.paopao.container;
 			// #endif
+			that.kaptchaUrl = that.$API.getKaptcha();
+			that.getConfig();
+			
 		},
 		methods: {
 			PickerChange(e) {
@@ -134,6 +162,28 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
+			getConfig() {
+				var that = this;
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.verifyLevel = AppInfo.verifyLevel;
+					}catch(e){
+						console.log(e);
+					}
+					
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			reply(){
 				var that = this;
@@ -161,11 +211,18 @@
 					});
 					return false
 				}
+				if(that.verifyLevel>1){
+					if (that.verifyCode == "") {
+						that.modalName = 'kaptcha'
+						return false
+					}
+				}
 				var data = {
 					type:3,
 					text:that.text,
 					toid:that.id,
-					token:that.token
+					token:that.token,
+					'verifyCode':that.verifyCode
 				}
 				uni.showLoading({
 					title: "加载中"
@@ -180,6 +237,8 @@
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -195,6 +254,8 @@
 						}
 					},
 					fail: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);

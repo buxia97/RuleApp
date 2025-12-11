@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -9,7 +9,7 @@
 					解除异常
 				</view>
 				<view class="action" @tap="submit">
-					<button class="cu-btn round bg-blue">提交</button>
+					<button class="cu-btn round bg-blue">确认</button>
 				</view>
 			</view>
 		</view>
@@ -20,7 +20,7 @@
 				<view class="title">用户ID</view>
 				<input placeholder="请输入用户ID" name="input" type="number" v-model="toid"></input>
 				<view class="action">
-					<text class="text-blue" @tap="toUser" v-if="pageType==0">选择用户</text>
+					<text class="text-blue" @tap="toUser">选择用户</text>
 				</view>
 			</view>
 			
@@ -66,7 +66,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			if(localStorage.getItem('getuid')){

@@ -1,5 +1,5 @@
 <template>
-	<view class="shop-box">
+	<view class="shop-box" v-if="!isBan">
 		<view class="shop-main">
 			<view class="shop-img" @tap="shopInfo(item)">
 				<image :src="item.imgurl" mode="widthFix"></image>
@@ -15,7 +15,7 @@
 					<block v-if="item.isView==0">
 						<text class="text-gray">[隐藏]</text>
 					</block>
-					{{item.title||"无标题商品"}}
+					{{item.title||"无标题商品"}}<text v-if="!isAdmin&&item.integral>0" class="text-green">[积分抵扣]</text>
 				</view>
 				<view class="shop-list-value">
 					{{item.sellNum}}人付款
@@ -77,7 +77,22 @@
 				vip:0,
 				currencyName:"",
 				group:"",
+				isBan:false
 			};
+		},
+		mounted() {
+			var that = this;
+			if(localStorage.getItem('userinfo')){
+				if(localStorage.getItem('myBanLog')){
+					var myBanLog = JSON.parse(localStorage.getItem('myBanLog'));
+					var banUserList = myBanLog.banUserList;
+					for(var i in banUserList){
+						if(that.item.authorId == banUserList[i].num){
+							that.isBan = true;
+						}
+					}
+				}
+			}
 		},
 		created(){
 			var that = this;

@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -91,11 +91,22 @@
 						name:"喜欢榜",
 						parent:0
 					},
+					{
+						order:"created",
+						name:"按时间",
+						parent:0
+					},
+					{
+						order:"replyTime",
+						name:"按回复",
+						parent:0
+					},
 				],
 				orderCur:"commentsNum",
 				TabCur: 0,
 				scrollLeft: 0,
 				isLoading:0,
+				isvip:0
 				
 			}
 		},
@@ -115,12 +126,16 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
 		onLoad(res) {
 			var that = this;
+			if(localStorage.getItem('userinfo')){
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				that.isvip = userInfo.isvip;
+			}
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
@@ -208,7 +223,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						if(res.data.code==1){
@@ -275,7 +290,7 @@
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))
@@ -288,15 +303,18 @@
 								var rand = Math.floor(Math.random()*num);
 								var pushAdsInfo = null;
 								// #ifdef APP-PLUS || H5
-								if(localStorage.getItem('pushAds')){
-									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
-									var adsNum = pushAds.length;
-									if(adsNum>0){
-										var adsRand = Math.floor(Math.random()*adsNum);
-										pushAdsInfo = pushAds[adsRand];
-										pushAdsInfo.isAds = 1;
+								if(that.isvip==0){
+									if(localStorage.getItem('pushAds')){
+										var pushAds = JSON.parse(localStorage.getItem('pushAds'));
+										var adsNum = pushAds.length;
+										if(adsNum>0){
+											var adsRand = Math.floor(Math.random()*adsNum);
+											pushAdsInfo = pushAds[adsRand];
+											pushAdsInfo.isAds = 1;
+										}
 									}
 								}
+								
 								// #endif
 								var contentsList = [];
 								//将自定义字段获取并添加到数据
@@ -358,11 +376,6 @@
 				var data = {
 					"mid":meta
 				}
-				var token = "";
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					token=userInfo.token;
-				}
 				var page = that.page;
 				if(isPage){
 					page++;
@@ -373,13 +386,12 @@
 						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
 						"limit":5,
 						"page":page,
-						"order":"created",
-						"token":token
+						"order":"created"
 					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					method: "post",
+					method: "get",
 					dataType: 'json',
 					success: function(res) {
 						//console.log(JSON.stringify(res))

@@ -2,12 +2,13 @@
 	<view>
 		<home v-show="curType=='home'" :curPage="0"></home>
 		<find v-show="curType=='find'" :curPage="1"></find>
-		<square v-show="curType=='square'" :curPage="2"></square>
+		<!--<square v-show="curType=='square'" :curPage="2"></square>-->
+		<inbox v-show="curType=='inbox'" :curPage="2"></inbox>
 		<user v-show="curType=='user'" :curPage="3"></user>
-		<view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx'}" :class="$store.state.AppStyle">
+		<view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx','opacity':$store.state.TabbarOpacity}" :class="$store.state.AppStyle">
 			<view class="tabbar-operate-bg" :class="isPost?'show':''" @tap="isPost=false"></view>
 			<view class="tabbar-operate" :class="isPost?'show':''" :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
-				<view class="tabbar-operate-main grid col-3">
+				<view class="tabbar-operate-main grid col-4">
 					<view class="index-sort-box">
 						<view class="index-sort-main"  @tap="toLink('../edit/articleNew')">
 							<view class="index-sort-i" style="background: rgba(30, 134, 231, 0.2);">
@@ -15,6 +16,16 @@
 							</view>
 							<view class="index-sort-text">
 								文章
+							</view>
+						</view>
+					</view>
+					<view class="index-sort-box">
+						<view class="index-sort-main"  @tap="toLink('../forum/section?type=2')">
+							<view class="index-sort-i" style="background: rgba(231, 44, 7, 0.2);">
+								<text class="cuIcon-discoverfill" style="color:  #e72c07;"></text>
+							</view>
+							<view class="index-sort-text">
+								帖子
 							</view>
 						</view>
 					</view>
@@ -43,9 +54,15 @@
 			<block  v-for="(item, index) in list" 
 				    :key="index">
 				
-				<view class="tabbar-item" @tap="tabbarChange(item.type,index)">
-				    <image class="item-img" :src="item.icon_a+'.png'" v-if="curType == item.type"></image>
-				    <image class="item-img" :src="item.icon" v-else></image>
+				<view class="tabbar-item" @tap="tabbarChange(item.type,index)" :class="$store.state.openTabbarText==0?'noText':''">
+					<text v-if="item.text=='消息'&&noticeSum>0" class="tabbar-noticeSum bg-red">
+						{{noticeSum>99?'99+':noticeSum}}
+					</text>
+					<view class="tabbar-item-ico" :class="{'tabbarActive': curType == item.type}">
+						<text :class="item.icon"></text>
+					</view>
+				   <!-- <image class="item-img" :src="item.icon_a+curStyle+'.png'" :c="curType == item.type"></image>
+				    <image class="item-img" :src="item.icon" v-else></image> -->
 				    <view class="item-name" :class="{'tabbarActive': curType == item.type}" v-if="item.text">{{item.text}}</view>
 				</view>
 				<view class="tabbar-item addPost" v-if="index==1" @tap="isPost=!isPost" :class="isPost?'postShow':''">
@@ -65,7 +82,7 @@
 			</view>
 			<view class="announcement-main">
 				<view class="announcement-title">
-					网站公告
+					全站公告
 					<text class="cuIcon-close text-red" @tap="isAnnouncement=false"></text>
 				</view>
 				<view class="announcement-concent">
@@ -104,7 +121,7 @@
 		</view>
 		<!--  #endif -->
 		<!--#ifdef APP-PLUS-->
-		<view class="Startupmap" v-if="!isStart">
+		<view class="Startupmap" v-if="!isStart&&isvip==0">
 			<view class="Startupmap-close" @tap="toStart">
 				<text>跳过</text>
 			</view>
@@ -127,24 +144,20 @@ export default {
             paddingBottomHeight: 0,  //苹果X以上手机底部适配高度
             list: [{
                     text: '首页',  
-                    icon: '/static/tabbar/home.png',  //未选中图标
-                    icon_a: '/static/tabbar/home_cur',  //选中图片
+                    icon: 'iconfont icon-shouye', 
                     type: "home",
                 },{
                     text: '发现',
-                    icon: '/static/tabbar/find.png',
-                    icon_a: '/static/tabbar/find_cur',
+                    icon: 'iconfont icon-faxian',
 					type: "find",
                 }
                 ,{
-                    text: '广场',
-                    icon: '/static/tabbar/square.png',
-                    icon_a: '/static/tabbar/square_cur',
-                    type: 'square',
+                    text: '消息',
+                    icon: 'iconfont icon-xiaoxi',
+                    type: 'inbox',
                 },{
                     text: '我的',
-                    icon: '/static/tabbar/user.png',
-                    icon_a: '/static/tabbar/user_cur',
+                    icon: 'iconfont icon-wodejianying',
                     type: "user",
                 },
             ],
@@ -167,15 +180,23 @@ export default {
 				localUrl:""
 			},
 			isStart:false,
-			backButtonPress:0,
+			
 			unreadNumLoading:null,
+			backButtonPress:0,
 			
 			pageShow:false,
+			isvip:0,
+			noticeSum:0,
         };
     },
 	onHide() {
 		var that = this;
 		that.pageShow = false;
+	},
+	onPageScroll(res){
+		var that = this;
+		//tab页面滚动条监听
+		that.$store.commit('setScrollTop', res.scrollTop);
 	},
 	onUnload() {
 		var that = this;
@@ -229,6 +250,7 @@ export default {
 			}
 		}
 		// #endif
+		that.myBanLog();
 		that.unreadNum();
 	},
 	//触底监听
@@ -265,6 +287,16 @@ export default {
 	// #endif
     onLoad() {
         let that = this;
+		//会员不显示开屏广告
+		if(localStorage.getItem('userinfo')){
+			var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+			that.isvip = userInfo.isvip;
+			if(that.isvip==1){
+				that.isStart=true;
+			}
+			
+		}
+		
 		that.pageShow = true;
 		let platform=uni.getSystemInfoSync().platform;
 		localStorage.setItem('app_platform',platform);
@@ -281,6 +313,33 @@ export default {
                 })
             }
         });
+		if(localStorage.getItem('appStyle')){
+			var appStyle = localStorage.getItem('appStyle');
+			
+			var curStyle = "blue";
+			that.curStyle = "blue";
+			if(appStyle.indexOf("blue")!=-1){
+				curStyle = "blue";
+				that.curStyle = "blue";
+			}
+			if(appStyle.indexOf("pink")!=-1){
+				curStyle = "pink";
+				that.curStyle = "pink";
+			}
+			if(appStyle.indexOf("orange")!=-1){
+				curStyle = "orange";
+				that.curStyle = "orange";
+			}
+			if(appStyle.indexOf("green")!=-1){
+				curStyle = "green";
+				that.curStyle = "green";
+			}
+			// that.$store.state.AppStyle = that.appStyle;
+			that.$store.commit('setStyle', appStyle);
+			console.log(that.$store.state.AppStyle)
+			
+			
+		}
 		that.getAnnouncement();
 		// #ifdef APP-PLUS
 		that.isUpdate(false);
@@ -293,18 +352,24 @@ export default {
 		// #ifdef APP-PLUS
 		 that.appStartImg();
 		 //#endif
-		that.unreadNumLoading = setInterval(() => {
-			if(that.pageShow){
-				that.unreadNum();
-			}
-		}, 5000);
+		 that.unreadNum();
 		 
 		 // setTimeout(function() {
 		 // 	uni.$emit('onShow', 0);
 		 // }, 200); 
-		uni.$on('goUser', function(data) {
-			that.tabbarChange("user",3)
-		});
+		 
+		 uni.$on('goUser', function(data) {
+		 	that.tabbarChange("user",3)
+		 });
+		
+		//确认当前风格
+		localStorage.setItem('curFullStyle',"index");
+		that.unreadNumLoading = setInterval(() => {
+		 if(that.pageShow){
+		 	that.unreadNum();
+		 }
+		}, 5000);
+		that.myBanLog();
     },
 	onReady() {
 		setTimeout(function() {
@@ -565,6 +630,42 @@ export default {
 			localStorage.setItem('isAnnouncement',timestamp);
 			
 		},
+		myBanLog(){
+			var that = this;
+			var token = ""
+			if(localStorage.getItem('userinfo')){
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				token=userInfo.token;
+			
+			}else{
+				return false;
+			}
+			that.$Net.request({
+				
+				url: that.$API.myBanLog(),
+				data:{
+					"token":token
+				},
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					if(res.data.code==1){
+						var myBanLog = res.data.data;
+						localStorage.setItem('myBanLog',JSON.stringify(myBanLog));
+					}
+				},
+				fail: function(res) {
+					uni.showToast({
+						title: "网络开小差了哦",
+						icon: 'none'
+					})
+				}
+			})
+		},
+		
 		unreadNum() {
 			var that = this;
 			var token = ""
@@ -572,6 +673,8 @@ export default {
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				token=userInfo.token;
 			
+			}else{
+				return false;
 			}
 			that.$Net.request({
 				
@@ -588,6 +691,7 @@ export default {
 					if(res.data.code==1){
 						var noticeSum = res.data.data.total;
 						localStorage.setItem('noticeSum',noticeSum);
+						that.noticeSum = noticeSum;
 					}
 				},
 				fail: function(res) {

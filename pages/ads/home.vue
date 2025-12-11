@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -78,6 +78,27 @@
 					</view>
 				</view>
 			</view>
+			<view class="ads-box">
+				<view class="ads-main">
+					<view class="ads-name">
+						轮播图广告
+					</view>
+					<view class="ads-text">
+						在平台的几个轮播区域展示广告。由于轮播广告名额较少，您将可以较快的获得曝光。<text class="text-red">为了展现效果，为了展现效果，建议上传横版图片。</text>
+					</view>
+					<view class="ads-info grid col-3 text-center">
+						<view class="ads-num">
+							剩余：<text class="text-blue">{{swiperAdsNum || 0}}</text>
+						</view>
+						<view class="ads-price">
+							<text class="text-red">{{swiperAdsPrice || 0}}{{currencyName}}</text>/天
+						</view>
+						<view class="ads-btn" @tap="goAdsBuy(swiperAdsPrice,swiperAdsNum,3)">
+							<text class="text-green">立即购买</text>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
@@ -91,8 +112,6 @@
 
 <script>
 import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
-var API = require('../../utils/api')
-var Net = require('../../utils/net')
 export default {
 	data() {
 		return {
@@ -114,7 +133,8 @@ export default {
 			userData:{
 				assets:0,
 			},
-			currencyName:""
+			
+			currencyName:"",
 		}
 	},
 	onPullDownRefresh(){
@@ -123,23 +143,27 @@ export default {
 	},
 	onShow(){
 		var that = this;
-		if(localStorage.getItem('token')){
-			
-			that.token = localStorage.getItem('token');
-		}
+		
 		// #ifdef APP-PLUS
-		plus.navigator.setStatusBarStyle("dark")
+		//plus.navigator.setStatusBarStyle("dark")
 		// #endif
-		that.getAdsConfig();
-		that.getUserData();
+		
 		
 	},
-	onLoad(res) {
+	onLoad() {
 		var that = this;
 		// #ifdef APP-PLUS || MP
 		that.NavBar = this.CustomBar;
 		// #endif
 		that.currencyName = that.$API.getCurrencyName();
+		if(localStorage.getItem('token')){
+			
+			that.token = localStorage.getItem('token');
+		}
+		
+		that.getAdsConfig();
+		that.getUserData();
+		
 	},
 	methods: {
 		back(){
@@ -209,7 +233,7 @@ export default {
 		toLink(text){
 			var that = this;
 			
-			if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+			if(!localStorage.getItem('token')){
 				uni.showToast({
 					title: "请先登录哦",
 					icon: 'none'
@@ -229,7 +253,7 @@ export default {
 				})
 				return false;
 			}
-			if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+			if(!localStorage.getItem('token')){
 				uni.showToast({
 					title: "请先登录哦",
 					icon: 'none'

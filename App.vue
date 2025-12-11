@@ -36,11 +36,6 @@
 				}
 				plus.push.clear();
 			}, false);
-			
-			//app禁用默认tab
-			uni.hideTabBar({
-				animation: false
-			})
 			// #endif
 			uni.getSystemInfo({
 				success: function(e) {
@@ -160,6 +155,9 @@
 			]
 
 		},
+		onError: function(res) {
+			console.log(JSON.stringify(res))
+		},
 		onShow: function() {
 			console.log('App Show')
 		},
@@ -174,6 +172,7 @@
 	@import "colorui/main.css";
 	@import "colorui/icon.css";
 	@import "static/base.css";
+	@import "static/font/iconfont.css";
 	.nav-list {
 		display: flex;
 		flex-wrap: wrap;
@@ -290,6 +289,59 @@
 	.uni-swiper-dot.uni-swiper-dot-active::after{
 		background-color: #0081FF !important;
 		height: 8upx !important;
+	}
+	/**风格切换**/
+	.simple-pink .uni-swiper-dot.uni-swiper-dot-active,.full-pink .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #fa7298 !important;
+		
+	}
+	.simple-pink .uni-swiper-dot.uni-swiper-dot-active::after,.full-pink .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #fa7298 !important;
+	}
+	
+	.simple-orange .uni-swiper-dot.uni-swiper-dot-active,.full-orange .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #f47c35 !important;
+		
+	}
+	.simple-orange .uni-swiper-dot.uni-swiper-dot-active::after,.full-orange .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #f47c35 !important;
+	}
+	
+	.simple-green .uni-swiper-dot.uni-swiper-dot-active,.full-green .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #8ebe58 !important;
+		
+	}
+	.simple-green .uni-swiper-dot.uni-swiper-dot-active::after,.full-green .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #8ebe58 !important;
+	}
+	
+	.simple-red .uni-swiper-dot.uni-swiper-dot-active,.full-red .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #e54d42 !important;
+		
+	}
+	.simple-red .uni-swiper-dot.uni-swiper-dot-active::after,.full-red .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #e54d42 !important;
+	}
+	.simple-brown .uni-swiper-dot.uni-swiper-dot-active,.full-brown .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #a5673f !important;
+		
+	}
+	.simple-brown .uni-swiper-dot.uni-swiper-dot-active::after,.full-brown .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #a5673f !important;
+	}
+	.simple-cyan .uni-swiper-dot.uni-swiper-dot-active,.full-cyan .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #1cbbb4 !important;
+		
+	}
+	.simple-cyan .uni-swiper-dot.uni-swiper-dot-active::after,.full-cyan .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #1cbbb4 !important;
+	}
+	.simple-purple .uni-swiper-dot.uni-swiper-dot-active,.full-purple .uni-swiper-dot.uni-swiper-dot-active{
+		background-color: #6739b6 !important;
+		
+	}
+	.simple-purple .uni-swiper-dot.uni-swiper-dot-active::after,.full-purple .uni-swiper-dot.uni-swiper-dot-active::after{
+		background-color: #6739b6 !important;
 	}
 	.uni-swiper-dots-horizontal{
 		bottom: 40upx !important;

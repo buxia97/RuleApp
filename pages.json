@@ -15,6 +15,7 @@
 				
 			}
 		},
+		
 		{
 			"path": "pages/home/tool",
 			"style": {
@@ -52,11 +53,17 @@
 			}
 		},
 		{
+			"path": "pages/user/mybanlist",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/user/useredit",
 			"style": {}
 		},
 		{
-			"path": "pages/user/userBg",
+			"path": "pages/user/phoneedit",
 			"style": {}
 		},
 		{
@@ -69,6 +76,10 @@
 		},
 		{
 			"path": "pages/user/scan",
+			"style": {}
+		},
+		{
+			"path": "pages/user/qrcodeLogin",
 			"style": {}
 		},
 		{
@@ -109,7 +120,10 @@
 			"path": "pages/user/login"
 		},
 		{
-			"path": "pages/user/foget"
+			"path": "pages/user/foget",
+			"style": {
+				"softinputMode": "adjustResize"
+			}
 		},
 		{
 			"path": "pages/user/register",
@@ -121,6 +135,7 @@
 			"path": "pages/user/switchAccounts",
 			"style": {}
 		},
+		
 		{
 			"path": "pages/user/setup",
 			"style": {}
@@ -134,6 +149,7 @@
 			"path": "pages/user/buyvip",
 			"style": {}
 		},
+		
 		{
 			"path": "pages/user/clothes",
 			"style": {}
@@ -143,7 +159,7 @@
 			"path": "pages/user/usermark",
 			"style": {}
 		},
-		// #ifdef APP-PLUS || H5
+		
 		{
 			"path": "pages/user/address",
 			"style": {}
@@ -166,7 +182,9 @@
 		},
 		{
 			"path": "pages/user/myshop",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/user/order",
@@ -195,6 +213,15 @@
 			"style": {}
 		},
 		{
+			"path": "pages/user/userBg",
+			"style": {}
+		},
+		{
+			"path": "pages/user/report",
+			"style": {}
+		},
+		// #ifdef APP-PLUS || H5
+		{
 			"path": "uni_modules/buuug7-img-cropper/pages/cropper",
 			"style": {
 			"navigationBarTitleText": "头像上传"
@@ -203,6 +230,26 @@
 		// #endif
 		{
 			"path": "pages/user/agreement",
+			"style": {}
+		},
+		{
+			"path": "pages/user/privacyPolicy",
+			"style": {}
+		},
+		{
+			"path": "pages/user/rebate",
+			"style": {}
+		},
+		{
+			"path": "pages/user/inviteList",
+			"style": {}
+		},
+		{
+			"path": "pages/user/help",
+			"style": {}
+		},
+		{
+			"path": "pages/user/applePay",
 			"style": {}
 		},
 		// #ifdef APP-PLUS || H5
@@ -218,10 +265,6 @@
 			}
 		},
 		{
-			"path": "pages/user/rebate",
-			"style": {}
-		},
-		{
 			"path": "pages/inbox/message",
 			"style": {
 				"enablePullDownRefresh":true
@@ -229,9 +272,7 @@
 		},
 		{
 			"path": "pages/contents/comments",
-			"style": {
-				"enablePullDownRefresh":true
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/contents/commentsadd",
@@ -270,16 +311,16 @@
 			}
 		},
 		{
-			"path": "pages/shop/shoptext",
-			"style": {
-				"enablePullDownRefresh":true
-			}
+			"path": "pages/shop/shoptext"
 		},
 		{
 			"path": "pages/shop/orderpay",
 			"style": {
 				"enablePullDownRefresh":true
 			}
+		},
+		{
+			"path": "pages/contents/rewardLog"
 		},
 		// #endif
 		{
@@ -310,7 +351,9 @@
 		},
 		{
 			"path": "pages/contents/metas",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh":true
+			}
 		},
 		{
 			"path": "pages/contents/recommend",
@@ -446,13 +489,34 @@
 			"path": "pages/manage/endException"
 		},
 		{
+			"path": "pages/manage/giftVIP"
+		},
+		{
 			"path": "pages/manage/space",
 			"style": {
 				"enablePullDownRefresh":true
 			}
 		},
 		{
+			"path": "pages/manage/consumer",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/manage/company",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
 			"path": "pages/manage/selfDelete",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+		{
+			"path": "pages/manage/report",
 			"style": {
 				"enablePullDownRefresh":true
 			}
@@ -481,13 +545,10 @@
 			}
 		},
 		{
-			"path": "pages/space/info",
-			"style": {
-				"enablePullDownRefresh":true
-			}
+			"path": "pages/chat/history"
 		},
 		{
-			"path": "pages/space/mySpace",
+			"path": "pages/space/info",
 			"style": {
 				"enablePullDownRefresh":true
 			}
@@ -499,34 +560,38 @@
 		{
 			"path": "pages/space/reply",
 			"style": {}
-		}
-		// #ifdef APP-PLUS || H5
-		,{
+		},
+		{
+			"path": "pages/space/mySpace",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
+
+		{
 			"path": "pages/edit/addshop"
 		},
 		{
-			"path": "pages/edit/articlePost"
+			"path": "pages/edit/articleNew"
 		},
 		{
-			"path": "pages/edit/articleNew"
+			"path": "pages/edit/articlePost"
 		}
-		// #endif
-		
-	],
+    ],
 	"globalStyle": {
 		"mp-alipay": {
 			/* 支付宝小程序特有相关 */
 			"transparentTitle": "always",
 			"allowsBounceVertical": "NO"
 		},
-		"navigationBarBackgroundColor": "#0081ff",
+		"navigationBarBackgroundColor": "#409EFF",
 		"navigationBarTitleText": "规则之树",
 		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black"
 	},
 	"usingComponts": true,
 		"condition": { //模式配置，仅开发期间生效
-		"current": 0, 
+		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
 				"name": "首页", //模式名称
 				"path": "pages/home/index", //启动页面
@@ -534,5 +599,4 @@
 			}
 		]
 	}
-
 }

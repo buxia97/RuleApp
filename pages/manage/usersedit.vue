@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -23,7 +23,7 @@
 				<input name="input" disabled="disabled" :value="name"></input>
 			</view>
 			<view class="cu-form-group">
-				<view class="title">用户积分</view>
+				<view class="title">用户金币</view>
 				<input name="input" disabled="disabled" :value="assets"></input>
 				<view class="action">
 					<text class="text-blue" @tap="recharge">充扣</text>
@@ -40,6 +40,10 @@
 			<view class="cu-form-group">
 				<view class="title">邮箱</view>
 				<input placeholder="请输入邮箱" name="input" v-model="mail"></input>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">手机号</view>
+				<input placeholder="请输入手机号" name="input" v-model="phone"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">网址</view>
@@ -110,7 +114,7 @@
 				customize:'',
 				token:'',
 				experience:0,
-				
+				phone:"",
 				groupText:"贡献者",
 				group:"contributor",
 				groupList:[
@@ -149,7 +153,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},
@@ -198,6 +202,8 @@
 							that.mail = res.data.data.mail;
 							that.url = res.data.data.url;
 							that.group = res.data.data.groupKey;
+							
+							that.phone = res.data.data.phone;
 							that.customize = res.data.data.customize;
 							that.assets =  res.data.data.assets;
 							that.experience=  res.data.data.experience;
@@ -217,9 +223,6 @@
 					}
 				})
 			},
-			isValidString(str) {
-				return /\s/.test(str);
-			},
 			userEdit() {
 				var that = this;
 				if (that.password != "") {
@@ -232,15 +235,7 @@
 						});
 						return false
 					}
-				}
-				if(that.isValidString(that.screenName)){
-					uni.showToast({
-					    title:"昵称不能存在空格",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					return false
+					
 				}
 				var token = "";
 				
@@ -303,17 +298,6 @@
 						uni.stopPullDownRefresh()
 					}
 				})
-			},
-			validateString(str) {
-			  // 判断是否包含空格或中文空格
-			  if (/\s|　/.test(str)) {
-			    return false;
-			  }
-			  // 判断是否只包含空格
-			  if (/^\s+$/.test(str)) {
-			    return false;
-			  }
-			  return true;
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target

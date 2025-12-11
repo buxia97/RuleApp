@@ -1,12 +1,12 @@
 <template>
-	<view :class="AppStyle">
+	<view :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					财务流水（积分）
+					财务流水（{{currencyName}}）
 				</view>
 			</view>
 		</view>
@@ -95,6 +95,8 @@
 				
 				isLoading:0,
 				
+				currencyName:"",
+				
 			}
 		},
 		onPullDownRefresh(){
@@ -117,7 +119,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.getFinanceList();
 			that.getFinanceTotal();
@@ -127,6 +129,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.currencyName = that.$API.getCurrencyName();
 		},
 		methods: {
 			back(){

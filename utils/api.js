@@ -1,22 +1,24 @@
-//RuleApp是一套开源免费的客户端代码，如果您通过任何收费渠道下载到了此代码，则可以认为你被忽悠了。
-//正式版下载地址：https://ext.dcloud.net.cn/plugin?id=6909
-//github内测版地址：https://github.com/buxia97/RuleApp
-
+//RuleApp Pro是RuleApp的增强版，提供更加强大的社区服务。
 var API_URL = 'https://api.ruletree.club/';
+//在API配置中心创建的应用Key
 var appKey = "Yc9AQDnN";
 
-
-//web网站地址
-var WEB_URL = '';
+//  var API_URL = 'http://127.0.0.4/';
+// var appKey = "Yc9AQDnN";
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
+var WEB_URL = '';
 
+//风格模板，对应page/home/目录下的文件，目前只有index、index2两个选择
+//设置后，修改page.json顶部和底部的index，替换为你选择的风格
+var styleIndex = "index";
 
 //是否禁止网络代理，为1时开启（可以在安卓和苹果APP中防止抓包，但同时也会禁止VPN环境使用APP）
 //由于uniapp官方的问题，只能拦截部分条件
 var banVPN = 0;
 //全局数据调用部分【重要】
+
 //评论等级头衔
 var rankList = ["小水友","资深水友","灌水大师","小龙王","大龙王","深海巨妖","水神","至尊水神"];
 //经验等级头衔
@@ -27,7 +29,6 @@ var rankStyle = ["#6699CC","#666699","#009933","#FF9900","#ff007f","#FF0033","#6
 //链接规则(用于站内链接自动跳转和文章分享)，请根据自己的网站文件链接自由发挥，比如我的就是
 //https://www.ruletree.club/archives/2824/
 //{cid}对应文章id，{category}对应分类缩略名，{slug}对应独立页面名称，其实本质上就是页面拼接。
-
 if(localStorage.getItem('AppInfo')){
 	try{
 		var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
@@ -47,8 +48,6 @@ var isComment = 1;
 
 //使用攻略文章id，typecho文章表cid
 var raiders = 1518
-//意见反馈文章id，typecho文章表cid
-var feedback = 2689
 //关于我们文章id，typecho文章表cid
 var aboutme = 2
 
@@ -86,7 +85,30 @@ uni.request({
 
 
 
+
 module.exports = {
+	//获取用户当前等级
+	getLever(num){
+		var lv = 0;
+		if (num < 10) {
+			lv = 0;
+		} else if (num >= 10 && num < 50) {
+			lv = 1;
+		} else if (num >= 50 && num < 200) {
+			lv = 2;
+		} else if (num >= 200 && num < 500) {
+			lv = 3;
+		} else if (num >= 500 && num < 1000) {
+			lv = 4;
+		} else if (num >= 1000 && num < 2000) {
+			lv = 5;
+		} else if (num >= 2000 && num < 5000) {
+			lv = 6;
+		} else if (num >= 5000) {
+			lv = 7;
+		}
+		return lv;
+	},
 	getBanVPN(){
 		return banVPN;
 	},
@@ -94,39 +116,15 @@ module.exports = {
 		return appKey;
 	},
 	getCurrencyName(){
-		var currencyName = "积分";
+		var currencyName = "金币";
 		if(localStorage.getItem('AppInfo')){
 			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
 			currencyName = AppInfo.currencyName;
 		}
 		return currencyName;
 	},
-	GetAppName:function(){
-		var appName = "";
-		if(localStorage.getItem('AppInfo')){
-			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
-			appName = AppInfo.name;
-		}
-		return appName;
-	},
-	GetAppEmail:function(){
-		var appEmail = "";
-		if(localStorage.getItem('AppInfo')){
-			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
-			appEmail = AppInfo.mail;
-		}
-		return appEmail;
-	},
-	GetLogo:function(){
-		var logo = "";
-		if(localStorage.getItem('AppInfo')){
-			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
-			logo = AppInfo.logo;
-		}
-		return logo;
-	},
-	getApiUrl:function(){
-		return API_URL;
+	GetStyleIndex(){
+		return styleIndex;
 	},
 	GetIsComment(){
 		return isComment;
@@ -164,6 +162,24 @@ module.exports = {
 		}
 		return adpid;
 	},
+	GetLogo:function(){
+		var logo = "";
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			logo = AppInfo.logo;
+		}
+		return logo;
+	},
+	GetAdsVideoType:function(){
+		var adsVideoType = 1;
+		if(localStorage.getItem('AppInfo')){
+			var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+			adsVideoType = AppInfo.adsVideoType;
+		}
+		return adsVideoType;
+	},
+	
+	
 	GetLinkRule:function(){
 		return linkRule;
 	},
@@ -173,23 +189,11 @@ module.exports = {
 	GetRaiders:function(){
 		return raiders;
 	},
-	GetFeedback:function(){
-		return feedback;
-	},
 	GetAboutme:function(){
 		return aboutme;
 	},
 	GetFields:function(){
 		return fields;
-	},
-	GetUpdateUrl:function(){
-		return WEB_URL + 'apiResult.php?update=1';
-	},
-	GetAds:function(){
-		return WEB_URL + 'apiResult.php?getAds=1';
-	},
-	GetAppStart:function(){
-		return WEB_URL + 'apiResult.php?appStart=1';
 	},
 	GetGithubUrl:function(){
 		return GithubUrl;
@@ -200,11 +204,20 @@ module.exports = {
 	GetGroupUrl:function(){
 		return GroupUrl;
 	},
+	getApiUrl:function(){
+		return API_URL;
+	},
 	userLogin:function(){
 		return API_URL + 'typechoUsers/userLogin';
 	},
+	phoneLogin:function(){
+		return API_URL + 'typechoUsers/phoneLogin';
+	},
 	RegSendCode:function(){
 		return API_URL + 'typechoUsers/RegSendCode';
+	},
+	sendSMS:function(){
+		return API_URL + 'typechoUsers/sendSMS';
 	},
 	SendCode:function(){
 		return API_URL + 'typechoUsers/SendCode';
@@ -252,6 +265,9 @@ module.exports = {
 	apiBind:function(){
 		return API_URL + 'typechoUsers/apiBind';
 	},
+	apiBindDelete:function(){
+		return API_URL + 'typechoUsers/apiBindDelete';
+	},
 	userBindStatus:function(){
 		return API_URL + 'typechoUsers/userBindStatus';
 	},
@@ -267,7 +283,6 @@ module.exports = {
 	signOut:function(){
 		return API_URL + 'typechoUsers/signOut';
 	},
-	
 	//邀请码注册相关
 	madeInvitation:function(){
 		return API_URL + 'typechoUsers/madeInvitation';
@@ -332,7 +347,33 @@ module.exports = {
 	restrict:function(){
 		return API_URL + 'typechoUsers/restrict';
 	},
-	
+	getKaptcha:function(){
+		return API_URL + 'typechoUsers/getKaptcha';
+	},
+	giftVIP:function(){
+		return API_URL + 'typechoUsers/giftVIP';
+	},
+	getInvitationCode:function(){
+		return API_URL + 'typechoUsers/getInvitationCode';
+	},
+	getScan:function(){
+	  return API_URL +  'typechoUsers/getScan';
+	},
+	getScanStatus:function(){
+	  return API_URL +  'typechoUsers/getScanStatus';
+	},
+	report:function(){
+	  return API_URL +  'typechoUsers/report';
+	},
+	reportList:function(){
+	  return API_URL +  'typechoUsers/reportList';
+	},
+	reportAudit:function(){
+	  return API_URL +  'typechoUsers/reportAudit';
+	},
+	myBanList:function(){
+	  return API_URL +  'typechoUsers/myBanList';
+	},
 	
 	getMarkList:function(){
 		return API_URL + 'typechoUserlog/markList';
@@ -347,9 +388,6 @@ module.exports = {
 	removeLog:function(){
 		return API_URL + 'typechoUserlog/removeLog';
 	},
-	removeLog:function(){
-		return API_URL + 'typechoUserlog/removeLog';
-	},
 	dataClean:function(){
 		return API_URL + 'typechoUserlog/dataClean';
 	},
@@ -359,6 +397,16 @@ module.exports = {
 	adsGiftNotify:function(){
 		return API_URL + 'typechoUserlog/adsGiftNotify';
 	},
+	ban:function(){
+		return API_URL + 'typechoUserlog/ban';
+	},
+	removeBan:function(){
+		return API_URL + 'typechoUserlog/removeBan';
+	},
+	myBanLog:function(){
+		return API_URL + 'typechoUserlog/myBanLog';
+	},
+	
 	
 	getCommentsList:function(){
 		return API_URL + 'typechoComments/commentsList';
@@ -458,6 +506,13 @@ module.exports = {
 	upload:function(){
 		return API_URL + 'upload/full';
 	},
+	uploadChunk:function(){
+		return API_URL + 'upload/chunk';
+	},
+	
+	uploadMerge:function(){
+		return API_URL + 'upload/merge';
+	},
 	shopList:function(){
 		return API_URL + 'typechoShop/shopList';
 	},
@@ -533,6 +588,10 @@ module.exports = {
 	EPay:function(){
 		return API_URL + 'pay/EPay';
 	},
+	//苹果支付
+	verifyReceipt:function(){
+		return API_URL + 'pay/verifyReceipt';
+	},
 	//充值二维码生成
 	qrCode:function(){
 		return API_URL + 'pay/qrCode';
@@ -559,6 +618,11 @@ module.exports = {
 	financeTotal:function(){
 		return API_URL + 'pay/financeTotal';
 	},
+	
+	//支付状态查询
+	payStatus:function(){
+		return API_URL + 'pay/payStatus';
+	},
 	//付费广告
 	adsConfig:function(){
 		return API_URL + 'typechoAds/adsConfig';
@@ -581,9 +645,6 @@ module.exports = {
 	},
 	auditAds:function(){
 		return API_URL + 'typechoAds/auditAds';
-	},
-	renewalAds:function(){
-		return API_URL + 'typechoAds/renewalAds';
 	},
 	renewalAds:function(){
 		return API_URL + 'typechoAds/renewalAds';
@@ -625,7 +686,7 @@ module.exports = {
 	groupInfo:function(){
 		return API_URL + 'typechoChat/groupInfo';
 	},
-	
+	//动态开始
 	
 	addSpace:function(){
 		return API_URL + 'typechoSpace/addSpace';
@@ -657,6 +718,201 @@ module.exports = {
 	followSpace:function(){
 		return API_URL + 'typechoSpace/followSpace';
 	},
+	
+	//圈子开始
+	addSection:function(){
+		return API_URL + 'typechoForum/addSection';
+	},
+	editSection:function(){
+		return API_URL + 'typechoForum/editSection';
+	},
+	sectionList:function(){
+		return API_URL + 'typechoForum/sectionList';
+	},
+	deleteSection:function(){
+		return API_URL + 'typechoForum/deleteSection';
+	},
+	sectionInfo:function(){
+		return API_URL + 'typechoForum/sectionInfo';
+	},
+	sectionFollow:function(){
+		return API_URL + 'typechoForum/sectionFollow';
+	},
+	sectionClock:function(){
+		return API_URL + 'typechoForum/sectionClock';
+	},
+	setModerator:function(){
+		return API_URL + 'typechoForum/setModerator';
+	},
+	deleteModerator:function(){
+		return API_URL + 'typechoForum/deleteModerator';
+	},
+	postForum:function(){
+		return API_URL + 'typechoForum/post';
+	},
+	editForum:function(){
+		return API_URL + 'typechoForum/edit';
+	},
+	postInfoForum:function(){
+		return API_URL + 'typechoForum/postInfo';
+	},
+	postList:function(){
+		return API_URL + 'typechoForum/postList';
+	},
+	postLikes:function(){
+		return API_URL + 'typechoForum/postLikes';
+	},
+	postLock:function(){
+		return API_URL + 'typechoForum/postLock';
+	},
+	postReview:function(){
+		return API_URL + 'typechoForum/postReview';
+	},
+	postTop:function(){
+		return API_URL + 'typechoForum/postTop';
+	},
+	postRecommend:function(){
+		return API_URL + 'typechoForum/postRecommend';
+	},
+	postSwiper:function(){
+		return API_URL + 'typechoForum/postSwiper';
+	},
+	postDelete:function(){
+		return API_URL + 'typechoForum/postDelete';
+	},
+	sectionClockList:function(){
+		return API_URL + 'typechoForum/sectionClockList';
+	},
+	postComments:function(){
+		return API_URL + 'typechoForum/postComments';
+	},
+	postCommentLike:function(){
+		return API_URL + 'typechoForum/postCommentLike';
+	},
+	postCommentDelete:function(){
+		return API_URL + 'typechoForum/postCommentDelete';
+	},
+	postCommentReview:function(){
+		return API_URL + 'typechoForum/postCommentReview';
+	},
+	
+	postCommentList:function(){
+		return API_URL + 'typechoForum/postCommentList';
+	},
+	userPurview:function(){
+		return API_URL + 'typechoForum/userPurview';
+	},
+	postMark:function(){
+		return API_URL + 'typechoForum/postMark';
+	},
+	postMarkList:function(){
+		return API_URL + 'typechoForum/postMarkList';
+	},
+	postReward:function(){
+		return API_URL + 'typechoForum/postReward';
+	},
+	postRewardList:function(){
+		return API_URL + 'typechoForum/postRewardList';
+	},
+	sectionRecommend:function(){
+		return API_URL + 'typechoForum/sectionRecommend';
+	},
+	draftList:function(){
+		return API_URL + 'typechoForum/draftList';
+	},
+	
+	draftDelete:function(){
+		return API_URL + 'typechoForum/draftDelete';
+	},
+	postTransfer:function(){
+		return API_URL + 'typechoForum/postTransfer';
+	},
+	followPosts:function(){
+		return API_URL + 'typechoForum/followPosts';
+	},
+	vipTypeList:function(){
+		return API_URL + 'system/vipTypeList';
+	},
+	payPackageList:function(){
+		return API_URL + 'system/payPackageList';
+	},
+	identifyConsumer:function(){
+		return API_URL + 'identify/identifyConsumer';
+	},
+	identifyCompany:function(){
+		return API_URL + 'identify/identifyCompany';
+	},
+	identifyHand:function(){
+		return API_URL + 'identify/identifyHand';
+	},
+	identifyStatus:function(){
+		return API_URL + 'identify/identifyStatus';
+	},
+	identifyInfo:function(){
+		return API_URL + 'identify/identifyInfo';
+	},
+	addConsumer:function(){
+		return API_URL + 'identify/addConsumer';
+	},
+	systemIdentifyConsumer:function(){
+		return API_URL + 'identify/systemIdentifyConsumer';
+	},
+	systemIdentifyCompany:function(){
+		return API_URL + 'identify/systemIdentifyCompany';
+	},
+	removeConsumer:function(){
+		return API_URL + 'identify/removeConsumer';
+	},
+	addCompany:function(){
+		return API_URL + 'identify/addCompany';
+	},
+	removeCompany:function(){
+		return API_URL + 'identify/removeCompany';
+	},
+	companyList:function(){
+		return API_URL + 'identify/companyList';
+	},
+	consumerList:function(){
+		return API_URL + 'identify/consumerList';
+	},
+	
+	gptSendMsg:function(){
+		return API_URL + 'gpt/sendMsg';
+	},
+	gptSendText:function(){
+		return API_URL + 'gpt/sendText';
+	},
+	gptLastMsg:function(){
+		return API_URL + 'gpt/lastMsg';
+	},
+	gptSystemMsgList:function(){
+		return API_URL + 'gpt/systemMsgList';
+	},
+	
+	gptMsgList:function(){
+		return API_URL + 'gpt/msgList';
+	},
+	gptAdd:function(){
+		return API_URL + 'gpt/gptAdd';
+	},
+	gptEdit:function(){
+		return API_URL + 'gpt/gptEdit';
+	},
+	gptDelete:function(){
+		return API_URL + 'gpt/gptDelete';
+	},
+	gptList:function(){
+		return API_URL + 'gpt/gptList';
+	},
+	gptInfo:function(){
+		return API_URL + 'gpt/gptInfo';
+	},
+	gptChatDelete:function(){
+		return API_URL + 'gpt/gptChatDelete';
+	},
+	
+	
+
 	
 	IsNull(obj) {
 		return (obj != null && obj != undefined);
@@ -695,28 +951,7 @@ module.exports = {
 	        }
 	    }
 	    return json;
-	},
-	//获取用户当前等级
-	getLever(num){
-		var lv = 0;
-		if (num < 10) {
-			lv = 0;
-		} else if (num >= 10 && num < 50) {
-			lv = 1;
-		} else if (num >= 50 && num < 200) {
-			lv = 2;
-		} else if (num >= 200 && num < 500) {
-			lv = 3;
-		} else if (num >= 500 && num < 1000) {
-			lv = 4;
-		} else if (num >= 1000 && num < 2000) {
-			lv = 5;
-		} else if (num >= 2000 && num < 5000) {
-			lv = 6;
-		} else if (num >= 5000) {
-			lv = 7;
-		}
-		return lv;
-	},
+	}
+	
 
 }

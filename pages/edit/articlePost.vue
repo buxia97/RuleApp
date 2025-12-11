@@ -119,6 +119,16 @@
 					id = res.cid;
 				}
 			}
+			var verifyLevel = 0;
+			if(localStorage.getItem('AppInfo')){
+				try{
+					var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+					verifyLevel = AppInfo.verifyLevel;
+				}catch(e){
+					console.log(e);
+				}
+				
+			}
 			if(localStorage.getItem('userinfo')){
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 				that.token=userInfo.token;
@@ -135,7 +145,8 @@
 				"token":that.token,
 				"type":that.type,
 				"isDocx":that.isDocx,
-				"env":Env
+				"env":Env,
+				"verifyLevel":verifyLevel
 			}
 			that.weburl+=encodeURIComponent(JSON.stringify(data));
 			

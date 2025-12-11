@@ -54,7 +54,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.getContentsList();
 			
@@ -87,7 +87,6 @@
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					token=userInfo.token;
 				}
-
 				that.$Net.request({
 					url: that.$API.getContentsList(),
 					data:{

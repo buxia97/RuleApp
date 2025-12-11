@@ -1,5 +1,5 @@
 <template>
-	<view class="post" :class="AppStyle">
+	<view class="post" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'},{top:jpHeight + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -249,7 +249,7 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			if(localStorage.getItem('userinfo')){
 				var userInfo = JSON.parse(localStorage.getItem('userinfo'));

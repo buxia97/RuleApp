@@ -118,9 +118,6 @@
 		onShow(){
 			var that = this;
 			// #ifdef APP-PLUS
-			
-			//plus.navigator.setStatusBarStyle("dark")
-			
 			that.isUpdate(false);
 			// #endif
 			that.name = that.$API.GetAppName();

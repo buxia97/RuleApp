@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -130,7 +130,7 @@ export default {
 		var that = this;
 		that.page=1;
 		// #ifdef APP-PLUS
-		plus.navigator.setStatusBarStyle("dark")
+		//plus.navigator.setStatusBarStyle("dark")
 		// #endif
 		if(localStorage.getItem('token')){
 			that.page=1;

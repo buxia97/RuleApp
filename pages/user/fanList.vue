@@ -22,7 +22,7 @@
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item.userJson)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
-					<view class="text-grey">
+					<view class="text-black">
 						<block>{{item.userJson.name}}</block>
 						<text v-if="item.userJson.groupKey=='contributor'||item.userJson.groupKey=='administrator'" class="cuIcon-lightfill"></text>
 						<!--  #ifdef H5 || APP-PLUS -->

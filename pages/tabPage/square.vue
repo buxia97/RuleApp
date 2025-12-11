@@ -5,7 +5,6 @@
 				<view class="action">
 					<text class="square-box" :class="squareid==0?'cur':''" @tap="setSquare(0,true)">动态</text>
 					<text class="square-box" :class="squareid==1?'cur':''" @tap="setSquare(1,true)">群聊</text>
-					<!-- <text class="square-box" :class="squareid==2?'cur':''" @tap="setSquare(2)">综合</text> -->
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
 					
@@ -229,8 +228,6 @@
 				page:1,
 				moreText:"加载更多",
 				
-				sectionList:[],
-				swiperList:[],
 				
 				noLogin:false,
 				
@@ -719,6 +716,8 @@
 							var list = res.data.data;
 							var spaceList = [];
 							for(var i in list){
+								list[i].banShow = false;
+								list[i].isBan = false;
 								if(list[i].type==0){
 									if(list[i].pic){
 										var pic = list[i].pic;
@@ -752,12 +751,9 @@
 							}
 							
 						}else{
-							if(url!=that.$API.followSpace()){
-								if(res.data.msg=="用户未登录或Token验证失败"){
-									that.noLogin = true;
-								}
+							if(res.data.msg=="用户未登录或Token验证失败"){
+								that.noLogin = true;
 							}
-							
 						}
 					},
 					fail: function(res) {
@@ -792,7 +788,6 @@
 				    url: '/pages/user/register'
 				});
 			},
-
 			subText(text,num){
 				if(text.length < null){
 					return text.substring(0,num)+"……"

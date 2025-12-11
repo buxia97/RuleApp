@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -27,7 +27,7 @@
 				<view class="title">新邮箱</view>
 				<input placeholder="请输入新邮箱" v-model="mail" name="input"></input>
 			</view>
-			<view class="cu-form-group" v-if="isEmail>0">
+			<view class="cu-form-group" v-if="isEmail > 0">
 				<view class="title">验证码</view>
 				<input placeholder="填写新邮箱验证码" v-model="code" name="input"></input>
 				<view class="sendcode text-blue" v-if="show" @tap="RegSendCode">发送</view>
@@ -40,6 +40,25 @@
 			<!--  #endif -->
 			
 		</form>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="RegSendCode">确定</view>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -63,7 +82,13 @@
 				show:true,
 				isEmail:1,
 				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
+				
 				token:'',
+				styleIndex:""
 			}
 		},
 		onPullDownRefresh(){
@@ -74,11 +99,10 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 			that.getCacheInfo();
-			that.regConfig();
 		},
 		onLoad() {
 			var that = this;
@@ -86,12 +110,38 @@
 			that.NavBar = this.CustomBar;
 			// #endif
 			that.getCacheInfo();
+			that.kaptchaUrl = that.$API.getKaptcha();
+			that.getConfig();
+			that.styleIndex = that.$API.GetStyleIndex();
 		},
 		methods: {
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
+			getConfig() {
+				var that = this;
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.verifyLevel = AppInfo.verifyLevel;
+						that.isEmail = AppInfo.isEmail;
+					}catch(e){
+						console.log(e);
+					}
+					
+				}
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			getCacheInfo(){
 				var that = this;
@@ -104,17 +154,18 @@
 			},
 			userEdit() {
 				var that = this;
-				if (that.mail == ""||that.code == "") {
+				if (that.mail == "" || that.code =="") {
 					uni.showToast({
-						title:"请完整填写表单",
+					    title:"请完成表单填写",
 						icon:'none',
 						duration: 1000,
 						position:'bottom',
 					});
 					return false
 				}
+			
 				var data = {
-					uid:that.uid.toString(),
+					uid:that.uid,
 					name:that.name,
 					mail:that.mail,
 					code:that.code,
@@ -149,9 +200,10 @@
 								localStorage.removeItem('userinfo');
 								localStorage.removeItem('token');
 								var timer = setTimeout(function() {
+									var styleIndex = that.styleIndex;
 									uni.redirectTo({
-										url: '/pages/home/index'
-									})
+										url: '/pages/home/'+styleIndex
+									});
 									clearTimeout('timer')
 								}, 1000)
 							}else{
@@ -187,6 +239,12 @@
 					});
 					return false
 				}
+				if(that.verifyLevel>0){
+					if (that.verifyCode == "") {
+						that.modalName = 'kaptcha'
+						return false
+					}
+				}
 				var data = {
 					'mail':that.mail
 				}
@@ -196,13 +254,18 @@
 				that.$Net.request({
 					
 					url: that.$API.RegSendCode(),
-					data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(data))},
+					data:{
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						'verifyCode':that.verifyCode
+					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -237,31 +300,7 @@
 				  this.times = 60;
 				}
 			  },1000)
-			},
-			regConfig() {
-				var that = this;
-				that.$Net.request({
-					
-					url: that.$API.regConfig(),
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						//console.log(JSON.stringify(res));
-						if(res.data.code==1){
-							that.isEmail = res.data.data.isEmail;
-						}
-					},
-					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
-					}
-				})
-			},
+			}
 		}
 	}
 </script>

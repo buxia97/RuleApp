@@ -1,5 +1,21 @@
 <template>
-	<view>
+	<view class="content-list-box" @longtap="banShow=true"  v-if="!isBan" :class="banShow?'banShow':''">
+		<view class="ban" v-if="!isTop&&!item.isAds">
+			<view class="ban-close" @tap="banShow=false">
+				<text class="cuIcon-close"></text>
+			</view>
+			<view class="ban-concent">
+				<text class="ban-btn" @tap="report(item.title,1)">
+					<text class="cuIcon-warn"></text>举报
+				</text>
+				<text class="ban-btn" @tap="goMyBan(item.cid,'banContent')">
+					<text class="cuIcon-roundclosefill"></text>不喜欢
+				</text>
+				<text class="ban-btn" @tap="goMyBan(item.authorId,'banUser')">
+					<text class="cuIcon-attentionforbidfill"></text>拉黑作者
+				</text>
+			</view>
+		</view>
 		<!--文章推流广告区域-->
 		<view class="cu-card article no-card" :class="isTop?'topContents':''" v-if="item.isAds" @tap="goAds(item)">
 			<view class="cu-item shadow">
@@ -103,6 +119,7 @@
 </template>
 
 <script>
+import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
 export default {
     props: {
         item: {
@@ -117,7 +134,29 @@ export default {
 	name: "articleItem",
 	data() {
 		return {
+			banShow:false,
+			isBan:false
 		};
+	},
+	mounted() {
+		var that = this;
+		if(localStorage.getItem('userinfo')){
+			if(localStorage.getItem('myBanLog')){
+				var myBanLog = JSON.parse(localStorage.getItem('myBanLog'));
+				var banContentList = myBanLog.banContentList;
+				var banUserList = myBanLog.banUserList;
+				for(var i in banUserList){
+					if(that.item.authorId == banUserList[i].num){
+						that.isBan = true;
+					}
+				}
+				for(var i in banContentList){
+					if(that.item.cid == banContentList[i].num){
+						that.isBan = true;
+					}
+				}
+			}
+		}
 	},
 	methods: {
 		subText(text,num){
@@ -171,6 +210,133 @@ export default {
 			// #ifdef H5
 			window.open(url)
 			// #endif
+		},
+		goMyBan(uid,type){
+			var that = this;
+			var token = "";
+			
+			if(localStorage.getItem('userinfo')){
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				token=userInfo.token;
+			}
+			var title = "";
+			if(type=="banUser"){
+				title = '确定要拉黑作者吗？拉黑后，将屏蔽该用户所有发布内容！'
+			}
+			if(type=="banContent"){
+				title = '确定要屏蔽该文章吗！'
+			}
+			var data = {
+				"id":uid,
+				"type":type,
+				"token":token
+			}
+			uni.showModal({
+				title: title,
+				success: function (res) {
+					if (res.confirm) {
+						uni.showLoading({
+							title: "加载中"
+						});
+						
+						that.$Net.request({
+							url: that.$API.ban(),
+							data:data,
+							header:{
+								'Content-Type':'application/x-www-form-urlencoded'
+							},
+							method: "get",
+							dataType: 'json',
+							success: function(res) {
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+								if(res.data.code==1){
+									that.isBan = true;
+									that.myBanLog();
+								}else{
+									if(res.data.msg=="用户未登录或Token验证失败"){
+										uni.showToast({
+											title: "请先登录",
+											icon: 'none'
+										})
+										uni.navigateTo({
+											url: '/pages/user/login'
+										});
+									}else{
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+									
+								}
+								
+								
+							},
+							fail: function(res) {
+								setTimeout(function () {
+									uni.hideLoading();
+								}, 1000);
+								uni.showToast({
+									title: "网络开小差了哦",
+									icon: 'none'
+								})
+							}
+						})
+					} else if (res.cancel) {
+						console.log('用户点击取消');
+					}
+				}
+			});
+		},
+		myBanLog(){
+			var that = this;
+			var token = ""
+			if(localStorage.getItem('userinfo')){
+				var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+				token=userInfo.token;
+			
+			}else{
+				return false;
+			}
+			that.$Net.request({
+				
+				url: that.$API.myBanLog(),
+				data:{
+					"token":token
+				},
+				header:{
+					'Content-Type':'application/x-www-form-urlencoded'
+				},
+				method: "get",
+				dataType: 'json',
+				success: function(res) {
+					if(res.data.code==1){
+						var myBanLog = res.data.data;
+						localStorage.setItem('myBanLog',myBanLog);
+					}
+				},
+				fail: function(res) {
+					uni.showToast({
+						title: "网络开小差了哦",
+						icon: 'none'
+					})
+				}
+			})
+		},
+		report(title,type){
+			var that = this;
+			if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+				uni.showToast({
+					title: "请先登录哦",
+					icon: 'none'
+				})
+				return false;
+			}
+			uni.navigateTo({
+			    url: '/pages/user/report?title='+title+"&type="+type
+			});
 		},
 	}
 }

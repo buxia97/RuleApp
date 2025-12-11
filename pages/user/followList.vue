@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -22,7 +22,7 @@
 			<view class="cu-item" v-for="(item,index) in userList" :key="index" @tap="toUserContents(item.userJson)">
 				<view class="cu-avatar round lg" :style="item.style"></view>
 				<view class="content">
-					<view class="text-grey">
+					<view class="text-black">
 						<block>{{item.userJson.name}}</block>
 						<text v-if="item.userJson.groupKey=='contributor'||item.userJson.groupKey=='administrator'" class="cuIcon-lightfill"></text>
 						<!--  #ifdef H5 || APP-PLUS -->
@@ -101,7 +101,7 @@
 			that.page=1;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			
 		},

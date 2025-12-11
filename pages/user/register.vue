@@ -1,5 +1,5 @@
 <template>
-	<view class="user" :class="AppStyle">
+	<view class="user" :class="$store.state.AppStyle">
 		<view class="header" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="back">
@@ -28,19 +28,47 @@
 					<view class="sendcode text-gray" v-if="!show">{{ times }}s</view>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" v-model="password" type="password" placeholder="请输入密码"></input>
+					<input name="input" placeholder="请输入密码" type="password" v-if="!pwdShow" v-model="password"></input>
+					<input name="input" placeholder="请输入密码" type="text" v-if="pwdShow" v-model="password"></input>
+					<text class="active cuIcon-attentionfill text-black" @tap="pwdShow=!pwdShow" v-if="password!=''&&pwdShow"></text>
+					<text class="active cuIcon-attentionfill text-gray" @tap="pwdShow=!pwdShow" v-if="password!=''&&!pwdShow"></text>
 				</view>
 				<view class="cu-form-group">
-					<input name="input" v-model="repassword" type="password" placeholder="再次输入密码"></input>
+					<input name="input" placeholder="再次输入密码" type="password" v-if="!rePwdShow" v-model="repassword"></input>
+					<input name="input" placeholder="再次输入密码" type="text" v-if="rePwdShow" v-model="repassword"></input>
+					<text class="active cuIcon-attentionfill text-black" @tap="rePwdShow=!rePwdShow" v-if="repassword!=''&&rePwdShow"></text>
+					<text class="active cuIcon-attentionfill text-gray" @tap="rePwdShow=!rePwdShow" v-if="repassword!=''&&!rePwdShow"></text>
 				</view>
-				<view class="cu-form-group" v-if="isInvite==1">
+				<view class="cu-form-group" v-if="isInvite>0">
 					<input name="input" v-model="inviteCode" type="text" placeholder="请输入邀请码(必填)"></input>
+				</view>
+				<view class="cu-form-group" v-else>
+					<input name="input" v-model="inviteCode" type="text" placeholder="邀请码(可不填)"></input>
 				</view>
 				<view class="user-btn flex flex-direction">
 					<button class="cu-btn bg-blue margin-tb-sm lg" @tap="userRegister">立即注册</button>
-					<text class="text-blue text-right margin-top" @tap="toAgreement">注册即为同意 《用户协议》</text>
+					<text class="text-center margin-top"><text class="agree-ico" :class="isAgree?'bg-blue':''" @tap="isAgree=!isAgree"><text class="cuIcon-check"></text></text>我同意<text class="text-blue" @tap="toPrivacyPolicy()">《隐私政策》</text>和<text class="text-blue" @tap="toAgreement()">《用户服务条款》</text></text>
 				</view>
 			</form>
+		</view>
+		<view class="cu-modal" :class="modalName=='kaptcha'?'show':''">
+			<view class="cu-dialog kaptcha-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作验证</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close"></text>
+					</view>
+				</view>
+				<view class="kaptcha-form">
+					<view class="kaptcha-image">
+						<image :src="kaptchaUrl" mode="widthFix" @tap="reloadCode()"></image>
+					</view>
+					<view class="kaptcha-input">
+						<input name="input" v-model="verifyCode" placeholder="请输入验证码"></input>
+						<view class="cu-btn bg-blue" @tap="RegSendCode">确定</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -66,6 +94,15 @@
 				isEmail:1,
 				isInvite:0,
 				inviteCode:"",
+				isAgree:false,
+				
+				modalName:null,
+				kaptchaUrl:"",
+				verifyCode:"",
+				verifyLevel:0,
+				
+				pwdShow:false,
+				rePwdShow:false
 				
 			}
 		},
@@ -77,21 +114,28 @@
 			var that = this;
 			// #ifdef APP-PLUS
 			
-			plus.navigator.setStatusBarStyle("dark")
+			//plus.navigator.setStatusBarStyle("dark")
 			// #endif
 			that.regConfig();
+			that.kaptchaUrl = that.$API.getKaptcha();
 		},
-		onLoad() {
+		onLoad(res) {
 			var that = this;
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			if(res.inviteCode){
+				that.inviteCode = res.inviteCode;
+			}
 		},
 		methods: {
 			back(){
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			hideModal(e) {
+				this.modalName = null
 			},
 			PickerChange(e) {
 				this.index = e.detail.value
@@ -100,8 +144,24 @@
 			  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,}$/;
 			  return regex.test(password);
 			},
+			reloadCode(){
+				var that = this;
+				var kaptchaUrl = that.$API.getKaptcha();
+				var num=Math.ceil(Math.random()*10);
+				kaptchaUrl += "?"+num;
+				that.kaptchaUrl = kaptchaUrl;
+			},
 			userRegister() {
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				if (that.name == ""||that.mail == ""||that.password == ""||that.repassword == "") {
 					uni.showToast({
 						title:"请输入正确的参数",
@@ -185,6 +245,13 @@
 					});
 					return false
 				}
+				if(that.verifyLevel > 0){
+					if (that.verifyCode == "") {
+						that.modalName = 'kaptcha'
+						return false
+					}
+				}
+				
 				var data = {
 					'mail':that.mail
 				}
@@ -194,13 +261,18 @@
 				that.$Net.request({
 					
 					url: that.$API.RegSendCode(),
-					data:{"params":JSON.stringify(that.$API.removeObjectEmptyKey(data))},
+					data:{
+						"params":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						'verifyCode':that.verifyCode
+					},
 					header:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
 					method: "get",
 					dataType: 'json',
 					success: function(res) {
+						that.modalName = null;
+						that.verifyCode = "";
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 1000);
@@ -227,28 +299,17 @@
 			},
 			regConfig() {
 				var that = this;
-				that.$Net.request({
-					
-					url: that.$API.regConfig(),
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						//console.log(JSON.stringify(res));
-						if(res.data.code==1){
-							that.isEmail = res.data.data.isEmail;
-							that.isInvite = res.data.data.isInvite;
-						}
-					},
-					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
+				if(localStorage.getItem('AppInfo')){
+					try{
+						var AppInfo = JSON.parse(localStorage.getItem('AppInfo'));
+						that.isEmail = AppInfo.isEmail;
+						that.isInvite = AppInfo.isInvite;
+						that.verifyLevel = AppInfo.verifyLevel;
+					}catch(e){
+						console.log(e);
 					}
-				})
+					
+				}
 			},
 			getCode() {
 			  this.show = false
@@ -268,6 +329,13 @@
 				    url: '/pages/user/agreement'
 				});
 			},
+			toPrivacyPolicy(){
+				var that = this;
+				
+				uni.navigateTo({
+				    url: '/pages/user/privacyPolicy'
+				});
+			}
 		}
 	}
 </script>

@@ -219,6 +219,8 @@
 				isPlay:false,
 				curVideo:"",
 				
+				token:"",
+				
 			}
 		},
 		onPullDownRefresh(){

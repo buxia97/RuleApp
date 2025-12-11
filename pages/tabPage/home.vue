@@ -1,56 +1,51 @@
 <template>
 	<view :class="$store.state.AppStyle">
-		<view class="header" :style="[{height:CustomBar + 'px'}]" >
-			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+		<view class="header" :class="squareid==3&&scrollTop<=50?'startHome':''" :style="[{height:CustomBar + 'px'}]" >
+			<view class="cu-bar" :class="squareid!=3||scrollTop>50?'bg-white':''" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<!--  #ifdef H5 || APP-PLUS -->
-				<!-- <view class="action" @tap="toGroup">
-					<text class="toGroup">社交</text>
-				</view> -->
-				<!--  #endif -->
-				<!--  #ifdef MP -->
-				<view class="action" @tap="toSearch">
-					<text class="cuIcon-search"></text>
-				</view>
-				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					首页
-				</view>
-				<!--  #endif -->
-				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="cu-avatar round" @tap="goUserInfo()" :style="userInfo.style" v-if="token!=''"></view>
-				<view class="cu-avatar round" @tap="goUserInfo()" v-else>
-					<text class="home-noLogin">登录</text>
-				</view>
-				<view class="search-form radius"  @tap="toSearch">
-					<text class="cuIcon-search"></text>
-					<view class="search-form-text">搜索内容、评论、用户</view>
+				<view class="home-header-sort">
+					<text class="square-box" :class="squareid==3?'cur':''" @tap="setSquareid(3)">推荐</text>
+					<text class="square-box" :class="squareid==4?'cur':''" @tap="setSquareid(4)">文章库</text>
+					<text class="square-box" :class="squareid==0?'cur':''" @tap="setSquareid(0)">动态</text>
+					<text class="square-box" :class="squareid==1?'cur':''" @tap="setSquareid(1)">群聊</text>
 				</view>
 				<view class="action header-btn">
 					
-					<text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
-						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum}}</text>
-					</text>
-					<!-- <text class="cuIcon-search" @tap="toSearch"></text> -->
+					<!-- <text class="cuIcon-notice" @tap="toLink('/pages/inbox/home')">
+						<text class="noticeSum bg-red" v-if="noticeSum>0">{{noticeSum > 99?'99+':noticeSum}}</text>
+					</text> -->
+					<text class="cuIcon-search" @tap="toSearch"></text>
 				</view>
 				<!--  #endif -->
 			</view>
 		</view>
-		<view class="home-nav metaList" :style="'top:'+CustomBar+'px'">
-			<block v-if="metaList.length>0">
-				<scroll-view scroll-x class="bg-white nav " scroll-with-animation :scroll-left="scrollLeft" >
-					<view class="cu-item" :class="item.mid==TabCur?'text-blue cur':''" v-for="(item,index) in metaList" :key="index" @tap="tabSelect" :data-id="item.mid" v-if="item.parent==0">
-						{{item.name}}
-					</view>
-				</scroll-view>
-			</block>
-			<view class="goCategory" @tap="goCategory">
-				<text class="cuIcon-more"></text>
+		<view v-if="squareid==0" :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
+		<view v-if="squareid==1" :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
+		<view v-if="squareid==4" :style="[{padding:NavBar+40 + 'px 10px 0px 10px'}]"></view>
+		<block v-if="squareid==4">
+			<view class="home-nav metaList" :style="'top:'+CustomBar+'px'">
+				<block v-if="metaList.length>0">
+					<scroll-view scroll-x class="bg-white nav " scroll-with-animation :scroll-left="scrollLeft" >
+						<view class="cu-item" :class="item.mid==TabCur?'text-blue cur':''" v-for="(item,index) in metaList" :key="index" @tap="tabSelect" :data-id="item.mid" v-if="item.parent==0">
+							{{item.name}}
+						</view>
+					</scroll-view>
+				</block>
+				<view class="goCategory" @tap="goCategory">
+					<text class="cuIcon-more"></text>
+				</view>
 			</view>
-		</view>
-		<view :style="[{padding:NavBar+45 + 'px 10px 0px 10px'}]"></view>
-		<block v-if="TabCur==0">
-			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
+			
+			
+		</block>
+		<block v-if="squareid==3">
+			<swiper class="screen-swiper home-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 			 :autoplay="true" interval="5000" duration="500">
 				<swiper-item v-for="(item,index) in swiperList" :key="index"  @tap="toInfo(item)">
+					<view class="swiper-item-bg">
+						<view class="swiper-item-bgShow"></view>
+						<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+					</view>
 					<view class="swiper-box">
 						<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
 						<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
@@ -59,7 +54,7 @@
 								{{item.title}}
 							</view>
 							<view class="swiper-intro">
-								{{item.intro}}
+								{{getSwiperText(item.intro)}}
 							</view>
 						</view>
 					</view>
@@ -169,36 +164,186 @@
 					</view>
 				</view>
 			</view>
+			<view class="ads-banner" v-if="bannerAdsInfo!=null">
+				<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
+			</view>
 		</block>
-		<view class="ads-banner" v-if="bannerAdsInfo!=null">
-			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
-		</view>
-		<!--底下改成滑动形式-->
-		<view class="all-box" :style="TabCur!=0?'margin-top:0;':''">
-			<view class="cu-bar bg-white" v-if="TabCur==0">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text>最新文章
+		<block v-if="squareid==3||squareid==4">
+			<!--底下改成滑动形式-->
+			<view class="all-box" :style="TabCur!=0?'margin-top:0;':''">
+				<view class="cu-bar bg-white" v-if="TabCur==0">
+					<view class="action data-box-title">
+						<text class="cuIcon-titles text-rule"></text>最新文章
+					</view>
+					<view class="action more" @tap='toTopContents("排行榜","commentsNum")'>
+						<text>阅读更多</text><text class="cuIcon-right"></text>
+					</view>
 				</view>
-				<view class="action more" @tap='toTopContents("排行榜","commentsNum")'>
-					<text>阅读更多</text><text class="cuIcon-right"></text>
+				
+				<block v-for="(item,index) in topContents" :key="'top'+index" v-if="TabCur==0&&dataLoad">
+					<articleItem :item="item" :isTop="true"></articleItem>
+				</block>
+				<view class="dataLoad" v-if="!dataLoad">
+					<image src="../../static/loading.gif"></image>
+				</view>
+				<block v-for="(item,index) in contentsList" :key="index" v-if="dataLoad">
+					<articleItem :item="item"></articleItem>
+				</block>
+				
+				
+				<view class="load-more" @tap="loadMore" v-if="dataLoad&contentsList.length>5">
+					<text>{{moreText}}</text>
 				</view>
 			</view>
-			
-			<block v-for="(item,index) in topContents" :key="'top'+index" v-if="TabCur==0&&dataLoad">
-				<articleItem :item="item" :isTop="true"></articleItem>
-			</block>
-			<view class="dataLoad" v-if="!dataLoad">
-				<image src="../../static/loading.gif"></image>
+		</block>
+		<block v-if="squareid==0">
+			<view class="data-box">
+				<view class="square-post">
+					<view class="square-post-header">
+						<view class="square-user" @tap="goUserInfo()">
+							<view class="cu-avatar round" :style="userInfo.style" v-if="token!=''"></view>
+							<view class="cu-avatar round" v-else>
+								<text class="text-blue text-sm">登录</text>
+							</view>
+						</view>
+						<view class="square-text" @tap="postSpace(0)">
+							分享你的想法吧！
+						</view>
+					</view>
+					<view class="square-post-btn grid col-4">
+						<view class="square-post-btn-box" @tap="postSpace(0)">
+							<text class="cuIcon-pic text-green"></text>图片
+						</view>
+						<view class="square-post-btn-box" @tap="postSpace(4)">
+							<text class="cuIcon-record text-purple"></text>视频
+						</view>
+						<view class="square-post-btn-box" @tap="postSpace(1)">
+							<text class="cuIcon-read text-blue"></text>文章
+						</view>
+						<view class="square-post-btn-box" @tap="postSpace(5)">
+							<text class="cuIcon-cart text-red"></text>商品
+						</view>
+					</view>
+				</view>
 			</view>
-			<block v-for="(item,index) in contentsList" :key="index" v-if="dataLoad">
-				<articleItem :item="item"></articleItem>
-			</block>
+			<view class="square-data-type">
+				<text :class="spaceDataType==0?'cur':''" @tap="setSpaceDataType(0)">只看关注</text>
+				<text :class="spaceDataType==1?'cur':''" @tap="setSpaceDataType(1)">点赞最多</text>
+				<text :class="spaceDataType==2?'cur':''" @tap="setSpaceDataType(2)">实时最新</text>
+			</view>
+			<block v-if="spaceList.length==0">
 			
-			
-			<view class="load-more" @tap="loadMore" v-if="dataLoad">
+				<block v-if="spaceLoad">
+					<view class="no-data" >
+						<text class="cuIcon-text"></text>
+						
+						暂时没有动态哦！
+						<view class="text-center margin-top-sm">
+							<text class="cu-btn bg-gradual-orange radius" @tap="postSpace(0)">我要发布</text>
+						
+						</view>
+					</view>
+				</block>
+				<block v-else>
+					<view class="dataLoad" v-if="!dataLoad">
+						<image src="../../static/loading.gif"></image>
+					</view>
+				</block>
+			</block>	
+				
+			<spaceItem :spaceList="spaceList"></spaceItem>
+			<view class="load-more" @tap="loadMore" v-if="dataLoad&&chatList.length>0">
 				<text>{{moreText}}</text>
 			</view>
-		</view>
+			
+			
+		</block>
+		<block v-if="squareid==1">
+			
+			<view class="no-data" v-if="token==''">
+				<text class="cuIcon-text"></text>
+				
+				请先登录哦！
+				<view class="text-center margin-top-sm">
+					<text class="cu-btn bg-blue radius" @tap="goLogin()">登录</text>
+					<text class="cu-btn line-blue margin-left-sm radius" @tap="goRegister()">注册</text>
+				</view>
+				
+			</view>
+			<view class="cu-list menu-avatar" v-if="token!=''">
+				<view class="cu-bar bg-white search">
+					<view class="search-form round">
+						<text class="cuIcon-search"></text>
+						<input type="text" placeholder="搜索群聊" v-model="searchText"></input>
+						<view class="search-close" v-if="searchText!=''" @tap="searchClose()"><text class="cuIcon-close"></text></view>
+					</view>
+				</view>
+				<view class="no-data" v-if="chatList.length==0">
+					<text class="cuIcon-text"></text>
+					暂时没有数据
+				</view>
+				<block v-for="(item,index) in chatList" :key="index">
+				<view class="cu-item" @tap="goChat(item)" v-if="item.name.indexOf(searchText)!=-1">
+					<block v-if="item.type==1">
+						<view class="cu-avatar round lg" :style="'background-image:url('+item.pic+');'"></view>
+					</block>
+					<block v-else>
+						<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
+					</block>
+					<view class="content">
+						<view><view class="text-cut">{{item.name}}</view></view>
+						<view class="text-gray text-sm flex">
+							<view class="text-cut">
+								<block v-if="item.lastMsg!=null">
+									
+									<block v-if="item.lastMsg.type!=4">
+										<block v-if="item.lastMsg.uid==uid">
+											我: 
+										</block>
+										<block v-if="item.lastMsg.uid!=uid">
+											{{item.name}}: 
+										</block>
+										<block v-if="item.lastMsg.type==0">
+											{{item.lastMsg.text}}
+										</block>
+										<block v-if="item.lastMsg.type==1">
+											[图片]
+										</block>
+									</block>
+									<block v-else>
+										<block v-if="item.lastMsg.text=='ban'">
+											<text class="text-red">[已开启全体禁言]</text>
+										</block>
+										<block v-else>
+											<text class="text-blue">[已解除全体禁言]</text>
+										</block>
+									</block>
+								</block>
+								<block v-else>暂无消息</block>
+							</view>
+						</view>
+					</view>
+					<view class="action">
+						<view class="text-grey text-xs">{{chatFormatDate(item.lastTime)}}</view>
+						<block v-if="item.lastMsg!=null">
+							<block v-if="item.lastMsg.uid==uid">
+								<view class="cu-tag sm" style="background: none;">&nbsp</view>
+							</block>
+							<block v-else>
+								<view class="cu-tag sm" style="background: none;" v-if="item.isNew==0">&nbsp</view>
+								<view class="cu-tag round bg-red sm" v-else>{{item.unRead}}</view>
+							</block>
+						</block>
+						<block v-else>
+							<view class="cu-tag sm" style="background: none;">&nbsp</view>
+						</block>
+					</view>
+				</view>
+				</block>
+			</view>
+		</block>
+
+		
 		<!--加载遮罩-->
 		<view class="loading" v-if="isLoading==0">
 			<view class="loading-main">
@@ -225,6 +370,7 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	
 	import waves from '@/components/xxley-waves/waves.vue';
 	import { localStorage } from '../../js_sdk/mp-storage/mp-storage/index.js'
@@ -245,6 +391,7 @@
 				
 				cardCur: 0,
 				swiperList: [],
+				postSwiperList:[],
 				
 				contentsList:[],
 				topContents:[],
@@ -253,6 +400,8 @@
 				dotStyle: false,
 				towerStart: 0,
 				direction: '100000',
+				
+				squareid:3,
 				
 				TabCur: 0,
 				scrollLeft: 0,
@@ -280,11 +429,36 @@
 				
 				userInfo:null,
 				token:"",
+				isvip:0,
 				
 				noLogin:false,
 				
+				scrollTop:0,
+				
+				chatList:[],
+				oldChatList:[],
+				
+				spaceList:[],
+				
+				isGetChat:null,
+				
+				uid:0,
+				dataLoad:false,
+				
+				
+				
+				spaceDataType:2,
+				spaceLoad:false,
+				searchText:""
+					
 			}
 		},
+		watch:{
+			"$store.state.scrollTop": function(newValue, oldValue) {
+				this.scrollTop = newValue;
+			}
+		},
+		
 		mounted() {
 			var that = this;
 			uni.$on('onShow', function(data) {
@@ -297,8 +471,10 @@
 					that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
 					that.group = that.userInfo.group;
+					that.isvip = that.userInfo.isvip;
 				}else{
 					that.userInfo =null;
+					
 				}
 				if(localStorage.getItem('token')){
 					
@@ -329,20 +505,6 @@
 					
 					
 				}
-				if(localStorage.getItem('userinfo')){
-					
-					that.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					that.userInfo.style = "background-image:url("+that.userInfo.avatar+");"
-					that.group = that.userInfo.group;
-				}else{
-					that.userInfo =null;
-				}
-				if(localStorage.getItem('token')){
-					
-					that.token = localStorage.getItem('token');
-				}else{
-					that.token = "";
-				}
 				
 				// #ifdef APP-PLUS
 				//如果启动图还没有缓存过，第一次进来就不显示启动图了
@@ -364,9 +526,11 @@
 				that.getSwiper();
 				that.getCID();
 				// #ifdef APP-PLUS || H5
+				if(that.isvip==0){
+					that.getAdsCache();
+					that.getAds();
+				}
 				
-				that.getAdsCache();
-				that.getAds();
 				// #endif
 				
 			});
@@ -388,7 +552,7 @@
 				}
 				console.log("触发下拉刷新");
 				that.page = 1;
-				that.loading();
+				that.setSquareid(that.squareid);
 			});
 			// if(localStorage.getItem('userinfo')){
 				
@@ -486,6 +650,8 @@
 				that.getAdsList(0);
 				//获取横幅广告
 				that.getAdsList(1);
+				//获取轮播图广告
+				that.getAdsList(3);
 				//#endif
 				// #ifdef APP-PLUS
 				//获取启动图广告
@@ -513,6 +679,7 @@
 				var that = this;
 				var data = {
 					"type":type,
+					"status":1,
 				}
 				that.$Net.request({
 					url: that.$API.adsList(),
@@ -541,6 +708,10 @@
 							if(type==2){
 								that.startAds = res.data.data;
 								localStorage.setItem('startAds',JSON.stringify(that.startAds));
+							}
+							if(type==3){
+								that.swiperAds = res.data.data;
+								localStorage.setItem('swiperAds',JSON.stringify(that.swiperAds));
 							}
 						}
 						
@@ -573,7 +744,7 @@
 				// that.page = 1;
 				//that.getSwiper();
 				that.getTopPic();
-				that.getMetaList();
+				
 				that.getTopContents();
 				if(that.page < 2){
 					if(that.TabCur==0){
@@ -582,6 +753,52 @@
 						that.getMetaContents(false,that.TabCur);
 					}
 				}
+				
+			},
+			setSquareid(squareid){
+				var that = this;
+				if(squareid==that.squareid){
+					return false;
+				}
+				that.squareid = squareid;
+				that.page = 1;
+				console.log("当前分页"+that.page)
+				clearInterval(that.isGetChat);
+				that.isGetChat = null
+				if(squareid==0){
+					if(that.page == 1){
+						that.getSpaceList(false);
+					}
+				}
+				if(squareid==1){
+					if(that.token!=""){
+						that.getMyChat(false);
+						that.isGetChat = setInterval(() => {
+						 that.getMyChat(false);
+						}, 4000);
+					}
+				}
+				if(squareid==3){
+					that.TabCur = 0;
+					
+					
+					that.getSwiper();
+					that.loading();
+					
+					that.getContentsList(false);
+				}
+				if(squareid==4){
+					that.loading();
+					that.getMetaList();
+					if(that.page < 2){
+						if(that.TabCur==0){
+							that.getContentsList(false);
+						}else{
+							that.getMetaContents(false,that.TabCur);
+						}
+					}
+				}
+				
 				
 			},
 			tabSelect(e) {
@@ -601,10 +818,16 @@
 				var that = this;
 				that.moreText="正在加载中...";
 				that.isLoad=1;
-				if(that.TabCur==0){
-					that.getContentsList(true);
-				}else{
-					that.getMetaContents(true,that.TabCur);
+				if(that.squareid==3||that.squareid==4){
+					if(that.TabCur==0){
+						that.getContentsList(true);
+					}else{
+						that.getMetaContents(true,that.TabCur);
+					}
+				}
+				
+				if(that.squareid==0){
+					that.getSpaceList(true);
 				}
 			},
 			//公共缓存
@@ -664,6 +887,30 @@
 							that.noLogin = false;
 							var list = res.data.data;
 							var swiper = [];
+							var swiperAdsList = [];
+							// #ifdef APP-PLUS || H5
+							if(that.isvip==0){
+								if(localStorage.getItem('swiperAds')){
+									var swiperAds = JSON.parse(localStorage.getItem('swiperAds'));
+									
+									if(swiperAds.length>0){
+										for(var i in swiperAds){
+											var arr = {
+												cid: 0,
+												adurl:swiperAds[i].img,
+												type: 'image',
+												url: swiperAds[i].url,
+												title:swiperAds[i].name,
+												urltype:0,
+												isAd:1,
+												intro:that.subText(swiperAds[i].intro,20),
+											}
+											swiper.push(arr);
+										}
+									}
+								}
+							}
+							// #endif
 							if(list.length>0){
 								for(var i in list){
 									if(list[i].images.length>0){
@@ -673,15 +920,20 @@
 											url: list[i].images[0],
 											title:list[i].title,
 											intro:that.subText(list[i].text,20),
+											isAd:0,
+											urltype:0
 										}
 										swiper.push(arr);
 									}
 									
 								}
 								that.swiperList = swiper;
+								if(swiperAdsList.length>0){
+									that.swiperList = swiper.concat(swiperAdsList);
+								}
 								
 							}else{
-								that.swiperList = [];
+								that.swiperList = swiperAdsList;
 							}
 							localStorage.setItem('swiperList',JSON.stringify(that.swiperList));
 						}else{
@@ -719,7 +971,7 @@
 							if(list.length>0){
 								var meta = [{
 									mid:0,
-									name:"推荐",
+									name:"全部",
 									parent:0
 								}];
 								that.metaList = meta.concat(list);
@@ -879,13 +1131,15 @@
 								var rand = Math.floor(Math.random()*num);
 								var pushAdsInfo = null;
 								// #ifdef APP-PLUS || H5
-								if(localStorage.getItem('pushAds')){
-									var pushAds = JSON.parse(localStorage.getItem('pushAds'));
-									var adsNum = pushAds.length;
-									if(adsNum>0){
-										var adsRand = Math.floor(Math.random()*adsNum);
-										pushAdsInfo = that.pushAds[adsRand];
-										pushAdsInfo.isAds = 1;
+								if(that.isvip==0){
+									if(localStorage.getItem('pushAds')){
+										var pushAds = JSON.parse(localStorage.getItem('pushAds'));
+										var adsNum = pushAds.length;
+										if(adsNum>0){
+											var adsRand = Math.floor(Math.random()*adsNum);
+											pushAdsInfo = that.pushAds[adsRand];
+											pushAdsInfo.isAds = 1;
+										}
 									}
 								}
 								// #endif
@@ -1098,10 +1352,26 @@
 			},
 			toInfo(data){
 				var that = this;
+				if(data.isAd==0){
+					uni.navigateTo({
+					    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
+					});
+				}else{
+					var url = data.url;
+					var type = data.urltype;
+					// #ifdef APP-PLUS
+					if(type==1){
+						plus.runtime.openURL(url);
+					}
+					if(type==0){
+						plus.runtime.openWeb(url);
+					}
+					// #endif
+					// #ifdef H5
+					window.open(url)
+					// #endif
+				}
 				
-				uni.navigateTo({
-				    url: '/pages/contents/info?cid='+data.cid+"&title="+data.title
-				});
 			},
 			subText(text,num){
 				if(text.length < null){
@@ -1163,7 +1433,13 @@
 					});
 					return false;
 				}
-				uni.$emit('goUser', 0); 
+				uni.$emit('goUser', 0);
+			},
+			getSwiperText(text){
+				var that = this;
+				var regex = /[a-zA-Z]|[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]/g;
+				text = text.replace(regex, '');
+				return text;
 			},
 			toMetas(){
 				var that = this;
@@ -1233,19 +1509,348 @@
 				    url: '/pages/user/login'
 				});
 			},
+			setSpaceDataType(type){
+				var that = this;
+				that.spaceDataType = type;
+				that.spaceLoad = false;
+				that.page = 1;
+				that.spaceList = [];
+				that.getSpaceList(false);
+			},
+			getSpaceList(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				var data = {
+					"status":1
+				}
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				
+				}
+				var spaceDataType = that.spaceDataType;
+				var url = that.$API.followSpace();
+				var order = "created";
+				if(spaceDataType > 0 ){
+					url = that.$API.spaceList();
+				}
+				if(spaceDataType  == 1 ){
+					order = "likes";
+				}
+				that.$Net.request({
+					url: url,
+					data:{
+						"searchParams":JSON.stringify(that.$API.removeObjectEmptyKey(data)),
+						"limit":10,
+						"page":page,
+						"order":order,
+						"token":token
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.spaceLoad = true;
+						that.isLoading = 1;
+						that.isLoad=0;
+						that.moreText="加载更多";
+						if(!isPage){
+							that.dataLoad = true;
+						}
+						if(res.data.code==1){
+							that.noLogin = false;
+							var list = res.data.data;
+							var spaceList = [];
+							for(var i in list){
+								list[i].banShow = false;
+								list[i].isBan = false;
+								if(list[i].type==0){
+									if(list[i].pic){
+										var pic = list[i].pic;
+										list[i].picList = pic.split("||");
+									}else{
+										list[i].picList = [];
+									}
+									
+								}
+								if(list[i].type==2){
+									if(list[i].forwardJson.pic){
+										var pic = list[i].forwardJson.pic;
+										list[i].forwardJson.picList = pic.split("||");
+									}else{
+										list[i].forwardJson.picList = [];
+									}
+									
+								}
+							}
+							spaceList = list;
+							if(list.length>0){
+								if(isPage){
+									that.page++;
+									that.spaceList = that.spaceList.concat(spaceList);
+								}else{
+									that.spaceList = spaceList;
+								}
+								localStorage.setItem('spaceList',JSON.stringify(spaceList));
+							}else{
+								that.moreText="没有更多动态了";
+							}
+							
+						}else{
+							if(res.data.msg=="用户未登录或Token验证失败"){
+								that.noLogin = true;
+							}
+						}
+					},
+					fail: function(res) {
+						that.spaceLoad = true;
+						that.isLoading = 1;
+						that.moreText="加载更多";
+						that.isLoad=0;
+					}
+				})
+			},
+			
+			goUserInfo(){
+				 
+				var that = this;
+				if(!localStorage.getItem('token')||localStorage.getItem('token')==""){
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
+				uni.switchTab({
+					url: '/pages/home/user'
+				});
+			},
+			goLogin(){
+				uni.navigateTo({
+				    url: '/pages/user/login'
+				});
+			},
+			goRegister(){
+				uni.navigateTo({
+				    url: '/pages/user/register'
+				});
+			},
+			subText(text,num){
+				if(text.length < null){
+					return text.substring(0,num)+"……"
+				}else{
+					return text;
+				}
+				
+			},
+			goLogin(){
+				uni.navigateTo({
+				    url: '/pages/user/login'
+				});
+			},
+			//群聊(性能考虑，只加载前30条)
+			getMyChat(isPage){
+				var that = this;
+				var page = that.page;
+				if(isPage){
+					page++;
+				}
+				if(that.token==""){
+					uni.showToast({
+					    title:"请先登录",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
+				that.$Net.request({
+					url: that.$API.allChat(),
+					data:{
+						"token":that.token,
+						"limit":30,
+						"page":page,
+						"order":"lastTime"
+					},
+					header:{
+						'Content-Type':'application/x-www-form-urlencoded'
+					},
+					method: "get",
+					dataType: 'json',
+					success: function(res) {
+						that.isLoading = 1;
+						that.isLoad=0;
+						if(res.data.code==1){
+							var list = res.data.data;
+							if(list.length>0){
+								var chatList = [];
+								for(var i in list){
+									var arr = list[i];
+									arr.isNew =0;
+									arr.unRead =0;
+									chatList.push(arr);
+								}
+								if(isPage){
+									that.page++;
+									that.chatList = that.chatList.concat(chatList);
+								}else{
+									var oldChatList = [];
+									if(that.oldChatList!=null){
+										oldChatList = that.oldChatList;
+									}
+									if(oldChatList.length>0){
+										
+										if(!that.arraysEqual(oldChatList,chatList)){
+											console.log("开始对比")
+											for(var c in chatList){
+												for(var d in oldChatList){
+													if(oldChatList[d].id == chatList[c].id){
+														if(oldChatList[d].lastTime < chatList[c].lastTime){
+															console.log("赋值完成")
+															chatList[c].isNew = 1;
+															
+															var unRead = chatList[c].msgNum - oldChatList[d].msgNum;
+															if(unRead <= 0){
+																unRead = 0;
+															}
+															chatList[c].unRead = unRead;
+														}
+													}
+													
+												}
+											}
+											that.oldChatList = chatList;
+											that.chatList = chatList;
+											localStorage.setItem('AllchatList',JSON.stringify(chatList));
+										}
+										
+										
+									}else{
+										that.oldChatList = chatList;
+										that.chatList = chatList;
+										localStorage.setItem('AllchatList',JSON.stringify(chatList));
+									}
+								}
+							}else{
+								// that.moreText="没有更多消息了";
+							}
+							
+						}
+					},
+					fail: function(res) {
+						that.isLoading = 1;
+						that.isLoad=0;
+						// that.moreText="加载更多";
+					}
+				})
+			},
+			arraysEqual(a, b) {
+				if (a === b) return true;
+				if (a == null || b == null) return false;
+				if (a.length != b.length) return false;
+				for(var c in a){
+					for(var d in b){
+						if(b[d].id == a[c].id){
+							if(b[d].lastTime != a[c].lastTime){
+								return false;
+							}
+						}
+						
+					}
+				}
+			},
+			chatFormatDate(datetime) {
+				var datetime = new Date(parseInt(datetime * 1000));
+				// 获取年月日时分秒值  slice(-2)过滤掉大于10日期前面的0
+				var year = datetime.getFullYear();
+				var month = ("0" + (datetime.getMonth() + 1)).slice(-2);
+				var date = ("0" + datetime.getDate()).slice(-2);
+				var hour = ("0" + datetime.getHours()).slice(-2);
+				var minute = ("0" + datetime.getMinutes()).slice(-2);
+				var time = year+""+month+""+date;
+				
+				var result = hour + ":" + minute;
+				var curDate = new Date();
+				var curYear = curDate.getFullYear(); //获取完整的年份(4位)
+				var curMonth = ("0" + (curDate.getMonth() + 1)).slice(-2);
+				var curDay = ("0" + curDate.getDate()).slice(-2); //获取当前日(1-31)
+				var curTime = curYear+""+curMonth+""+curDay;
+				if(year==curYear){
+					if(year==curYear){
+						if(date==curDay){
+							result = hour + ":" + minute;
+						}else{
+							result = month + "-" + date;
+						}
+					}else{
+						result = month + "-" + date;
+					}
+				}else{
+					result = month + "-" + date;
+				}
+				return result;
+			},
+			goChat(data){
+				var that = this;
+				var chatid = data.id;
+				clearInterval(that.chatLoading);
+				that.chatLoading = null
+				//去除未读标志
+				var chatlist = that.chatList;
+				for(var i in chatlist){
+					if(chatlist[i].id==chatid){
+						chatlist[i].isNew =0;
+						chatlist[i].unRead =0;
+					}
+				}
+				that.chatList = chatlist;
+				that.oldChatList = that.chatList;
+				localStorage.setItem('AllchatList',JSON.stringify(that.chatList));
+				//结束
+				if(data.type==0){
+					var name = data.userJson.name;
+					var uid = data.userJson.uid;
+					
+					uni.navigateTo({
+					    url: '/pages/chat/chat?uid='+uid+"&name="+name+"&chatid="+chatid+"&type=0"
+					});
+				}
+				if(data.type==1){
+					var name = data.name;
+					
+					uni.navigateTo({
+					    url: '/pages/chat/chat?&name='+name+'&chatid='+chatid+'&type=1'
+					});
+				}
+				
+			},
+			postSpace(type){
+				var that = this;
+				if(type==1){
+					uni.navigateTo({
+					    url: '/pages/edit/articlePost'
+					});
+				}else if(type==5){
+					uni.navigateTo({
+					    url: '/pages/edit/addshop'
+					});
+				}else{
+					uni.navigateTo({
+					    url: '/pages/space/post?type='+type
+					});
+				}
+				
+				
+			},
 		},
 		
-		// #ifdef APP-PLUS
-		components: {
-			waves
-		},
-		// #endif
 		
-		// #ifdef H5 || MP
 		components: {
 			waves
-		},
-		// #endif
+		}
+
 	}
 </script>
 

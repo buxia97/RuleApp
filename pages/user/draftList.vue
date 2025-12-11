@@ -337,7 +337,8 @@
 				text = text.replace(/&gt;/g, '>');
 				text = text.replace(/&nbsp;/g, ' ');
 				return text;
-			}
+			},
+			
 		}
 	}
 </script>

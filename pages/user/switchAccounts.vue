@@ -82,6 +82,7 @@
 				userinfo:{
 					uid:0
 				},
+				styleIndex:"",
 				
 			}
 		},
@@ -106,6 +107,7 @@
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
 			// #endif
+			that.styleIndex = that.$API.GetStyleIndex();
 			
 			that.getSwitchAccounts();
 		},
@@ -266,8 +268,9 @@
 							})
 							that.getCID();
 							var timer = setTimeout(function() {
+								var styleIndex = that.styleIndex;
 								uni.redirectTo({
-									url: '/pages/home/index'
+									url: '/pages/home/'+styleIndex
 								})
 								clearTimeout('timer')
 							}, 1000)

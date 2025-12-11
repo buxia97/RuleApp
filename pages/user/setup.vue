@@ -55,6 +55,15 @@
 					<text class="text-gray">{{ localdata }}</text>
 				</view>
 			</view>
+			<view class="cu-item" v-if="token!=''" @tap="goMyBanlist()">
+				<view class="content">
+					<text class="cuIcon-attentionforbidfill"></text>
+					<text>我的黑名单</text>
+				</view>
+				<view class="action">
+					<text class="cuIcon-right text-black"></text>
+				</view>
+			</view>
 			
 		</view>
 		<view class="cu-list menu  card-menu margin-top">
@@ -257,6 +266,11 @@
 				    url: '/pages/user/switchAccounts'
 				});
 				
+			},
+			goMyBanlist(){
+				uni.navigateTo({
+				    url: '/pages/user/mybanlist'
+				});
 			},
 			back(){
 				uni.navigateBack({

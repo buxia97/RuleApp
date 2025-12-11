@@ -3452,3 +3452,195 @@ page{
 	font-size: 24upx;
 	color: #999;
 }
+/**风格切换**/
+
+
+
+/**风格切换**/
+.full-blue .header .cu-bar.bg-white{
+	background-color: #0081ff;
+	color: #fff;
+}
+.full-pink .header .cu-bar.bg-white{
+	background-color: #fa7298;
+	color: #fff;
+}
+.full-orange .header .cu-bar.bg-white{
+	background-color: #f47c35;
+	color: #fff;
+}
+.full-green .header .cu-bar.bg-white{
+	background-color: #8ebe58;
+	color: #fff;
+}
+
+
+[class*="full-"] .header .action{
+	color: #fff;
+}
+[class*="full-"] .header .cu-bar .search-form{
+	background-color: rgba(255, 255, 255, .25);
+	color:#fff;
+}
+[class*="full-"] .header .cu-bar .search-form .uni-input-placeholder{
+	color:#fff;
+}
+[class*="full-"] .header .content{
+	color:#fff;
+}
+[class*="full-"] .square-box{
+	color:rgba(255, 255, 255, .8);
+}
+[class*="full-"] .square-box.cur{
+	color:#fff;
+}
+[class*="full-"] .header .action .bg-gradual-orange{
+	color:#333;
+	background-color: #fff;
+	background-image:none
+}
+
+
+.simple-pink .metaList .nav .cu-item.cur,.full-pink .metaList .nav .cu-item.cur{
+	border-bottom: #fa7298 2px solid;
+}
+.simple-pink .cu-list.menu-avatar>.cu-item .content>view:first-child,.full-pink .cu-list.menu-avatar>.cu-item .content>view:first-child{
+	color: #fa7298;
+}
+.simple-pink .text-blue,.full-pink .text-blue{
+	color: #fa7298;
+}
+.simple-pink .bg-blue,.full-pink .bg-blue{
+	background-color: #fa7298;
+}
+.simple-pink .cu-avatar .home-noLogin,.full-pink .cu-avatar .home-noLogin{
+	color: #fa7298;
+}
+.simple-pink .search-type-box.active,.full-pink .search-type-box.active{
+	border-bottom: solid 2px #fa7298;
+}
+.simple-pink .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red,.full-pink .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red{
+	background-color: #fa7298;
+}
+.simple-pink .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red,.full-pink .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red{
+	color: #fa7298;
+}
+.simple-pink .section-ico-no,.full-pink .section-ico-no{
+	background-color: #fa7298;
+}
+.simple-pink .bg-blue.light,.full-pink .bg-blue.light {
+    color: #fff;
+}
+.simple-pink .tags text.tags-box,.full-pink .tags text.tags-box{
+	color: #fa7298;
+	background-color: #fadee8;
+}
+.simple-pink .goUserIndex .unFollow,.full-pink .goUserIndex .unFollow{
+	background: #fa7298 !important;
+}
+.simple-pink .goUserIndex .isFollow,.full-pink .goUserIndex .isFollow{
+    background: #fa517e !important;
+}
+
+.simple-orange .metaList .nav .cu-item.cur,.full-orange .metaList .nav .cu-item.cur{
+	border-bottom: #f47c35 2px solid;
+}
+.simple-orange .cu-list.menu-avatar>.cu-item .content>view:first-child,.full-orange .cu-list.menu-avatar>.cu-item .content>view:first-child{
+	color: #f47c35;
+}
+.simple-orange .text-blue,.full-orange .text-blue{
+	color: #f47c35;
+}
+.simple-orange .bg-blue,.full-orange .bg-blue{
+	background-color: #f47c35;
+}
+.simple-orange .cu-avatar .home-noLogin,.full-orange .cu-avatar .home-noLogin{
+	color: #f47c35;
+}
+.simple-orange .search-type-box.active,.full-orange .search-type-box.active{
+	border-bottom: solid 2px #f47c35;
+}
+.simple-orange .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red,.full-orange .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red{
+	background-color: #f47c35;
+}
+.simple-orange .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red,.full-orange .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red{
+	color: #f47c35;
+}
+.simple-orange .section-ico-no,.full-orange .section-ico-no{
+	background-color: #f47c35;
+}
+.simple-orange .bg-blue.light,.full-orange .bg-blue.light{
+    color: #fff;
+}
+.simple-orange .tags text.tags-box,.full-orange .tags text.tags-box{
+	color: #f47c35;
+	background-color: #f4e1d4;
+}
+.simple-orange .goUserIndex .unFollow,.full-orange .goUserIndex .unFollow{
+	background: #f47c35 !important;
+}
+.simple-orange .goUserIndex .isFollow{
+    background: #df7030 !important;
+}
+
+
+.simple-green .metaList .nav .cu-item.cur,.full-green .metaList .nav .cu-item.cur{
+	border-bottom: #8ebe58 2px solid;
+}
+.simple-green .cu-list.menu-avatar>.cu-item .content>view:first-child,.full-green .cu-list.menu-avatar>.cu-item .content>view:first-child{
+	color: #8ebe58;
+}
+.simple-green .text-blue,.full-green .text-blue{
+	color: #8ebe58;
+}
+.simple-green .bg-blue,.full-green .bg-blue{
+	background-color: #8ebe58;
+}
+.simple-green .cu-avatar .home-noLogin,.full-green .cu-avatar .home-noLogin{
+	color: #8ebe58;
+}
+.simple-green .search-type-box.active,.full-green .search-type-box.active{
+	border-bottom: solid 2px #8ebe58;
+}
+.simple-green .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red,.full-green .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.bg-red{
+	background-color: #8ebe58;
+}
+.simple-green .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red,.full-green .cu-list.menu-avatar>.cu-item .action.space-follow .cu-btn.text-red{
+	color: #8ebe58;
+}
+.simple-green .section-ico-no,.full-green .section-ico-no{
+	background-color: #8ebe58;
+}
+.simple-green .bg-blue.light,.full-green .bg-blue.light{
+    color: #fff;
+}
+.simple-green .tags text.tags-box,.full-green .tags text.tags-box{
+	color: #fff;
+	background-color: #8ebe58;
+}
+.simple-green .goUserIndex .unFollow,.full-green .goUserIndex .unFollow{
+	background: #8ebe58 !important;
+}
+.simple-green .goUserIndex .isFollow,.full-green .goUserIndex .isFollow{
+    background: #7ea84e !important;
+}
+.simple-pink .tabbarActive,.full-pink .tabbarActive{
+	color: #fa7298 !important;
+}
+.simple-pink .addPost-i,.full-pink .addPost-i{
+	background-color: #fa7298;
+}
+
+.simple-orange .tabbarActive,.full-orange .tabbarActive{
+	color: #f47c35 !important;
+}
+.simple-orange .addPost-i,.full-orange .addPost-i{
+	background-color: #f47c35;
+}
+
+.simple-green .tabbarActive,.full-green .tabbarActive{
+	color: #8ebe58 !important;
+}
+.simple-green .addPost-i,.full-green .addPost-i{
+	background-color: #8ebe58;
+}

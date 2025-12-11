@@ -6,7 +6,7 @@
 					<text class="cuIcon-back"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					发布文章
+					发布作品
 				</view>
 			</view>
 		</view>
@@ -22,7 +22,7 @@
 							在线撰写
 						</view>
 						<view class="articleNew-mian-intro">
-							直接进入编辑器撰写文章
+							直接进入编辑器撰写作品
 						</view>
 					</view>
 					<view class="articleNew-right">
