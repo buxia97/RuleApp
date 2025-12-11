@@ -2067,9 +2067,6 @@ page{
 	width: 100%;
 	position: relative;
 	height: calc(100% - 110upx);
-	/* #ifdef APP-PLUS */
-	height: calc(100% - 60upx);
-	/* #endif */
 	box-sizing: border-box;
 	border-radius:30upx;
 	margin-top: 110upx;
@@ -2080,7 +2077,11 @@ page{
 }
 .home-swiper.home-swiper{
 	min-height: 550upx;
+	/* #ifdef APP-PLUS */
+	min-height: 600upx;
+	/* #endif */
 }
+
 
 .swiper-item-bg{
 	width: calc(100% + 100upx);
