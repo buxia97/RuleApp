@@ -51,7 +51,7 @@
 						<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
 						<view class="swiper-text">
 							<view class="swiper-title">
-								{{item.title}}
+								{{replaceSpecialChar(item.title)}}
 							</view>
 							<view class="swiper-intro">
 								{{getSwiperText(item.intro)}}
