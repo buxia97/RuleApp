@@ -498,18 +498,6 @@
 			}
 		},
 		{
-			"path": "pages/manage/consumer",
-			"style": {
-				"enablePullDownRefresh":true
-			}
-		},
-		{
-			"path": "pages/manage/company",
-			"style": {
-				"enablePullDownRefresh":true
-			}
-		},
-		{
 			"path": "pages/manage/selfDelete",
 			"style": {
 				"enablePullDownRefresh":true

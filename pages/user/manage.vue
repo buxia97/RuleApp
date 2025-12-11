@@ -109,19 +109,6 @@
 						</view>
 						
 					</view>
-					<view class="user-data-box" v-if="allData.upcomingIdentifyConsumer!=0">
-						<view class="user-data-main" @tap="toLink('/pages/manage/consumer')">
-							<view class="user-data-value">{{allData.upcomingIdentifyConsumer}}</view>
-							<view class="user-data-title">个人认证</view>
-						</view>
-						
-					</view>
-					<view class="user-data-box" v-if="allData.upcomingIdentifyCompany!=0">
-						<view class="user-data-main" @tap="toLink('/pages/manage/company')">
-							<view class="user-data-value">{{allData.upcomingIdentifyCompany}}</view>
-							<view class="user-data-title">机构认证</view>
-						</view>
-					</view>
 					<view class="user-data-box" v-if="allData.selfDelete!=0">
 						<view class="user-data-main" @tap="toLink('/pages/manage/selfDelete')">
 							<view class="user-data-value">{{allData.selfDelete}}</view>
@@ -236,30 +223,6 @@
 				</view>
 				<view class="index-sort-box">
 					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/consumer')">
-							<view class="index-sort-i" style="background-color: #ff5356;">
-								<text class="cuIcon-profilefill"></text>
-							</view>
-							<view class="index-sort-text">
-								个人认证审核
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/company')">
-							<view class="index-sort-i" style="background-color: #0852ff;">
-								<text class="cuIcon-profilefill"></text>
-							</view>
-							<view class="index-sort-text">
-								机构认证审核
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
 						<view class="index-sort-main" @tap="toLink('/pages/manage/selfDelete')">
 							<view class="index-sort-i" style="background-color: #7a0000;">
 								<text class="cuIcon-repairfill"></text>
@@ -364,102 +327,6 @@
 							</view>
 							<view class="index-sort-text">
 								动态管理
-							</view>
-						</view>
-					</waves>
-				</view>
-			</view>
-		</view>
-		<view class="data-box">
-			<view class="cu-bar bg-white">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text>圈子模块
-				</view>
-				<view class="action more">
-					
-				</view>
-			</view>
-			<view class="index-sort grid col-4">
-				<view class="index-sort-box" v-if="myPurview == 5">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/section')">
-							<view class="index-sort-i">
-								<text class="cuIcon-skin"></text>
-							</view>
-							<view class="index-sort-text">
-								版块管理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/postReview')">
-							<view class="index-sort-i" style="background-color: #e72323;">
-								<text class="cuIcon-text"></text>
-							</view>
-							<view class="index-sort-text">
-								帖子审核
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="myPurview == 5">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/postComment')">
-							<view class="index-sort-i" style="background-color: #0ca471;">
-								<text class="cuIcon-commentfill"></text>
-							</view>
-							<view class="index-sort-text">
-								帖子评论
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" v-if="group=='administrator'||group=='editor'">
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/moderator')">
-							<view class="index-sort-i">
-								<text class="cuIcon-selection"></text>
-							</view>
-							<view class="index-sort-text">
-								版主管理
-							</view>
-						</view>
-					</waves>
-				</view>
-			</view>
-		</view>
-		<view class="data-box" v-if="group=='administrator'">
-			<view class="cu-bar bg-white">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text>AI模块
-				</view>
-				<view class="action more">
-					
-				</view>
-			</view>
-			<view class="index-sort grid col-4">
-				<view class="index-sort-box" >
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/gpt')">
-							<view class="index-sort-i" style="background-color: #148ce7;">
-								<text class="cuIcon-vipcard"></text>
-							</view>
-							<view class="index-sort-text">
-								大模型管理
-							</view>
-						</view>
-					</waves>
-				</view>
-				<view class="index-sort-box" >
-					<waves itemClass="butclass">
-						<view class="index-sort-main" @tap="toLink('/pages/manage/gptchat')">
-							<view class="index-sort-i" style="background-color: #f45da6;">
-								<text class="cuIcon-vipcard"></text>
-							</view>
-							<view class="index-sort-text">
-								AI消息管理
 							</view>
 						</view>
 					</waves>

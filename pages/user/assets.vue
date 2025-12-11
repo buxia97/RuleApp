@@ -220,9 +220,6 @@
 			buyvip(){
 				var that = this;
 				var url = "/pages/user/buyvip";
-				if(that.isIOS == 1){
-					url = "/pages/user/appleVips";
-				}
 				uni.navigateTo({
 				    url: url
 				});
