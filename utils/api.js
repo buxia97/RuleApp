@@ -1,10 +1,10 @@
 //RuleApp Pro是RuleApp的增强版，提供更加强大的社区服务。
-var API_URL = 'https://api.ruletree.club/';
-//在API配置中心创建的应用Key
-var appKey = "Yc9AQDnN";
-
-//  var API_URL = 'http://127.0.0.4/';
+// var API_URL = 'https://api.ruletree.club/';
+// //在API配置中心创建的应用Key
 // var appKey = "Yc9AQDnN";
+
+ var API_URL = 'https://api.beimu.site/';
+var appKey = "F7Tyd7xx";
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 var GithubUrl = 'https://github.com/buxia97/RuleApp';
@@ -718,199 +718,10 @@ module.exports = {
 	followSpace:function(){
 		return API_URL + 'typechoSpace/followSpace';
 	},
-	
-	//圈子开始
-	addSection:function(){
-		return API_URL + 'typechoForum/addSection';
-	},
-	editSection:function(){
-		return API_URL + 'typechoForum/editSection';
-	},
-	sectionList:function(){
-		return API_URL + 'typechoForum/sectionList';
-	},
-	deleteSection:function(){
-		return API_URL + 'typechoForum/deleteSection';
-	},
-	sectionInfo:function(){
-		return API_URL + 'typechoForum/sectionInfo';
-	},
-	sectionFollow:function(){
-		return API_URL + 'typechoForum/sectionFollow';
-	},
-	sectionClock:function(){
-		return API_URL + 'typechoForum/sectionClock';
-	},
-	setModerator:function(){
-		return API_URL + 'typechoForum/setModerator';
-	},
-	deleteModerator:function(){
-		return API_URL + 'typechoForum/deleteModerator';
-	},
-	postForum:function(){
-		return API_URL + 'typechoForum/post';
-	},
-	editForum:function(){
-		return API_URL + 'typechoForum/edit';
-	},
-	postInfoForum:function(){
-		return API_URL + 'typechoForum/postInfo';
-	},
-	postList:function(){
-		return API_URL + 'typechoForum/postList';
-	},
-	postLikes:function(){
-		return API_URL + 'typechoForum/postLikes';
-	},
-	postLock:function(){
-		return API_URL + 'typechoForum/postLock';
-	},
-	postReview:function(){
-		return API_URL + 'typechoForum/postReview';
-	},
-	postTop:function(){
-		return API_URL + 'typechoForum/postTop';
-	},
-	postRecommend:function(){
-		return API_URL + 'typechoForum/postRecommend';
-	},
-	postSwiper:function(){
-		return API_URL + 'typechoForum/postSwiper';
-	},
-	postDelete:function(){
-		return API_URL + 'typechoForum/postDelete';
-	},
-	sectionClockList:function(){
-		return API_URL + 'typechoForum/sectionClockList';
-	},
-	postComments:function(){
-		return API_URL + 'typechoForum/postComments';
-	},
-	postCommentLike:function(){
-		return API_URL + 'typechoForum/postCommentLike';
-	},
-	postCommentDelete:function(){
-		return API_URL + 'typechoForum/postCommentDelete';
-	},
-	postCommentReview:function(){
-		return API_URL + 'typechoForum/postCommentReview';
-	},
-	
-	postCommentList:function(){
-		return API_URL + 'typechoForum/postCommentList';
-	},
-	userPurview:function(){
-		return API_URL + 'typechoForum/userPurview';
-	},
-	postMark:function(){
-		return API_URL + 'typechoForum/postMark';
-	},
-	postMarkList:function(){
-		return API_URL + 'typechoForum/postMarkList';
-	},
-	postReward:function(){
-		return API_URL + 'typechoForum/postReward';
-	},
-	postRewardList:function(){
-		return API_URL + 'typechoForum/postRewardList';
-	},
-	sectionRecommend:function(){
-		return API_URL + 'typechoForum/sectionRecommend';
-	},
-	draftList:function(){
-		return API_URL + 'typechoForum/draftList';
-	},
-	
-	draftDelete:function(){
-		return API_URL + 'typechoForum/draftDelete';
-	},
-	postTransfer:function(){
-		return API_URL + 'typechoForum/postTransfer';
-	},
-	followPosts:function(){
-		return API_URL + 'typechoForum/followPosts';
-	},
-	vipTypeList:function(){
-		return API_URL + 'system/vipTypeList';
-	},
+
 	payPackageList:function(){
 		return API_URL + 'system/payPackageList';
 	},
-	identifyConsumer:function(){
-		return API_URL + 'identify/identifyConsumer';
-	},
-	identifyCompany:function(){
-		return API_URL + 'identify/identifyCompany';
-	},
-	identifyHand:function(){
-		return API_URL + 'identify/identifyHand';
-	},
-	identifyStatus:function(){
-		return API_URL + 'identify/identifyStatus';
-	},
-	identifyInfo:function(){
-		return API_URL + 'identify/identifyInfo';
-	},
-	addConsumer:function(){
-		return API_URL + 'identify/addConsumer';
-	},
-	systemIdentifyConsumer:function(){
-		return API_URL + 'identify/systemIdentifyConsumer';
-	},
-	systemIdentifyCompany:function(){
-		return API_URL + 'identify/systemIdentifyCompany';
-	},
-	removeConsumer:function(){
-		return API_URL + 'identify/removeConsumer';
-	},
-	addCompany:function(){
-		return API_URL + 'identify/addCompany';
-	},
-	removeCompany:function(){
-		return API_URL + 'identify/removeCompany';
-	},
-	companyList:function(){
-		return API_URL + 'identify/companyList';
-	},
-	consumerList:function(){
-		return API_URL + 'identify/consumerList';
-	},
-	
-	gptSendMsg:function(){
-		return API_URL + 'gpt/sendMsg';
-	},
-	gptSendText:function(){
-		return API_URL + 'gpt/sendText';
-	},
-	gptLastMsg:function(){
-		return API_URL + 'gpt/lastMsg';
-	},
-	gptSystemMsgList:function(){
-		return API_URL + 'gpt/systemMsgList';
-	},
-	
-	gptMsgList:function(){
-		return API_URL + 'gpt/msgList';
-	},
-	gptAdd:function(){
-		return API_URL + 'gpt/gptAdd';
-	},
-	gptEdit:function(){
-		return API_URL + 'gpt/gptEdit';
-	},
-	gptDelete:function(){
-		return API_URL + 'gpt/gptDelete';
-	},
-	gptList:function(){
-		return API_URL + 'gpt/gptList';
-	},
-	gptInfo:function(){
-		return API_URL + 'gpt/gptInfo';
-	},
-	gptChatDelete:function(){
-		return API_URL + 'gpt/gptChatDelete';
-	},
-	
 	
 
 	

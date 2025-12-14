@@ -129,27 +129,6 @@
 				</view>
 			</view>
 		</view>
-		<view class="data-box">
-			<view class="cu-bar bg-white">
-				<view class="action data-box-title">
-					<text class="cuIcon-titles text-rule"></text> AI大模型
-				</view>
-				
-				
-			</view>
-			<view class="find-gpt">
-				<view class="find-gpt-mian"  @tap="goPage('/pages/gpt/home')">
-					<view class="find-gpt-ico">
-						<image src="../../static/gpt.png" mode="widthFix"></image>
-					</view>
-					<view class="find-gpt-intro">
-						<view class="find-gpt-intro-title">体验大模型，开启新时代</view>
-						<text class="cu-btn sm bg-black">即刻出发</text>
-					</view>
-				</view>
-			</view>
-			
-		</view>
 		<view class="ads-banner" v-if="bannerAdsInfo!=null">
 			<image :src="bannerAdsInfo.img" mode="widthFix" @tap="goAds(bannerAdsInfo)"></image>
 		</view>

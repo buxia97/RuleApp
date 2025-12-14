@@ -128,6 +128,8 @@ export default {
 			bannerAdsPrice:0,
 			startAdsNum:0,
 			startAdsPrice:0,
+			swiperAdsNum:0,
+			swiperAdsPrice:0,
 
 			token:"",
 			userData:{
@@ -216,6 +218,9 @@ export default {
 						that.bannerAdsPrice = res.data.data.bannerAdsPrice;
 						that.startAdsNum = res.data.data.startAdsNum;
 						that.startAdsPrice = res.data.data.startAdsPrice;
+						that.swiperAdsNum = res.data.data.swiperAdsNum;
+						that.swiperAdsPrice = res.data.data.swiperAdsPrice;
+						
 					}
 					var timer = setTimeout(function() {
 						that.isLoading=1;

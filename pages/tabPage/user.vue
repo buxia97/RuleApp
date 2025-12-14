@@ -218,18 +218,6 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box" @tap="toLink('/pages/user/identify')">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i" style="background-color: #ff5356;">
-								<text class="cuIcon-profilefill"></text>
-							</view>
-							<view class="index-sort-text">
-								实人认证
-							</view>
-						</view>
-					</waves>
-				</view>
 				<view class="index-sort-box" @tap="toLink('/pages/user/help')">
 					<waves itemClass="butclass">
 						<view class="index-sort-main">
@@ -285,22 +273,6 @@
 				</view>
 			</view>
 		</block>
-		<block v-if="group!='administrator'&&group!='editor'">
-			<view class="data-box" v-if="isModerator">
-				<view class="cu-list menu" @tap="toManage">
-					<view class="cu-item">
-						<view class="content">
-							<text class="cuIcon-colorlens text-red"></text>
-							<text>圈子管理中心 </text>
-						</view>
-						<view class="action">
-							<text class="text-sm text-gray">仅圈子管理成员可见</text>
-							<text class="cuIcon-right"></text>
-						</view>
-					</view>
-				</view>
-			</view>
-		</block>
 		
 		<!--  #endif -->
 		<view class="data-box">
@@ -317,15 +289,6 @@
 					</view>
 				</view>
 				<!--  #endif -->
-				<view class="cu-item" @tap="changeStyle" v-else>
-					<view class="content">
-						<text class="cuIcon-explorefill text-purple"></text>
-						<text>切换到文章风格</text>
-					</view>
-					<view class="action">
-						<text class="cuIcon-right"></text>
-					</view>
-				</view>
 				<view class="cu-item" @tap="toUserList">
 					<view class="content">
 						<text class="cuIcon-location text-pink"></text>
