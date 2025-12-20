@@ -8,7 +8,7 @@
 		<view class="tabbar" :style="{'padding-bottom': paddingBottomHeight + 'upx','opacity':$store.state.TabbarOpacity}" :class="$store.state.AppStyle">
 			<view class="tabbar-operate-bg" :class="isPost?'show':''" @tap="isPost=false"></view>
 			<view class="tabbar-operate" :class="isPost?'show':''" :style="{'padding-bottom': paddingBottomHeight + 'upx'}">
-				<view class="tabbar-operate-main grid col-4">
+				<view class="tabbar-operate-main grid col-3">
 					<view class="index-sort-box">
 						<view class="index-sort-main"  @tap="toLink('../edit/articleNew')">
 							<view class="index-sort-i" style="background: rgba(30, 134, 231, 0.2);">
@@ -16,16 +16,6 @@
 							</view>
 							<view class="index-sort-text">
 								文章
-							</view>
-						</view>
-					</view>
-					<view class="index-sort-box">
-						<view class="index-sort-main"  @tap="toLink('../forum/section?type=2')">
-							<view class="index-sort-i" style="background: rgba(231, 44, 7, 0.2);">
-								<text class="cuIcon-discoverfill" style="color:  #e72c07;"></text>
-							</view>
-							<view class="index-sort-text">
-								帖子
 							</view>
 						</view>
 					</view>

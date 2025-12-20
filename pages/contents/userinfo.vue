@@ -125,15 +125,12 @@
 			</view>
 			<template  v-if="isBan==0">
 				<!--  #ifdef H5 || APP-PLUS -->
-				<view class="search-type grid col-4">
+				<view class="search-type grid col-3">
 					<view class="search-type-box" @tap="toType(0)" :class="type==0?'active':''">
 						<text>文章</text>
 					</view>
 					<view class="search-type-box" @tap="toType(2)" :class="type==2?'active':''">
 						<text>动态</text>
-					</view>
-					<view class="search-type-box" @tap="toType(3)" :class="type==3?'active':''">
-						<text>帖子</text>
 					</view>
 					<view class="search-type-box" @tap="toType(1)" :class="type==1?'active':''">
 						<text>评论</text>
@@ -214,7 +211,7 @@
 					<template v-if="isBan==2">
 						你已将对方拉黑，无法查看内容！
 						<view class="text-center margin-top-sm">
-							<text class="cu-btn bg-red" @tap="removeBan(uid)">解除拉黑</text>
+							<text class="cu-btn bg-red" @tap="removeBan(isBanlogid)">解除拉黑</text>
 						</view>
 					</template>
 					<template v-if="isBan==1">
@@ -530,6 +527,7 @@
 							that.experience = res.data.data.experience;
 							that.region = res.data.data.region;
 							that.birthday = res.data.data.birthday;
+							that.isBanlogid =res.data.data.isBanlogid;
 							if(res.data.data.userBg){
 								that.userBg = res.data.data.userBg;
 							}
