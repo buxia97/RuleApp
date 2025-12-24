@@ -303,6 +303,7 @@
 				contentsNum:0,
 				commentsNum:0,
 				isBan:0,
+				isBanlogid:0,
 				
 				scrollTop:0,
 				isFollow:0,
