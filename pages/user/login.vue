@@ -314,6 +314,15 @@
 			},
 			login() {
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				if (that.password == ""||that.userName == "") {
 					uni.showToast({
 					    title:"请输入正确的参数",
@@ -393,6 +402,15 @@
 				//QQ登陆
 				//后端直接根据access_token来判断用户的唯一性。
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				uni.login({
 					provider: 'qq',
 					success: resp => {
@@ -485,6 +503,15 @@
 			},
 			toWexinlogin(){
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				//微信登陆
 				//后端直接根据unionId来判断用户的唯一性。
 				
@@ -630,6 +657,15 @@
 			},
 			toWeibologin(){
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				//微博登陆
 				//后端直接根据access_token来判断用户的唯一性。
 				
@@ -711,6 +747,15 @@
 			},
 			toApplelogin(){
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				uni.login({
 				    provider: 'apple',
 				    success: function (loginRes) {
@@ -836,6 +881,15 @@
 			},
 			phoneLogin(){
 				var that = this;
+				if(!that.isAgree){
+					uni.showToast({
+						title:"请阅读并同意用户协议",
+						icon:'none',
+						duration: 1000,
+						position:'bottom',
+					});
+					return false
+				}
 				if (that.phone == ""||that.code == "") {
 					uni.showToast({
 					    title:"请输入正确的参数",
