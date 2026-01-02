@@ -84,8 +84,6 @@
 									<text class="age-ico bg-blue">{{getAge(birthday)}}岁</text>
 								</block>
 								<text class="userlv customize" v-if="customize&&customize!=''">{{customize}}</text>
-								<text class="identifyLv bg-mauve cuIcon-selection" v-if="identifyConsumer==1"></text>
-								<text class="identifyLv bg-yellow cuIcon-selection" v-if="identifyCompany==1"></text>
 								
 								<!-- </view> -->
 								<view class="user-info-data">
@@ -312,8 +310,6 @@
 				
 				local:"",
 				
-				identifyCompany:0,
-				identifyConsumer:0,
 				
 				experience:0,
 				
@@ -374,7 +370,7 @@
 			that.uid =  res.uid;
 			that.avatar =  res.avatar;
 			// that.name =  res.name;
-			that.identifyStatus();
+
 			that.getIsFollow();
 			that.getUserInfo();
 			that.getUserData();
@@ -446,43 +442,6 @@
 				var rankStyle = that.$API.GetRankStyle();
 				var userlvStyle ="color:#fff;background-color: "+rankStyle[i];
 				return userlvStyle;
-			},
-			identifyStatus() {
-				var that = this;
-				that.$Net.request({
-					
-					url: that.$API.identifyStatus(),
-					data:{
-						"uid":that.uid
-					},
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						
-						if(res.data.code==1){
-							
-							that.identifyCompany = res.data.data.identifyCompany;
-							that.identifyConsumer = res.data.data.identifyConsumer;
-						}
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					},
-					fail: function(res) {
-						uni.showToast({
-							title: "网络开小差了哦",
-							icon: 'none'
-						})
-						var timer = setTimeout(function() {
-							that.isLoading=1;
-							clearTimeout('timer')
-						}, 300)
-					}
-				})
 			},
 			toUserList(regionStr){
 				var that = this;

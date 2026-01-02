@@ -1,10 +1,10 @@
-//RuleApp Pro是RuleApp的增强版，提供更加强大的社区服务。
 // var API_URL = 'https://api.ruletree.club/';
 // //在API配置中心创建的应用Key
 // var appKey = "Yc9AQDnN";
 
- var API_URL = 'https://api.beimu.site/';
-var appKey = "F7Tyd7xx";
+var API_URL = 'https://api.ruletree.club/';
+//在API配置中心创建的应用Key
+var appKey = "Yc9AQDnN";
 
 var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
 var GithubUrl = 'https://github.com/buxia97/RuleApp';

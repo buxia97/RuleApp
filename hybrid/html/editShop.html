@@ -1539,7 +1539,10 @@ var wu = new Wu()
 		// ==========================
 		insertToQuill(type, url, filename) {
 		  var that = this;
-		
+		  console.log("上传成功"+url)
+		  if(type=="thumbnail"){
+			  that.imgurl = url;
+		  }
 		  var editor = that.editType == 2 ? shopQuill : quill;
 		  var index = that.editType == 2 ? that.shopSelectionIndex : that.selectionIndex;
 		
