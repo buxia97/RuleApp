@@ -449,7 +449,7 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
-				that.userPurview();
+				// that.userPurview();
 				if(localStorage.getItem('curFullStyle')){
 					that.curFullStyle = localStorage.getItem('curFullStyle');
 				}

@@ -6,8 +6,6 @@ var API_URL = 'https://api.ruletree.club/';
 //在API配置中心创建的应用Key
 var appKey = "Yc9AQDnN";
 
-var GroupUrl = 'https://jq.qq.com/?_wv=1027&k=tzDllRvf';
-var GithubUrl = 'https://github.com/buxia97/RuleApp';
 var WEB_URL = '';
 
 //风格模板，对应page/home/目录下的文件，目前只有index、index2两个选择
@@ -195,14 +193,8 @@ module.exports = {
 	GetFields:function(){
 		return fields;
 	},
-	GetGithubUrl:function(){
-		return GithubUrl;
-	},
 	GetWebUrl:function(){
 		return WEB_URL;
-	},
-	GetGroupUrl:function(){
-		return GroupUrl;
 	},
 	getApiUrl:function(){
 		return API_URL;

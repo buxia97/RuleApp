@@ -496,7 +496,7 @@
 			}
 			
 			that.getInfo();
-			that.userPurview();
+			// that.userPurview();
 		},
 		onLoad() {
 			var that = this;
