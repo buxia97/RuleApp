@@ -8,6 +8,8 @@ var appKey = "Yc9AQDnN";
 
 var WEB_URL = '';
 
+
+
 //风格模板，对应page/home/目录下的文件，目前只有index、index2两个选择
 //设置后，修改page.json顶部和底部的index，替换为你选择的风格
 var styleIndex = "index";

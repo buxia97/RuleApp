@@ -99,7 +99,12 @@
 							<block v-else>
 								<view class="user-post-info" @tap="goContentInfo(item.contentJson)">
 									<view class="user-post-pic" v-if="item.contentJson.images.length>0">
-										<image :src="item.contentJson.images[0]" mode="widthFix"></image>
+										<!-- <image :src="item.contentJson.images[0]" mode="widthFix"></image> -->
+										<CachedImage
+										      :src="item.contentJson.images[0]"
+										      :maxSize="700"
+										      mode="widthFix"
+										    />
 									</view>
 									<view class="user-post-text">
 										<view class="user-post-title">
@@ -131,7 +136,12 @@
 							<block v-else>
 								<view class="user-post-info" @tap="goPostInfo(item.postJson.id)">
 									<view class="user-post-pic" v-if="item.postJson.images.length>0">
-										<image :src="item.postJson.images[0]" mode="widthFix"></image>
+										<!-- <image :src="item.postJson.images[0]" mode="widthFix"></image> -->
+										<CachedImage
+										      :src="item.postJson.images[0]"
+										      :maxSize="700"
+										      mode="widthFix"
+										    />
 									</view>
 									<view class="user-post-text">
 										<view class="user-post-title">
@@ -206,7 +216,12 @@
 							<block v-else>
 								<view class="user-post-info" @tap="goShopInfo(item.shopJson)">
 									<view class="user-post-pic">
-										<image :src="item.shopJson.imgurl" mode="widthFix"></image>
+										<!-- <image :src="item.shopJson.imgurl" mode="widthFix"></image> -->
+										<CachedImage
+										      :src="item.shopJson.imgurl"
+										      :maxSize="700"
+										      mode="widthFix"
+										    />
 									</view>
 									<view class="user-post-text">
 										<view class="user-post-title">
@@ -772,11 +787,17 @@
 				var that = this;
 				if(local&&local!=''){
 					var local_arr = local.split("|");
-					if(!local_arr[3]||local_arr[3]==0){
-						return local_arr[2];
-					}else{
-						return local_arr[3];
+					var num = local_arr.length;
+					if(!local_arr[num-3]||local_arr[num-3]==0){
+						if(!local_arr[num-4]||local_arr[num-4]==0){
+							if(!local_arr[num-5]||local_arr[num-5]==0){
+								return local_arr[num-6];
+							}
+							return local_arr[num-5];
+						}
+						return local_arr[num-4];
 					}
+					return local_arr[num-3];
 					
 				}else{
 					return "未知"

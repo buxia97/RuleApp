@@ -69,10 +69,23 @@
 					</waves>
 				</view>
 			</view>
-			<view class="no-data" v-if="chatList.length==0">
+			<!-- <view class="no-data" v-if="chatList.length==0">
 				暂时没有消息
+			</view> -->
+			<view class="block-noLogin" v-if="uid==0">
+				<view class="block-noLogin-main">
+					<view class="block-noLogin-text">
+						请先登录用户！
+					</view>
+					<view class="block-noLogin-btn">
+						<view class="cu-btn bg-blue" @tap="goLogin()">
+							立即登录
+						</view>
+					</view>
+				</view>
 			</view>
-			<view class="cu-list menu-avatar"  v-if="chatList.length>0">
+			<view class="cu-list menu-avatar" v-else>
+
 				<block v-for="(item,index) in chatList" :key="index" v-if="item.lastMsg!=null">
 				<view class="cu-item" @tap="goChat(item)">
 					<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>
@@ -145,26 +158,13 @@
 			</view>
 		</view>
 		<!--加载遮罩-->
-		<view class="loading" v-if="isLoading==0&&uid==0">
+		<!-- <view class="loading" v-if="isLoading==0&&uid==0">
 			<view class="loading-main">
 				<image src="../../static/loading.gif"></image>
 			</view>
-		</view>
+		</view> -->
 		<!--加载遮罩结束-->
-		<!--登录遮罩-->
-		<view class="full-noLogin" v-if="uid==0">
-			<view class="full-noLogin-main">
-				<view class="full-noLogin-text">
-					请先登录用户！
-				</view>
-				<view class="full-noLogin-btn">
-					<view class="cu-btn bg-blue" @tap="goLogin()">
-						立即登录
-					</view>
-				</view>
-			</view>
-		</view>
-		<!--登录遮罩结束-->
+
 	</view>
 </template>
 
@@ -213,18 +213,24 @@
 		},
 		mounted() {
 			var that = this;
+			
 			uni.$on('onShow', function(data) {
-				if(Number(data)!=Number(that.curPage)){
-					return false;
-				}
-				
-				console.log("触发Tab-"+data+"||页面下标"+that.curPage);
-				that.page=1;
 				if(localStorage.getItem('userinfo')){
 					
 					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
 					that.uid = userInfo.uid;
 				}
+				if(Number(data)!=Number(that.curPage)){
+					return false;
+				}
+				
+				console.log("触发Tab-"+data+"||页面下标"+that.curPage);
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration:0 
+				})
+				that.page=1;
+				
 				if(localStorage.getItem('token')){
 					
 					that.token = localStorage.getItem('token');
@@ -234,6 +240,10 @@
 					}, 3000);
 				}
 				that.unreadNum();
+				//#ifdef APP-PLUS
+				that.checkNotificationPermission();
+				//#endif
+				
 				
 			});
 			
@@ -300,10 +310,19 @@
 				var that = this;
 				clearInterval(that.msgLoading);
 				that.msgLoading = null
-				uni.navigateBack({
-					delta: 1
-				});
+				const pages = getCurrentPages()
+				if (pages.length === 1) {
+				  uni.redirectTo({
+				  	url: '/pages/home/index'
+				  });
+				} else {
+				  uni.navigateBack({
+				  	delta: 1
+				  });
+				}
 			},
+			
+			
 			loadMore(){
 				var that = this;
 				
@@ -491,6 +510,9 @@
 				localStorage.setItem('chatList',JSON.stringify(chatList));
 				//结束
 				var name = data.userJson.name;
+				if(data.userJson.screenName){
+					name = data.userJson.screenName;
+				}
 				var uid = data.userJson.uid;
 				
 				clearInterval(that.msgLoading);
@@ -501,7 +523,17 @@
 			},
 			goPage(url){
 				var that = this;
-				
+				if(!localStorage.getItem('userinfo')){
+					
+					uni.showToast({
+						title: "请先登录哦！",
+						icon: 'none'
+					})
+					uni.navigateTo({
+					    url: '/pages/user/login'
+					});
+					return false;
+				}
 				uni.navigateTo({
 				    url: url
 				});
@@ -538,6 +570,117 @@
 					}
 				})
 			},
+			checkNotificationPermission() {
+			    // 先判断是否在“免打扰期”
+				const ONE_DAY = 24 * 60 * 60 * 1000; // 24小时毫秒
+			    const lastIgnoreTime = localStorage.getItem("NOTIFY_IGNORE_KEY");
+			    if (lastIgnoreTime) {
+			        const now = Date.now();
+			        if (now - parseInt(lastIgnoreTime) < ONE_DAY) {
+			            // 一天内不再提醒
+			            return;
+			        }
+			    }
+			
+			    const platform = plus.os.name; // Android 或 iOS
+			
+			    if (platform === 'Android') {
+			        this.checkAndroidNotification();
+			    } else if (platform === 'iOS') {
+			        this.checkIOSNotification();
+			    }
+			},
+					
+			// ===== Android 检测 =====
+			checkAndroidNotification() {
+				try {
+					const main = plus.android.runtimeMainActivity();
+					const NotificationManagerCompat = plus.android.importClass("androidx.core.app.NotificationManagerCompat");
+					const nm = NotificationManagerCompat.from(main);
+					const enabled = nm.areNotificationsEnabled();
+					
+					if (!enabled) {
+						this.showNotifyDialog();
+					} else {
+						// 已开启，清除忽略记录
+						localStorage.removeItem("NOTIFY_IGNORE_KEY");
+					}
+				} catch (e) {
+					console.log("Android 检测通知权限失败：", e);
+				}
+			},
+					
+			// ===== iOS 检测 =====
+			checkIOSNotification() {
+				try {
+					const UIApplication = plus.ios.import("UIApplication");
+					const app = UIApplication.sharedApplication();
+					
+					let settings = null;
+					
+					if (app.currentUserNotificationSettings) {
+						settings = app.currentUserNotificationSettings();
+						const types = settings.plusGetAttribute("types");
+					
+						// types == 0 表示未开启通知
+						if (types === 0) {
+							this.showNotifyDialog();
+						}
+					}
+				} catch (e) {
+					console.log("iOS 检测通知权限失败：", e);
+				}
+			},
+					
+			// ===== 弹窗 =====
+			showNotifyDialog() {
+				uni.showModal({
+					title: '通知权限未开启',
+					content: '开启通知权限后，才能及时接收重要消息，是否前往设置开启？',
+					confirmText: '去开启',
+					cancelText: '暂不',
+					success: (res) => {
+						if (res.confirm) {
+							this.openAppSetting();
+						} else if (res.cancel) {
+							// 记录“暂不提醒”的时间
+							localStorage.setItem("NOTIFY_IGNORE_KEY", Date.now().toString());
+						}
+					}
+				});
+			},
+					
+			// ===== 跳转到系统设置 =====
+			openAppSetting() {
+				const platform = plus.os.name;
+					
+				if (platform === 'Android') {
+					try {
+						const main = plus.android.runtimeMainActivity();
+						const Intent = plus.android.importClass("android.content.Intent");
+						const Settings = plus.android.importClass("android.provider.Settings");
+						const Uri = plus.android.importClass("android.net.Uri");
+					
+						const intent = new Intent();
+						intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+						const uri = Uri.fromParts("package", main.getPackageName(), null);
+						intent.setData(uri);
+						main.startActivity(intent);
+					} catch (e) {
+						console.log("跳转 Android 设置失败：", e);
+					}
+				} else if (platform === 'iOS') {
+					try {
+						const UIApplication = plus.ios.import("UIApplication");
+						const NSURL = plus.ios.import("NSURL");
+						const app = UIApplication.sharedApplication();
+						const url = NSURL.URLWithString("app-settings:");
+						app.openURL(url);
+					} catch (e) {
+						console.log("跳转 iOS 设置失败：", e);
+					}
+				}
+			}
 
 
 		},
@@ -548,4 +691,5 @@
 </script>
 
 <style>
+	
 </style>

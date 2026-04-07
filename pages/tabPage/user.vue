@@ -1,12 +1,14 @@
 <template>
-	<view class="user" :class="$store.state.AppStyle">
-		<view class="header" :style="[{height:CustomBar + 'px'}]">
-			<view class="cu-bar bg-white" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
+	<view class="user home" :class="$store.state.AppStyle">
+		<view class="header" :style="[{height:CustomBar + 'px'}]"  :class="scrollTop>40?'goScroll':''">
+			<view class="cu-bar"  :class="scrollTop>40?'bg-white':''" :style="{'height': CustomBar + 'px','padding-top':StatusBar + 'px'}">
 				<view class="action" @tap="toSearch">
 					<text class="cuIcon-search"></text>
 				</view>
 				<view class="content text-bold" :style="[{top:StatusBar + 'px'}]">
-					账户
+					<block v-if="scrollTop>40">
+					用户中心
+					</block>
 				</view>
 				<!--  #ifdef H5 -->
 				<view class="action header-btn">
@@ -29,87 +31,117 @@
 				<!--  #endif -->
 			</view>
 		</view>
-		<view :style="[{padding:NavBar + 'px 10px 0px 10px'}]"></view>
-		<view class="data-box" style="padding-bottom: 20upx;">
-			<view class="cu-list menu-avatar">
-				<view class="cu-item userinfo" v-if="userInfo==null">
-					<view class="cu-avatar round lg">
-						<i class="cuIcon-myfill"></i>
-					</view>
-					<view class="content" @tap="toLogin">
-						<view class="text-black">点击登录</view>
-						<view class="text-gray text-sm flex">
-							<view class="text-cut">
-								
+		<view class="userPage-home">
+			
+			<text class="clock-btn cuIcon-babyfill" @tap="toClock" v-if="isClock==0">签到</text>
+			<text class="clock-btn cuIcon-babyfill" v-else>已签到</text>
+			<view class="userPage-home-bg">
+				
+				<image src="/static/userBg.jpg" mode="widthFix"  v-if="userBg==''"></image>
+				<image :src="userBg" mode="widthFix"  v-else></image>
+				
+				
+				<view class="user-main-pic-btBg"></view>
+			</view>
+			<view class="userPage-home-userInfo">
+				<view class="userPage-home-userBox">
+					<view class="cu-list menu-avatar">
+						<view class="cu-item userinfo" v-if="userInfo==null"  @tap="toLogin">
+							<view class="cu-avatar round lg bg-black">
+								<i class="cuIcon-myfill"></i>
+							</view>
+							<view class="content">
+								<view class="text-black">点击登录</view>
+								<view class="text-gray text-sm flex">
+									<view class="text-cut">
+										
+									</view>
+								</view>
 							</view>
 						</view>
-					</view>
-				</view>
-				<view class="cu-item userinfo" v-else  @tap="toUserContents()">
-					<view class="cu-avatar round lg" :style="userInfo.style">
-						<view class="curLv" :style="lvStyle">{{getLv(userInfo.experience)}}</view>
-					</view>
-					<view class="content">
-						<view class="text-black">
+						<view class="cu-item userinfo" v-else>
 							
-							<block v-if="userInfo.isvip==1">
-								<block v-if="userInfo.vip==1">
-									<text class="text-red">
-										{{name}}
-									</text>
-								</block>
-								<block v-else>
-									<text class="text-yellow">
-										{{name}}
-									</text>
-								</block>
-							</block>
-							<block v-else>
-								{{name}}
-							</block>
-							
-							<!-- <text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text> -->
-							<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
-
-						</view>
-						<view class="text-gray text-sm flex">
-							<view class="text-cut">
-								UID : {{userInfo.uid}}
+							<view class="cu-avatar round lg" :style="userInfo.style"   @tap="toUserContents()">
+								<view class="curLv" :style="lvStyle">{{getLv(userInfo.experience)}}</view>
 							</view>
+							<view class="content">
+								<view class="text-black"  @tap="toUserContents()">
+									
+									<block v-if="userInfo.isvip==1">
+										<block v-if="userInfo.vip==1">
+											<text class="text-red">
+												{{name}}
+											</text>
+										</block>
+										<block v-else>
+											<text class="text-yellow">
+												{{name}}
+											</text>
+										</block>
+									</block>
+									<block v-else>
+										{{name}}
+									</block>
+									
+									<!-- <text class="userlv" :style="userlvStyle">{{getUserLv(userInfo.lv)}}</text> -->
+									<text class="userlv customize" v-if="userInfo.customize&&userInfo.customize!=''">{{userInfo.customize}}</text>
+						
+								</view>
+								<!-- <view class="text-gray text-sm flex">
+									<view class="text-cut">
+										UID : {{userInfo.uid}}
+									</view>
+								</view> -->
+								<view class="text-gray text-sm flex margin-top-xs" @tap="toLink('/pages/user/assets')">
+									<view class="text-cut" >
+										{{currencyName}} : <text class="text-blue">{{userData.assets}}</text>
+									</view>
+								</view>
+							</view>
+							
 						</view>
 						
+					</view>
+				</view>
+				<!--  #ifdef H5 || APP-PLUS -->
+				<view class="user-data grid col-3" v-if="userInfo!=null">
+					<view class="user-data-box" @tap="toLink('/pages/user/userpost')">
+						<view class="user-data-value">{{userData.contentsNum}}</view>
+						<view class="user-data-title">作品</view>
+					</view>
+					<view class="user-data-box" @tap="toLink('/pages/user/usercomments')">
+						<view class="user-data-value">{{userData.commentsNum}}</view>
+						<view class="user-data-title">评论</view>
 					</view>
 					
-				</view>
-				
-				<block v-if="userInfo!=null">
-					<text class="clock-btn" @tap="toClock" v-if="isClock==0">签到</text>
-					<text class="clock-btn istap" v-else>已签到</text>
-					<!--  #ifdef H5 || APP-PLUS -->
-					<view class="user-data grid col-4" v-if="userInfo!=null">
-						<view class="user-data-box" @tap="toLink('/pages/user/userpost')">
-							<view class="user-data-value">{{userData.contentsNum}}</view>
-							<view class="user-data-title">文章</view>
-						</view>
-						<view class="user-data-box" @tap="toLink('/pages/user/usercomments')">
-							<view class="user-data-value">{{userData.commentsNum}}</view>
-							<view class="user-data-title">评论</view>
-						</view>
-						<view class="user-data-box"  @tap="toLink('/pages/user/fanList?uid='+uid)">
-							<view class="user-data-value">{{formatNumber(userData.fanNum)}}</view>
-							<view class="user-data-title">粉丝</view>
-						</view>
-						
-						<view class="user-data-box" @tap="toLink('/pages/user/assets')">
-							<view class="user-data-value text-yellow">{{formatNumber(userData.assets)}}</view>
-							<view class="user-data-title">{{currencyName}}</view>
-						</view>
+					<view class="user-data-box"  @tap="toLink('/pages/user/fanList?uid='+uid)">
+						<view class="user-data-value">{{formatNumber(userData.fanNum)}}</view>
+						<view class="user-data-title">粉丝</view>
 					</view>
-					<!--  #endif -->
-				</block>
-				
+					
+					<!-- <view class="user-data-box" @tap="toLink('/pages/user/assets')">
+						<view class="user-data-value">{{formatNumber(userData.assets)}}</view>
+						<view class="user-data-title">{{currencyName}}</view>
+					</view> -->
+				</view>
+				<view class="user-data grid col-3" v-else>
+					<view class="user-data-box">
+						<view class="user-data-value">-.-</view>
+						<view class="user-data-title">作品</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">-.-</view>
+						<view class="user-data-title">评论</view>
+					</view>
+					<view class="user-data-box">
+						<view class="user-data-value">-.-</view>
+						<view class="user-data-title">粉丝</view>
+					</view>
+					
+					
+				</view>
+				<!--  #endif -->
 			</view>
-			
 		</view>
 		<view class="data-box">
 			<view class="index-sort grid col-4">
@@ -176,7 +208,7 @@
 								<text class="cuIcon-writefill"></text>
 							</view>
 							<view class="index-sort-text">
-								我的文章
+								我的作品
 							</view>
 						</view>
 					</waves>
@@ -242,18 +274,6 @@
 						</view>
 					</waves>
 				</view>
-				<view class="index-sort-box" @tap="toLink('/pages/inbox/home')">
-					<waves itemClass="butclass">
-						<view class="index-sort-main">
-							<view class="index-sort-i" style="background-color: #9728aa;">
-								<text class="cuIcon-noticefill"></text>
-							</view>
-							<view class="index-sort-text">
-								消息通知
-							</view>
-						</view>
-					</waves>
-				</view>
 			</view>
 		</view>
 		<!--  #ifdef H5 || APP-PLUS -->
@@ -289,6 +309,7 @@
 					</view>
 				</view>
 				<!--  #endif -->
+
 				<view class="cu-item" @tap="toUserList">
 					<view class="content">
 						<text class="cuIcon-location text-pink"></text>
@@ -347,30 +368,6 @@
 			
 			</view>
 		</view>
-		<view class="cu-modal" :class="modalName=='changeStyle'?'show':''">
-			<view class="cu-dialog">
-				<view class="cu-bar bg-white justify-end">
-					<view class="content">切换到圈子风格</view>
-					<view class="action" @tap="hideModal">
-						<text class="cuIcon-close text-red"></text>
-					</view>
-				</view>
-				<view class="padding-xl">
-					<block v-if="curFullStyle=='index'">
-						通过此操作可以进入圈子内容为主的首页模式，此页面仅供预览，重启APP后将还原。
-					</block>
-					<block v-else>
-						通过此入口可重新回到文章为主的首页模式，也可以通过重启APP回归。
-					</block>
-				</view>
-				<view class="cu-bar bg-white justify-end">
-					<view class="action">
-						<button class="cu-btn bg-purple" @tap="changeStyle">确认切换</button>
-		
-					</view>
-				</view>
-			</view>
-		</view>
 		<view style="width: 100%; height: 100upx;"></view>
 	</view>
 </template>
@@ -394,6 +391,7 @@
 				AppStyle:this.$store.state.AppStyle,
 				userInfo:null,
 				name:"",
+				scrollTop:0,
 				uid:0,
 				token:"",
 				userData:{},
@@ -414,8 +412,15 @@
 				
 				modalName:null,
 				
-				curFullStyle:""
+				curFullStyle:"",
 				
+				userBg:'',
+				
+			}
+		},
+		watch:{
+			"$store.state.scrollTop": function(newValue, oldValue) {
+				this.scrollTop = newValue;
 			}
 		},
 		mounted() {
@@ -449,7 +454,6 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
-				// that.userPurview();
 				if(localStorage.getItem('curFullStyle')){
 					that.curFullStyle = localStorage.getItem('curFullStyle');
 				}
@@ -472,7 +476,6 @@
 				that.getUserData();
 				that.userStatus();
 				that.unreadNum();
-				that.userPurview();
 			});
 			// #ifdef APP-PLUS || MP
 			that.NavBar = this.CustomBar;
@@ -517,6 +520,9 @@
 						title: "请先登录哦",
 						icon: 'none'
 					})
+					uni.navigateTo({
+						url: '/pages/user/login'
+					});
 					return false;
 				}
 				uni.navigateTo({
@@ -577,6 +583,9 @@
 								}
 								if(res.data.data.experience){
 									userInfo.experience = res.data.data.experience;
+								}
+								if(res.data.data.userBg){
+									that.userBg = res.data.data.userBg;
 								}
 								localStorage.setItem('userinfo',JSON.stringify(userInfo));
 								// if(res.data.data.avatar){
@@ -890,55 +899,11 @@
 				    url: '/pages/contents/userinfo?title='+title+"&name="+name+"&uid="+id+"&avatar="+encodeURIComponent(that.avatar)
 				});
 			},
-			userPurview(){
-				var that = this;
-				var uid = 0;
-				if(localStorage.getItem('userinfo')){
-					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-					uid=userInfo.uid;
-				}
-				var data = {
-					"uid":uid,
-				}
-				that.$Net.request({
-					url: that.$API.userPurview(),
-					data:data,
-					header:{
-						'Content-Type':'application/x-www-form-urlencoded'
-					},
-					method: "get",
-					dataType: 'json',
-					success: function(res) {
-						
-						
-						if(res.data.code==1){
-							var list = res.data.data;
-							if(list.length>0){
-								that.isModerator = true;
-							}
-						}
-					},
-					fail: function(res) {
-						
-					}
-				})
-				
-			},
 			changeStyle(){
 				var that = this;
-				if(that.modalName==null){
-					that.modalName = "changeStyle";
-					return false;
-				}
-				if(that.curFullStyle=="index"){
-					uni.redirectTo({
-						url: '/pages/home/index2'
-					})
-				}else{
-					uni.redirectTo({
-						url: '/pages/home/index'
-					})
-				}
+				uni.navigateTo({
+				    url: '/pages/user/homeStyle'
+				});
 				
 			}
 		},

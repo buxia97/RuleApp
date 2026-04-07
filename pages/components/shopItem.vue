@@ -2,7 +2,12 @@
 	<view class="shop-box" v-if="!isBan">
 		<view class="shop-main">
 			<view class="shop-img" @tap="shopInfo(item)">
-				<image :src="item.imgurl" mode="widthFix"></image>
+				<!-- <image :src="item.imgurl" mode="widthFix"></image> -->
+			<CachedImage
+				  :src="item.imgurl"
+				  :maxSize="500"
+				  mode="aspectFill"
+				/>
 			</view>
 			<view class="shop-concent" @tap="shopInfo(item)">
 				<text class="cuIcon-cart"></text>
@@ -31,7 +36,12 @@
 				</view>
 				<view class="shop-list-user" v-if="item.userJson">
 					<view class="content-author">
-						<image :src="item.userJson.avatar" mode="aspectFill"></image>
+						<!-- <image :src="item.userJson.avatar" mode="aspectFill"></image> -->
+						<CachedImage
+						      :src="item.userJson.avatar"
+						      :maxSize="300"
+						      mode="aspectFill"
+						    />
 						<text class="content-author-name">{{item.userJson.name}}</text>
 					</view>
 	

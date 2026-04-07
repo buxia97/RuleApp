@@ -2,8 +2,8 @@
     "name" : "规则之树",
     "appid" : "__UNI__8D6C809",
     "description" : "规则之树手机客户端",
-    "versionName" : "RuleTree App 2.0.3",
-    "versionCode" : 53,
+    "versionName" : "RuleTree App 2.0.5",
+    "versionCode" : 55,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */

@@ -4,35 +4,133 @@
        url('./static/font/iconfont.woff?t=1758436900280') format('woff'),
        url('./static/font/iconfont.ttf?t=1758436900280') format('truetype');
 }
-
 .iconfont {
   font-family: "iconfont" !important;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-.icon-xiaoxi:before {
-  content: "\e607";
+.icon-csdn:before {
+  content: "\e620";
 }
 
-.icon-huati_topic:before {
-  content: "\e621";
+.icon-yuque-fill:before {
+  content: "\eab5";
+}
+
+.icon-shangcheng11:before {
+  content: "\e67b";
+}
+
+.icon-zaixianshangcheng:before {
+  content: "\e72d";
+}
+
+.icon-faxian:before {
+  content: "\e622";
+}
+
+.icon-yongyan:before {
+  content: "\e602";
+}
+
+.icon-yingyong:before {
+  content: "\e600";
+}
+
+.icon-qq:before {
+  content: "\e603";
 }
 
 .icon-shouye:before {
   content: "\e62e";
 }
 
+.icon-zhihu:before {
+  content: "\e69a";
+}
+
+.icon-faxianjihuo:before {
+  content: "\e655";
+}
+
+.icon-daohang:before {
+  content: "\e63b";
+}
+
+.icon-icon-test:before {
+  content: "\e606";
+}
+
 .icon-gongju-:before {
   content: "\e633";
+}
+
+.icon-gonggao:before {
+  content: "\e650";
+}
+
+.icon-icon_search_line:before {
+  content: "\e7a1";
+}
+
+.icon-icon_search:before {
+  content: "\e7a0";
+}
+
+.icon-xiaoxi:before {
+  content: "\e607";
+}
+
+.icon-weixin:before {
+  content: "\e609";
 }
 
 .icon-wodejianying:before {
   content: "\e651";
 }
 
-.icon-faxian:before {
-  content: "\e622";
+.icon-message:before {
+  content: "\e601";
+}
+
+.icon-baijiahao:before {
+  content: "\e604";
+}
+
+.icon-daohang1:before {
+  content: "\e634";
+}
+
+.icon-qunliao1:before {
+  content: "\e611";
+}
+
+.icon-shouye-shouye:before {
+  content: "\e614";
+}
+
+.icon-huati_topic:before {
+  content: "\e621";
+}
+
+.icon-xiaohongshu:before {
+  content: "\e864";
+}
+
+.icon-a-BILIBILI_LOGO1:before {
+  content: "\e636";
+}
+
+.icon-robot-2-fill:before {
+  content: "\e7a2";
+}
+
+.icon-yuanshujutubiao:before {
+  content: "\e610";
+}
+
+.icon-a-zujian8:before {
+  content: "\e605";
 }
 

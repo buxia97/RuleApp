@@ -1,6 +1,6 @@
 <template>
 	<view class="content-list-box" @longtap="banShow=true"  v-if="!isBan" :class="banShow?'banShow':''">
-		<view class="ban" v-if="!isTop&&!item.isAds">
+		<view class="ban" v-if="!isTop&&!item.isAds&&uid!=item.authorId">
 			<view class="ban-close" @tap="banShow=false">
 				<text class="cuIcon-close"></text>
 			</view>
@@ -23,8 +23,13 @@
 					<view class="text-cut">{{item.name}}</view>
 				</view>
 				<view class="content article-content" style="position: relative;">
-					 <image :src="item.img"
-					  mode="aspectFill"></image>
+					<!-- <image :src="item.img"
+					  mode="aspectFill"></image> -->
+					<CachedImage
+					      :src="item.img"
+					      :maxSize="500"
+					      mode="aspectFill"
+					    />
 					<view class="desc">
 						<view class="text-content">{{item.intro}}</view>
 						<view class="ads-more">了解更多<text class="cuIcon-right"></text></view>
@@ -51,21 +56,40 @@
 					<view class="article-imgMain grid col-3">
 						
 						<view class="article-img">
-							<image v-if="item.images.length > 0" :src="item.images[0]"
-							 mode="aspectFill"></image>
+							<!-- <image v-if="item.images.length > 0" :src="item.images[0]"
+							 mode="aspectFill"></image> -->
+							 <CachedImage
+							       v-if="item.images.length > 0" :src="item.images[0]"
+							       :maxSize="500"
+							       mode="aspectFill"
+							     />
 						</view>
 						<view class="article-img">
-							<image v-if="item.images.length > 1" :src="item.images[1]"
-							 mode="aspectFill"></image>
+							<!-- <image v-if="item.images.length > 1" :src="item.images[1]"
+							 mode="aspectFill"></image> -->
+							 <CachedImage
+							       v-if="item.images.length > 1" :src="item.images[1]"
+							       :maxSize="500"
+							       mode="aspectFill"
+							     />
 						</view>
 						<view class="article-img">
-							<image v-if="item.images.length > 2" :src="item.images[2]"
-							 mode="aspectFill"></image>
+							<!-- <image v-if="item.images.length > 2" :src="item.images[2]"
+							 mode="aspectFill"></image> -->
+							 <CachedImage
+							       v-if="item.images.length > 2" :src="item.images[2]"
+							       :maxSize="500"
+							       mode="aspectFill"
+							     />
 						</view>
 					</view>
 					<block v-if="item.images.length > 0">
 						<view class="content-author content-header bigImg-style">
-							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<CachedImage
+							      :src="item.authorInfo.avatar"
+							      :maxSize="300"
+							      mode="aspectFill"
+							    />
 							<text class="content-author-name">{{item.authorInfo.name}}</text>
 							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
 						</view>
@@ -75,14 +99,21 @@
 					
 					<view class="content article-content">
 						<view class="article-big">
-							<image v-if="item.images.length > 0" :src="item.images[0]"
-							 mode="aspectFill"></image>
+							<CachedImage
+							      v-if="item.images.length > 0" :src="item.images[0]"
+							      :maxSize="500"
+							      mode="aspectFill"
+							    />
 						</view>
 						<view class="text-content"> {{subText(item.text,80)}}</view>
 					</view>
 					<block v-if="item.images.length > 0">
 						<view class="content-author content-header bigImg-style">
-							<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+							<CachedImage
+							      :src="item.authorInfo.avatar"
+							      :maxSize="300"
+							      mode="aspectFill"
+							    />
 							<text class="content-author-name">{{item.authorInfo.name}}</text>
 							<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
 						</view>
@@ -91,13 +122,20 @@
 				<block v-if="item.abcimg == 'able'||!item.abcimg">
 					<view class="content article-content">
 						
-						 <image v-if="item.images.length > 0" :src="item.images[0]"
-						  mode="aspectFill"></image>
+						<CachedImage
+						      v-if="item.images.length > 0" :src="item.images[0]"
+						      :maxSize="500"
+						      mode="aspectFill"
+						    />
 						 
 						<view class="desc">
 							<view class="text-content"> {{subText(item.text,80)}}</view>
 							<view class="content-author" v-if="item.images.length>0">
-								<image :src="item.authorInfo.avatar" mode="aspectFill"></image>
+								<CachedImage
+								      :src="item.authorInfo.avatar"
+								      :maxSize="300"
+								      mode="aspectFill"
+								    />
 								<text class="content-author-name">{{item.authorInfo.name}}</text>
 								<text class="article-category" v-if="item.category.length>0">{{item.category[0].name}}</text>
 							</view>
@@ -135,8 +173,16 @@ export default {
 	data() {
 		return {
 			banShow:false,
-			isBan:false
+			isBan:false,
+			uid:0
 		};
+	},
+	created() {
+		var that = this;
+		if(localStorage.getItem('userinfo')){
+			var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+			that.uid=userInfo.uid;
+		}	
 	},
 	mounted() {
 		var that = this;

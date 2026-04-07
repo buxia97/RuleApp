@@ -13,6 +13,8 @@ Vue.prototype.$Net = Net
 // import cuCustom from './colorui/components/cu-custom.vue'
 // Vue.component('cu-custom',cuCustom)
 
+import CachedImage from './pages/components/CachedImage.vue'
+Vue.component('CachedImage',CachedImage)
 //页面类型
 //文章为主风格
 import find from './pages/tabPage/find.vue'
