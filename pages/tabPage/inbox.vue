@@ -85,7 +85,12 @@
 				</view>
 			</view>
 			<view class="cu-list menu-avatar" v-else>
-
+				<view class="no-data" v-if="chatList.length==0">
+					<text class="cuIcon-text"></text>
+					
+					暂时没有新消息
+					
+				</view>
 				<block v-for="(item,index) in chatList" :key="index" v-if="item.lastMsg!=null">
 				<view class="cu-item" @tap="goChat(item)">
 					<view class="cu-avatar round lg" :style="'background-image:url('+item.userJson.avatar+');'"></view>

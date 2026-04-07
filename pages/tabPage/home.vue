@@ -157,9 +157,21 @@
 				<view class="topic grid col-2">
 					<view class="topic-box" v-for="(item,index) in Topic" @tap="toCategoryContents(item.name,item.mid)" :key="index">
 						<view class="topic-main">
-							<image :src="item.imgurl" mode="aspectFill"></image>
-							<view class="topic-text" v-if="item.type=='tag'">#{{replaceSpecialChar(item.name)}}#</view>
-							<view class="topic-text" v-else>{{replaceSpecialChar(item.name)}}</view>
+							<!-- <image :src="item.imgurl" mode="aspectFill"></image> -->
+							<CachedImage
+							      :src="item.imgurl"
+							      :maxSize="500"
+							      mode="aspectFill"
+							    />
+							<view class="topic-text">
+								<view class="topic-title" v-if="item.type=='tag'">
+									#{{replaceSpecialChar(item.name)}}#
+								</view>
+								<view class="topic-title" v-else>{{replaceSpecialChar(item.name)}}</view>
+								<!-- <view class="topic-value">已有<text class="text-blue text-bold">{{item.count}}</text>作品</view> -->
+							</view>
+							
+							
 						</view>
 					</view>
 				</view>
