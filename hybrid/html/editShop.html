@@ -632,6 +632,7 @@ var wu = new Wu()
 	  verifyCode:"",
 	  kaptchaUrl:'',
 	  isVerify:false,
+	  CustomBar:0
     },
 	created() {
 		var that = this;
@@ -655,6 +656,7 @@ var wu = new Wu()
 			that.type = data.type;
 			that.env =  data.env;
 			that.sectionid = data.sectionid;
+			that.CustomBar= data.CustomBar;
 			that.verifyLevel = data.verifyLevel,
 			that.kaptchaUrl = data.apiUrl+"typechoUsers/getKaptcha"
 		}
@@ -664,9 +666,8 @@ var wu = new Wu()
 			that.getShopTypelist();
 		}
 		if(that.env=='H5'){
-			that.editTopStyle = "padding-top:44px"
+			that.editTopStyle = "padding-top:"+that.CustomBar+"px"
 		}
-		
 	},
 	methods:{
 		qs(json){

@@ -7,6 +7,13 @@ RuleApp，一款功能全面，用户交互良好的文章内容社区程序，�
 
 [赞助地址](https://www.ruletree.club/sponsor.html)
 
+## 升级至PRO版
+
+注意：目前开源的版本已经集成了所有的收费体系功能，完全可以进行商业化运营，但如果你仍然觉得功能太少，想进一步拓展，欢迎选择功能进一步升级的PRO版本。
+[升级至PRO](https://www.yuque.com/buxia97/ruleproject/xychnh7yxu2o4ere)
+QQ：1378283361
+微信：Buxia42
+
 ## 旧版下载
 
 当前为2.x全新版本，1.x旧版本可在下方下载： 
@@ -73,11 +80,6 @@ Windows桌面版本是我自己另外打包的，需要的话可以来官方群�
 
 或者访问语雀教程浏览更多信息：[RuleProject社区应用帮助文档](https://www.yuque.com/buxia97/ruleproject)
 
-
-## 升级至PRO版
-
-目前开源的版本已经集成了所有的收费体系功能，完全可以进行商业化运营，但如果你仍然觉得功能太少，想进一步拓展，欢迎选择功能进一步升级的PRO版本。
-[升级至PRO](https://www.yuque.com/buxia97/ruleproject/xychnh7yxu2o4ere)
 
 ## 旧版存档
 

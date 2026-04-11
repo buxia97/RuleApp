@@ -598,6 +598,7 @@ var wu = new Wu()
 	  isVerify:false,
 	  
 	  isDocx:0,
+	  CustomBar:0,
     },
 	created() {
 		var that = this;
@@ -620,8 +621,9 @@ var wu = new Wu()
 			that.token = data.token;
 			that.type = data.type;
 			that.env =  data.env;
-			that.isDocx = data.isDocx,
-			that.verifyLevel = data.verifyLevel,
+			that.isDocx = data.isDocx;
+			that.CustomBar= data.CustomBar;
+			that.verifyLevel = data.verifyLevel;
 			that.kaptchaUrl = data.apiUrl+"typechoUsers/getKaptcha"
 		}
 		if(that.type=='edit'){
@@ -632,7 +634,7 @@ var wu = new Wu()
 			
 		}
 		if(that.env=='H5'){
-			that.editTopStyle = "padding-top:44px"
+			that.editTopStyle = "padding-top:"+that.CustomBar+"px"
 		}
 		that.getTaglist();
 		that.getShoplist();

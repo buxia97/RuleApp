@@ -146,6 +146,7 @@
 				"type":that.type,
 				"isDocx":that.isDocx,
 				"env":Env,
+				"CustomBar":uni.upx2px(100),
 				"verifyLevel":verifyLevel
 			}
 			that.weburl+=encodeURIComponent(JSON.stringify(data));

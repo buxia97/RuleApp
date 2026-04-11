@@ -135,6 +135,7 @@
 				"token":that.token,
 				"type":that.type,
 				"env":Env,
+				"CustomBar":uni.upx2px(100),
 				"verifyLevel":verifyLevel
 			}
 			that.weburl+=encodeURIComponent(JSON.stringify(data));
