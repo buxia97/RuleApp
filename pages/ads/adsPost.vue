@@ -31,7 +31,7 @@
 			<view class="cu-form-group">
 				<view class="title">广告类型</view>
 				<view class="picker">
-					<text class="text-blue">{{typeList[type].name}}</text>
+					<text class="text-blue">{{typeList[type]?typeList[type].name:''}}</text>
 					
 				</view>
 			</view>
@@ -57,7 +57,7 @@
 						选择跳转类型
 					</block>
 					<block v-else>
-						<text class="text-blue">{{urltypeList[urltype].name}}</text>
+						<text class="text-blue">{{urltypeList[urltype]?urltypeList[urltype].name:''}}</text>
 					</block>
 					<text class="cuIcon-right"></text>
 				</view>
@@ -79,14 +79,14 @@
 			<view class="cu-dialog" @tap.stop="">
 				<radio-group class="block" @change="RadioChange">
 					<view class="cu-list menu text-left">
-						<view class="cu-item" v-for="(item,index) in urltypeList" :key="index">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">{{item.name}}</view>
-								<radio class="round" :class="urltype==Number(item.id)?'checked':''" :checked="urltype==Number(item.id)?true:false"
-								 :value="item.id"></radio>
-							</label>
+							<view class="cu-item" v-for="(item,index) in urltypeList" :key="'urltype_' + index">
+								<label class="flex justify-between align-center flex-sub">
+									<view class="flex-sub">{{item.name}}</view>
+									<radio class="round" :class="urltype==Number(item.id)?'checked':''" :checked="urltype==Number(item.id)?true:false"
+									 :value="item.id"></radio>
+								</label>
+							</view>
 						</view>
-					</view>
 				</radio-group>
 			</view>
 		</view>
@@ -138,6 +138,10 @@ export default {
 				{
 					name:"启动图广告",
 					id:2
+				},
+				{
+					name:"轮播图广告",
+					id:3
 				}
 			],
 			
@@ -279,14 +283,68 @@ export default {
 						var data = JSON.parse(uploadFileRes.data);
 						//var data = uploadFileRes.data;
 						uni.showToast({
-							title: data.msg,
-							icon: 'none'
-						})
-						if(data.code==1){
-							that.imgurl = data.data.url;
-							
-							
+										title: data.msg,
+										icon: 'none'
+									})
+									if(data.code==1){
+										that.imgurl = data.data.url;
+										
+										
+									}
+									},fail:function(){
+										setTimeout(function () {
+											uni.hideLoading();
+										}, 1000);
+									}
+									
+								   
+								});
+								 
+									uploadTask.onProgressUpdate(function (res) {
+									  
+									 });
+								}
+							})
 						}
+					},
+					getAdsConfig(){
+						var that = this;
+						that.$Net.request({
+							url: that.$API.adsConfig(),
+							header:{
+								'Content-Type':'application/x-www-form-urlencoded'
+							},
+							method: "get",
+							dataType: 'json',
+							success: function(res) {
+								if(res.data.code==1){
+									if(that.type==0){
+										that.price = res.data.data.pushAdsPrice;
+									}
+									if(that.type==1){
+										that.price = res.data.data.bannerAdsPrice;
+									}
+									if(that.type==2){
+										that.price = res.data.data.startAdsPrice;
+									}
+									if(that.type==3){
+										that.price = res.data.data.swiperAdsPrice;
+									}
+									
+								}
+								var timer = setTimeout(function() {
+									that.isLoading=1;
+									clearTimeout('timer')
+								}, 300)
+							},
+							fail: function(res) {
+								var timer = setTimeout(function() {
+									that.isLoading=1;
+									clearTimeout('timer')
+								}, 300)
+							}
+						})
+					},
 						},fail:function(){
 							setTimeout(function () {
 								uni.hideLoading();

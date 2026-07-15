@@ -387,39 +387,43 @@
 					
 				}
 				if(that.isValidString(that.screenName)){
-					uni.showToast({
-					    title:"昵称不能包含空格",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					return false
-				}
-				if(that.region==0||that.region==''){
-					uni.showToast({
-					    title:"请选择地区",
-						icon:'none',
-						duration: 1000,
-						position:'bottom',
-					});
-					return false
-				}
+				uni.showToast({
+				    title:"昵称不能包含空格",
+					icon:'none',
+					duration: 1000,
+					position:'bottom',
+				});
+				return false
+			}
+			// if(that.region==0||that.region==''){
+			// 	uni.showToast({
+			// 	    title:"请选择地区",
+			// 		icon:'none',
+			// 		duration: 1000,
+			// 		position:'bottom',
+			// 	});
+			// 	return false
+			// }
+			var data = {
+				uid:that.uid,
+				name:that.name,
+				screenName:that.screenName,
+				password:that.password,
+				introduce:that.introduce,
+				url:that.url,
+				gender:that.gender,
+			}
+			if(that.region!=0&&that.region!=''){
+				data.region = that.region;
+			}
+			if(that.birthday!=null&&that.birthday!=""){
 				const birthday = that.birthday;
 				const timeStampBirthday = Math.floor(new Date(birthday.replace(/-/g, '/')).getTime() / 1000);
-				var data = {
-					uid:that.uid,
-					name:that.name,
-					screenName:that.screenName,
-					password:that.password,
-					introduce:that.introduce,
-					url:that.url,
-					region:that.region,
-					gender:that.gender,
-					birthday:timeStampBirthday
-				}
-				if(that.avatarNew!=''){
-					data.avatar = that.avatarNew;
-				}
+				data.birthday = timeStampBirthday;
+			}
+			if(that.avatarNew!=''){
+				data.avatar = that.avatarNew;
+			}
 				uni.showLoading({
 					title: "加载中"
 				});
@@ -537,8 +541,8 @@
 				// #endif
 			},
 			toAvatar(){
-				// #ifdef APP-PLUS || H5
 				const that = this;
+				// #ifdef APP-PLUS || H5
 				  uni.navigateTo({
 					url: "../../uni_modules/buuug7-img-cropper/pages/cropper",
 					events: {
@@ -547,6 +551,19 @@
 					  },
 					},
 				  });
+				// #endif
+				// #ifdef MP-WEIXIN
+				uni.chooseAvatar({
+					success: function(res) {
+						that.avatarUploadMp(res.avatarUrl);
+					},
+					fail: function() {
+						uni.showToast({
+							title: "获取头像失败",
+							icon: 'none'
+						});
+					}
+				});
 				// #endif
 			},
 			avatarUpload(base64){
@@ -583,7 +600,7 @@
 								// uni.showToast({
 								// 	title: data.msg,
 								// 	icon: 'none'
-								// })
+								// )
 								that.avatar = data.data.url;
 								that.avatarNew = data.data.url;
 								localStorage.removeItem('toAvatar');
@@ -608,6 +625,50 @@
 				  .catch(error => {
 					console.error("失败"+error)
 				  })
+			},
+			avatarUploadMp(filePath){
+				var that = this;
+				var token = "";
+				if(localStorage.getItem('userinfo')){
+					var userInfo = JSON.parse(localStorage.getItem('userinfo'));
+					token=userInfo.token;
+				}
+				uni.showLoading({
+					title: "上传中"
+				});
+				uni.uploadFile({
+					url: that.$API.upload(),
+					filePath: filePath,
+					name: 'file',
+					formData: {
+						'token': token
+					},
+					success: function(uploadFileRes) {
+						setTimeout(function() {
+							uni.hideLoading();
+						}, 1000);
+						var data = JSON.parse(uploadFileRes.data);
+						if(data.code==1){
+							that.avatar = data.data.url;
+							that.avatarNew = data.data.url;
+							that.userEdit();
+						}else{
+							uni.showToast({
+								title: "头像上传失败，请检查接口",
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						setTimeout(function() {
+							uni.hideLoading();
+						}, 1000);
+						uni.showToast({
+							title: "头像上传失败",
+							icon: 'none'
+						})
+					}
+				});
 			},
 			isValidString(str) {
 			  return /\s/g.test(str);

@@ -1,10 +1,10 @@
-// var API_URL = 'https://api.ruletree.club/';
-// //在API配置中心创建的应用Key
-// var appKey = "Yc9AQDnN";
-
 var API_URL = 'https://api.ruletree.club/';
 //在API配置中心创建的应用Key
 var appKey = "Yc9AQDnN";
+
+// var API_URL = 'http://127.0.0.4/';
+// //在API配置中心创建的应用Key
+// var appKey = "Yc9AQDnN";
 
 var WEB_URL = '';
 

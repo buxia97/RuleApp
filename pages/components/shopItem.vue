@@ -54,8 +54,9 @@
 				
 			</view>
 			<view class="shop-admin-info text-center"  v-if="isAdmin">
-				<text class="shop-btn text-blue" v-if="item.status==0" @tap="getUserInfo(item.uid)">用户信息</text>
+				<text class="shop-btn text-blue" @tap="getUserInfo(item.uid)">用户信息</text>
 				<text class="shop-btn text-yellow" v-if="item.status==0" @tap="auditShop(item.id)">审核</text>
+				<text class="shop-btn text-yellow" @tap="editShop(item)">编辑</text>
 				<text class="shop-btn text-red" @tap="deleteShop(item.id)" v-if="group=='administrator'">删除</text>
 			</view>
 			
@@ -121,14 +122,11 @@
 		methods: {
 			shopInfo(data){
 				var that = this;
-				if(that.isAdmin){
-					that.editShop(data);
-				}else{
-					uni.navigateTo({
-					    url: '/pages/shop/shopinfo?sid='+data.id
-					});
-				}
-				
+
+				uni.navigateTo({
+					url: '/pages/shop/shopinfo?sid='+data.id
+				});
+			
 			},
 			getVipInfo(){
 				var that = this;

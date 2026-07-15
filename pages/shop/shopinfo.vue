@@ -52,6 +52,7 @@
 			<view class="shopinfo-title">
 				{{title}}
 			</view>
+			
 			<view class="info-author margin-bottom-sm" v-if="userInfo!=null">
 				<view class="cu-list menu-avatar">
 					<view class="cu-item">
