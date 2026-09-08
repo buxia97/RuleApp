@@ -305,7 +305,6 @@ export default {
 									 });
 								}
 							})
-						}
 					},
 					getAdsConfig(){
 						var that = this;
@@ -345,56 +344,6 @@ export default {
 							}
 						})
 					},
-						},fail:function(){
-							setTimeout(function () {
-								uni.hideLoading();
-							}, 1000);
-						}
-						
-					   
-					});
-				 
-					uploadTask.onProgressUpdate(function (res) {
-					  
-					 });
-				}
-			})
-		},
-		getAdsConfig(){
-			var that = this;
-			that.$Net.request({
-				url: that.$API.adsConfig(),
-				header:{
-					'Content-Type':'application/x-www-form-urlencoded'
-				},
-				method: "get",
-				dataType: 'json',
-				success: function(res) {
-					if(res.data.code==1){
-						if(that.type==0){
-							that.price = res.data.data.pushAdsPrice;
-						}
-						if(that.type==1){
-							that.price = res.data.data.bannerAdsPrice;
-						}
-						if(that.type==2){
-							that.price = res.data.data.startAdsPrice;
-						}
-						
-					}
-					var timer = setTimeout(function() {
-						that.isLoading=1;
-						clearTimeout('timer')
-					}, 300)
-				},
-				fail: function(res) {
-					var timer = setTimeout(function() {
-						that.isLoading=1;
-						clearTimeout('timer')
-					}, 300)
-				}
-			})
-		},
 		getAdsInfo(){
 			var that = this;
 			var data = {
